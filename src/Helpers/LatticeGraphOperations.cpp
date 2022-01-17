@@ -6,8 +6,13 @@ using Pathfinding::Datastructures::NodeState;
 
 namespace Pathfinding::Helpers
 {
-    LatticeGraphOperations::LatticeGraphOperations(LatticeGraph *graph)
+    LatticeGraphOperations::LatticeGraphOperations(LatticeGraph * graph)
         : graphPtr(graph)
+    {
+        resize();
+    }
+
+    void LatticeGraphOperations::resize()
     {
         int32_t heightI = static_cast<int32_t>(graphPtr->height());
         int32_t widthI = static_cast<int32_t>(graphPtr->width());

@@ -1,6 +1,8 @@
 #ifndef C6BCD717_D222_4EF4_9463_0AFA2C68BD0A
 #define C6BCD717_D222_4EF4_9463_0AFA2C68BD0A
 
+#include <memory>
+
 #include "GraphLocation.hpp"
 #include "LatticeGraph.hpp"
 
@@ -17,6 +19,7 @@ namespace Pathfinding::Helpers
             void setStart(GraphLocation location);
             void blockNode(GraphLocation location);
             void clearNode(GraphLocation location);
+            void resize();
             std::size_t width() const;
             std::size_t height() const;
             GraphLocation startLocation() const;

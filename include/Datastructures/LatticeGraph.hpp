@@ -14,15 +14,7 @@ namespace Pathfinding::Datastructures
         public:
             LatticeGraph(int32_t height, int32_t width)
             {
-                graph.resize(height, std::vector<Node>(width));
-                for(int32_t h = 0; h < height; ++h)
-                {
-                    std::vector<Node> row;
-                    for(int32_t w = 0; w < width; ++w)
-                    {
-                        graph[h][w].location = GraphLocation(h,w);
-                    }
-                }
+                resize(height, width);
             }
 
             std::vector<Node> & operator[](std::size_t height) {return graph[height];}
@@ -38,6 +30,20 @@ namespace Pathfinding::Datastructures
                 int32_t widthI = static_cast<int32_t>(width());
                 int32_t heightI = static_cast<int32_t>(height());
                 return 0 <= location.height && location.height < heightI && 0 <= location.width && location.width < widthI;
+            }
+
+            void resize(int32_t height, int32_t width)
+            {
+                graph.clear();
+                graph.resize(height, std::vector<Node>(width));
+                for(int32_t h = 0; h < height; ++h)
+                {
+                    std::vector<Node> row;
+                    for(int32_t w = 0; w < width; ++w)
+                    {
+                        graph[h][w].location = GraphLocation(h,w);
+                    }
+                }
             }
 
         private:

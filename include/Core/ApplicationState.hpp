@@ -9,8 +9,11 @@ namespace Pathfinding::Core
 {
     struct ApplicationState
     {
-        const bool canRenderNodeInfo = NODE_SIDE_LENGTH >= MINIMUM_NODE_SIDE_LENGHT_FOR_NODE_INFO;
+        bool canRenderNodeInfo = true;
         bool renderNodeInfo = false;
+        int32_t currentNumberOfNodeIndex = 0;
+        int32_t currentNodeSideLength = NUMBER_OF_NODES_IN_ROW[currentNumberOfNodeIndex];
+        bool numberOfNodesChanged = false;
     };
 }
 

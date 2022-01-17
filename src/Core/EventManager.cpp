@@ -1,14 +1,12 @@
 #include "EventManager.hpp"
 #include "LatticeGraphOperations.hpp"
 #include "Constants.hpp"
-#include <iostream>
-
-using Pathfinding::Constants::NODE_SIDE_LENGTH;
+#include "ApplicationState.hpp"
 
 namespace Pathfinding::Core
 {
-    EventManager::EventManager(sf::RenderWindow * window, LatticeGraphOperations * graphOps)
-    : windowPtr(window), graphOpsPtr(graphOps) {}
+    EventManager::EventManager(ApplicationState * appState, sf::RenderWindow * window, LatticeGraphOperations * graphOps)
+    : appStatePtr(appState), windowPtr(window), graphOpsPtr(graphOps) {}
 
     void EventManager::pushEvent(sf::Event event)
     {
@@ -17,8 +15,8 @@ namespace Pathfinding::Core
 
     GraphLocation EventManager::mapMouseToGraphCoordinates(sf::Vector2i pos)
     {
-        int32_t faH = pos.y / NODE_SIDE_LENGTH;
-        int32_t faW = pos.x / NODE_SIDE_LENGTH;
+        int32_t faH = pos.y / appStatePtr->currentNodeSideLength;
+        int32_t faW = pos.x / appStatePtr->currentNodeSideLength;
         return {faH,faW};
     }
 

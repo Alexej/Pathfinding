@@ -1,5 +1,4 @@
 #include "Application.hpp"
-#include <filesystem>
 
 using Pathfinding::Core::Application;
 

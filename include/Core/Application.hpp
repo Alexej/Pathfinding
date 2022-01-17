@@ -32,11 +32,12 @@ namespace Pathfinding::Core
             void update();
             void draw();
             void handleInput(sf::Event event);
+            void handleNumberOfNodesChange();
         private:
+            ApplicationState appState;
             sf::RenderWindow window;
             Renderer renderer;
             LatticeGraph graph;
-            ApplicationState appState;
             LatticeGraphOperations graphOps;
             EventManager eventManager;
             Menu menu;

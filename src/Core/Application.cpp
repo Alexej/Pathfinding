@@ -9,6 +9,9 @@
 #include <imgui-SFML.h>
 #include <imgui.h>
 
+#include <iostream>
+using namespace std;
+
 using namespace Pathfinding::Datastructures;
 using namespace Pathfinding::Constants;
 
@@ -16,17 +19,16 @@ namespace Pathfinding::Core
 {
     
     Application::Application()
-    : window(sf::VideoMode( NUMBER_OF_NODES_HORIZONTAL * NODE_SIDE_LENGTH + MENU_WIDTH, 
-                            NUMBER_OF_NODES_VERTICAL * NODE_SIDE_LENGTH),
+    : window(sf::VideoMode( GRID_FIELD_WIDTH + MENU_WIDTH, 
+                            GRID_FIELD_HEIGHT),
                             APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close
                             ),
-    graph(NUMBER_OF_NODES_VERTICAL, NUMBER_OF_NODES_HORIZONTAL),
     renderer(&appState),
+    graph(GRID_FIELD_HEIGHT / appState.currentNodeSideLength, GRID_FIELD_HEIGHT / appState.currentNodeSideLength),
     graphOps(&graph),
-    eventManager(&window, &graphOps),
-    menu(&appState,NUMBER_OF_NODES_HORIZONTAL * NODE_SIDE_LENGTH, NUMBER_OF_NODES_VERTICAL * NODE_SIDE_LENGTH, MENU_WIDTH)
+    eventManager(&appState, &window, &graphOps),
+    menu(&appState,GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH)
     {
-        appState.renderNodeInfo = true;
     }
 
     void Application::run()
@@ -41,9 +43,7 @@ namespace Pathfinding::Core
                 ImGui::SFML::ProcessEvent(event);
                 handleInput(event);
             }
-
             update();
-
             ImGui::SFML::Update(window, deltaClock.restart());
             menu.show();
             window.clear();
@@ -68,11 +68,23 @@ namespace Pathfinding::Core
 
     void Application::update()
     {
+        if(appState.numberOfNodesChanged)
+        {
+            handleNumberOfNodesChange();
+        }
         eventManager.processEvents();
+    }
+
+    void Application::handleNumberOfNodesChange()
+    {
+        appState.numberOfNodesChanged = false;
+        appState.currentNodeSideLength = NUMBER_OF_NODES_IN_ROW[appState.currentNumberOfNodeIndex];
+        graph.resize(GRID_FIELD_HEIGHT / appState.currentNodeSideLength, GRID_FIELD_HEIGHT / appState.currentNodeSideLength);
+        graphOps.resize();
     }
 
     void Application::draw()
     {
-        renderer.render(window, graph);
+        renderer.render(window, &graph);
     }
 }

@@ -22,7 +22,7 @@ namespace Pathfinding::Core
     {
     public:
         Renderer(const ApplicationState *appState);
-        void render(sf::RenderWindow &window, const LatticeGraph &graph);
+        void render(sf::RenderWindow &window, const LatticeGraph * graph);
 
     private:
         void loadFont(std::string font);

@@ -13,15 +13,21 @@ namespace Pathfinding::Helpers
     class LatticeGraphOperations;
 }
 
+namespace Pathfinding::Core
+{
+    struct ApplicationState;
+}
+
 using Pathfinding::Helpers::LatticeGraphOperations;
 using Pathfinding::Datastructures::GraphLocation;
+using Pathfinding::Core::ApplicationState;
 
 namespace Pathfinding::Core
 {
     class EventManager
     {
         public:
-            explicit EventManager(sf::RenderWindow * window, LatticeGraphOperations * graphOps);
+            EventManager(ApplicationState * appState, sf::RenderWindow * window, LatticeGraphOperations * graphOps);
             void pushEvent(sf::Event event);
             void processEvents();
         private:
@@ -30,6 +36,7 @@ namespace Pathfinding::Core
             std::deque<sf::Event> eventQueue;
             LatticeGraphOperations * graphOpsPtr;
             sf::RenderWindow * windowPtr;
+            ApplicationState * appStatePtr;
             bool settingWall = false;
             bool clearingWall = false;
             bool settingStart = false;

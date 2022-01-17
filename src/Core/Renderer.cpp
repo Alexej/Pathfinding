@@ -51,7 +51,7 @@ namespace Pathfinding::Core
     Renderer::Renderer(const ApplicationState *appState)
         : appStatePtr(appState)
     {
-        nodeRect.setSize(sf::Vector2f(NODE_SIDE_LENGTH, NODE_SIDE_LENGTH));
+        nodeRect.setSize(sf::Vector2f(appStatePtr->currentNodeSideLength, appStatePtr->currentNodeSideLength));
         nodeRect.setOutlineThickness(NODE_OUTLINE_THICKNESS);
         nodeRect.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
 
@@ -59,7 +59,7 @@ namespace Pathfinding::Core
         {
             loadFont("NugoSansLight.ttf");
             text.setFont(font);
-            text.setCharacterSize(NODE_SIDE_LENGTH / 5);
+            text.setCharacterSize(appStatePtr->currentNodeSideLength / 5);
             text.setFillColor(convertToSfmlColor(NODE_INFO_COLOR));
         }
     }
@@ -78,13 +78,13 @@ namespace Pathfinding::Core
         }
     }
 
-    void Renderer::render(sf::RenderWindow &window, const LatticeGraph &graph)
+    void Renderer::render(sf::RenderWindow &window, const LatticeGraph * graph)
     {
-        for (std::size_t h = 0; h < graph.height(); ++h)
+        for (std::size_t h = 0; h < graph->height(); ++h)
         {
-            for (std::size_t w = 0; w < graph.width(); ++w)
+            for (std::size_t w = 0; w < graph->width(); ++w)
             {
-                drawNode(window, graph[h][w]);
+                drawNode(window, graph->operator[](h)[w]);
             }
         }
     }
@@ -93,7 +93,7 @@ namespace Pathfinding::Core
     {
         float nodesHor = static_cast<float>(node.location.width);
         float nodesVert = static_cast<float>(node.location.height);
-        float sideLength = static_cast<float>(NODE_SIDE_LENGTH);
+        float sideLength = static_cast<float>(appStatePtr->currentNodeSideLength);
         float positionHor = nodesHor * sideLength;
         float positionVer = nodesVert * sideLength;
 
@@ -119,12 +119,12 @@ namespace Pathfinding::Core
 
             text.setString(giveInf(node.rhs));
             float widthOfRHSText = text.getLocalBounds().width;
-            float freeSpaceHor = NODE_SIDE_LENGTH - widthOfGText - widthOfRHSText;
+            float freeSpaceHor = appStatePtr->currentNodeSideLength - widthOfGText - widthOfRHSText;
             text.setPosition(sf::Vector2f(positionHor + NODE_INFO_OFFSET, positionVer + freeSpaceHor + widthOfGText -NODE_INFO_OFFSET));
             window.draw(text);
 
             float textHeight = text.getLocalBounds().height;
-            float freeSpaceVert = NODE_SIDE_LENGTH - 2 * textHeight;
+            float freeSpaceVert = appStatePtr->currentNodeSideLength - 2 * textHeight;
             text.setString(giveInf(node.key.k1));
             text.setPosition(sf::Vector2f(positionHor + freeSpaceVert + textHeight - NODE_INFO_OFFSET, positionVer + NODE_INFO_OFFSET));
             window.draw(text);
@@ -133,7 +133,7 @@ namespace Pathfinding::Core
 
             text.setString(giveInf(node.key.k2));
             float widthOfK2Text = text.getLocalBounds().width;
-            freeSpaceHor = NODE_SIDE_LENGTH - widthOfK1Text - widthOfK2Text;
+            freeSpaceHor = appStatePtr->currentNodeSideLength - widthOfK1Text - widthOfK2Text;
             text.setPosition(sf::Vector2f(positionHor + freeSpaceVert + textHeight - NODE_INFO_OFFSET, positionVer + widthOfK1Text + freeSpaceHor - NODE_INFO_OFFSET));
             window.draw(text);
         }

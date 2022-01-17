@@ -8,13 +8,13 @@ namespace Pathfinding::Constants
 {
     constexpr auto APPLICATION_TITLE = "Pathfinding";
 
-    //Dimension
-    constexpr int32_t NUMBER_OF_NODES_VERTICAL = 10;
-    constexpr int32_t NUMBER_OF_NODES_HORIZONTAL = 10;
-    constexpr int32_t NODE_SIDE_LENGTH = 80;
+    // Dimension
+    constexpr int32_t GRID_FIELD_WIDTH = 800;
+    constexpr int32_t GRID_FIELD_HEIGHT = 800;
     constexpr int32_t MINIMUM_NODE_SIDE_LENGHT_FOR_NODE_INFO = 80;
-
     constexpr int32_t MENU_WIDTH = 400;
+    constexpr std::array<int32_t, 8> NUMBER_OF_NODES{100, 400, 625, 1600};
+    constexpr std::array<int32_t, 8> NUMBER_OF_NODES_IN_ROW{80, 40, 32, 20};
 
     // Colors:
     constexpr std::array<uint8_t, 3> FREE_NODE_COLOR{150, 160, 180};
@@ -31,7 +31,7 @@ namespace Pathfinding::Constants
     constexpr std::size_t GREEN = 1;
     constexpr std::size_t BLUE = 2;
 
-    //Rendering
+    // Rendering
     constexpr auto NODE_OUTLINE_THICKNESS = 1.0f;
     constexpr auto NODE_INFO_OFFSET = 8.0f;
 
