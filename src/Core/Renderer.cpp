@@ -87,8 +87,6 @@ namespace Pathfinding::Core
                 drawNode(window, graph[h][w]);
             }
         }
-
-        window.display();
     }
 
     void Renderer::drawNode(sf::RenderWindow &window, const Node &node)

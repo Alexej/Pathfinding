@@ -3,6 +3,7 @@ set(SOURCES_PATHFINDING
     Datastructures/Key.cpp
     Core/Application.cpp
     Core/Renderer.cpp
+    Core/Menu.cpp
     Core/EventManager.cpp
     Helpers/LatticeGraphOperations.cpp
     main.cpp

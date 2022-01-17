@@ -22,7 +22,7 @@ namespace Pathfinding::Core
     {
         public:
             explicit EventManager(sf::RenderWindow * window, LatticeGraphOperations * graphOps);
-            void pushEvent();
+            void pushEvent(sf::Event event);
             void processEvents();
         private:
             GraphLocation mapMouseToGraphCoordinates(sf::Vector2i pos);

@@ -10,13 +10,9 @@ namespace Pathfinding::Core
     EventManager::EventManager(sf::RenderWindow * window, LatticeGraphOperations * graphOps)
     : windowPtr(window), graphOpsPtr(graphOps) {}
 
-    void EventManager::pushEvent()
+    void EventManager::pushEvent(sf::Event event)
     {
-        sf::Event event;
-        while(windowPtr->pollEvent(event))
-        {
-            eventQueue.push_back(event);
-        }
+        eventQueue.push_back(event);
     }
 
     GraphLocation EventManager::mapMouseToGraphCoordinates(sf::Vector2i pos)
@@ -33,11 +29,7 @@ namespace Pathfinding::Core
             sf::Vector2i mouseCoordinates = sf::Mouse::getPosition(*windowPtr);
             GraphLocation mappedCoordinates = mapMouseToGraphCoordinates(mouseCoordinates);
             auto & currentEvent = eventQueue[0];
-            if(currentEvent.type == sf::Event::EventType::Closed)
-            {
-                windowPtr->close();
-            }
-            else if(currentEvent.type == sf::Event::EventType::MouseButtonPressed)
+            if(currentEvent.type == sf::Event::EventType::MouseButtonPressed)
             {
                 if(currentEvent.key.code == sf::Mouse::Left)
                 {

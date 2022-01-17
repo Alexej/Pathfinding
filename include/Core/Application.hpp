@@ -14,6 +14,7 @@
 #include "GraphLocation.hpp"
 #include "LatticeGraphOperations.hpp"
 #include "EventManager.hpp"
+#include "Menu.hpp"
 
 using namespace Pathfinding::Constants;
 using Pathfinding::Datastructures::LatticeGraph;
@@ -30,7 +31,7 @@ namespace Pathfinding::Core
             void run();
             void update();
             void draw();
-            void handleInput();
+            void handleInput(sf::Event event);
         private:
             sf::RenderWindow window;
             Renderer renderer;
@@ -38,6 +39,7 @@ namespace Pathfinding::Core
             ApplicationState appState;
             LatticeGraphOperations graphOps;
             EventManager eventManager;
+            Menu menu;
     };
 }
 

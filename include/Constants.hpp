@@ -14,6 +14,7 @@ namespace Pathfinding::Constants
     constexpr int32_t NODE_SIDE_LENGTH = 80;
     constexpr int32_t MINIMUM_NODE_SIDE_LENGHT_FOR_NODE_INFO = 80;
 
+    constexpr int32_t MENU_WIDTH = 400;
 
     // Colors:
     constexpr std::array<uint8_t, 3> FREE_NODE_COLOR{150, 160, 180};
