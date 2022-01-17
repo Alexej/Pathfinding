@@ -9,9 +9,9 @@ namespace Pathfinding::Constants
     constexpr auto APPLICATION_TITLE = "Pathfinding";
 
     //Dimension
-    constexpr int32_t NUMBER_OF_NODES_VERTICAL = 20;
-    constexpr int32_t NUMBER_OF_NODES_HORIZONTAL = 20;
-    constexpr int32_t NODE_SIDE_LENGTH = 40;
+    constexpr int32_t NUMBER_OF_NODES_VERTICAL = 10;
+    constexpr int32_t NUMBER_OF_NODES_HORIZONTAL = 10;
+    constexpr int32_t NODE_SIDE_LENGTH = 80;
     constexpr int32_t MINIMUM_NODE_SIDE_LENGHT_FOR_NODE_INFO = 80;
 
 

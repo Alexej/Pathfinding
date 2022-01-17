@@ -99,7 +99,7 @@ namespace Pathfinding::Core
         float positionHor = nodesHor * sideLength;
         float positionVer = nodesVert * sideLength;
 
-        nodeRect.setPosition(sf::Vector2f(positionVer, positionHor));
+        nodeRect.setPosition(sf::Vector2f(positionHor, positionVer));
         nodeRect.setFillColor(stateColor(node.state));
         window.draw(nodeRect);
 
@@ -115,20 +115,20 @@ namespace Pathfinding::Core
         if (appStatePtr->renderNodeInfo)
         {
             text.setString(giveInf(node.g));
-            text.setPosition(sf::Vector2f(positionVer + NODE_INFO_OFFSET, positionHor + NODE_INFO_OFFSET));
+            text.setPosition(sf::Vector2f(positionHor + NODE_INFO_OFFSET, positionVer + NODE_INFO_OFFSET));
             window.draw(text);
             float widthOfGText = text.getLocalBounds().width;
 
             text.setString(giveInf(node.rhs));
             float widthOfRHSText = text.getLocalBounds().width;
             float freeSpaceHor = NODE_SIDE_LENGTH - widthOfGText - widthOfRHSText;
-            text.setPosition(sf::Vector2f(positionVer + freeSpaceHor + widthOfGText -NODE_INFO_OFFSET, positionHor + NODE_INFO_OFFSET));
+            text.setPosition(sf::Vector2f(positionHor + NODE_INFO_OFFSET, positionVer + freeSpaceHor + widthOfGText -NODE_INFO_OFFSET));
             window.draw(text);
 
             float textHeight = text.getLocalBounds().height;
             float freeSpaceVert = NODE_SIDE_LENGTH - 2 * textHeight;
             text.setString(giveInf(node.key.k1));
-            text.setPosition(sf::Vector2f(positionVer + NODE_INFO_OFFSET, positionHor + freeSpaceVert + textHeight - NODE_INFO_OFFSET));
+            text.setPosition(sf::Vector2f(positionHor + freeSpaceVert + textHeight - NODE_INFO_OFFSET, positionVer + NODE_INFO_OFFSET));
             window.draw(text);
 
             float widthOfK1Text = text.getLocalBounds().width;
@@ -136,7 +136,7 @@ namespace Pathfinding::Core
             text.setString(giveInf(node.key.k2));
             float widthOfK2Text = text.getLocalBounds().width;
             freeSpaceHor = NODE_SIDE_LENGTH - widthOfK1Text - widthOfK2Text;
-            text.setPosition(sf::Vector2f(positionVer + widthOfK1Text + freeSpaceHor - NODE_INFO_OFFSET, positionHor + freeSpaceVert + textHeight - NODE_INFO_OFFSET));
+            text.setPosition(sf::Vector2f(positionHor + freeSpaceVert + textHeight - NODE_INFO_OFFSET, positionVer + widthOfK1Text + freeSpaceHor - NODE_INFO_OFFSET));
             window.draw(text);
         }
     }

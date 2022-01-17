@@ -17,12 +17,12 @@ namespace Pathfinding::Core
                             NUMBER_OF_NODES_VERTICAL * NODE_SIDE_LENGTH),
                             APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close
                             ),
-                            graph(NUMBER_OF_NODES_VERTICAL, NUMBER_OF_NODES_HORIZONTAL),
-                            renderer(&appState),
-                            graphOps(&graph)
+    graph(NUMBER_OF_NODES_VERTICAL, NUMBER_OF_NODES_HORIZONTAL),
+    renderer(&appState),
+    graphOps(&graph),
+    eventManager(&window, &graphOps)
     {
-        graphOps.setStart(GraphLocation(0,0));
-        graphOps.setGoal(GraphLocation(NUMBER_OF_NODES_VERTICAL-1,NUMBER_OF_NODES_HORIZONTAL-1));
+        appState.renderNodeInfo = true;
     }
 
     void Application::run()
@@ -35,29 +35,18 @@ namespace Pathfinding::Core
         }
     }
 
+    void Application::handleInput()
+    {
+        eventManager.pushEvent();
+    }
+
     void Application::update()
     {
-        while (!events.empty())
-        {
-            if (events[0].type == sf::Event::EventType::Closed)
-            {
-                window.close();
-            }
-            events.pop_front();
-        }
+        eventManager.processEvents();
     }
 
     void Application::draw()
     {
         renderer.render(window, graph);
-    }
-
-    void Application::handleInput()
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            events.push_back(event);
-        }
     }
 }

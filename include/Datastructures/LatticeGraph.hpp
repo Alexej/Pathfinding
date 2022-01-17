@@ -33,6 +33,13 @@ namespace Pathfinding::Datastructures
             std::size_t width() const {return graph[0].size();}
             std::size_t height() const {return graph.size();}
 
+            bool inBounds(GraphLocation location) const
+            {
+                int32_t widthI = static_cast<int32_t>(width());
+                int32_t heightI = static_cast<int32_t>(height());
+                return 0 <= location.height && location.height < heightI && 0 <= location.width && location.width < widthI;
+            }
+
         private:
             Vector2D<Node> graph;
     };

@@ -13,12 +13,13 @@
 #include "ApplicationState.hpp"
 #include "GraphLocation.hpp"
 #include "LatticeGraphOperations.hpp"
+#include "EventManager.hpp"
 
 using namespace Pathfinding::Constants;
 using Pathfinding::Datastructures::LatticeGraph;
 using Pathfinding::Datastructures::GraphLocation;
 using Pathfinding::Helpers::LatticeGraphOperations;
-
+using Pathfinding::Core::EventManager;
 
 namespace Pathfinding::Core
 {
@@ -33,10 +34,10 @@ namespace Pathfinding::Core
         private:
             sf::RenderWindow window;
             Renderer renderer;
-            std::deque<sf::Event> events;
             LatticeGraph graph;
             ApplicationState appState;
             LatticeGraphOperations graphOps;
+            EventManager eventManager;
     };
 }
 

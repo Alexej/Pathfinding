@@ -17,10 +17,15 @@ namespace Pathfinding::Helpers
             void setStart(GraphLocation location);
             void blockNode(GraphLocation location);
             void clearNode(GraphLocation location);
+            std::size_t width() const;
+            std::size_t height() const;
+            GraphLocation startLocation() const;
+            GraphLocation goalLocation() const;
+            bool inBounds(GraphLocation location) const;
         private:
             LatticeGraph * graphPtr;
-            GraphLocation startLocation;
-            GraphLocation goalLocation;
+            GraphLocation startLocation_;
+            GraphLocation goalLocation_;
     };
 }
 
