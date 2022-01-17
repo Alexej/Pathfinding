@@ -11,7 +11,8 @@ FetchContent_MakeAvailable(Catch2)
 
 
 set(SOURCES_TESTS
-
+    TestLocation.cpp
+    TestLatticeGraph.cpp
     )
 
 add_executable(tests ${SOURCES_TESTS})

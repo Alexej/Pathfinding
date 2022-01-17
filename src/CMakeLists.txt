@@ -1,5 +1,9 @@
 
 set(SOURCES_PATHFINDING
+    Datastructures/Key.cpp
+    Core/Application.cpp
+    Core/Renderer.cpp
+    Helpers/LatticeGraphOperations.cpp
     main.cpp
 )
 
