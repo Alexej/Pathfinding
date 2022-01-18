@@ -6,6 +6,7 @@
 #include "ApplicationState.hpp"
 
 using namespace Pathfinding::Constants;
+using Pathfinding::Core::AlgorithmState;
 
 namespace Pathfinding::Core
 {
@@ -30,26 +31,51 @@ namespace Pathfinding::Core
         ImGui::SetNextWindowPos(ImVec2(offset, 0), ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize(ImVec2(width, height), ImGuiCond_FirstUseEver);
 
-        ImGui::Begin("Configuration", nullptr, window_flags);
+        ImGui::Begin("Controls", nullptr, window_flags);
 
-        static int item_current = appStatePtr->numberOfNodeIndex;
-        ImGui::Spacing();
-        ImGui::Text("Number of nodes");
-        if (ImGui::Combo("", &item_current, NUMBER_OF_NODES_CHAR, IM_ARRAYSIZE(NUMBER_OF_NODES_CHAR)))
+        // Algorithm Ready state controls
+        if(appStatePtr->algState == AlgorithmState::READY)
         {
-            if (appStatePtr->numberOfNodeIndex != item_current)
+            static int item_current = appStatePtr->numberOfNodeIndex;
+            ImGui::Spacing();
+            ImGui::Text("Number of nodes");
+            if (ImGui::Combo("", &item_current, NUMBER_OF_NODES_CHAR, IM_ARRAYSIZE(NUMBER_OF_NODES_CHAR)))
             {
-                if (nodeSizeLargeEnoughForInfo())
+                if (appStatePtr->numberOfNodeIndex != item_current)
                 {
-                    appStatePtr->renderNodeInfo = false;
+                    if (nodeSizeLargeEnoughForInfo())
+                    {
+                        appStatePtr->renderNodeInfo = false;
+                    }
+                    appStatePtr->numberOfNodesChanged = true;
+                    appStatePtr->numberOfNodeIndex = item_current;
                 }
-                appStatePtr->numberOfNodesChanged = true;
-                appStatePtr->numberOfNodeIndex = item_current;
-            }
-        };
+            };
 
-        ImGui::Separator();
-        ImGui::Spacing();
+            ImGui::Separator();
+            ImGui::Spacing();
+
+            if(ImGui::Button("Start", ImVec2(width-20,20)))
+            {
+                appStatePtr->algState = AlgorithmState::SEARCHING;
+                appStatePtr->stateChanged = true;
+            }
+            ImGui::Spacing();
+        }
+
+        // Algorithm searching state controls
+        else if(appStatePtr->algState == AlgorithmState::SEARCHING)
+        {
+
+
+        }
+        // Algorithm done state controls
+
+        else if(appStatePtr->algState == AlgorithmState::DONE)
+        {
+
+        }
+
         if (nodeSizeLargeEnoughForInfo())
         {
             if (ImGui::Checkbox("Render Node Info", &appStatePtr->renderNodeInfo))

@@ -11,6 +11,7 @@ include_directories(include)
 include_directories(include/Events)
 include_directories(include/Core)
 include_directories(include/Datastructures)
+include_directories(include/Algorithms)
 include_directories(include/Core)
 
 add_subdirectory(dependencies)

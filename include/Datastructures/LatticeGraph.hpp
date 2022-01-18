@@ -3,6 +3,7 @@
 
 #include <vector>
 #include "Node.hpp"
+#include <unordered_map>
 
 template <typename Type>
 using Vector2D = std::vector<std::vector<Type>>;
@@ -17,8 +18,8 @@ namespace Pathfinding::Datastructures
         std::vector<Node> &operator[](std::size_t height) { return graph[height]; }
         const std::vector<Node> &operator[](std::size_t height) const { return graph[height]; }
 
-        Node &node(GraphLocation location) { return graph[location.height][location.width]; }
-        const Node &node(GraphLocation location) const { return graph[location.height][location.width]; }
+        Node * node(GraphLocation location) { return &graph[location.height][location.width]; }
+        const Node * node(GraphLocation location) const { return &graph[location.height][location.width]; }
 
         std::size_t width() const { return graph[0].size(); }
         std::size_t height() const { return graph.size(); }
@@ -28,6 +29,9 @@ namespace Pathfinding::Datastructures
         const Node * startNode() const;
         const Node * goalNode() const;
 
+        Node * startNode();
+        Node * goalNode();
+
         void setGoal(GraphLocation location);
         void setStart(GraphLocation location);
         void blockNode(GraphLocation location);
@@ -36,13 +40,13 @@ namespace Pathfinding::Datastructures
         void resetEndpoints();
         void resize(int32_t height, int32_t width);
 
+        void computeSuccsCache();
+
     private:
         Vector2D<Node> graph;
         Node * goalNodePtr;
         Node * startNodePtr;
     };
-
-    std::vector<Node> &successors(LatticeGraph &graph, Node node);
 }
 
 #endif /* FD0247C3_67EB_48FC_909F_6614B9CC4CBC */

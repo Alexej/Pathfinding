@@ -7,6 +7,7 @@ using namespace Pathfinding::Constants;
 
 namespace Pathfinding::Core
 {
+    enum class AlgorithmState{ READY, SEARCHING, DONE};
     struct ApplicationState
     {
         explicit ApplicationState(int32_t numberOfNodes)
@@ -18,9 +19,12 @@ namespace Pathfinding::Core
         bool canRenderNodeInfo = true;
         bool renderNodeInfo = false;
         bool numberOfNodesChanged = false;
+        bool stateChanged = false;
 
         int32_t numberOfNodeIndex;
         int32_t nodeSideLength;
+
+        AlgorithmState algState = AlgorithmState::READY;
     };
 }
 

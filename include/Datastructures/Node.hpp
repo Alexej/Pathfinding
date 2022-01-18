@@ -11,9 +11,9 @@ namespace Pathfinding::Datastructures
     struct Node
     {
         GraphLocation location;
-        NodeState state = NodeState::Free;
-        int32_t rhs = 345;
-        int32_t g = 534;
+        NodeState state;
+        int32_t rhs;
+        int32_t g;
         Key key;
     };
 

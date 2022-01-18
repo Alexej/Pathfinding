@@ -34,6 +34,10 @@ namespace Pathfinding::Datastructures
             for (int32_t w = 0; w < width; ++w)
             {
                 graph[h][w].location = GraphLocation(h, w);
+                graph[h][w].g = std::numeric_limits<int32_t>::max();
+                graph[h][w].rhs = std::numeric_limits<int32_t>::max();
+                graph[h][w].key = Key();
+                graph[h][w].state = NodeState::Free;
             }
         }
         resetEndpoints();
@@ -49,9 +53,19 @@ namespace Pathfinding::Datastructures
         return goalNodePtr;
     }
 
+    Node * LatticeGraph::startNode()
+    {
+        return startNodePtr;
+    }
+
+    Node * LatticeGraph::goalNode()
+    {
+        return goalNodePtr;
+    }
+
     void LatticeGraph::setGoal(GraphLocation location)
     {
-        if (node(location).state == NodeState::Free)
+        if (node(location)->state == NodeState::Free)
         {
             goalNodePtr->state = NodeState::Free;
             goalNodePtr = &graph[location.height][location.width];
@@ -61,7 +75,7 @@ namespace Pathfinding::Datastructures
 
     void LatticeGraph::setStart(GraphLocation location)
     {
-        if (node(location).state == NodeState::Free)
+        if (node(location)->state == NodeState::Free)
         {
             startNodePtr->state = NodeState::Free;
             startNodePtr = &graph[location.height][location.width];
@@ -71,17 +85,17 @@ namespace Pathfinding::Datastructures
 
     void LatticeGraph::blockNode(GraphLocation location)
     {
-        if (node(location).state == NodeState::Free)
+        if (node(location)->state == NodeState::Free)
         {
-            node(location).state = NodeState::Blocked;
+            node(location)->state = NodeState::Blocked;
         }
     }
 
     void LatticeGraph::clearNode(GraphLocation location)
     {
-        if (node(location).state == NodeState::Blocked)
+        if (node(location)->state == NodeState::Blocked)
         {
-            node(location).state = NodeState::Free;
+            node(location)->state = NodeState::Free;
         }
     }
 }
