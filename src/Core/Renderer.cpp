@@ -15,6 +15,16 @@ namespace Pathfinding::Core
 {
     namespace
     {
+
+        std::string convertIntToStringWithInf(int32_t num)
+        {
+            if(num == std::numeric_limits<int32_t>::max())
+            {
+                return std::string("inf");
+            }
+            return std::to_string(num);
+        };
+
         sf::Color convertToSfmlColor(std::array<uint8_t, 3> color)
         {
             return {color[RED], color[GREEN], color[BLUE]};
@@ -104,29 +114,20 @@ namespace Pathfinding::Core
         nodeRect.setFillColor(stateColor(node.state));
         window.draw(nodeRect);
 
-        auto giveInf = [](int32_t num){
-            if(num == std::numeric_limits<int32_t>::max())
-            {
-                return std::string("inf");
-            }
-            else
-            return std::to_string(num);
-        };
-
         if (appStatePtr->renderNodeInfo)
         {
-            text.setString(giveInf(node.g));
+            text.setString(convertIntToStringWithInf(node.g));
             text.setPosition(sf::Vector2f(positionHor + NODE_INFO_OFFSET, positionVer + NODE_INFO_OFFSET));
             window.draw(text);
             float widthOfGText = text.getLocalBounds().width;
 
-            text.setString(giveInf(node.rhs));
+            text.setString(convertIntToStringWithInf(node.rhs));
             float widthOfRHSText = text.getLocalBounds().width;
             float freeSpaceHor = appStatePtr->currentNodeSideLength - widthOfGText - widthOfRHSText;
             text.setPosition(sf::Vector2f(positionHor + freeSpaceHor + widthOfGText - NODE_INFO_OFFSET, positionVer + NODE_INFO_OFFSET));
             window.draw(text);
 
-            std::string keyString = "[" + giveInf(node.key.k1) +":"+ giveInf(node.key.k2) +"]";
+            std::string keyString = "[" + convertIntToStringWithInf(node.key.k1) +":"+ convertIntToStringWithInf(node.key.k2) +"]";
             text.setString(keyString);
             float halfOfText = text.getLocalBounds().width / 2;
             float heightKeyOffset = 2 * text.getLocalBounds().height + NODE_INFO_OFFSET;

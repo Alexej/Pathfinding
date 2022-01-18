@@ -8,10 +8,10 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
 include_directories(include)
+include_directories(include/Events)
 include_directories(include/Core)
 include_directories(include/Datastructures)
-include_directories(include/Helpers)
-
+include_directories(include/Core)
 
 add_subdirectory(dependencies)
 add_subdirectory(src)

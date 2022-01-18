@@ -12,18 +12,17 @@
 #include "LatticeGraph.hpp"
 #include "ApplicationState.hpp"
 #include "GraphLocation.hpp"
-#include "LatticeGraphOperations.hpp"
 #include "EventManager.hpp"
 #include "Menu.hpp"
 
 using namespace Pathfinding::Constants;
 using Pathfinding::Datastructures::LatticeGraph;
 using Pathfinding::Datastructures::GraphLocation;
-using Pathfinding::Helpers::LatticeGraphOperations;
-using Pathfinding::Core::EventManager;
+using Pathfinding::Events::EventManager;
 
 namespace Pathfinding::Core
 {
+    enum class MouseAction {SETTING_START, SETTING_GOAL, BLOCKING_NODE, CLEARING_NODE, IDLE};
     class Application
     {
         public:
@@ -34,11 +33,16 @@ namespace Pathfinding::Core
             void handleInput(sf::Event event);
             void handleNumberOfNodesChange();
         private:
+            void leftMouseButtonPressed(sf::Vector2i pos);
+            void rightMouseButtonPressed(sf::Vector2i pos);
+            void mouseMoved(sf::Vector2i pos);
+            void mouseButtonReleased(sf::Vector2i pos);
+        private:
+            MouseAction currentMouseAction = MouseAction::IDLE;
             ApplicationState appState;
             sf::RenderWindow window;
             Renderer renderer;
             LatticeGraph graph;
-            LatticeGraphOperations graphOps;
             EventManager eventManager;
             Menu menu;
     };

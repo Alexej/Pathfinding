@@ -15,21 +15,44 @@ using namespace std;
 using namespace Pathfinding::Datastructures;
 using namespace Pathfinding::Constants;
 
+using std::placeholders::_1;
+
+
 namespace Pathfinding::Core
 {
-    
-    Application::Application()
-    : appState(N_100),
-    window(sf::VideoMode( GRID_FIELD_WIDTH + MENU_WIDTH, 
-                            GRID_FIELD_HEIGHT),
-                            APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close
-                            ),
-    renderer(&appState),
-    graph(GRID_FIELD_HEIGHT / appState.currentNodeSideLength, GRID_FIELD_HEIGHT / appState.currentNodeSideLength),
-    graphOps(&graph),
-    eventManager(&appState, &window, &graphOps),
-    menu(&appState,GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH)
+
+    namespace
     {
+        GraphLocation mapMouseToGraphCoordinates(sf::Vector2i pos, int32_t currentSideLength)
+        {
+            int32_t faH = pos.y / currentSideLength;
+            int32_t faW = pos.x / currentSideLength;
+            return {faH, faW};
+        }
+    }
+
+    Application::Application()
+        : appState(N_100),
+          window(sf::VideoMode(GRID_FIELD_WIDTH + MENU_WIDTH,
+                               GRID_FIELD_HEIGHT),
+                 APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close),
+          renderer(&appState),
+          graph(GRID_FIELD_HEIGHT / appState.currentNodeSideLength, GRID_FIELD_HEIGHT / appState.currentNodeSideLength),
+          eventManager(&window),
+          menu(&appState, GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH)
+    {
+        eventManager.addBinging({false, sf::Event::EventType::MouseButtonPressed, sf::Mouse::Left}, 
+        std::bind(&Application::leftMouseButtonPressed, this, std::placeholders::_1));
+
+        eventManager.addBinging({false, sf::Event::EventType::MouseButtonPressed, sf::Mouse::Right},
+        std::bind(&Application::rightMouseButtonPressed, this, std::placeholders::_1));
+
+        eventManager.addBinging({true, sf::Event::EventType::MouseButtonReleased, sf::Mouse::Left},
+        std::bind(&Application::mouseButtonReleased, this, std::placeholders::_1));
+
+        eventManager.addBinging({true, sf::Event::EventType::MouseMoved, sf::Mouse::Left},
+        std::bind(&Application::mouseMoved, this, std::placeholders::_1));
+
     }
 
     void Application::run()
@@ -39,14 +62,13 @@ namespace Pathfinding::Core
         while (window.isOpen())
         {
             sf::Event event;
-            while(window.pollEvent(event))
+            while (window.pollEvent(event))
             {
                 handleInput(event);
             }
             update(deltaClock);
             menu.show();
             draw();
-
         }
         ImGui::SFML::Shutdown();
     }
@@ -54,20 +76,13 @@ namespace Pathfinding::Core
     void Application::handleInput(sf::Event event)
     {
         ImGui::SFML::ProcessEvent(event);
-        if(event.type == sf::Event::EventType::Closed)
-        {
-            window.close();
-        }
-        else
-        {
-            eventManager.pushEvent(event);
-        }
+        eventManager.pushEvent(event);
     }
 
-    void Application::update(sf::Clock & deltaClock)
+    void Application::update(sf::Clock &deltaClock)
     {
         ImGui::SFML::Update(window, deltaClock.restart());
-        if(appState.numberOfNodesChanged)
+        if (appState.numberOfNodesChanged)
         {
             handleNumberOfNodesChange();
         }
@@ -79,7 +94,6 @@ namespace Pathfinding::Core
         appState.numberOfNodesChanged = false;
         appState.currentNodeSideLength = NUMBER_OF_NODES_IN_ROW[appState.currentNumberOfNodeIndex];
         graph.resize(GRID_FIELD_HEIGHT / appState.currentNodeSideLength, GRID_FIELD_HEIGHT / appState.currentNodeSideLength);
-        graphOps.resize();
         renderer.resize();
     }
 
@@ -89,5 +103,56 @@ namespace Pathfinding::Core
         renderer.render(window, graph);
         ImGui::SFML::Render(window);
         window.display();
+    }
+
+    void Application::leftMouseButtonPressed(sf::Vector2i pos)
+    {
+        GraphLocation mappedCoordinates = mapMouseToGraphCoordinates(pos, appState.currentNodeSideLength);
+        if (mappedCoordinates == graph.startLocation())
+        {
+            currentMouseAction = MouseAction::SETTING_START;
+        }
+        else if (mappedCoordinates == graph.goalLocation())
+        {
+            currentMouseAction = MouseAction::SETTING_GOAL;
+        }
+        else
+        {
+            currentMouseAction = MouseAction::BLOCKING_NODE;
+        }
+    }
+
+    void Application::rightMouseButtonPressed(sf::Vector2i pos)
+    {
+        currentMouseAction = MouseAction::CLEARING_NODE;
+    }
+
+    void Application::mouseMoved(sf::Vector2i pos)
+    {
+        GraphLocation mappedCoordinates = mapMouseToGraphCoordinates(pos, appState.currentNodeSideLength);
+        if (!graph.inBounds(mappedCoordinates))
+        {
+            return;
+        }
+        switch (currentMouseAction)
+        {
+        case MouseAction::SETTING_START:
+            graph.setStart(mappedCoordinates);
+            break;
+        case MouseAction::SETTING_GOAL:
+            graph.setGoal(mappedCoordinates);
+            break;
+        case MouseAction::BLOCKING_NODE:
+            graph.blockNode(mappedCoordinates);
+            break;
+        case MouseAction::CLEARING_NODE:
+            graph.clearNode(mappedCoordinates);
+            break;
+        }
+    }
+
+    void Application::mouseButtonReleased(sf::Vector2i pos)
+    {
+        currentMouseAction = MouseAction::IDLE;
     }
 }

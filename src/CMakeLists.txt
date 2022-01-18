@@ -1,11 +1,11 @@
 
 set(SOURCES_PATHFINDING
     Datastructures/Key.cpp
+    Datastructures/LatticeGraph.cpp
     Core/Application.cpp
     Core/Renderer.cpp
     Core/Menu.cpp
-    Core/EventManager.cpp
-    Helpers/LatticeGraphOperations.cpp
+    Events/EventManager.cpp
     main.cpp
 )
 
