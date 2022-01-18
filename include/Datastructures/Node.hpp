@@ -12,8 +12,8 @@ namespace Pathfinding::Datastructures
     {
         GraphLocation location;
         NodeState state = NodeState::Free;
-        int32_t rhs = std::numeric_limits<int32_t>::max();
-        int32_t g = std::numeric_limits<int32_t>::max();
+        int32_t rhs = 345;
+        int32_t g = 534;
         Key key;
     };
 }

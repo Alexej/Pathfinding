@@ -12,9 +12,11 @@ namespace Pathfinding::Core
             Menu(ApplicationState * appStat, int32_t offset, int32_t height, int32_t width);
             void show();
         private:
-            int32_t offset; 
-            int32_t height; 
-            int32_t width;
+            bool nodeSizeLargeEnoughForInfo();
+        private:
+            float offset; 
+            float height; 
+            float width;
             ApplicationState * appStatePtr;
     };
 }

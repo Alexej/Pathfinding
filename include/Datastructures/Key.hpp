@@ -9,8 +9,8 @@ namespace Pathfinding::Datastructures
     {
         Key() = default;
         Key(int32_t k1_, int32_t k2_) : k1(k1_), k2(k2_) {}
-        int32_t k1 = std::numeric_limits<int32_t>::max();
-        int32_t k2 = std::numeric_limits<int32_t>::max();
+        int32_t k1 = 123;
+        int32_t k2 = 321;
     };
 
     [[nodiscard]] bool operator<(const Key & lhs, const Key & rhs);

@@ -9,11 +9,18 @@ namespace Pathfinding::Core
 {
     struct ApplicationState
     {
+        explicit ApplicationState(int32_t numberOfNodes)
+        {
+            currentNumberOfNodeIndex = numberOfNodes;
+            currentNodeSideLength = NUMBER_OF_NODES_IN_ROW[numberOfNodes];
+        }
+        
         bool canRenderNodeInfo = true;
         bool renderNodeInfo = false;
-        int32_t currentNumberOfNodeIndex = 0;
-        int32_t currentNodeSideLength = NUMBER_OF_NODES_IN_ROW[currentNumberOfNodeIndex];
         bool numberOfNodesChanged = false;
+
+        int32_t currentNumberOfNodeIndex;
+        int32_t currentNodeSideLength;
     };
 }
 

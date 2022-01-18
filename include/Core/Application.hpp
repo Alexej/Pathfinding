@@ -29,8 +29,8 @@ namespace Pathfinding::Core
         public:
             Application();
             void run();
-            void update();
             void draw();
+            void update(sf::Clock & deltaClock);
             void handleInput(sf::Event event);
             void handleNumberOfNodesChange();
         private:

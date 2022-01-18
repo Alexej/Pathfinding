@@ -19,7 +19,8 @@ namespace Pathfinding::Core
 {
     
     Application::Application()
-    : window(sf::VideoMode( GRID_FIELD_WIDTH + MENU_WIDTH, 
+    : appState(N_100),
+    window(sf::VideoMode( GRID_FIELD_WIDTH + MENU_WIDTH, 
                             GRID_FIELD_HEIGHT),
                             APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close
                             ),
@@ -40,22 +41,19 @@ namespace Pathfinding::Core
             sf::Event event;
             while(window.pollEvent(event))
             {
-                ImGui::SFML::ProcessEvent(event);
                 handleInput(event);
             }
-            update();
-            ImGui::SFML::Update(window, deltaClock.restart());
+            update(deltaClock);
             menu.show();
-            window.clear();
             draw();
-            ImGui::SFML::Render(window);
-            window.display();
+
         }
         ImGui::SFML::Shutdown();
     }
 
     void Application::handleInput(sf::Event event)
     {
+        ImGui::SFML::ProcessEvent(event);
         if(event.type == sf::Event::EventType::Closed)
         {
             window.close();
@@ -66,8 +64,9 @@ namespace Pathfinding::Core
         }
     }
 
-    void Application::update()
+    void Application::update(sf::Clock & deltaClock)
     {
+        ImGui::SFML::Update(window, deltaClock.restart());
         if(appState.numberOfNodesChanged)
         {
             handleNumberOfNodesChange();
@@ -81,10 +80,14 @@ namespace Pathfinding::Core
         appState.currentNodeSideLength = NUMBER_OF_NODES_IN_ROW[appState.currentNumberOfNodeIndex];
         graph.resize(GRID_FIELD_HEIGHT / appState.currentNodeSideLength, GRID_FIELD_HEIGHT / appState.currentNodeSideLength);
         graphOps.resize();
+        renderer.resize();
     }
 
     void Application::draw()
     {
-        renderer.render(window, &graph);
+        window.clear();
+        renderer.render(window, graph);
+        ImGui::SFML::Render(window);
+        window.display();
     }
 }

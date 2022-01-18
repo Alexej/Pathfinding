@@ -10,7 +10,14 @@ using namespace Pathfinding::Constants;
 namespace Pathfinding::Core
 {
     Menu::Menu(ApplicationState *appStat_, int32_t offset_, int32_t height_, int32_t width_)
-        : appStatePtr(appStat_), offset(offset_), height(height_), width(width_) {}
+        : appStatePtr(appStat_), offset(static_cast<float>(offset_)), 
+        height(static_cast<float>(height_)), 
+        width(static_cast<float>(width_)) {}
+
+    bool Menu::nodeSizeLargeEnoughForInfo()
+    {
+        return NUMBER_OF_NODES[appStatePtr->currentNumberOfNodeIndex] == NUMBER_OF_NODES[0];
+    }
 
     void Menu::show()
     {
@@ -18,20 +25,37 @@ namespace Pathfinding::Core
         window_flags |= ImGuiWindowFlags_NoMove;
         window_flags |= ImGuiWindowFlags_NoResize;
         window_flags |= ImGuiWindowFlags_NoCollapse;
+        window_flags |= ImGuiWindowFlags_NoTitleBar;
 
         ImGui::SetNextWindowPos(ImVec2(offset, 0), ImGuiCond_FirstUseEver);
         ImGui::SetNextWindowSize(ImVec2(width, height), ImGuiCond_FirstUseEver);
 
         ImGui::Begin("Configuration", nullptr, window_flags);
 
-        const char *  NUMBER_OF_NODES_CHAR[] = {"100", "400", "625", "1600"};
-        static int item_current = 0;
-
-        if(ImGui::Combo("Number of nodes", &item_current, NUMBER_OF_NODES_CHAR, IM_ARRAYSIZE(NUMBER_OF_NODES_CHAR)))
+        static int item_current = appStatePtr->currentNumberOfNodeIndex;
+        ImGui::Spacing();
+        ImGui::Text("Number of nodes");
+        if (ImGui::Combo("", &item_current, NUMBER_OF_NODES_CHAR, IM_ARRAYSIZE(NUMBER_OF_NODES_CHAR)))
         {
-            appStatePtr->numberOfNodesChanged = true;
-            appStatePtr->currentNumberOfNodeIndex = item_current;
+            if (appStatePtr->currentNumberOfNodeIndex != item_current)
+            {
+                if (nodeSizeLargeEnoughForInfo())
+                {
+                    appStatePtr->renderNodeInfo = false;
+                }
+                appStatePtr->numberOfNodesChanged = true;
+                appStatePtr->currentNumberOfNodeIndex = item_current;
+            }
         };
+
+        ImGui::Separator();
+        ImGui::Spacing();
+        if (nodeSizeLargeEnoughForInfo())
+        {
+            if (ImGui::Checkbox("Render Node Info", &appStatePtr->renderNodeInfo))
+            {
+            }
+        }
 
         ImGui::End();
     }
