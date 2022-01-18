@@ -106,11 +106,11 @@ namespace Pathfinding::Core
     void Application::leftMouseButtonPressed(sf::Vector2i pos)
     {
         GraphLocation mappedCoordinates = mapMouseToGraphCoordinates(pos, appState.nodeSideLength);
-        if (mappedCoordinates == graph.startLocation())
+        if (mappedCoordinates == graph.startNode()->location)
         {
             currentMouseAction = MouseAction::SETTING_START;
         }
-        else if (mappedCoordinates == graph.goalLocation())
+        else if (mappedCoordinates == graph.goalNode()->location)
         {
             currentMouseAction = MouseAction::SETTING_GOAL;
         }

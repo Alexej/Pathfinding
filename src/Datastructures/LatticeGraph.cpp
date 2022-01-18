@@ -18,10 +18,10 @@ namespace Pathfinding::Datastructures
     {
         int32_t heightI = static_cast<int32_t>(height());
         int32_t widthI = static_cast<int32_t>(width());
-        goalLocation_ = GraphLocation(heightI - 1, widthI - 1);
-        startLocation_ = GraphLocation(0, 0);
-        node(goalLocation_).state = NodeState::Goal;
-        node(startLocation_).state = NodeState::Start;
+        goalNodePtr = &graph[heightI - 1][widthI - 1];
+        startNodePtr = &graph[0][0];
+        goalNodePtr->state = NodeState::Goal;
+        startNodePtr->state = NodeState::Start;
     }
 
     void LatticeGraph::resize(int32_t height, int32_t width)
@@ -39,23 +39,23 @@ namespace Pathfinding::Datastructures
         resetEndpoints();
     }
 
-    GraphLocation LatticeGraph::startLocation() const
+    const Node * LatticeGraph::startNode() const
     {
-        return startLocation_;
+        return startNodePtr;
     }
 
-    GraphLocation LatticeGraph::goalLocation() const
+    const Node * LatticeGraph::goalNode() const
     {
-        return goalLocation_;
+        return goalNodePtr;
     }
 
     void LatticeGraph::setGoal(GraphLocation location)
     {
         if (node(location).state == NodeState::Free)
         {
-            node(goalLocation_).state = NodeState::Free;
-            goalLocation_ = location;
-            node(goalLocation_).state = NodeState::Goal;
+            goalNodePtr->state = NodeState::Free;
+            goalNodePtr = &graph[location.height][location.width];
+            goalNodePtr->state = NodeState::Goal;
         }
     }
 
@@ -63,9 +63,9 @@ namespace Pathfinding::Datastructures
     {
         if (node(location).state == NodeState::Free)
         {
-            node(startLocation_).state = NodeState::Free;
-            startLocation_ = location;
-            node(startLocation_).state = NodeState::Start;
+            startNodePtr->state = NodeState::Free;
+            startNodePtr = &graph[location.height][location.width];
+            startNodePtr->state = NodeState::Start;
         }
     }
 

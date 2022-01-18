@@ -25,8 +25,8 @@ namespace Pathfinding::Datastructures
 
         bool inBounds(GraphLocation location) const;
 
-        GraphLocation startLocation() const;
-        GraphLocation goalLocation() const;
+        const Node * startNode() const;
+        const Node * goalNode() const;
 
         void setGoal(GraphLocation location);
         void setStart(GraphLocation location);
@@ -38,8 +38,8 @@ namespace Pathfinding::Datastructures
 
     private:
         Vector2D<Node> graph;
-        GraphLocation goalLocation_;
-        GraphLocation startLocation_;
+        Node * goalNodePtr;
+        Node * startNodePtr;
     };
 
     std::vector<Node> &successors(LatticeGraph &graph, Node node);
