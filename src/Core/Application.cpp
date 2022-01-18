@@ -36,8 +36,7 @@ namespace Pathfinding::Core
           window(sf::VideoMode(GRID_FIELD_WIDTH + MENU_WIDTH,
                                GRID_FIELD_HEIGHT),
                  APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close),
-          renderer(&appState),
-          graph(GRID_FIELD_HEIGHT / appState.currentNodeSideLength, GRID_FIELD_HEIGHT / appState.currentNodeSideLength),
+          graph(GRID_FIELD_HEIGHT / appState.nodeSideLength, GRID_FIELD_HEIGHT / appState.nodeSideLength),
           eventManager(&window),
           menu(&appState, GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH)
     {
@@ -92,22 +91,21 @@ namespace Pathfinding::Core
     void Application::handleNumberOfNodesChange()
     {
         appState.numberOfNodesChanged = false;
-        appState.currentNodeSideLength = NUMBER_OF_NODES_IN_ROW[appState.currentNumberOfNodeIndex];
-        graph.resize(GRID_FIELD_HEIGHT / appState.currentNodeSideLength, GRID_FIELD_HEIGHT / appState.currentNodeSideLength);
-        renderer.resize();
+        appState.nodeSideLength = NUMBER_OF_NODES_IN_ROW[appState.numberOfNodeIndex];
+        graph.resize(GRID_FIELD_HEIGHT / appState.nodeSideLength, GRID_FIELD_HEIGHT / appState.nodeSideLength);
     }
 
     void Application::draw()
     {
         window.clear();
-        renderer.render(window, graph);
+        renderer.render(window, graph, appState.nodeSideLength, appState.renderNodeInfo);
         ImGui::SFML::Render(window);
         window.display();
     }
 
     void Application::leftMouseButtonPressed(sf::Vector2i pos)
     {
-        GraphLocation mappedCoordinates = mapMouseToGraphCoordinates(pos, appState.currentNodeSideLength);
+        GraphLocation mappedCoordinates = mapMouseToGraphCoordinates(pos, appState.nodeSideLength);
         if (mappedCoordinates == graph.startLocation())
         {
             currentMouseAction = MouseAction::SETTING_START;
@@ -129,7 +127,7 @@ namespace Pathfinding::Core
 
     void Application::mouseMoved(sf::Vector2i pos)
     {
-        GraphLocation mappedCoordinates = mapMouseToGraphCoordinates(pos, appState.currentNodeSideLength);
+        GraphLocation mappedCoordinates = mapMouseToGraphCoordinates(pos, appState.nodeSideLength);
         if (!graph.inBounds(mappedCoordinates))
         {
             return;

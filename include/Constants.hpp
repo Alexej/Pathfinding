@@ -43,7 +43,7 @@ namespace Pathfinding::Constants
     // Rendering
     constexpr auto NODE_OUTLINE_THICKNESS = 1.0f;
     constexpr auto NODE_INFO_OFFSET = 8.0f;
-    constexpr auto NODE_INFO_TEXT_FACTOR = 6;
+    constexpr auto NODE_INFO_TEXT_SIZE = 13;
 
 }
 

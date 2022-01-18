@@ -10,11 +10,21 @@
 
 using namespace Pathfinding::Constants;
 using Pathfinding::Datastructures::NodeState;
+using Pathfinding::Datastructures::GraphLocation;
 
 namespace Pathfinding::Core
 {
     namespace
     {
+        sf::Vector2f getNodePosition(GraphLocation location, int32_t sideLength)
+        {
+            float nodesHorF = static_cast<float>(location.width);
+            float nodesVertF = static_cast<float>(location.height);
+            float sideLengthF = static_cast<float>(sideLength);
+            float positionHor = nodesHorF * sideLengthF;
+            float positionVer = nodesVertF * sideLengthF;
+            return {positionHor, positionVer};
+        }
 
         std::string convertIntToStringWithInf(int32_t num)
         {
@@ -58,24 +68,17 @@ namespace Pathfinding::Core
         }
     }
 
-    Renderer::Renderer(const ApplicationState *appState)
-        : appStatePtr(appState)
+    Renderer::Renderer()
     {
         loadFont("NugoSansLight.ttf");
         text.setFont(font);
         text.setStyle(sf::Text::Bold);
-        resize();
-    }
-
-
-    void Renderer::resize()
-    {
-        nodeRect.setSize(sf::Vector2f(appStatePtr->currentNodeSideLength, appStatePtr->currentNodeSideLength));
         nodeRect.setOutlineThickness(NODE_OUTLINE_THICKNESS);
         nodeRect.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
-        text.setCharacterSize(appStatePtr->currentNodeSideLength / NODE_INFO_TEXT_FACTOR);
+        text.setCharacterSize(NODE_INFO_TEXT_SIZE);
         text.setFillColor(convertToSfmlColor(NODE_INFO_COLOR));
     }
+
 
     /**
      * @brief
@@ -91,50 +94,52 @@ namespace Pathfinding::Core
         }
     }
 
-    void Renderer::render(sf::RenderWindow &window, const LatticeGraph & graph)
+    void Renderer::render(sf::RenderWindow &window, const LatticeGraph & graph, int32_t nodeSideLength, bool showNodeInfo)
     {
+        nodeRect.setSize(sf::Vector2f(nodeSideLength,nodeSideLength));
         for (std::size_t h = 0; h < graph.height(); ++h)
         {
             for (std::size_t w = 0; w < graph.width(); ++w)
             {
-                drawNode(window, graph[h][w]);
+                auto coords = getNodePosition(graph[h][w].location, nodeSideLength);
+                auto currentNode = graph[h][w];
+                drawNode(window, currentNode, coords);
+                if(showNodeInfo)
+                {
+                    renderNodeInfo(window, currentNode, coords, nodeSideLength);
+                }
             }
         }
     }
 
-    void Renderer::drawNode(sf::RenderWindow &window, const Node &node)
-    {
-        float nodesHor = static_cast<float>(node.location.width);
-        float nodesVert = static_cast<float>(node.location.height);
-        float sideLength = static_cast<float>(appStatePtr->currentNodeSideLength);
-        float positionHor = nodesHor * sideLength;
-        float positionVer = nodesVert * sideLength;
 
-        nodeRect.setPosition(sf::Vector2f(positionHor, positionVer));
+    void Renderer::renderNodeInfo(sf::RenderWindow &window, const Node &node, sf::Vector2f coords, int32_t nodeSideLength)
+    {
+        text.setString(convertIntToStringWithInf(node.g));
+        text.setPosition(sf::Vector2f(coords.x + NODE_INFO_OFFSET, coords.y + NODE_INFO_OFFSET));
+        window.draw(text);
+        float widthOfGText = text.getLocalBounds().width;
+
+        text.setString(convertIntToStringWithInf(node.rhs));
+        float widthOfRHSText = text.getLocalBounds().width;
+        float freeSpaceHor = nodeSideLength - widthOfGText - widthOfRHSText;
+        text.setPosition(sf::Vector2f(coords.x + freeSpaceHor + widthOfGText - NODE_INFO_OFFSET, coords.y + NODE_INFO_OFFSET));
+        window.draw(text);
+
+        std::string keyString = "[" + convertIntToStringWithInf(node.key.k1) +":"+ convertIntToStringWithInf(node.key.k2) +"]";
+        text.setString(keyString);
+        float halfOfText = text.getLocalBounds().width / 2;
+        float heightKeyOffset = 2 * text.getLocalBounds().height + NODE_INFO_OFFSET;
+        float halfOfNode = static_cast<float>(nodeSideLength) / 2;
+        float diff = halfOfNode - halfOfText;
+        text.setPosition(sf::Vector2f(coords.x + diff, coords.y + NODE_INFO_OFFSET + heightKeyOffset));
+        window.draw(text);
+    }
+
+    void Renderer::drawNode(sf::RenderWindow &window, const Node &node, sf::Vector2f coords)
+    {
+        nodeRect.setPosition(sf::Vector2f(coords.x, coords.y));
         nodeRect.setFillColor(stateColor(node.state));
         window.draw(nodeRect);
-
-        if (appStatePtr->renderNodeInfo)
-        {
-            text.setString(convertIntToStringWithInf(node.g));
-            text.setPosition(sf::Vector2f(positionHor + NODE_INFO_OFFSET, positionVer + NODE_INFO_OFFSET));
-            window.draw(text);
-            float widthOfGText = text.getLocalBounds().width;
-
-            text.setString(convertIntToStringWithInf(node.rhs));
-            float widthOfRHSText = text.getLocalBounds().width;
-            float freeSpaceHor = appStatePtr->currentNodeSideLength - widthOfGText - widthOfRHSText;
-            text.setPosition(sf::Vector2f(positionHor + freeSpaceHor + widthOfGText - NODE_INFO_OFFSET, positionVer + NODE_INFO_OFFSET));
-            window.draw(text);
-
-            std::string keyString = "[" + convertIntToStringWithInf(node.key.k1) +":"+ convertIntToStringWithInf(node.key.k2) +"]";
-            text.setString(keyString);
-            float halfOfText = text.getLocalBounds().width / 2;
-            float heightKeyOffset = 2 * text.getLocalBounds().height + NODE_INFO_OFFSET;
-            float halfOfNode = static_cast<float>(appStatePtr->currentNodeSideLength) / 2;
-            float diff = halfOfNode - halfOfText;
-            text.setPosition(sf::Vector2f(positionHor + diff, positionVer + NODE_INFO_OFFSET + heightKeyOffset));
-            window.draw(text);
-        }
     }
 }

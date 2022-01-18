@@ -21,16 +21,13 @@ namespace Pathfinding::Core
     class Renderer
     {
     public:
-        Renderer(const ApplicationState *appState);
-        void render(sf::RenderWindow &window, const LatticeGraph & graph);
-        void resize();
-
+        Renderer();
+        void render(sf::RenderWindow &window, const LatticeGraph & graph, int32_t nodeSideLength, bool showNodeInfo);
     private:
         void loadFont(std::string font);
-        void drawNode(sf::RenderWindow &window, const Node &node);
-
+        void drawNode(sf::RenderWindow &window, const Node &node, sf::Vector2f coords);
+        void renderNodeInfo(sf::RenderWindow &window, const Node &node, sf::Vector2f coords, int32_t nodeSideLength);
     private:
-        const ApplicationState *appStatePtr;
         sf::RectangleShape nodeRect;
         sf::Text text;
         sf::Font font;

@@ -16,7 +16,7 @@ namespace Pathfinding::Core
 
     bool Menu::nodeSizeLargeEnoughForInfo()
     {
-        return NUMBER_OF_NODES[appStatePtr->currentNumberOfNodeIndex] == NUMBER_OF_NODES[0];
+        return NUMBER_OF_NODES[appStatePtr->numberOfNodeIndex] == NUMBER_OF_NODES[0];
     }
 
     void Menu::show()
@@ -32,19 +32,19 @@ namespace Pathfinding::Core
 
         ImGui::Begin("Configuration", nullptr, window_flags);
 
-        static int item_current = appStatePtr->currentNumberOfNodeIndex;
+        static int item_current = appStatePtr->numberOfNodeIndex;
         ImGui::Spacing();
         ImGui::Text("Number of nodes");
         if (ImGui::Combo("", &item_current, NUMBER_OF_NODES_CHAR, IM_ARRAYSIZE(NUMBER_OF_NODES_CHAR)))
         {
-            if (appStatePtr->currentNumberOfNodeIndex != item_current)
+            if (appStatePtr->numberOfNodeIndex != item_current)
             {
                 if (nodeSizeLargeEnoughForInfo())
                 {
                     appStatePtr->renderNodeInfo = false;
                 }
                 appStatePtr->numberOfNodesChanged = true;
-                appStatePtr->currentNumberOfNodeIndex = item_current;
+                appStatePtr->numberOfNodeIndex = item_current;
             }
         };
 

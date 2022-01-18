@@ -11,16 +11,16 @@ namespace Pathfinding::Core
     {
         explicit ApplicationState(int32_t numberOfNodes)
         {
-            currentNumberOfNodeIndex = numberOfNodes;
-            currentNodeSideLength = NUMBER_OF_NODES_IN_ROW[numberOfNodes];
+            numberOfNodeIndex = numberOfNodes;
+            nodeSideLength = NUMBER_OF_NODES_IN_ROW[numberOfNodes];
         }
         
         bool canRenderNodeInfo = true;
         bool renderNodeInfo = false;
         bool numberOfNodesChanged = false;
 
-        int32_t currentNumberOfNodeIndex;
-        int32_t currentNodeSideLength;
+        int32_t numberOfNodeIndex;
+        int32_t nodeSideLength;
     };
 }
 
