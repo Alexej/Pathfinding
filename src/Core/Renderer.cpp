@@ -9,8 +9,8 @@
 #include "Constants.hpp"
 
 using namespace Pathfinding::Constants;
-using Pathfinding::Datastructures::NodeState;
 using Pathfinding::Datastructures::GraphLocation;
+using Pathfinding::Datastructures::NodeState;
 
 namespace Pathfinding::Core
 {
@@ -28,7 +28,7 @@ namespace Pathfinding::Core
 
         std::string convertIntToStringWithInf(int32_t num)
         {
-            if(num == std::numeric_limits<int32_t>::max())
+            if (num == std::numeric_limits<int32_t>::max())
             {
                 return std::string("inf");
             }
@@ -79,7 +79,6 @@ namespace Pathfinding::Core
         text.setFillColor(convertToSfmlColor(NODE_INFO_COLOR));
     }
 
-
     /**
      * @brief
      * !fix path!
@@ -94,9 +93,9 @@ namespace Pathfinding::Core
         }
     }
 
-    void Renderer::render(sf::RenderWindow &window, const LatticeGraph & graph, int32_t nodeSideLength, bool showNodeInfo)
+    void Renderer::render(sf::RenderWindow &window, const LatticeGraph &graph, int32_t nodeSideLength, bool showNodeInfo)
     {
-        nodeRect.setSize(sf::Vector2f(nodeSideLength,nodeSideLength));
+        nodeRect.setSize(sf::Vector2f(nodeSideLength, nodeSideLength));
         for (std::size_t h = 0; h < graph.height(); ++h)
         {
             for (std::size_t w = 0; w < graph.width(); ++w)
@@ -104,14 +103,13 @@ namespace Pathfinding::Core
                 auto coords = getNodePosition(graph[h][w].location, nodeSideLength);
                 auto currentNode = graph[h][w];
                 drawNode(window, currentNode, coords);
-                if(showNodeInfo)
+                if (showNodeInfo)
                 {
                     renderNodeInfo(window, currentNode, coords, nodeSideLength);
                 }
             }
         }
     }
-
 
     void Renderer::renderNodeInfo(sf::RenderWindow &window, const Node &node, sf::Vector2f coords, int32_t nodeSideLength)
     {
@@ -126,7 +124,7 @@ namespace Pathfinding::Core
         text.setPosition(sf::Vector2f(coords.x + freeSpaceHor + widthOfGText - NODE_INFO_OFFSET, coords.y + NODE_INFO_OFFSET));
         window.draw(text);
 
-        std::string keyString = "[" + convertIntToStringWithInf(node.key.k1) +":"+ convertIntToStringWithInf(node.key.k2) +"]";
+        std::string keyString = "[" + convertIntToStringWithInf(node.key.k1) + ":" + convertIntToStringWithInf(node.key.k2) + "]";
         text.setString(keyString);
         float halfOfText = text.getLocalBounds().width / 2;
         float heightKeyOffset = 2 * text.getLocalBounds().height + NODE_INFO_OFFSET;

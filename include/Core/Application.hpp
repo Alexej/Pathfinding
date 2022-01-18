@@ -16,35 +16,45 @@
 #include "Menu.hpp"
 
 using namespace Pathfinding::Constants;
-using Pathfinding::Datastructures::LatticeGraph;
 using Pathfinding::Datastructures::GraphLocation;
+using Pathfinding::Datastructures::LatticeGraph;
 using Pathfinding::Events::EventManager;
 
 namespace Pathfinding::Core
 {
-    enum class MouseAction {SETTING_START, SETTING_GOAL, BLOCKING_NODE, CLEARING_NODE, IDLE};
+    enum class MouseAction
+    {
+        SETTING_START,
+        SETTING_GOAL,
+        BLOCKING_NODE,
+        CLEARING_NODE,
+        IDLE
+    };
     class Application
     {
-        public:
-            Application();
-            void run();
-            void draw();
-            void update(sf::Clock & deltaClock);
-            void handleInput(sf::Event event);
-            void handleNumberOfNodesChange();
-        private:
-            void leftMouseButtonPressed(sf::Vector2i pos);
-            void rightMouseButtonPressed(sf::Vector2i pos);
-            void mouseMoved(sf::Vector2i pos);
-            void mouseButtonReleased(sf::Vector2i pos);
-        private:
-            MouseAction currentMouseAction = MouseAction::IDLE;
-            ApplicationState appState;
-            sf::RenderWindow window;
-            Renderer renderer;
-            LatticeGraph graph;
-            EventManager eventManager;
-            Menu menu;
+    public:
+        Application();
+        void run();
+
+    private:
+        void draw();
+        void update(sf::Clock &deltaClock);
+        void handleInput(sf::Event event);
+        void handleNumberOfNodesChange();
+
+    private:
+        void leftMouseButtonPressed(sf::Vector2i pos);
+        void rightMouseButtonPressed(sf::Vector2i pos);
+        void mouseMoved(sf::Vector2i pos);
+        void mouseButtonReleased(sf::Vector2i pos);
+        MouseAction currentMouseAction = MouseAction::IDLE;
+    private:
+        ApplicationState appState;
+        sf::RenderWindow window;
+        Renderer renderer;
+        LatticeGraph graph;
+        EventManager eventManager;
+        Menu menu;
     };
 }
 

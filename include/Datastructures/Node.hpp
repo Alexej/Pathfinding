@@ -16,6 +16,8 @@ namespace Pathfinding::Datastructures
         int32_t g = 534;
         Key key;
     };
+
+    bool operator==(const Node & lhs, const Node & rhs);
 }
 
 #endif /* EA7DED5B_A2DD_40EB_9E16_BAB60E8C98E4 */

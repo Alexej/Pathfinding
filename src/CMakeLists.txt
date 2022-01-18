@@ -2,6 +2,7 @@
 set(SOURCES_PATHFINDING
     Datastructures/Key.cpp
     Datastructures/LatticeGraph.cpp
+    Datastructures/Node.cpp
     Core/Application.cpp
     Core/Renderer.cpp
     Core/Menu.cpp

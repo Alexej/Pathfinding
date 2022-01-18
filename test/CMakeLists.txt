@@ -11,8 +11,12 @@ FetchContent_MakeAvailable(Catch2)
 
 
 set(SOURCES_TESTS
+    ../src/Datastructures/Node.cpp
+    ../src/Datastructures/LatticeGraph.cpp
+    ../src/Datastructures/Key.cpp
     TestLocation.cpp
     TestLatticeGraph.cpp
+    TestPriorityQueue.cpp
     )
 
 add_executable(tests ${SOURCES_TESTS})
