@@ -15,13 +15,14 @@
 #include "EventManager.hpp"
 #include "Menu.hpp"
 
-using namespace Pathfinding::Constants;
-using Pathfinding::Datastructures::GraphLocation;
-using Pathfinding::Datastructures::LatticeGraph;
-using Pathfinding::Events::EventManager;
-
 namespace Pathfinding::Core
 {
+    using namespace Pathfinding::Constants;
+    using Pathfinding::Datastructures::GraphLocation;
+    using Pathfinding::Datastructures::LatticeGraph;
+    using Pathfinding::Events::EventManager;
+    using Pathfinding::Gui::Menu;
+
     enum class MouseAction
     {
         SETTING_START,
@@ -41,7 +42,6 @@ namespace Pathfinding::Core
         void update(sf::Clock &deltaClock);
         void handleInput(sf::Event event);
         void handleNumberOfNodesChange();
-
     private:
         void leftMouseButtonPressed(sf::Vector2i pos);
         void rightMouseButtonPressed(sf::Vector2i pos);

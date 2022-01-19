@@ -18,7 +18,7 @@ namespace Pathfinding::Constants
     //Number of nodes
     constexpr std::array<int32_t, 4> NUMBER_OF_NODES{100, 400, 625, 1600};
     constexpr std::array<int32_t, 4> NUMBER_OF_NODES_IN_ROW{80, 40, 32, 20};
-    constexpr const char *NUMBER_OF_NODES_CHAR[] = {"100", "400", "625", "1600"};
+    constexpr const char * NUMBER_OF_NODES_CHAR[] = {"100", "400", "625", "1600"};
     constexpr int32_t N_100 = 0;
     constexpr int32_t N_400 = 1;
     constexpr int32_t N_625 = 2;

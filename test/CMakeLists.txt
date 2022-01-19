@@ -14,6 +14,8 @@ set(SOURCES_TESTS
     ../src/Datastructures/Node.cpp
     ../src/Datastructures/LatticeGraph.cpp
     ../src/Datastructures/Key.cpp
+    ../src/Gui/Menu.cpp
+
     TestLocation.cpp
     TestLatticeGraph.cpp
     TestPriorityQueue.cpp

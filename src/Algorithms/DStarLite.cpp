@@ -5,11 +5,12 @@
 #include "LatticeGraph.hpp"
 #include "GraphLocation.hpp"
 
-using Pathfinding::Datastructures::NodeState;
-using Pathfinding::Datastructures::GraphLocation;
 
 namespace Pathfinding::Algorithms
 {
+    using Pathfinding::Datastructures::NodeState;
+    using Pathfinding::Datastructures::GraphLocation;
+    
     namespace
     {
         int32_t heuristic(const Node * from ,const Node * to)

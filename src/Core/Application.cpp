@@ -10,17 +10,14 @@
 #include <imgui.h>
 
 #include <iostream>
-using namespace std;
 
-using namespace Pathfinding::Datastructures;
-using namespace Pathfinding::Constants;
-
-using std::placeholders::_1;
 
 
 namespace Pathfinding::Core
 {
-
+    using namespace Pathfinding::Datastructures;
+    using namespace Pathfinding::Constants;
+    using std::placeholders::_1;
     namespace
     {
         GraphLocation mapMouseToGraphCoordinates(sf::Vector2i pos, int32_t currentSideLength)

@@ -5,11 +5,12 @@
 #include "Node.hpp"
 #include <unordered_map>
 
-template <typename Type>
-using Vector2D = std::vector<std::vector<Type>>;
-
 namespace Pathfinding::Datastructures
 {
+
+    template <typename Type>
+    using Vector2D = std::vector<std::vector<Type>>;
+    
     class LatticeGraph
     {
     public:

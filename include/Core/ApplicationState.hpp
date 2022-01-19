@@ -3,10 +3,11 @@
 
 #include "Constants.hpp"
 
-using namespace Pathfinding::Constants;
 
 namespace Pathfinding::Core
 {
+    using namespace Pathfinding::Constants;
+    
     enum class AlgorithmState{ READY, SEARCHING, DONE};
     struct ApplicationState
     {

@@ -1,14 +1,14 @@
 
 set(SOURCES_PATHFINDING
-    Datastructures/Key.cpp
-    Datastructures/LatticeGraph.cpp
-    Datastructures/Node.cpp
-    Algorithms/DStarLite.cpp
-    Core/Application.cpp
-    Core/Renderer.cpp
-    Core/Menu.cpp
-    Events/EventManager.cpp
-    main.cpp
+  Datastructures/Key.cpp
+  Datastructures/LatticeGraph.cpp
+  Datastructures/Node.cpp
+  Algorithms/DStarLite.cpp
+  Core/Application.cpp
+  Core/Renderer.cpp
+  Gui/Menu.cpp
+  Events/EventManager.cpp
+  main.cpp
 )
 
 add_executable(pathfinding_b ${SOURCES_PATHFINDING})

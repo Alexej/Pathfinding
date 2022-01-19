@@ -2,11 +2,15 @@
 #define EAA44AE2_6A11_4F15_8B18_A067DC162051
 
 #include <SFML/Graphics/RenderWindow.hpp>
-#include <functional>
 
 namespace Pathfinding::Core
 {
     struct ApplicationState;
+}
+
+namespace Pathfinding::Gui
+{
+    using Pathfinding::Core::ApplicationState;
     class Menu
     {
         public:

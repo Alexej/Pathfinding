@@ -8,12 +8,13 @@
 #include "LatticeGraph.hpp"
 #include "Constants.hpp"
 
-using namespace Pathfinding::Constants;
-using Pathfinding::Datastructures::GraphLocation;
-using Pathfinding::Datastructures::NodeState;
 
 namespace Pathfinding::Core
 {
+    using namespace Pathfinding::Constants;
+    using Pathfinding::Datastructures::GraphLocation;
+    using Pathfinding::Datastructures::NodeState;
+    
     namespace
     {
         sf::Vector2f getNodePosition(GraphLocation location, int32_t sideLength)

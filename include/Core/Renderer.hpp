@@ -12,11 +12,12 @@ namespace Pathfinding::Datastructures
     struct Node;
 }
 
-using Pathfinding::Datastructures::LatticeGraph;
-using Pathfinding::Datastructures::Node;
 
 namespace Pathfinding::Core
 {
+    using Pathfinding::Datastructures::LatticeGraph;
+    using Pathfinding::Datastructures::Node;
+    
     struct ApplicationState;
     class Renderer
     {
