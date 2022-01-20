@@ -8,13 +8,12 @@
 #include "LatticeGraph.hpp"
 #include "Constants.hpp"
 
-
 namespace Pathfinding::Core
 {
     using namespace Pathfinding::Constants;
     using Pathfinding::Datastructures::GraphLocation;
     using Pathfinding::Datastructures::NodeState;
-    
+
     namespace
     {
         sf::Vector2f getNodePosition(GraphLocation location, int32_t sideLength)
@@ -94,19 +93,19 @@ namespace Pathfinding::Core
         }
     }
 
-    void Renderer::render(sf::RenderWindow &window, const LatticeGraph &graph, int32_t nodeSideLength, bool showNodeInfo)
+    void Renderer::render(sf::RenderWindow &window, const LatticeGraph &graph, ApplicationState & state)
     {
-        nodeRect.setSize(sf::Vector2f(nodeSideLength, nodeSideLength));
+        nodeRect.setSize(sf::Vector2f(state.dim.currentNodeSideLength(), state.dim.currentNodeSideLength()));
         for (std::size_t h = 0; h < graph.height(); ++h)
         {
             for (std::size_t w = 0; w < graph.width(); ++w)
             {
-                auto coords = getNodePosition(graph[h][w].location, nodeSideLength);
                 auto currentNode = graph[h][w];
+                auto coords = getNodePosition(currentNode.location, state.dim.currentNodeSideLength());
                 drawNode(window, currentNode, coords);
-                if (showNodeInfo)
+                if (state.renderNodeInfo)
                 {
-                    renderNodeInfo(window, currentNode, coords, nodeSideLength);
+                    renderNodeInfo(window, currentNode, coords, state.dim.currentNodeSideLength());
                 }
             }
         }

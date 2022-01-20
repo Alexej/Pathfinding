@@ -13,9 +13,8 @@
 
 namespace Pathfinding::Core
 {
-    using namespace Pathfinding::Datastructures;
     using namespace Pathfinding::Constants;
-    using std::placeholders::_1;
+
     namespace
     {
         GraphLocation mapMouseToGraphCoordinates(sf::Vector2i pos, int32_t currentSideLength)
@@ -27,26 +26,24 @@ namespace Pathfinding::Core
     }
 
     Application::Application()
-        : appState(N_100),
-          window(sf::VideoMode(GRID_FIELD_WIDTH + MENU_WIDTH, GRID_FIELD_HEIGHT),
-                APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close),
-                graph(GRID_FIELD_HEIGHT / appState.nodeSideLength, GRID_FIELD_HEIGHT / appState.nodeSideLength),
+        : window(sf::VideoMode(GRID_FIELD_WIDTH + MENU_WIDTH, GRID_FIELD_HEIGHT),
+                 APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close),
+          graph(GRID_FIELD_HEIGHT / appState.dim.currentNodeSideLength(), GRID_FIELD_HEIGHT / appState.dim.currentNodeSideLength()),
           eventManager(&window),
           menu(&appState, GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH),
           dstar(&graph),
-          graphOps(&graph,appState.nodeSideLength)
+          graphOps(&graph, appState.dim.currentNodeSideLength())
     {
-        eventManager.addBinging({false, sf::Event::EventType::MouseButtonPressed, sf::Mouse::Left}, 
-        std::bind(&GraphOperations::leftMouseButtonPressed, &graphOps, std::placeholders::_1));
 
-        eventManager.addBinging({false, sf::Event::EventType::MouseButtonPressed, sf::Mouse::Right},
-        std::bind(&GraphOperations::rightMouseButtonPressed, &graphOps, std::placeholders::_1));
-
-        eventManager.addBinging({true, sf::Event::EventType::MouseButtonReleased, sf::Mouse::Left},
-        std::bind(&GraphOperations::mouseButtonReleased, &graphOps, std::placeholders::_1));
-
-        eventManager.addBinging({true, sf::Event::EventType::MouseMoved, sf::Mouse::Left},
-        std::bind(&GraphOperations::mouseMoved, &graphOps, std::placeholders::_1));
+        using std::placeholders::_1;
+        using sf::Event::EventType::MouseButtonPressed;
+        using sf::Event::EventType::MouseButtonReleased;
+        using sf::Event::EventType::MouseMoved;
+    
+        eventManager.addBinging({false, MouseButtonPressed, sf::Mouse::Left}, std::bind(&GraphOperations::leftMouseButtonPressed, &graphOps, _1));
+        eventManager.addBinging({false, MouseButtonPressed, sf::Mouse::Right}, std::bind(&GraphOperations::rightMouseButtonPressed, &graphOps, _1));
+        eventManager.addBinging({true, MouseButtonReleased, sf::Mouse::Left}, std::bind(&GraphOperations::mouseButtonReleased, &graphOps, _1));
+        eventManager.addBinging({true, MouseMoved, sf::Mouse::Left}, std::bind(&GraphOperations::mouseMoved, &graphOps, _1));
     }
 
     void Application::run()
@@ -86,15 +83,14 @@ namespace Pathfinding::Core
     void Application::handleNumberOfNodesChange()
     {
         appState.numberOfNodesChanged = false;
-        appState.nodeSideLength = NUMBER_OF_NODES_IN_ROW[appState.numberOfNodeIndex];
-        graph.resize(GRID_FIELD_HEIGHT / appState.nodeSideLength, GRID_FIELD_HEIGHT / appState.nodeSideLength);
-        graphOps.resize(appState.nodeSideLength);
+        graph.resize(GRID_FIELD_HEIGHT / appState.dim.currentNodeSideLength(), GRID_FIELD_HEIGHT / appState.dim.currentNodeSideLength());
+        graphOps.resize(appState.dim.currentNodeSideLength());
     }
 
     void Application::draw()
     {
         window.clear();
-        renderer.render(window, graph, appState.nodeSideLength, appState.renderNodeInfo);
+        renderer.render(window, graph, appState);
         ImGui::SFML::Render(window);
         window.display();
     }

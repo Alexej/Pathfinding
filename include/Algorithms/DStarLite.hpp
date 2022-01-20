@@ -10,13 +10,12 @@ namespace Pathfinding::Datastructures
     struct Key;
 }
 
-using Pathfinding::Datastructures::LatticeGraph;
-using Pathfinding::Datastructures::PriorityQueue;
-using Pathfinding::Datastructures::Node;
-using Pathfinding::Datastructures::Key;
-
 namespace Pathfinding::Algorithms
 {
+    using Pathfinding::Datastructures::LatticeGraph;
+    using Pathfinding::Datastructures::PriorityQueue;
+    using Pathfinding::Datastructures::Node;
+    using Pathfinding::Datastructures::Key;
     class DStarLite
     {
         public:

@@ -2,6 +2,18 @@
 
 namespace Pathfinding::Datastructures
 {
+    namespace 
+    {
+        void initNode(Node & node, int32_t h, int32_t w)
+        {
+            node.location = GraphLocation(h, w);
+            node.g = std::numeric_limits<int32_t>::max();
+            node.rhs = std::numeric_limits<int32_t>::max();
+            node.key = Key();
+            node.state = NodeState::Free;
+        }
+    }
+
     LatticeGraph::LatticeGraph(int32_t height, int32_t width)
     {
         resize(height, width);
@@ -33,32 +45,28 @@ namespace Pathfinding::Datastructures
             std::vector<Node> row;
             for (int32_t w = 0; w < width; ++w)
             {
-                graph[h][w].location = GraphLocation(h, w);
-                graph[h][w].g = std::numeric_limits<int32_t>::max();
-                graph[h][w].rhs = std::numeric_limits<int32_t>::max();
-                graph[h][w].key = Key();
-                graph[h][w].state = NodeState::Free;
+                initNode(graph[h][w], h, w);
             }
         }
         resetEndpoints();
     }
 
-    const Node * LatticeGraph::startNode() const
+    const Node *LatticeGraph::startNode() const
     {
         return startNodePtr;
     }
 
-    const Node * LatticeGraph::goalNode() const
+    const Node *LatticeGraph::goalNode() const
     {
         return goalNodePtr;
     }
 
-    Node * LatticeGraph::startNode()
+    Node *LatticeGraph::startNode()
     {
         return startNodePtr;
     }
 
-    Node * LatticeGraph::goalNode()
+    Node *LatticeGraph::goalNode()
     {
         return goalNodePtr;
     }

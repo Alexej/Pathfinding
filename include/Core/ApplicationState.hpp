@@ -2,7 +2,7 @@
 #define C35910EF_5FC3_4918_8225_6FEE6352FD76
 
 #include "Constants.hpp"
-
+#include "GraphDimension.hpp"
 
 namespace Pathfinding::Core
 {
@@ -11,21 +11,19 @@ namespace Pathfinding::Core
     enum class AlgorithmState{ READY, SEARCHING, DONE};
     struct ApplicationState
     {
-        explicit ApplicationState(int32_t numberOfNodes)
+        ApplicationState()
         {
-            numberOfNodeIndex = numberOfNodes;
-            nodeSideLength = NUMBER_OF_NODES_IN_ROW[numberOfNodes];
+            renderNodeInfo = false;
+            stateChanged = false;
+            numberOfNodesChanged = false;  
+            algState = AlgorithmState::READY;
         }
         
-        bool canRenderNodeInfo = true;
-        bool renderNodeInfo = false;
-        bool numberOfNodesChanged = false;
-        bool stateChanged = false;
-
-        int32_t numberOfNodeIndex;
-        int32_t nodeSideLength;
-
-        AlgorithmState algState = AlgorithmState::READY;
+        GraphDimension dim;
+        bool renderNodeInfo;
+        bool stateChanged;
+        bool numberOfNodesChanged;
+        AlgorithmState algState;
     };
 }
 

@@ -6,24 +6,14 @@
 
 namespace Pathfinding::Constants
 {
-    //Strings
+    // Strings
     constexpr auto APPLICATION_TITLE = "Pathfinding";
 
-    //Dimension
+    // Dimension
     constexpr int32_t GRID_FIELD_WIDTH = 800;
     constexpr int32_t GRID_FIELD_HEIGHT = 800;
-    constexpr int32_t MINIMUM_NODE_SIDE_LENGHT_FOR_NODE_INFO = 80;
     constexpr int32_t MENU_WIDTH = 300;
-
-    //Number of nodes
-    constexpr std::array<int32_t, 4> NUMBER_OF_NODES{100, 400, 625, 1600};
-    constexpr std::array<int32_t, 4> NUMBER_OF_NODES_IN_ROW{80, 40, 32, 20};
-    constexpr const char * NUMBER_OF_NODES_CHAR[] = {"100", "400", "625", "1600"};
-    constexpr int32_t N_100 = 0;
-    constexpr int32_t N_400 = 1;
-    constexpr int32_t N_625 = 2;
-    constexpr int32_t N_1600 = 3;
-
+    constexpr int32_t NUMBER_OF_NODES_FOR_RENDER_INFO = 100;
 
     // Colors:
     constexpr std::array<uint8_t, 3> FREE_NODE_COLOR{150, 160, 180};
@@ -48,3 +38,13 @@ namespace Pathfinding::Constants
 }
 
 #endif /* A2338B5A_9164_4556_99CB_AA1F92239E7A */
+
+
+/*
+    constexpr std::array<int32_t, 4> NUMBER_OF_NODES{100, 400, 625, 1600};
+    constexpr std::array<int32_t, 4> NUMBER_OF_NODES_IN_ROW{80, 40, 32, 20};
+    constexpr int32_t N_100 = 0;
+    constexpr int32_t N_400 = 1;
+    constexpr int32_t N_625 = 2;
+    constexpr int32_t N_1600 = 3;
+*/

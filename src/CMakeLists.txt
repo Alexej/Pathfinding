@@ -8,6 +8,7 @@ set(SOURCES_PATHFINDING
   Datastructures/Key.cpp
   Core/Application.cpp
   Core/Renderer.cpp
+  Core/GraphDimension.cpp
   Gui/Menu.cpp
   main.cpp
 )

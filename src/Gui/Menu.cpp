@@ -5,10 +5,11 @@
 #include "Menu.hpp"
 #include "ApplicationState.hpp"
 
-
 using namespace Pathfinding::Constants;
 using Pathfinding::Core::ApplicationState;
 using Pathfinding::Core::AlgorithmState;
+using Pathfinding::Core::NumberOfNodes;
+using Pathfinding::Core::NUMBER_OF_NODES_CHAR;
 
 namespace Pathfinding::Gui
 {
@@ -16,11 +17,6 @@ namespace Pathfinding::Gui
         : appStatePtr(appStat_), offset(static_cast<float>(offset_)), 
         height(static_cast<float>(height_)), 
         width(static_cast<float>(width_)) {}
-
-    bool Menu::nodeSizeLargeEnoughForInfo()
-    {
-        return NUMBER_OF_NODES[appStatePtr->numberOfNodeIndex] == NUMBER_OF_NODES[0];
-    }
 
     void Menu::show()
     {
@@ -35,24 +31,22 @@ namespace Pathfinding::Gui
 
         ImGui::Begin("Configuration", nullptr, window_flags);
 
-
-
         switch(appStatePtr->algState)
         {
             case AlgorithmState::READY:
-                static int item_current = appStatePtr->numberOfNodeIndex;
+                static int32_t item_current = static_cast<int32_t>(appStatePtr->dim.currentNumberOfNodes());
                 ImGui::Spacing();
                 ImGui::Text("Number of nodes");
                 if (ImGui::Combo("", &item_current, NUMBER_OF_NODES_CHAR, IM_ARRAYSIZE(NUMBER_OF_NODES_CHAR)))
                 {
-                    if (appStatePtr->numberOfNodeIndex != item_current)
+                    if (static_cast<int32_t>(appStatePtr->dim.currentNumberOfNodes()) != item_current)
                     {
-                        if (nodeSizeLargeEnoughForInfo())
+                        if (appStatePtr->dim.canRenderInfo())
                         {
                             appStatePtr->renderNodeInfo = false;
                         }
                         appStatePtr->numberOfNodesChanged = true;
-                        appStatePtr->numberOfNodeIndex = item_current;
+                        appStatePtr->dim.setCurrentNumberOfNodes(static_cast<NumberOfNodes>(item_current));
                     }
                 };
 
@@ -74,7 +68,7 @@ namespace Pathfinding::Gui
         //Common Elements
         ImGui::Separator();
         ImGui::Spacing();
-        if (nodeSizeLargeEnoughForInfo())
+        if (appStatePtr->dim.canRenderInfo())
         {
             if (ImGui::Checkbox("Render Node Info", &appStatePtr->renderNodeInfo))
             {

@@ -17,8 +17,6 @@ namespace Pathfinding::Gui
             Menu(ApplicationState * appStat, int32_t offset, int32_t height, int32_t width);
             void show();
         private:
-            bool nodeSizeLargeEnoughForInfo();
-        private:
             float offset; 
             float height; 
             float width;

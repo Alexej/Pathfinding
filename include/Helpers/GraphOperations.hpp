@@ -23,20 +23,21 @@ namespace Pathfinding::Helpers
 
     class GraphOperations
     {
-        public:
-            GraphOperations(LatticeGraph * graph, int32_t nodeSideLength);
-            void leftMouseButtonPressed(sf::Vector2i pos);
-            void rightMouseButtonPressed(sf::Vector2i pos);
-            void mouseMoved(sf::Vector2i pos);
-            void mouseButtonReleased(sf::Vector2i pos);
-            void resize(int32_t nodeSideLength);
-            void disableEnpointsEvent();
-            void enableEndPointsEvent();
-        private:
-            MouseAction currentMouseAction = MouseAction::IDLE;
-            LatticeGraph * graphPtr;
-            bool endPointsEvent = true;
-            int32_t nodeSideLength;
+    public:
+        GraphOperations(LatticeGraph *graph, int32_t nodeSideLength);
+        void rightMouseButtonPressed(sf::Vector2i pos);
+        void leftMouseButtonPressed(sf::Vector2i pos);
+        void mouseButtonReleased(sf::Vector2i pos);
+        void mouseMoved(sf::Vector2i pos);
+        void resize(int32_t nodeSideLength);
+        void disableEnpointsEvent();
+        void enableEndPointsEvent();
+
+    private:
+        MouseAction currentMouseAction = MouseAction::IDLE;
+        LatticeGraph *graphPtr;
+        bool endPointsEvent = true;
+        int32_t nodeSideLength;
     };
 }
 
