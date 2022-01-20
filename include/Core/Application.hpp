@@ -14,23 +14,19 @@
 #include "GraphLocation.hpp"
 #include "EventManager.hpp"
 #include "Menu.hpp"
+#include "DStarLite.hpp"
+#include "GraphOperations.hpp"
 
 namespace Pathfinding::Core
 {
     using namespace Pathfinding::Constants;
-    using Pathfinding::Datastructures::GraphLocation;
-    using Pathfinding::Datastructures::LatticeGraph;
-    using Pathfinding::Events::EventManager;
     using Pathfinding::Gui::Menu;
+    using Pathfinding::Events::EventManager;
+    using Pathfinding::Algorithms::DStarLite;
+    using Pathfinding::Datastructures::LatticeGraph;
+    using Pathfinding::Datastructures::GraphLocation;
+    using Pathfinding::Helpers::GraphOperations;
 
-    enum class MouseAction
-    {
-        SETTING_START,
-        SETTING_GOAL,
-        BLOCKING_NODE,
-        CLEARING_NODE,
-        IDLE
-    };
     class Application
     {
     public:
@@ -43,18 +39,14 @@ namespace Pathfinding::Core
         void handleInput(sf::Event event);
         void handleNumberOfNodesChange();
     private:
-        void leftMouseButtonPressed(sf::Vector2i pos);
-        void rightMouseButtonPressed(sf::Vector2i pos);
-        void mouseMoved(sf::Vector2i pos);
-        void mouseButtonReleased(sf::Vector2i pos);
-        MouseAction currentMouseAction = MouseAction::IDLE;
-    private:
         ApplicationState appState;
         sf::RenderWindow window;
         Renderer renderer;
         LatticeGraph graph;
         EventManager eventManager;
         Menu menu;
+        DStarLite dstar;
+        GraphOperations graphOps;
     };
 }
 

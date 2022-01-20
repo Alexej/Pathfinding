@@ -5,8 +5,10 @@
 #include "Menu.hpp"
 #include "ApplicationState.hpp"
 
+
 using namespace Pathfinding::Constants;
 using Pathfinding::Core::ApplicationState;
+using Pathfinding::Core::AlgorithmState;
 
 namespace Pathfinding::Gui
 {
@@ -33,22 +35,43 @@ namespace Pathfinding::Gui
 
         ImGui::Begin("Configuration", nullptr, window_flags);
 
-        static int item_current = appStatePtr->numberOfNodeIndex;
-        ImGui::Spacing();
-        ImGui::Text("Number of nodes");
-        if (ImGui::Combo("", &item_current, NUMBER_OF_NODES_CHAR, IM_ARRAYSIZE(NUMBER_OF_NODES_CHAR)))
-        {
-            if (appStatePtr->numberOfNodeIndex != item_current)
-            {
-                if (nodeSizeLargeEnoughForInfo())
-                {
-                    appStatePtr->renderNodeInfo = false;
-                }
-                appStatePtr->numberOfNodesChanged = true;
-                appStatePtr->numberOfNodeIndex = item_current;
-            }
-        };
 
+
+        switch(appStatePtr->algState)
+        {
+            case AlgorithmState::READY:
+                static int item_current = appStatePtr->numberOfNodeIndex;
+                ImGui::Spacing();
+                ImGui::Text("Number of nodes");
+                if (ImGui::Combo("", &item_current, NUMBER_OF_NODES_CHAR, IM_ARRAYSIZE(NUMBER_OF_NODES_CHAR)))
+                {
+                    if (appStatePtr->numberOfNodeIndex != item_current)
+                    {
+                        if (nodeSizeLargeEnoughForInfo())
+                        {
+                            appStatePtr->renderNodeInfo = false;
+                        }
+                        appStatePtr->numberOfNodesChanged = true;
+                        appStatePtr->numberOfNodeIndex = item_current;
+                    }
+                };
+
+                ImGui::Separator();
+                ImGui::Spacing();
+                if(ImGui::Button("Start", ImVec2(width-20,20)))
+                {
+                    appStatePtr->algState = AlgorithmState::SEARCHING;
+                }
+            break;
+            case AlgorithmState::SEARCHING:
+                if(ImGui::Button("Step", ImVec2(width-20,20)))
+                {
+                    appStatePtr->algState = AlgorithmState::SEARCHING;
+                }
+
+        }
+
+        //Common Elements
         ImGui::Separator();
         ImGui::Spacing();
         if (nodeSizeLargeEnoughForInfo())
@@ -57,6 +80,12 @@ namespace Pathfinding::Gui
             {
             }
         }
+        ImGui::Spacing();
+        if(ImGui::Button("RESET", ImVec2(width-20,20)))
+        {
+            appStatePtr->algState = AlgorithmState::SEARCHING;
+        }
+
 
         ImGui::End();
     }

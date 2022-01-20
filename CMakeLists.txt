@@ -14,6 +14,7 @@ include_directories(include/Datastructures)
 include_directories(include/Algorithms)
 include_directories(include/Abstract)
 include_directories(include/Core)
+include_directories(include/Helpers)
 include_directories(include/Gui)
 
 add_subdirectory(dependencies)
