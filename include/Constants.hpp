@@ -14,6 +14,7 @@ namespace Pathfinding::Constants
     constexpr int32_t GRID_FIELD_HEIGHT = 800;
     constexpr int32_t MENU_WIDTH = 300;
     constexpr int32_t NUMBER_OF_NODES_FOR_RENDER_INFO = 100;
+    constexpr int32_t APPLICATION_WINDOW_WIDTH = GRID_FIELD_WIDTH + MENU_WIDTH;
 
     // Colors:
     constexpr std::array<uint8_t, 3> FREE_NODE_COLOR{150, 160, 180};

@@ -7,19 +7,18 @@
 namespace Pathfinding::Core
 {
     using namespace Pathfinding::Constants;
-    
     enum class State{ READY, SEARCHING, DONE};
     class ApplicationState
     {
         public:
             ApplicationState();
-            int32_t currentNumberOfNodesI() const;
             bool canShowNodeInfo() const;
             bool showNodeInfo() const;
             void enableNodeInfo();
             void disableNodeInfo();
             void setState(State state);
             void setCurrentNumberOfNodesIndex(int32_t index);
+            int32_t currentNumberOfNodesI() const;
             int32_t currentNodeSideLength() const;
             State currentState() const; 
             int32_t currentNumberOfNodesIndex() const;

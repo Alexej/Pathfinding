@@ -99,10 +99,12 @@ namespace Pathfinding::Gui
             appStatePtr->setState(State::SEARCHING);
         }
     }
+    
     void Menu::addNumberOfNodesChangedCallback(std::function<void(int32_t)> callBack)
     {
         numberOfNodesChangedCallBack = callBack;
     }
+
     void Menu::addStepCallBack(std::function<void(void)> callBack)
     {
         stepCallbBack = callBack;

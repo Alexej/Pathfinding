@@ -2,6 +2,7 @@
 #define AB283A7C_08BA_4585_A98A_76E2641DDE71
 
 #include "PriorityQueue.hpp"
+#include <memory>
 
 namespace Pathfinding::Datastructures
 {
@@ -10,15 +11,25 @@ namespace Pathfinding::Datastructures
     struct Key;
 }
 
+namespace Pathfinding::Abstract
+{
+    class ACost;
+    class AHeuristic;
+}
+
 namespace Pathfinding::Algorithms
 {
     using Pathfinding::Datastructures::LatticeGraph;
     using Pathfinding::Datastructures::PriorityQueue;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::Key;
+    using Pathfinding::Abstract::ACost;
+    using Pathfinding::Abstract::AHeuristic;
+
     class DStarLite
     {
         public:
+            DStarLite() = default;
             explicit DStarLite(LatticeGraph * graph);
             void initialize();
             void UpdateVertex(Node * node);

@@ -100,9 +100,14 @@ namespace Pathfinding::Algorithms
     std::vector<Node *> DStarLite::succ(Node * u)
     {
         std::vector<Node *> succs;
-        for(int32_t h = u->location.height - 1; h <= u->location.height + 1; ++h)
+        int32_t hFrom = u->location.height - 1;
+        int32_t hTo = u->location.height + 1;
+        int32_t wFrom = u->location.width - 1;
+        int32_t wTo = u->location.width + 1;
+
+        for(int32_t h = hFrom; h <=  hTo; ++h)
         {
-            for(int32_t w = u->location.width - 1; w <= u->location.width + 1; ++w)
+            for(int32_t w = wFrom; w <= wTo ; ++w)
             {
                 GraphLocation location(h,w);
                 if(graphPtr->inBounds(location))

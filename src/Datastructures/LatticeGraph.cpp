@@ -19,6 +19,11 @@ namespace Pathfinding::Datastructures
         resize(height, width);
     }
 
+    LatticeGraph::LatticeGraph(GraphLocation dimension)
+    {
+        resize(dimension.height, dimension.width);
+    }
+
     bool LatticeGraph::inBounds(GraphLocation location) const
     {
         int32_t widthI = static_cast<int32_t>(width());

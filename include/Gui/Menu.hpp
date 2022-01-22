@@ -15,6 +15,7 @@ namespace Pathfinding::Gui
     class Menu
     {
         public:
+            Menu() = default;
             Menu(ApplicationState * appStat, int32_t offset, int32_t height, int32_t width);
             void show();
             void addNumberOfNodesChangedCallback(std::function<void(int32_t)> callBack);

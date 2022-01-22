@@ -25,14 +25,24 @@ namespace Pathfinding::Core
         }
     }
 
-    Application::Application()
-        : window(sf::VideoMode(GRID_FIELD_WIDTH + MENU_WIDTH, GRID_FIELD_HEIGHT), APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close),
-          graph(GRID_FIELD_HEIGHT / appState.currentNodeSideLength(), GRID_FIELD_HEIGHT / appState.currentNodeSideLength()),
-          eventManager(&window),
-          menu(&appState, GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH),
-          dstar(&graph),
-          graphOps(&graph, appState.currentNodeSideLength())
+    GraphLocation Application::getCurrentGraphDimension()
     {
+        return {GRID_FIELD_HEIGHT / appState.currentNodeSideLength(), GRID_FIELD_HEIGHT / appState.currentNodeSideLength()};
+    }
+
+    void Application::init()
+    {
+        window.create(sf::VideoMode(APPLICATION_WINDOW_WIDTH, GRID_FIELD_HEIGHT), APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close);
+        graph = LatticeGraph(getCurrentGraphDimension());
+        eventManager = EventManager(&window);
+        menu = Menu(&appState, GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH);
+        dstar = DStarLite(&graph);
+        graphOps = GraphOperations(&graph, appState.currentNodeSideLength());    
+    }
+
+    Application::Application()
+    {
+        init();
 
         using sf::Event::EventType::MouseButtonPressed;
         using sf::Event::EventType::MouseButtonReleased;

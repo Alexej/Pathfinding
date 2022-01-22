@@ -13,6 +13,7 @@ namespace Pathfinding::Events
     class EventManager
     {
         public:
+            EventManager() = default;
             explicit EventManager(sf::RenderWindow * window);
             void addBinging(MouseEvent event, std::function< void(sf::Vector2i) > callbackFunc);
             void pushEvent(sf::Event event);

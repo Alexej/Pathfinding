@@ -14,7 +14,9 @@ namespace Pathfinding::Datastructures
     class LatticeGraph
     {
     public:
+        LatticeGraph() = default;
         LatticeGraph(int32_t height, int32_t width);
+        LatticeGraph(GraphLocation dimension);
 
         std::vector<Node> &operator[](std::size_t height) { return graph[height]; }
         const std::vector<Node> &operator[](std::size_t height) const { return graph[height]; }

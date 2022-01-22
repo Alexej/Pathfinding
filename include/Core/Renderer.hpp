@@ -12,7 +12,6 @@ namespace Pathfinding::Datastructures
     struct Node;
 }
 
-
 namespace Pathfinding::Core
 {
     using Pathfinding::Datastructures::LatticeGraph;

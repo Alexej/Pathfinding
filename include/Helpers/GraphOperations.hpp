@@ -24,6 +24,7 @@ namespace Pathfinding::Helpers
     class GraphOperations
     {
     public:
+        GraphOperations() = default;
         GraphOperations(LatticeGraph *graph, int32_t nodeSideLength);
         void rightMouseButtonPressed(sf::Vector2i pos);
         void leftMouseButtonPressed(sf::Vector2i pos);

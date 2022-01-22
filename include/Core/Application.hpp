@@ -27,17 +27,21 @@ namespace Pathfinding::Core
     using Pathfinding::Datastructures::GraphLocation;
     using Pathfinding::Helpers::GraphOperations;
 
+    template<typename T>
+    using SPtr = std::shared_ptr<T>;
+
     class Application
     {
     public:
         Application();
         void run();
-
-    private:
+    private:    
+        void init();
         void draw();
         void update(sf::Clock &deltaClock);
         void handleInput(sf::Event event);
         void handleNumberOfNodesChange(int32_t index);
+        GraphLocation getCurrentGraphDimension();
     private:
         ApplicationState appState;
         sf::RenderWindow window;
