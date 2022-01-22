@@ -8,22 +8,26 @@ namespace Pathfinding::Core
 {
     using namespace Pathfinding::Constants;
     
-    enum class AlgorithmState{ READY, SEARCHING, DONE};
-    struct ApplicationState
+    enum class State{ READY, SEARCHING, DONE};
+    class ApplicationState
     {
-        ApplicationState()
-        {
-            renderNodeInfo = false;
-            stateChanged = false;
-            numberOfNodesChanged = false;  
-            algState = AlgorithmState::READY;
-        }
-        
-        GraphDimension dim;
-        bool renderNodeInfo;
-        bool stateChanged;
-        bool numberOfNodesChanged;
-        AlgorithmState algState;
+        public:
+            ApplicationState();
+            int32_t currentNumberOfNodesI() const;
+            bool canShowNodeInfo() const;
+            bool showNodeInfo() const;
+            void enableNodeInfo();
+            void disableNodeInfo();
+            void setState(State state);
+            void setCurrentNumberOfNodesIndex(int32_t index);
+            int32_t currentNodeSideLength() const;
+            State currentState() const; 
+            int32_t currentNumberOfNodesIndex() const;
+        private:
+            GraphDimension dim;
+            State currentState_;
+            bool showNodeInfo_;
+            bool stateChanged;
     };
 }
 

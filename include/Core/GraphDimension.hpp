@@ -11,11 +11,12 @@ namespace Pathfinding::Core
     {
         public:
             void setCurrentNumberOfNodes(NumberOfNodes numOfNodes);
-            int32_t currentNumberOfNodesI() const;
+            void setCurrentNumberOfNodesIndex(int32_t index);
+            int32_t currentNumberOfNodesIndex() const;
             NumberOfNodes currentNumberOfNodes() const;
             int32_t currentNodeSideLength() const;
             int32_t currentNumberOfNodesInRow() const;
-            bool canRenderInfo() const;
+            bool canShowNodeInfo() const;
         private:
             NumberOfNodes currentNumberOfNodes_ = NumberOfNodes::N_100;
             std::array<int32_t, 4> NUMBER_OF_NODES{100, 400, 625, 1600};

@@ -18,7 +18,7 @@ namespace Pathfinding::Core
     using Pathfinding::Datastructures::LatticeGraph;
     using Pathfinding::Datastructures::Node;
     
-    struct ApplicationState;
+    class ApplicationState;
     class Renderer
     {
     public:

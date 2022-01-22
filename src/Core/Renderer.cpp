@@ -95,17 +95,18 @@ namespace Pathfinding::Core
 
     void Renderer::render(sf::RenderWindow &window, const LatticeGraph &graph, ApplicationState & state)
     {
-        nodeRect.setSize(sf::Vector2f(state.dim.currentNodeSideLength(), state.dim.currentNodeSideLength()));
+        float sideLength = static_cast<float>(state.currentNodeSideLength());
+        nodeRect.setSize(sf::Vector2f(sideLength, sideLength));
         for (std::size_t h = 0; h < graph.height(); ++h)
         {
             for (std::size_t w = 0; w < graph.width(); ++w)
             {
                 auto currentNode = graph[h][w];
-                auto coords = getNodePosition(currentNode.location, state.dim.currentNodeSideLength());
+                auto coords = getNodePosition(currentNode.location, state.currentNodeSideLength());
                 drawNode(window, currentNode, coords);
-                if (state.renderNodeInfo)
+                if (state.showNodeInfo())
                 {
-                    renderNodeInfo(window, currentNode, coords, state.dim.currentNodeSideLength());
+                    renderNodeInfo(window, currentNode, coords, state.currentNodeSideLength());
                 }
             }
         }

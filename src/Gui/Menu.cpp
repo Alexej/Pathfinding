@@ -7,7 +7,7 @@
 
 using namespace Pathfinding::Constants;
 using Pathfinding::Core::ApplicationState;
-using Pathfinding::Core::AlgorithmState;
+using Pathfinding::Core::State;
 using Pathfinding::Core::NumberOfNodes;
 using Pathfinding::Core::NUMBER_OF_NODES_CHAR;
 
@@ -31,56 +31,85 @@ namespace Pathfinding::Gui
 
         ImGui::Begin("Configuration", nullptr, window_flags);
 
-        switch(appStatePtr->algState)
+        switch(appStatePtr->currentState())
         {
-            case AlgorithmState::READY:
-                static int32_t item_current = static_cast<int32_t>(appStatePtr->dim.currentNumberOfNodes());
-                ImGui::Spacing();
-                ImGui::Text("Number of nodes");
-                if (ImGui::Combo("", &item_current, NUMBER_OF_NODES_CHAR, IM_ARRAYSIZE(NUMBER_OF_NODES_CHAR)))
-                {
-                    if (static_cast<int32_t>(appStatePtr->dim.currentNumberOfNodes()) != item_current)
-                    {
-                        if (appStatePtr->dim.canRenderInfo())
-                        {
-                            appStatePtr->renderNodeInfo = false;
-                        }
-                        appStatePtr->numberOfNodesChanged = true;
-                        appStatePtr->dim.setCurrentNumberOfNodes(static_cast<NumberOfNodes>(item_current));
-                    }
-                };
-
-                ImGui::Separator();
-                ImGui::Spacing();
-                if(ImGui::Button("Start", ImVec2(width-20,20)))
-                {
-                    appStatePtr->algState = AlgorithmState::SEARCHING;
-                }
+            case State::READY:
+                showReadyStateElements();
             break;
-            case AlgorithmState::SEARCHING:
+            case State::SEARCHING:
                 if(ImGui::Button("Step", ImVec2(width-20,20)))
                 {
-                    appStatePtr->algState = AlgorithmState::SEARCHING;
                 }
+            break;
 
         }
 
-        //Common Elements
         ImGui::Separator();
         ImGui::Spacing();
-        if (appStatePtr->dim.canRenderInfo())
+        showCommonElements();
+        ImGui::End();
+    }
+
+    void Menu::showCommonElements()
+    {
+        if (appStatePtr->canShowNodeInfo())
         {
-            if (ImGui::Checkbox("Render Node Info", &appStatePtr->renderNodeInfo))
+            nodeInfo = appStatePtr->showNodeInfo();
+            if (ImGui::Checkbox("Render Node Info", &nodeInfo))
             {
+                if(nodeInfo)
+                {
+                    appStatePtr->enableNodeInfo();
+                }
+                else
+                {
+                    appStatePtr->disableNodeInfo();
+                }
             }
         }
         ImGui::Spacing();
         if(ImGui::Button("RESET", ImVec2(width-20,20)))
         {
-            appStatePtr->algState = AlgorithmState::SEARCHING;
+            appStatePtr->setState(State::READY);
         }
+    }
 
+    void Menu::showReadyStateElements()
+    {
+        static int32_t itemCurrent = appStatePtr->currentNumberOfNodesI();
+        ImGui::Spacing();
+        ImGui::Text("Number of nodes");
+        if (ImGui::Combo("", &itemCurrent, NUMBER_OF_NODES_CHAR, IM_ARRAYSIZE(NUMBER_OF_NODES_CHAR)))
+        {
+            if (appStatePtr->currentNumberOfNodesIndex() != itemCurrent)
+            {
+                if (appStatePtr->canShowNodeInfo())
+                {
+                    appStatePtr->disableNodeInfo();
+                    nodeInfo = false;
+                }
+                numberOfNodesChangedCallBack(itemCurrent);
+            }
+        };
 
-        ImGui::End();
+        ImGui::Separator();
+        ImGui::Spacing();
+        if(ImGui::Button("Start", ImVec2(width-20,20)))
+        {
+            appStatePtr->setState(State::SEARCHING);
+        }
+    }
+    void Menu::addNumberOfNodesChangedCallback(std::function<void(int32_t)> callBack)
+    {
+        numberOfNodesChangedCallBack = callBack;
+    }
+    void Menu::addStepCallBack(std::function<void(void)> callBack)
+    {
+        stepCallbBack = callBack;
+    }
+
+    bool Menu::initialized() const
+    {
+        return numberOfNodesChangedCallBack != nullptr && stepCallbBack != nullptr;
     }
 }
