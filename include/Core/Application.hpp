@@ -41,6 +41,7 @@ namespace Pathfinding::Core
         void update(sf::Clock &deltaClock);
         void handleInput(sf::Event event);
         void handleNumberOfNodesChange(int32_t index);
+    private:
         GraphLocation getCurrentGraphDimension();
     private:
         ApplicationState appState;

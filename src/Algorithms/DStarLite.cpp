@@ -5,11 +5,20 @@
 #include "LatticeGraph.hpp"
 #include "GraphLocation.hpp"
 #include "EuclidianHeuristic.hpp"
-#include "DefaultCost.hpp"
 
 
 namespace Pathfinding::Algorithms
 {
+
+    namespace 
+    {
+        int32_t cost(const Node *from, const Node *to)
+        {
+            int32_t dx = abs(from->location.width - to->location.width);
+            int32_t dy = abs(from->location.height - to->location.height);
+            return dx - dy == 0 ? 2 : 1;
+        }
+    }
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::GraphLocation;
     
@@ -22,11 +31,6 @@ namespace Pathfinding::Algorithms
         heuristicPtr = heuristicPtr_;
     }
     
-    void DStarLite::setCost(std::shared_ptr<ACost> costPtr_)
-    {
-        costPtr = costPtr_;
-    }
-
     void DStarLite::initialize()
     {
         kM = 0;
@@ -81,10 +85,10 @@ namespace Pathfinding::Algorithms
     int32_t DStarLite::getMinCG(Node * u)
     {
         auto succs = succ(u);
-        int32_t min = costPtr->calculate(u,succs[0]) + succs[0]->g;
+        int32_t min = cost(u,succs[0]) + succs[0]->g;
         for(uint32_t i = 1; i < succs.size(); ++i)
         {
-            int32_t currentCost = costPtr->calculate(u,succs[i]) + succs[0]->g;
+            int32_t currentCost = cost(u,succs[i]) + succs[0]->g;
             if(min > currentCost)
             {
                 min = currentCost;

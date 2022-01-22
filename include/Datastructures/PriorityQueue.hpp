@@ -4,25 +4,17 @@
 #include <queue>
 #include <vector>
 #include <list>
+#include <functional>
 #include <utility>
 #include "Node.hpp"
 #include "Key.hpp"
+
 
 namespace Pathfinding::Datastructures
 {
     using queue_element = std::pair<Key, Node*>;
 
-    template <typename T>
-    class Comperator
-    {
-    public:
-        auto operator()(const T &lhs, const T &rhs)
-        {
-            return lhs.first > rhs.first;
-        }
-    };
-
-    class PriorityQueue final : public std::priority_queue<queue_element, std::vector<queue_element>, Comperator<queue_element>>
+    class PriorityQueue final : public std::priority_queue<queue_element, std::vector<queue_element>, std::greater<queue_element>>
     {
     public:
         auto begin() { return this->c.begin(); }
@@ -65,7 +57,7 @@ namespace Pathfinding::Datastructures
         }
 
     private:
-        using std::priority_queue<queue_element, std::vector<queue_element>, Comperator<queue_element>>::pop;
+        using std::priority_queue<queue_element, std::vector<queue_element>, std::greater<queue_element>>::pop;
     };
 }
 
