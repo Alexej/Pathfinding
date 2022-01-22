@@ -37,7 +37,7 @@ namespace Pathfinding::Core
         eventManager = EventManager(&window);
         menu = Menu(&appState, GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH);
         dstar = DStarLite(&graph);
-        graphOps = GraphOperations(&graph, appState.currentNodeSideLength());    
+        graphOps = GraphOperations(&graph, appState.currentNodeSideLength());
     }
 
     Application::Application()

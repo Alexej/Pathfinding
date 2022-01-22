@@ -4,6 +4,8 @@
 #include "Node.hpp"
 #include "LatticeGraph.hpp"
 #include "GraphLocation.hpp"
+#include "EuclidianHeuristic.hpp"
+#include "DefaultCost.hpp"
 
 
 namespace Pathfinding::Algorithms
@@ -11,25 +13,19 @@ namespace Pathfinding::Algorithms
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::GraphLocation;
     
-    namespace
-    {
-        int32_t heuristic(const Node * from ,const Node * to)
-        {
-            int32_t dx = abs(from->location.width - to->location.width);
-            int32_t dy = abs(from->location.height - to->location.height);
-            return static_cast<int32_t>(dx * dx + dy * dy);
-        }
-
-        int32_t cost(const Node * from ,const Node * to)
-        {
-            int32_t dx = abs(from->location.width - to->location.width);
-            int32_t dy = abs(from->location.height - to->location.height);
-            return dx - dy == 0 ? 2 : 1;
-        }
-    }
-
     DStarLite::DStarLite(LatticeGraph * graph)
     : graphPtr(graph) {}
+
+
+    void DStarLite::setHeuristic(std::shared_ptr<AHeuristic> heuristicPtr_)
+    {
+        heuristicPtr = heuristicPtr_;
+    }
+    
+    void DStarLite::setCost(std::shared_ptr<ACost> costPtr_)
+    {
+        costPtr = costPtr_;
+    }
 
     void DStarLite::initialize()
     {
@@ -79,16 +75,16 @@ namespace Pathfinding::Algorithms
 
     Key DStarLite::calculateKey(Node * s)
     {
-        return {std::min(s->g, s->rhs + heuristic(graphPtr->startNode(), s) + kM), std::min(s->g, s->rhs)};
+        return {std::min(s->g, s->rhs + heuristicPtr->calculate(graphPtr->startNode(), s) + kM), std::min(s->g, s->rhs)};
     }
 
     int32_t DStarLite::getMinCG(Node * u)
     {
         auto succs = succ(u);
-        int32_t min = cost(u,succs[0]) + succs[0]->g;
+        int32_t min = costPtr->calculate(u,succs[0]) + succs[0]->g;
         for(uint32_t i = 1; i < succs.size(); ++i)
         {
-            int32_t currentCost = cost(u,succs[i]) + succs[0]->g;
+            int32_t currentCost = costPtr->calculate(u,succs[i]) + succs[0]->g;
             if(min > currentCost)
             {
                 min = currentCost;

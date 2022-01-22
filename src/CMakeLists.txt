@@ -9,6 +9,8 @@ set(SOURCES_PATHFINDING
   Core/Application.cpp
   Core/ApplicationState.cpp
   Core/Renderer.cpp
+  Algorithms/DefaultCost.cpp
+  Algorithms/EuclidianHeuristic.cpp
   Core/GraphDimension.cpp
   Gui/Menu.cpp
   main.cpp

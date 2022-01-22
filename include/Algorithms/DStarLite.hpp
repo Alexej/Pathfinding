@@ -34,6 +34,8 @@ namespace Pathfinding::Algorithms
             void initialize();
             void UpdateVertex(Node * node);
             void computeShortestPath();
+            void setCost(std::shared_ptr<ACost> heuristicPtr);
+            void setHeuristic(std::shared_ptr<AHeuristic> cost);
         private:
             Key calculateKey(Node * node);
             std::vector<Node *> succ(Node * node);
@@ -43,6 +45,8 @@ namespace Pathfinding::Algorithms
             Node * sLast;
             PriorityQueue U;
             int32_t kM;
+            std::shared_ptr<AHeuristic> heuristicPtr;
+            std::shared_ptr<ACost> costPtr;
     };
 }
 
