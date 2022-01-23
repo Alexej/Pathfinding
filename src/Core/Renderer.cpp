@@ -11,12 +11,12 @@
 namespace Pathfinding::Core
 {
     using namespace Pathfinding::Constants;
-    using Pathfinding::Datastructures::GraphLocation;
+    using Pathfinding::Datastructures::Vector2i;
     using Pathfinding::Datastructures::NodeState;
 
     namespace
     {
-        sf::Vector2f getNodePosition(GraphLocation location, int32_t sideLength)
+        sf::Vector2f getNodePosition(Vector2i location, int32_t sideLength)
         {
             float nodesHorF = static_cast<float>(location.width);
             float nodesVertF = static_cast<float>(location.height);

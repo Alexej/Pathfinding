@@ -5,7 +5,7 @@
 #include <SFML/Window/Event.hpp>
 #include "Constants.hpp"
 #include "Node.hpp"
-
+#include "Vector2.hpp"
 #include <imgui-SFML.h>
 #include <imgui.h>
 
@@ -14,10 +14,11 @@
 namespace Pathfinding::Core
 {
     using namespace Pathfinding::Constants;
+    using Pathfinding::Datastructures::Vector2i;
 
     namespace
     {
-        GraphLocation mapMouseToGraphCoordinates(sf::Vector2i pos, int32_t currentSideLength)
+        Vector2i mapMouseToGraphCoordinates(sf::Vector2i pos, int32_t currentSideLength)
         {
             int32_t faH = pos.y / currentSideLength;
             int32_t faW = pos.x / currentSideLength;

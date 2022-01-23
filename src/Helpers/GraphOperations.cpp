@@ -1,17 +1,17 @@
 #include "GraphOperations.hpp"
-#include "GraphLocation.hpp"
+#include "Vector2.hpp"
 #include "LatticeGraph.hpp"
 #include "Node.hpp"
 
 namespace Pathfinding::Helpers
 {
-    using Pathfinding::Datastructures::GraphLocation;
+    using Pathfinding::Datastructures::Vector2i;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
 
     namespace
     {
-        GraphLocation mapMouseToGraphCoordinates(sf::Vector2i pos, int32_t currentSideLength)
+        Vector2i mapMouseToGraphCoordinates(sf::Vector2i pos, int32_t currentSideLength)
         {
             int32_t faH = pos.y / currentSideLength;
             int32_t faW = pos.x / currentSideLength;
@@ -24,7 +24,7 @@ namespace Pathfinding::Helpers
 
     void GraphOperations::leftMouseButtonPressed(sf::Vector2i pos)
     {
-        GraphLocation mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
+        Vector2i mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
         if (mappedCoordinates == graphPtr->startNode()->location && endPointsEvent)
         {
             currentMouseAction = MouseAction::SETTING_START;
@@ -46,7 +46,7 @@ namespace Pathfinding::Helpers
 
     void GraphOperations::mouseMoved(sf::Vector2i pos)
     {
-        GraphLocation mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
+        Vector2i mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
         if (graphPtr->inBounds(mappedCoordinates))
         {
             switch (currentMouseAction)

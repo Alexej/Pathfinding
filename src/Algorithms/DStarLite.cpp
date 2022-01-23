@@ -3,7 +3,7 @@
 #include <limits>
 #include "Node.hpp"
 #include "LatticeGraph.hpp"
-#include "GraphLocation.hpp"
+#include "Vector2.hpp"
 #include "EuclidianHeuristic.hpp"
 
 
@@ -20,7 +20,7 @@ namespace Pathfinding::Algorithms
         }
     }
     using Pathfinding::Datastructures::NodeState;
-    using Pathfinding::Datastructures::GraphLocation;
+    using Pathfinding::Datastructures::Vector2i;
     
     DStarLite::DStarLite(LatticeGraph * graph)
     : graphPtr(graph) {}
@@ -109,7 +109,7 @@ namespace Pathfinding::Algorithms
         {
             for(int32_t w = wFrom; w <= wTo ; ++w)
             {
-                GraphLocation location(h,w);
+                Vector2i location(h,w);
                 if(graphPtr->inBounds(location))
                 {
                     if(u->location != location && u->state == NodeState::Free)

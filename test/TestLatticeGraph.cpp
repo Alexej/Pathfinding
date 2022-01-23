@@ -15,7 +15,7 @@ TEST_CASE( "Every node should have apropriate location", "[constructor]" ) {
     {
         for(int32_t w = 0; w <graph. width(); ++w)
         {
-            REQUIRE(graph[h][w].location == GraphLocation(h,w));
+            REQUIRE(graph[h][w].location == Vector2i(h,w));
         }
     }
 }

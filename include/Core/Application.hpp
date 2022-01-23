@@ -11,7 +11,7 @@
 #include "Renderer.hpp"
 #include "LatticeGraph.hpp"
 #include "ApplicationState.hpp"
-#include "GraphLocation.hpp"
+#include "Vector2.hpp"
 #include "EventManager.hpp"
 #include "Menu.hpp"
 #include "DStarLite.hpp"
@@ -26,7 +26,7 @@ namespace Pathfinding::Core
     using Pathfinding::Events::EventManager;
     using Pathfinding::Algorithms::DStarLite;
     using Pathfinding::Datastructures::LatticeGraph;
-    using Pathfinding::Datastructures::GraphLocation;
+    using Pathfinding::Datastructures::Vector2i;
     using Pathfinding::Helpers::GraphOperations;
     using Pathfinding::Core::GraphDimension;
 
