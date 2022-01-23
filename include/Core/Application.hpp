@@ -16,6 +16,8 @@
 #include "Menu.hpp"
 #include "DStarLite.hpp"
 #include "GraphOperations.hpp"
+#include "GraphDimension.hpp"
+
 
 namespace Pathfinding::Core
 {
@@ -26,6 +28,7 @@ namespace Pathfinding::Core
     using Pathfinding::Datastructures::LatticeGraph;
     using Pathfinding::Datastructures::GraphLocation;
     using Pathfinding::Helpers::GraphOperations;
+    using Pathfinding::Core::GraphDimension;
 
     template<typename T>
     using SPtr = std::shared_ptr<T>;
@@ -42,8 +45,6 @@ namespace Pathfinding::Core
         void handleInput(sf::Event event);
         void handleNumberOfNodesChange(int32_t index);
     private:
-        GraphLocation getCurrentGraphDimension();
-    private:
         ApplicationState appState;
         sf::RenderWindow window;
         Renderer renderer;
@@ -52,6 +53,7 @@ namespace Pathfinding::Core
         Menu menu;
         DStarLite dstar;
         GraphOperations graphOps;
+        GraphDimension * dimension;
     };
 }
 

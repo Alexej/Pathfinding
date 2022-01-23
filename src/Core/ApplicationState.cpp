@@ -9,14 +9,6 @@ namespace Pathfinding::Core
         currentState_ = State::READY;
     }
 
-    int32_t ApplicationState::currentNumberOfNodesI() const
-    {
-        return dim.currentNumberOfNodesIndex();
-    }
-    bool ApplicationState::canShowNodeInfo() const
-    {
-        return dim.canShowNodeInfo();
-    }
 
     bool ApplicationState::showNodeInfo() const
     {
@@ -43,18 +35,8 @@ namespace Pathfinding::Core
         return currentState_;
     } 
 
-    void ApplicationState::setCurrentNumberOfNodesIndex(int32_t index)
+    GraphDimension & ApplicationState::dimension()
     {
-        dim.setCurrentNumberOfNodesIndex(index);
-    }
-
-    int32_t ApplicationState::currentNodeSideLength() const
-    {
-        return dim.currentNodeSideLength();
-    }
-
-    int32_t ApplicationState::currentNumberOfNodesIndex() const
-    {
-        return dim.currentNumberOfNodesIndex();
+        return dim;
     }
 }

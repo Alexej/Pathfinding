@@ -4,6 +4,7 @@
 #include "Constants.hpp"
 #include "Menu.hpp"
 #include "ApplicationState.hpp"
+#include "GraphDimension.hpp"
 
 using namespace Pathfinding::Constants;
 using Pathfinding::Core::ApplicationState;
@@ -13,10 +14,13 @@ using Pathfinding::Core::NUMBER_OF_NODES_CHAR;
 
 namespace Pathfinding::Gui
 {
-    Menu::Menu(ApplicationState *appStat_, int32_t offset_, int32_t height_, int32_t width_)
-        : appStatePtr(appStat_), offset(static_cast<float>(offset_)), 
+    Menu::Menu(ApplicationState *appState_, int32_t offset_, int32_t height_, int32_t width_)
+        : appStatePtr(appState_), offset(static_cast<float>(offset_)), 
         height(static_cast<float>(height_)), 
-        width(static_cast<float>(width_)) {}
+        width(static_cast<float>(width_)) 
+        {
+            dimensionPtr = &appStatePtr->dimension();
+        }
 
     void Menu::show()
     {
@@ -52,7 +56,7 @@ namespace Pathfinding::Gui
 
     void Menu::showCommonElements()
     {
-        if (appStatePtr->canShowNodeInfo())
+        if (dimensionPtr->canShowNodeInfo())
         {
             nodeInfo = appStatePtr->showNodeInfo();
             if (ImGui::Checkbox("Render Node Info", &nodeInfo))
@@ -76,14 +80,14 @@ namespace Pathfinding::Gui
 
     void Menu::showReadyStateElements()
     {
-        static int32_t itemCurrent = appStatePtr->currentNumberOfNodesI();
+        static int32_t itemCurrent = dimensionPtr->currentNumberOfNodesIndex();
         ImGui::Spacing();
         ImGui::Text("Number of nodes");
         if (ImGui::Combo("", &itemCurrent, NUMBER_OF_NODES_CHAR, IM_ARRAYSIZE(NUMBER_OF_NODES_CHAR)))
         {
-            if (appStatePtr->currentNumberOfNodesIndex() != itemCurrent)
+            if (dimensionPtr->currentNumberOfNodesIndex() != itemCurrent)
             {
-                if (appStatePtr->canShowNodeInfo())
+                if (dimensionPtr->canShowNodeInfo())
                 {
                     appStatePtr->disableNodeInfo();
                     nodeInfo = false;

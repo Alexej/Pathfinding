@@ -37,4 +37,14 @@ namespace Pathfinding::Core
     {
         currentNumberOfNodes_ = static_cast<NumberOfNodes>(index);
     }
+
+    int32_t GraphDimension::width() const
+    {
+        return currentNumberOfNodesInRow();
+    }
+    
+    int32_t GraphDimension::height() const
+    {
+        return currentNumberOfNodesInRow();
+    }
 }

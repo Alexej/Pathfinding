@@ -25,19 +25,15 @@ namespace Pathfinding::Core
         }
     }
 
-    GraphLocation Application::getCurrentGraphDimension()
-    {
-        return {GRID_FIELD_HEIGHT / appState.currentNodeSideLength(), GRID_FIELD_HEIGHT / appState.currentNodeSideLength()};
-    }
-
     void Application::init()
     {
+        dimension = &appState.dimension();
         window.create(sf::VideoMode(APPLICATION_WINDOW_WIDTH, GRID_FIELD_HEIGHT), APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close);
-        graph = LatticeGraph(getCurrentGraphDimension());
+        graph = LatticeGraph(dimension->width(), dimension->height());
         eventManager = EventManager(&window);
         menu = Menu(&appState, GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH);
         dstar = DStarLite(&graph);
-        graphOps = GraphOperations(&graph, appState.currentNodeSideLength());
+        graphOps = GraphOperations(&graph, dimension->currentNodeSideLength());
     }
 
     Application::Application()
@@ -89,11 +85,9 @@ namespace Pathfinding::Core
 
     void Application::handleNumberOfNodesChange(int32_t index)
     {
-        appState.setCurrentNumberOfNodesIndex(index);
-        int32_t newGraphHeight = GRID_FIELD_HEIGHT / appState.currentNodeSideLength();
-        int32_t newGraphWidth = GRID_FIELD_HEIGHT / appState.currentNodeSideLength();
-        graph.resize(newGraphHeight, newGraphWidth);
-        graphOps.resize(appState.currentNodeSideLength());
+        dimension->setCurrentNumberOfNodesIndex(index);
+        graph.resize(dimension->height(), dimension->width());
+        graphOps.resize(dimension->currentNodeSideLength());
     }
 
     void Application::draw()

@@ -7,11 +7,13 @@
 namespace Pathfinding::Core
 {
     class ApplicationState;
+    class GraphDimension;
 }
 
 namespace Pathfinding::Gui
 {
     using Pathfinding::Core::ApplicationState;
+    using Pathfinding::Core::GraphDimension;
     class Menu
     {
         public:
@@ -33,6 +35,7 @@ namespace Pathfinding::Gui
         private:
             std::function<void(int32_t)> numberOfNodesChangedCallBack = nullptr;
             std::function<void(void)> stepCallbBack = nullptr;
+            GraphDimension * dimensionPtr;
     };
 }
 

@@ -12,16 +12,12 @@ namespace Pathfinding::Core
     {
         public:
             ApplicationState();
-            bool canShowNodeInfo() const;
             bool showNodeInfo() const;
             void enableNodeInfo();
             void disableNodeInfo();
             void setState(State state);
-            void setCurrentNumberOfNodesIndex(int32_t index);
-            int32_t currentNumberOfNodesI() const;
-            int32_t currentNodeSideLength() const;
             State currentState() const; 
-            int32_t currentNumberOfNodesIndex() const;
+            GraphDimension & dimension();
         private:
             GraphDimension dim;
             State currentState_;

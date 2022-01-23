@@ -17,6 +17,8 @@ namespace Pathfinding::Core
             int32_t currentNodeSideLength() const;
             int32_t currentNumberOfNodesInRow() const;
             bool canShowNodeInfo() const;
+            int32_t width() const;
+            int32_t height() const;
         private:
             NumberOfNodes currentNumberOfNodes_ = NumberOfNodes::N_100;
             std::array<int32_t, 4> NUMBER_OF_NODES{100, 400, 625, 1600};
