@@ -28,11 +28,7 @@ namespace Pathfinding::Core
 
         std::string convertIntToStringWithInf(int32_t num)
         {
-            if (num == std::numeric_limits<int32_t>::max())
-            {
-                return std::string("inf");
-            }
-            return std::to_string(num);
+            return num == std::numeric_limits<int32_t>::max() ? std::string("inf") : std::to_string(num);
         };
 
         sf::Color convertToSfmlColor(std::array<uint8_t, 3> color)

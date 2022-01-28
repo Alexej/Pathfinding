@@ -4,9 +4,18 @@
 #include "Constants.hpp"
 #include "GraphDimension.hpp"
 
+
+namespace Pathfinding::Datastructures
+{
+    struct Node;
+}
+
+
 namespace Pathfinding::Core
 {
     using namespace Pathfinding::Constants;
+    using Pathfinding::Datastructures::Node;
+    struct Node;
     enum class State{ READY, SEARCHING, DONE};
     class ApplicationState
     {
@@ -18,11 +27,14 @@ namespace Pathfinding::Core
             void setState(State state);
             State currentState() const; 
             GraphDimension & dimension();
+            const Node * nodeUnderCursor() const;
+            void setNodeUnderCursor(const Node * node);
         private:
             GraphDimension dim;
             State currentState_;
             bool showNodeInfo_;
             bool stateChanged;
+            const Node * nodeUnderCursor_ = nullptr;
     };
 }
 

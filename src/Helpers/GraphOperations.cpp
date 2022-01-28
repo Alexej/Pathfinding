@@ -2,6 +2,7 @@
 #include "Vector2.hpp"
 #include "LatticeGraph.hpp"
 #include "Node.hpp"
+#include "ApplicationState.hpp"
 
 namespace Pathfinding::Helpers
 {
@@ -19,8 +20,8 @@ namespace Pathfinding::Helpers
         }
     }
 
-    GraphOperations::GraphOperations(LatticeGraph * graph_, int32_t nodeSideLength_ )
-    : graphPtr(graph_), nodeSideLength(nodeSideLength_){ }
+    GraphOperations::GraphOperations(ApplicationState * state_, LatticeGraph * graph_, int32_t nodeSideLength_ )
+    : applicationStatePtr(state_), graphPtr(graph_), nodeSideLength(nodeSideLength_){ }
 
     void GraphOperations::leftMouseButtonPressed(sf::Vector2i pos)
     {
@@ -84,5 +85,14 @@ namespace Pathfinding::Helpers
     void GraphOperations::enableEndPointsEvent()
     {
         endPointsEvent = true;
+    }
+
+    void GraphOperations::nodeUnderCursor(sf::Vector2i pos)
+    {
+        Vector2i mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
+        if(graphPtr->inBounds(mappedCoordinates))
+        {
+            applicationStatePtr->setNodeUnderCursor(graphPtr->node(mappedCoordinates));
+        }
     }
 }

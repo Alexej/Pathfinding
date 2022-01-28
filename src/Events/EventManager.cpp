@@ -7,7 +7,7 @@ namespace Pathfinding::Events
     : windowPtr(window)
     {}
 
-    void EventManager::addBinging(MouseEvent event, std::function< void(sf::Vector2i)> callback)
+    void EventManager::addBinding(MouseEvent event, std::function< void(sf::Vector2i)> callback)
     {
         callBacks.push_back({event, callback});
     }

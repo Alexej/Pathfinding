@@ -36,7 +36,7 @@ namespace Pathfinding::Core
         eventManager = EventManager(&window);
         menu = Menu(&appState, GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH);
         dstar = DStarLite(&graph);
-        graphOps = GraphOperations(&graph, dimension->currentNodeSideLength());
+        graphOps = GraphOperations(&appState, &graph, dimension->currentNodeSideLength());
     }
 
     Application::Application()
@@ -48,12 +48,14 @@ namespace Pathfinding::Core
         using sf::Event::EventType::MouseMoved;
         using std::placeholders::_1;
 
-        eventManager.addBinging({false, MouseButtonPressed, sf::Mouse::Left}, std::bind(&GraphOperations::leftMouseButtonPressed, &graphOps, _1));
-        eventManager.addBinging({false, MouseButtonPressed, sf::Mouse::Right}, std::bind(&GraphOperations::rightMouseButtonPressed, &graphOps, _1));
-        eventManager.addBinging({true, MouseButtonReleased, sf::Mouse::Left}, std::bind(&GraphOperations::mouseButtonReleased, &graphOps, _1));
-        eventManager.addBinging({true, MouseMoved, sf::Mouse::Left}, std::bind(&GraphOperations::mouseMoved, &graphOps, _1));
+        eventManager.addBinding({EVENT_AND_KEY, MouseButtonPressed, sf::Mouse::Left}, std::bind(&GraphOperations::leftMouseButtonPressed, &graphOps, _1));
+        eventManager.addBinding({EVENT_AND_KEY, MouseButtonPressed, sf::Mouse::Right}, std::bind(&GraphOperations::rightMouseButtonPressed, &graphOps, _1));
+        eventManager.addBinding({EVENT_ONLY, MouseButtonReleased, NO_MOUSE_BUTTON}, std::bind(&GraphOperations::mouseButtonReleased, &graphOps, _1));
+        eventManager.addBinding({EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON}, std::bind(&GraphOperations::mouseMoved, &graphOps, _1));
+        eventManager.addBinding({EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON}, std::bind(&GraphOperations::nodeUnderCursor, &graphOps, _1));
 
         menu.addNumberOfNodesChangedCallback(std::bind(&Application::handleNumberOfNodesChange, this, _1));
+        
         dstar.setHeuristic(std::make_shared<EuclidianHeuristic>());
         dstar.initialize();
         dstar.computeShortestPath();

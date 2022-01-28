@@ -5,12 +5,15 @@
 #include "Menu.hpp"
 #include "ApplicationState.hpp"
 #include "GraphDimension.hpp"
+#include "Node.hpp"
+#include <format>
 
 using namespace Pathfinding::Constants;
 using Pathfinding::Core::ApplicationState;
 using Pathfinding::Core::State;
 using Pathfinding::Core::NumberOfNodes;
 using Pathfinding::Core::NUMBER_OF_NODES_CHAR;
+using Pathfinding::Datastructures::Node;
 
 namespace Pathfinding::Gui
 {
@@ -51,28 +54,48 @@ namespace Pathfinding::Gui
         ImGui::End();
     }
 
+    void Menu::showNodeInfoFlag()
+    {
+        nodeInfo = appStatePtr->showNodeInfo();
+        if (ImGui::Checkbox("Render Node Info", &nodeInfo))
+        {
+            if(nodeInfo)
+            {
+                appStatePtr->enableNodeInfo();
+            }
+            else
+            {
+                appStatePtr->disableNodeInfo();
+            }
+            }
+    }
+
     void Menu::showCommonElements()
     {
         if (dimensionPtr->canShowNodeInfo())
         {
-            nodeInfo = appStatePtr->showNodeInfo();
-            if (ImGui::Checkbox("Render Node Info", &nodeInfo))
-            {
-                if(nodeInfo)
-                {
-                    appStatePtr->enableNodeInfo();
-                }
-                else
-                {
-                    appStatePtr->disableNodeInfo();
-                }
-            }
+            showNodeInfoFlag();
         }
         ImGui::Spacing();
         if(ImGui::Button("RESET", ImVec2(width-20,20)))
         {
             appStatePtr->setState(State::READY);
         }
+        ImGui::Spacing();
+        if(appStatePtr->nodeUnderCursor() != nullptr)
+        {
+            showNodeInfoInMenu();
+        }
+    }
+
+    void Menu::showNodeInfoInMenu()
+    {
+        ImGui::Separator();
+        ImGui::Text(std::format("G: {}", appStatePtr->nodeUnderCursor()->g).c_str());
+        ImGui::Text(std::format("RHS: {}", appStatePtr->nodeUnderCursor()->rhs).c_str());
+        ImGui::Text(std::format("K1: {}", appStatePtr->nodeUnderCursor()->key.k1).c_str());
+        ImGui::Text(std::format("K2: {}", appStatePtr->nodeUnderCursor()->key.k2).c_str());
+        ImGui::Separator();
     }
 
     void Menu::showReadyStateElements()
@@ -92,13 +115,6 @@ namespace Pathfinding::Gui
                 numberOfNodesChangedCallBack(itemCurrent);
             }
         };
-
-        ImGui::Separator();
-        ImGui::Spacing();
-        if(ImGui::Button("Start", ImVec2(width-20,20)))
-        {
-            appStatePtr->setState(State::SEARCHING);
-        }
     }
     
     void Menu::addNumberOfNodesChangedCallback(fPtrVI callBack)

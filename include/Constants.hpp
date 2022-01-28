@@ -3,6 +3,7 @@
 
 #include <array>
 #include <filesystem>
+#include <SFML/Window/Event.hpp>
 
 namespace Pathfinding::Constants
 {
@@ -36,6 +37,11 @@ namespace Pathfinding::Constants
     constexpr auto NODE_INFO_OFFSET = 8.0f;
     constexpr auto NODE_INFO_TEXT_SIZE = 13;
 
+    // Events
+    // ! change to enums and move to Events class
+    constexpr auto EVENT_ONLY = true;
+    constexpr auto EVENT_AND_KEY = false;
+    constexpr sf::Mouse::Button NO_MOUSE_BUTTON = sf::Mouse::Left;
 }
 
 #endif /* A2338B5A_9164_4556_99CB_AA1F92239E7A */

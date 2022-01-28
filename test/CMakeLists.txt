@@ -18,6 +18,7 @@ set(SOURCES_TESTS
     TestLocation.cpp
     TestVector2.cpp
     TestLatticeGraph.cpp
+    TestNode.cpp
     TestPriorityQueue.cpp
     )
 

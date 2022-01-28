@@ -9,9 +9,15 @@ namespace Pathfinding::Datastructures
     class LatticeGraph;
 }
 
+namespace Pathfinding::Core
+{
+    class ApplicationState;
+}
+
 namespace Pathfinding::Helpers
 {
     using Pathfinding::Datastructures::LatticeGraph;
+    using Pathfinding::Core::ApplicationState;
     enum class MouseAction
     {
         SETTING_START,
@@ -25,10 +31,11 @@ namespace Pathfinding::Helpers
     {
     public:
         GraphOperations() = default;
-        GraphOperations(LatticeGraph *graph, int32_t nodeSideLength);
+        GraphOperations(ApplicationState * state, LatticeGraph *graph, int32_t nodeSideLength);
         void rightMouseButtonPressed(sf::Vector2i pos);
         void leftMouseButtonPressed(sf::Vector2i pos);
         void mouseButtonReleased(sf::Vector2i pos);
+        void nodeUnderCursor(sf::Vector2i pos);
         void mouseMoved(sf::Vector2i pos);
         void resize(int32_t nodeSideLength);
         void disableEnpointsEvent();
@@ -37,6 +44,7 @@ namespace Pathfinding::Helpers
     private:
         MouseAction currentMouseAction = MouseAction::IDLE;
         LatticeGraph *graphPtr;
+        ApplicationState * applicationStatePtr;
         bool endPointsEvent = true;
         int32_t nodeSideLength;
     };

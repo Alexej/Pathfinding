@@ -29,6 +29,8 @@ namespace Pathfinding::Gui
         private:
             void showCommonElements();
             void showReadyStateElements();
+            void showNodeInfoInMenu();
+            void showNodeInfoFlag();
         private:
             float offset; 
             float height; 

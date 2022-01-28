@@ -30,9 +30,6 @@ namespace Pathfinding::Core
     using Pathfinding::Helpers::GraphOperations;
     using Pathfinding::Core::GraphDimension;
 
-    template<typename T>
-    using SPtr = std::shared_ptr<T>;
-
     class Application
     {
     public:
