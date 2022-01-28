@@ -41,9 +41,6 @@ namespace Pathfinding::Gui
                 showReadyStateElements();
             break;
             case State::SEARCHING:
-                if(ImGui::Button("Step", ImVec2(width-20,20)))
-                {
-                }
             break;
 
         }
@@ -104,12 +101,12 @@ namespace Pathfinding::Gui
         }
     }
     
-    void Menu::addNumberOfNodesChangedCallback(std::function<void(int32_t)> callBack)
+    void Menu::addNumberOfNodesChangedCallback(fPtrVI callBack)
     {
         numberOfNodesChangedCallBack = callBack;
     }
 
-    void Menu::addStepCallBack(std::function<void(void)> callBack)
+    void Menu::addStepCallBack(fPtrVV callBack)
     {
         stepCallbBack = callBack;
     }

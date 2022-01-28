@@ -26,8 +26,8 @@ namespace Pathfinding::Datastructures
         const Node * startNode() const;
         const Node * goalNode() const;
         
-        std::vector<Node> &operator[](std::size_t height) { return graph[height]; }
-        const std::vector<Node> &operator[](std::size_t height) const { return graph[height]; }
+        std::vector<Node> & operator[](std::size_t height) { return graph[height]; }
+        const std::vector<Node> & operator[](std::size_t height) const { return graph[height]; }
 
         Node * node(Vector2i location) { return &graph[location.height][location.width]; }
         const Node * node(Vector2i location) const { return &graph[location.height][location.width]; }

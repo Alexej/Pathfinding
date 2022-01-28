@@ -87,7 +87,7 @@ namespace Pathfinding::Core
      */
     void Renderer::loadFont(std::string fontName)
     {
-        if (!font.loadFromFile("C:\\Users\\alexe\\Desktop\\project\\Pathfinding\\dependencies\\fonts\\" + fontName))
+        if (!font.loadFromFile(fontPath + fontName))
         {
             throw std::exception("Couldn't find font");
         }

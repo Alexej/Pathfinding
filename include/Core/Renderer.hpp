@@ -31,6 +31,11 @@ namespace Pathfinding::Core
         sf::RectangleShape nodeRect;
         sf::Text text;
         sf::Font font;
+        
+        /**
+         * ! absolute path bad, fix later.
+         */
+        std::string fontPath = "C:\\Users\\alexe\\Desktop\\project\\Pathfinding\\dependencies\\fonts\\";
     };
 }
 

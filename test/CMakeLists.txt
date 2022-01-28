@@ -16,6 +16,7 @@ set(SOURCES_TESTS
     ../src/Datastructures/Key.cpp
 
     TestLocation.cpp
+    TestVector2.cpp
     TestLatticeGraph.cpp
     TestPriorityQueue.cpp
     )

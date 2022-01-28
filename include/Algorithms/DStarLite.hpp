@@ -30,10 +30,10 @@ namespace Pathfinding::Algorithms
             DStarLite() = default;
             explicit DStarLite(LatticeGraph * graph);
             void initialize();
-            void UpdateVertex(Node * node);
             void computeShortestPath();
             void setHeuristic(std::shared_ptr<AHeuristic> cost);
         private:
+            void UpdateVertex(Node * node);
             Key calculateKey(Node * node);
             std::vector<Node *> succ(Node * node);
             int32_t getMinCG(Node * s);
@@ -42,7 +42,7 @@ namespace Pathfinding::Algorithms
             Node * sLast;
             PriorityQueue U;
             int32_t kM;
-            std::shared_ptr<AHeuristic> heuristicPtr;
+            std::shared_ptr<AHeuristic> heuristicPtr = nullptr;
     };
 }
 

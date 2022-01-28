@@ -8,6 +8,7 @@
 #include "Vector2.hpp"
 #include <imgui-SFML.h>
 #include <imgui.h>
+#include "EuclidianHeuristic.hpp"
 
 #include <iostream>
 
@@ -15,6 +16,7 @@ namespace Pathfinding::Core
 {
     using namespace Pathfinding::Constants;
     using Pathfinding::Datastructures::Vector2i;
+    using Pathfinding::Algorithms::EuclidianHeuristic;
 
     namespace
     {
@@ -52,6 +54,9 @@ namespace Pathfinding::Core
         eventManager.addBinging({true, MouseMoved, sf::Mouse::Left}, std::bind(&GraphOperations::mouseMoved, &graphOps, _1));
 
         menu.addNumberOfNodesChangedCallback(std::bind(&Application::handleNumberOfNodesChange, this, _1));
+        dstar.setHeuristic(std::make_shared<EuclidianHeuristic>());
+        dstar.initialize();
+        dstar.computeShortestPath();
     }
 
     void Application::run()
@@ -94,8 +99,8 @@ namespace Pathfinding::Core
     void Application::draw()
     {
         window.clear();
-        renderer.render(window, graph, appState);
         ImGui::SFML::Render(window);
+        renderer.render(window, graph, appState);
         window.display();
     }
 }

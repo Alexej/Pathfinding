@@ -20,10 +20,11 @@ namespace Pathfinding::Core
             int32_t width() const;
             int32_t height() const;
         private:
+            using arr4i = std::array<int32_t, 4>;
             NumberOfNodes currentNumberOfNodes_ = NumberOfNodes::N_100;
-            std::array<int32_t, 4> NUMBER_OF_NODES{100, 400, 625, 1600};
-            std::array<int32_t, 4> NODE_SIDE_LENGTH{80, 40, 32, 20};
-            std::array<int32_t, 4> NUMBER_OF_NODES_IN_ROW{10, 20, 25, 40};
+            arr4i NUMBER_OF_NODES{100, 400, 625, 1600};
+            arr4i NODE_SIDE_LENGTH{80, 40, 32, 20};
+            arr4i NUMBER_OF_NODES_IN_ROW{10, 20, 25, 40};
             const NumberOfNodes NUMBER_OF_NODES_FOR_RENDER_INFO = NumberOfNodes::N_100;
     };
 }

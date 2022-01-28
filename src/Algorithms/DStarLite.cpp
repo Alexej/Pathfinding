@@ -6,11 +6,12 @@
 #include "Vector2.hpp"
 #include "EuclidianHeuristic.hpp"
 
-
 namespace Pathfinding::Algorithms
 {
+    using Pathfinding::Datastructures::NodeState;
+    using Pathfinding::Datastructures::Vector2i;
 
-    namespace 
+    namespace
     {
         int32_t cost(const Node *from, const Node *to)
         {
@@ -19,18 +20,15 @@ namespace Pathfinding::Algorithms
             return dx - dy == 0 ? 2 : 1;
         }
     }
-    using Pathfinding::Datastructures::NodeState;
-    using Pathfinding::Datastructures::Vector2i;
-    
-    DStarLite::DStarLite(LatticeGraph * graph)
-    : graphPtr(graph) {}
 
+    DStarLite::DStarLite(LatticeGraph *graph)
+        : graphPtr(graph) {}
 
     void DStarLite::setHeuristic(std::shared_ptr<AHeuristic> heuristicPtr_)
     {
         heuristicPtr = heuristicPtr_;
     }
-    
+
     void DStarLite::initialize()
     {
         kM = 0;
@@ -39,28 +37,36 @@ namespace Pathfinding::Algorithms
         U.insert(graphPtr->goalNode(), calculateKey(graphPtr->goalNode()));
     }
 
-    void DStarLite::UpdateVertex(Node * u)
+    void DStarLite::UpdateVertex(Node *u)
     {
-        if(u != graphPtr->goalNode()) { u->rhs = getMinCG(u); }
-        if(U.contains(u)) { U.remove(u); }
-        if(u->g != u->rhs) { U.insert(u, calculateKey(u)); }
+        if (u != graphPtr->goalNode())
+        {
+            u->rhs = getMinCG(u);
+        }
+        if (U.contains(u))
+        {
+            U.remove(u);
+        }
+        if (u->g != u->rhs)
+        {
+            U.insert(u, calculateKey(u));
+        }
     }
 
     void DStarLite::computeShortestPath()
     {
-        while(U.topKey() < calculateKey(graphPtr->startNode()) 
-        || graphPtr->startNode()->rhs != graphPtr->startNode()->g)
+        while (U.topKey() < calculateKey(graphPtr->startNode()) || graphPtr->startNode()->rhs != graphPtr->startNode()->g)
         {
             Key kOld = U.topKey();
-            Node * u = U.popD();
-            if(kOld < calculateKey(u))
+            Node *u = U.popD();
+            if (kOld < calculateKey(u))
             {
                 U.insert(u, calculateKey(u));
             }
-            else if(u->g > u->rhs)
+            else if (u->g > u->rhs)
             {
                 u->g = u->rhs;
-                for(auto & pred : succ(u))
+                for (auto &pred : succ(u))
                 {
                     UpdateVertex(pred);
                 }
@@ -68,28 +74,28 @@ namespace Pathfinding::Algorithms
             else
             {
                 u->g = std::numeric_limits<int32_t>::max();
-                for(auto & pred : succ(u))
+                for (auto &pred : succ(u))
                 {
                     UpdateVertex(pred);
                 }
                 UpdateVertex(u);
             }
         }
-    }   
+    }
 
-    Key DStarLite::calculateKey(Node * s)
+    Key DStarLite::calculateKey(Node *s)
     {
         return {std::min(s->g, s->rhs + heuristicPtr->calculate(graphPtr->startNode(), s) + kM), std::min(s->g, s->rhs)};
     }
 
-    int32_t DStarLite::getMinCG(Node * u)
+    int32_t DStarLite::getMinCG(Node *u)
     {
         auto succs = succ(u);
-        int32_t min = cost(u,succs[0]) + succs[0]->g;
-        for(uint32_t i = 1; i < succs.size(); ++i)
+        int32_t min = cost(u, succs[0]) + succs[0]->g;
+        for (uint32_t i = 1; i < succs.size(); ++i)
         {
-            int32_t currentCost = cost(u,succs[i]) + succs[0]->g;
-            if(min > currentCost)
+            int32_t currentCost = cost(u, succs[i]) + succs[0]->g;
+            if (min > currentCost)
             {
                 min = currentCost;
             }
@@ -97,7 +103,7 @@ namespace Pathfinding::Algorithms
         return min;
     }
 
-    std::vector<Node *> DStarLite::succ(Node * u)
+    std::vector<Node *> DStarLite::succ(Node *u)
     {
         std::vector<Node *> succs;
         int32_t hFrom = u->location.height - 1;
@@ -105,14 +111,14 @@ namespace Pathfinding::Algorithms
         int32_t wFrom = u->location.width - 1;
         int32_t wTo = u->location.width + 1;
 
-        for(int32_t h = hFrom; h <=  hTo; ++h)
+        for (int32_t h = hFrom; h <= hTo; ++h)
         {
-            for(int32_t w = wFrom; w <= wTo ; ++w)
+            for (int32_t w = wFrom; w <= wTo; ++w)
             {
-                Vector2i location(h,w);
-                if(graphPtr->inBounds(location))
+                Vector2i location(h, w);
+                if (graphPtr->inBounds(location))
                 {
-                    if(u->location != location && u->state == NodeState::Free)
+                    if (u->location != location && u->state != NodeState::Blocked)
                     {
                         succs.push_back(graphPtr->node(location));
                     }
