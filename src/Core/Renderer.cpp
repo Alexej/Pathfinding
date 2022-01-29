@@ -16,7 +16,7 @@ namespace Pathfinding::Core
 
     namespace
     {
-        sf::Vector2f getNodePosition(Vector2i location, int32_t sideLength)
+        sf::Vector2f getNodePosition(Vector2i location, int64_t sideLength)
         {
             float nodesHorF = static_cast<float>(location.width);
             float nodesVertF = static_cast<float>(location.height);
@@ -26,9 +26,9 @@ namespace Pathfinding::Core
             return {positionHor, positionVer};
         }
 
-        std::string convertIntToStringWithInf(int32_t num)
+        std::string convertIntToStringWithInf(int64_t num)
         {
-            return num == std::numeric_limits<int32_t>::max() ? std::string("inf") : std::to_string(num);
+            return num >= std::numeric_limits<int32_t>::max() ? std::string("inf") : std::to_string(num);
         };
 
         sf::Color convertToSfmlColor(std::array<uint8_t, 3> color)
@@ -58,6 +58,9 @@ namespace Pathfinding::Core
                 break;
             case NodeState::Goal:
                 color = convertToSfmlColor(GOAL_NODE_COLOR);
+                break;
+            case NodeState::Path:
+                color = convertToSfmlColor(PATH_NODE_COLOR);
                 break;
             }
             return color;
@@ -108,7 +111,7 @@ namespace Pathfinding::Core
         }
     }
 
-    void Renderer::renderNodeInfo(sf::RenderWindow &window, const Node &node, sf::Vector2f coords, int32_t nodeSideLength)
+    void Renderer::renderNodeInfo(sf::RenderWindow &window, const Node &node, sf::Vector2f coords, int64_t nodeSideLength)
     {
         text.setString(convertIntToStringWithInf(node.g));
         text.setPosition(sf::Vector2f(coords.x + NODE_INFO_OFFSET, coords.y + NODE_INFO_OFFSET));

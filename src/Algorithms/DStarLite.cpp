@@ -13,10 +13,10 @@ namespace Pathfinding::Algorithms
 
     namespace
     {
-        int32_t cost(const Node *from, const Node *to)
+        int64_t cost(const Node *from, const Node *to)
         {
-            int32_t dx = abs(from->location.width - to->location.width);
-            int32_t dy = abs(from->location.height - to->location.height);
+            int64_t dx = abs(from->location.width - to->location.width);
+            int64_t dy = abs(from->location.height - to->location.height);
             return dx - dy == 0 ? 2 : 1;
         }
     }
@@ -41,7 +41,7 @@ namespace Pathfinding::Algorithms
     {
         if (u != graphPtr->goalNode())
         {
-            u->rhs = getMinCG(u);
+            u->rhs = getMinCG(u).first;
         }
         if (U.contains(u))
         {
@@ -73,7 +73,7 @@ namespace Pathfinding::Algorithms
             }
             else
             {
-                u->g = std::numeric_limits<int32_t>::max();
+                u->g = std::numeric_limits<int64_t>::max();
                 for (auto &pred : succ(u))
                 {
                     UpdateVertex(pred);
@@ -85,40 +85,46 @@ namespace Pathfinding::Algorithms
 
     Key DStarLite::calculateKey(Node *s)
     {
-        return {std::min(s->g, s->rhs + heuristicPtr->calculate(graphPtr->startNode(), s) + kM), std::min(s->g, s->rhs)};
+        auto k1New = std::min(s->g, s->rhs + heuristicPtr->calculate(graphPtr->startNode(), s) + kM);
+        auto k2New = std::min(s->g, s->rhs);
+        s->key.k1 = k1New;
+        s->key.k2 = k2New;
+        return {k1New, k2New};
     }
 
-    int32_t DStarLite::getMinCG(Node *u)
+    std::pair<int64_t, Node *> DStarLite::getMinCG(Node *u)
     {
         auto succs = succ(u);
-        int32_t min = cost(u, succs[0]) + succs[0]->g;
-        for (uint32_t i = 1; i < succs.size(); ++i)
+        int64_t min = cost(u, succs[0]) + succs[0]->g;
+        Node * currentNode = succs[0];
+        for (uint64_t i = 1; i < succs.size(); ++i)
         {
-            int32_t currentCost = cost(u, succs[i]) + succs[0]->g;
-            if (min > currentCost)
+            int64_t currentCost = cost(u, succs[i]) + succs[i]->g;
+            if (min >= currentCost)
             {
                 min = currentCost;
+                currentNode = succs[i];
             }
         }
-        return min;
+        return {min, currentNode};
     }
 
     std::vector<Node *> DStarLite::succ(Node *u)
     {
         std::vector<Node *> succs;
-        int32_t hFrom = u->location.height - 1;
-        int32_t hTo = u->location.height + 1;
-        int32_t wFrom = u->location.width - 1;
-        int32_t wTo = u->location.width + 1;
+        int64_t hFrom = u->location.height - 1;
+        int64_t hTo = u->location.height + 1;
+        int64_t wFrom = u->location.width - 1;
+        int64_t wTo = u->location.width + 1;
 
-        for (int32_t h = hFrom; h <= hTo; ++h)
+        for (int64_t h = hFrom; h <= hTo; ++h)
         {
-            for (int32_t w = wFrom; w <= wTo; ++w)
+            for (int64_t w = wFrom; w <= wTo; ++w)
             {
                 Vector2i location(h, w);
                 if (graphPtr->inBounds(location))
                 {
-                    if (u->location != location && u->state != NodeState::Blocked)
+                    if (u->location != location && graphPtr->node(location)->state != NodeState::Blocked)
                     {
                         succs.push_back(graphPtr->node(location));
                     }
@@ -126,5 +132,42 @@ namespace Pathfinding::Algorithms
             }
         }
         return succs;
+    }
+
+    void DStarLite::setPathInGraph()
+    {
+        for(auto & node : currentPath)
+        {
+            node->state = NodeState::Path;
+        }
+    }
+
+    void DStarLite::clearPathInGraph()
+    {
+        for(auto & node : currentPath)
+        {
+            node->state = NodeState::Free;
+        }
+    }
+
+    /**
+     * @brief 
+     * "After computeShortestPath() returns, one can then follow a shortest path from Sstart 
+     * to Sgoal by always moving from the current vertex s, starting at Sstart, to any successor s' 
+     * that minimizes c(s,s') + g(s') until Sgoal is reached(ties can be broken arbitrarily).""
+     */
+    void DStarLite::computePath()
+    {
+        Node * currentNode = graphPtr->startNode();
+        while(true)
+        {
+            currentNode = getMinCG(currentNode).second;
+            if(currentNode == graphPtr->goalNode())
+            {
+                break;
+            }
+            currentPath.push_back(currentNode);
+
+        }
     }
 }

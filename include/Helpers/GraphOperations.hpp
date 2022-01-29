@@ -31,13 +31,13 @@ namespace Pathfinding::Helpers
     {
     public:
         GraphOperations() = default;
-        GraphOperations(ApplicationState * state, LatticeGraph *graph, int32_t nodeSideLength);
+        GraphOperations(ApplicationState * state, LatticeGraph *graph, int64_t nodeSideLength);
         void rightMouseButtonPressed(sf::Vector2i pos);
         void leftMouseButtonPressed(sf::Vector2i pos);
         void mouseButtonReleased(sf::Vector2i pos);
         void nodeUnderCursor(sf::Vector2i pos);
         void mouseMoved(sf::Vector2i pos);
-        void resize(int32_t nodeSideLength);
+        void resize(int64_t nodeSideLength);
         void disableEnpointsEvent();
         void enableEndPointsEvent();
 
@@ -46,7 +46,7 @@ namespace Pathfinding::Helpers
         LatticeGraph *graphPtr;
         ApplicationState * applicationStatePtr;
         bool endPointsEvent = true;
-        int32_t nodeSideLength;
+        int64_t nodeSideLength;
     };
 }
 

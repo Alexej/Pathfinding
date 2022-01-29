@@ -40,7 +40,8 @@ namespace Pathfinding::Core
         void draw();
         void update(sf::Clock &deltaClock);
         void handleInput(sf::Event event);
-        void handleNumberOfNodesChange(int32_t index);
+        void handleNumberOfNodesChange(int64_t index);
+        void startAlgorithm();
     private:
         ApplicationState appState;
         sf::RenderWindow window;

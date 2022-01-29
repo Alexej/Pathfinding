@@ -26,7 +26,7 @@ namespace Pathfinding::Core
     private:
         void loadFont(std::string font);
         void drawNode(sf::RenderWindow &window, const Node &node, sf::Vector2f coords);
-        void renderNodeInfo(sf::RenderWindow &window, const Node &node, sf::Vector2f coords, int32_t nodeSideLength);
+        void renderNodeInfo(sf::RenderWindow &window, const Node &node, sf::Vector2f coords, int64_t nodeSideLength);
     private:
         sf::RectangleShape nodeRect;
         sf::Text text;

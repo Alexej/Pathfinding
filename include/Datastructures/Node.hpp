@@ -7,13 +7,13 @@
 
 namespace Pathfinding::Datastructures
 {
-    enum class NodeState {Start, Goal, Free, Blocked, Frontier, Visited};
+    enum class NodeState {Start, Goal, Free, Blocked, Frontier, Visited, Path};
     struct Node
     {
         Vector2i location;
         NodeState state;
-        int32_t rhs = std::numeric_limits<int32_t>::max();
-        int32_t g = std::numeric_limits<int32_t>::max();
+        int64_t rhs = std::numeric_limits<int32_t>::max();
+        int64_t g = std::numeric_limits<int32_t>::max();
         Key key;
     };
 

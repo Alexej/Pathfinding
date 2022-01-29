@@ -12,19 +12,21 @@
 
 namespace Pathfinding::Datastructures
 {
-    using queue_element = std::pair<Key, Node*>;
+    using queueElement = std::pair<Key, Node*>;
 
-    class PriorityQueue final : public std::priority_queue<queue_element, std::vector<queue_element>, std::greater<queue_element>>
+    class PriorityQueue final : public std::priority_queue<queueElement, 
+                                       std::vector<queueElement>, 
+                                       std::greater<queueElement>>
     {
     public:
         auto begin() { return this->c.begin(); }
         auto end() { return this->c.end(); }
-        const auto begin() const { return this->c.begin(); }
-        const auto end() const { return this->c.end(); }
+        auto begin() const { return this->c.cbegin(); }
+        auto end() const { return this->c.cend(); }
 
         void remove(Node * node)
         {
-            auto it = std::find_if(this->c.begin(), this->c.end(), [&node](const queue_element &element)
+            auto it = std::find_if(this->c.begin(), this->c.end(), [&node](const queueElement &element)
                                    { return element.second == node; });
             this->c.erase(it);
             std::make_heap(this->c.begin(), this->c.end(), this->comp);
@@ -49,7 +51,7 @@ namespace Pathfinding::Datastructures
 
         bool contains(const Node * node)
         {
-            return std::find_if(this->c.begin(), this->c.end(), [&node](const queue_element & input)
+            return std::find_if(this->c.begin(), this->c.end(), [&node](const queueElement & input)
             {
                 return *input.second == *node;
             }
@@ -57,7 +59,7 @@ namespace Pathfinding::Datastructures
         }
 
     private:
-        using std::priority_queue<queue_element, std::vector<queue_element>, std::greater<queue_element>>::pop;
+        using std::priority_queue<queueElement, std::vector<queueElement>, std::greater<queueElement>>::pop;
     };
 }
 

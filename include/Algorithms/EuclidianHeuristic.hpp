@@ -15,7 +15,7 @@ namespace Pathfinding::Algorithms
     class EuclidianHeuristic final : public AHeuristic
     {
         public: 
-            int32_t calculate(const Node * from, const Node * to) override;
+            int64_t calculate(const Node * from, const Node * to) override;
     };
 }
 

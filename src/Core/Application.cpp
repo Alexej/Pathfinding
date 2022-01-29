@@ -20,10 +20,10 @@ namespace Pathfinding::Core
 
     namespace
     {
-        Vector2i mapMouseToGraphCoordinates(sf::Vector2i pos, int32_t currentSideLength)
+        Vector2i mapMouseToGraphCoordinates(sf::Vector2i pos, int64_t currentSideLength)
         {
-            int32_t faH = pos.y / currentSideLength;
-            int32_t faW = pos.x / currentSideLength;
+            int64_t faH = pos.y / currentSideLength;
+            int64_t faW = pos.x / currentSideLength;
             return {faH, faW};
         }
     }
@@ -55,10 +55,17 @@ namespace Pathfinding::Core
         eventManager.addBinding({EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON}, std::bind(&GraphOperations::nodeUnderCursor, &graphOps, _1));
 
         menu.addNumberOfNodesChangedCallback(std::bind(&Application::handleNumberOfNodesChange, this, _1));
-        
+        menu.addStartCallback(std::bind(&Application::startAlgorithm, this));
+    }
+
+    void Application::startAlgorithm()
+    {
         dstar.setHeuristic(std::make_shared<EuclidianHeuristic>());
         dstar.initialize();
         dstar.computeShortestPath();
+        dstar.computePath();
+        dstar.setPathInGraph();
+        appState.setState(State::SEARCHING);
     }
 
     void Application::run()
@@ -91,7 +98,7 @@ namespace Pathfinding::Core
         eventManager.processEvents();
     }
 
-    void Application::handleNumberOfNodesChange(int32_t index)
+    void Application::handleNumberOfNodesChange(int64_t index)
     {
         dimension->setCurrentNumberOfNodesIndex(index);
         graph.resize(dimension->height(), dimension->width());

@@ -11,11 +11,11 @@ namespace Pathfinding::Constants
     constexpr auto APPLICATION_TITLE = "Pathfinding";
 
     // Dimension
-    constexpr int32_t GRID_FIELD_WIDTH = 800;
-    constexpr int32_t GRID_FIELD_HEIGHT = 800;
-    constexpr int32_t MENU_WIDTH = 300;
-    constexpr int32_t NUMBER_OF_NODES_FOR_RENDER_INFO = 100;
-    constexpr int32_t APPLICATION_WINDOW_WIDTH = GRID_FIELD_WIDTH + MENU_WIDTH;
+    constexpr int64_t GRID_FIELD_WIDTH = 800;
+    constexpr int64_t GRID_FIELD_HEIGHT = 800;
+    constexpr int64_t MENU_WIDTH = 300;
+    constexpr int64_t NUMBER_OF_NODES_FOR_RENDER_INFO = 100;
+    constexpr int64_t APPLICATION_WINDOW_WIDTH = GRID_FIELD_WIDTH + MENU_WIDTH;
 
     // Colors:
     constexpr std::array<uint8_t, 3> FREE_NODE_COLOR{150, 160, 180};
@@ -24,6 +24,9 @@ namespace Pathfinding::Constants
     constexpr std::array<uint8_t, 3> VISITED_NODE_COLOR{255, 0, 255};
     constexpr std::array<uint8_t, 3> START_NODE_COLOR{255, 0, 0};
     constexpr std::array<uint8_t, 3> GOAL_NODE_COLOR{255, 255, 0};
+    constexpr std::array<uint8_t, 3> PATH_NODE_COLOR{0, 67, 255};
+
+
 
     constexpr std::array<uint8_t, 3> NODE_OUTLINE_COLOR{255, 255, 255};
     constexpr std::array<uint8_t, 3> NODE_INFO_COLOR{0, 0, 0};
@@ -48,10 +51,10 @@ namespace Pathfinding::Constants
 
 
 /*
-    constexpr std::array<int32_t, 4> NUMBER_OF_NODES{100, 400, 625, 1600};
-    constexpr std::array<int32_t, 4> NUMBER_OF_NODES_IN_ROW{80, 40, 32, 20};
-    constexpr int32_t N_100 = 0;
-    constexpr int32_t N_400 = 1;
-    constexpr int32_t N_625 = 2;
-    constexpr int32_t N_1600 = 3;
+    constexpr std::array<int64_t, 4> NUMBER_OF_NODES{100, 400, 625, 1600};
+    constexpr std::array<int64_t, 4> NUMBER_OF_NODES_IN_ROW{80, 40, 32, 20};
+    constexpr int64_t N_100 = 0;
+    constexpr int64_t N_400 = 1;
+    constexpr int64_t N_625 = 2;
+    constexpr int64_t N_1600 = 3;
 */

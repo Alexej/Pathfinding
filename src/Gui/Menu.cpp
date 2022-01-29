@@ -17,7 +17,7 @@ using Pathfinding::Datastructures::Node;
 
 namespace Pathfinding::Gui
 {
-    Menu::Menu(ApplicationState *appState_, int32_t offset_, int32_t height_, int32_t width_)
+    Menu::Menu(ApplicationState *appState_, int64_t offset_, int64_t height_, int64_t width_)
         : appStatePtr(appState_), offset(static_cast<float>(offset_)), 
         height(static_cast<float>(height_)), 
         width(static_cast<float>(width_)) 
@@ -44,6 +44,7 @@ namespace Pathfinding::Gui
                 showReadyStateElements();
             break;
             case State::SEARCHING:
+                showSearchingElements();
             break;
 
         }
@@ -52,6 +53,15 @@ namespace Pathfinding::Gui
         ImGui::Spacing();
         showCommonElements();
         ImGui::End();
+    }
+
+    void Menu::showSearchingElements()
+    {
+        ImGui::Spacing();
+        if(ImGui::Button("STEP", ImVec2(width-20,20)))
+        {
+            
+        }
     }
 
     void Menu::showNodeInfoFlag()
@@ -67,7 +77,7 @@ namespace Pathfinding::Gui
             {
                 appStatePtr->disableNodeInfo();
             }
-            }
+        }
     }
 
     void Menu::showCommonElements()
@@ -91,6 +101,8 @@ namespace Pathfinding::Gui
     void Menu::showNodeInfoInMenu()
     {
         ImGui::Separator();
+        ImGui::Text(std::format("Height: {} Width: {}", appStatePtr->nodeUnderCursor()->location.height, 
+                                                      appStatePtr->nodeUnderCursor()->location.width).c_str());
         ImGui::Text(std::format("G: {}", appStatePtr->nodeUnderCursor()->g).c_str());
         ImGui::Text(std::format("RHS: {}", appStatePtr->nodeUnderCursor()->rhs).c_str());
         ImGui::Text(std::format("K1: {}", appStatePtr->nodeUnderCursor()->key.k1).c_str());
@@ -115,6 +127,12 @@ namespace Pathfinding::Gui
                 numberOfNodesChangedCallBack(itemCurrent);
             }
         };
+
+        ImGui::Spacing();
+        if(ImGui::Button("Start", ImVec2(width-20,20)))
+        {
+            startCallBack();
+        }
     }
     
     void Menu::addNumberOfNodesChangedCallback(fPtrVI callBack)
@@ -122,13 +140,13 @@ namespace Pathfinding::Gui
         numberOfNodesChangedCallBack = callBack;
     }
 
-    void Menu::addStepCallBack(fPtrVV callBack)
+    void Menu::addStartCallback(fPtrVV callBack)
     {
-        stepCallbBack = callBack;
+        startCallBack = callBack;
     }
 
     bool Menu::initialized() const
     {
-        return numberOfNodesChangedCallBack != nullptr && stepCallbBack != nullptr;
+        return numberOfNodesChangedCallBack != nullptr && startCallBack != nullptr;
     }
 }
