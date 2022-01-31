@@ -12,8 +12,8 @@ namespace Pathfinding::Datastructures
     {
         Vector2i location;
         NodeState state;
-        int64_t rhs = std::numeric_limits<int32_t>::max();
-        int64_t g = std::numeric_limits<int32_t>::max();
+        double rhs = std::numeric_limits<double>::infinity();
+        double g = std::numeric_limits<double>::infinity();
         Key key;
     };
 

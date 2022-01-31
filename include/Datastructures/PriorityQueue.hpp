@@ -13,7 +13,6 @@
 namespace Pathfinding::Datastructures
 {
     using queueElement = std::pair<Key, Node*>;
-
     class PriorityQueue final : public std::priority_queue<queueElement, 
                                        std::vector<queueElement>, 
                                        std::greater<queueElement>>
@@ -35,6 +34,12 @@ namespace Pathfinding::Datastructures
         void insert(Node * node, Key key)
         {
             this->push(std::make_pair(key, node));
+        }
+
+        void reset()
+        {
+            c.clear();
+            std::make_heap(this->c.begin(), this->c.end(), this->comp);
         }
 
         Key topKey()

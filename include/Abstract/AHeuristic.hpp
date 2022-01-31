@@ -14,7 +14,7 @@ namespace Pathfinding::Abstract
     class AHeuristic
     {
         public:
-            virtual int64_t calculate(const Node * from, const Node * to) = 0;
+            virtual double calculate(const Node * from, const Node * to) = 0;
             virtual ~AHeuristic() = default;
     };
 }

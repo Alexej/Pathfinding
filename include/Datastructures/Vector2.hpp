@@ -22,7 +22,7 @@ namespace Pathfinding::Datastructures
         T width = 0;
         auto operator<=>(const Vector2<T> &) const = default;
     };
-    using Vector2i = Vector2<int64_t>;
+    using Vector2i = Vector2<int32_t>;
 }
 
 #endif /* C71A173D_A9A7_4ABC_B640_D4C5497B6103 */

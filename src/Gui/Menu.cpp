@@ -17,7 +17,7 @@ using Pathfinding::Datastructures::Node;
 
 namespace Pathfinding::Gui
 {
-    Menu::Menu(ApplicationState *appState_, int64_t offset_, int64_t height_, int64_t width_)
+    Menu::Menu(ApplicationState *appState_, int32_t offset_, int32_t height_, int32_t width_)
         : appStatePtr(appState_), offset(static_cast<float>(offset_)), 
         height(static_cast<float>(height_)), 
         width(static_cast<float>(width_)) 
@@ -89,7 +89,7 @@ namespace Pathfinding::Gui
         ImGui::Spacing();
         if(ImGui::Button("RESET", ImVec2(width-20,20)))
         {
-            appStatePtr->setState(State::READY);
+            resetCallback();
         }
         ImGui::Spacing();
         if(appStatePtr->nodeUnderCursor() != nullptr)
@@ -135,14 +135,19 @@ namespace Pathfinding::Gui
         }
     }
     
-    void Menu::addNumberOfNodesChangedCallback(fPtrVI callBack)
+    void Menu::addNumberOfNodesChangedCallBack(fPtrVI callBack)
     {
         numberOfNodesChangedCallBack = callBack;
     }
 
-    void Menu::addStartCallback(fPtrVV callBack)
+    void Menu::addStartCallBack(fPtrVV callBack)
     {
         startCallBack = callBack;
+    }
+
+    void Menu::addResetCallBack(fPtrVV callBack)
+    {
+        resetCallback = callBack;
     }
 
     bool Menu::initialized() const

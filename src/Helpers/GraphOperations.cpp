@@ -12,15 +12,15 @@ namespace Pathfinding::Helpers
 
     namespace
     {
-        Vector2i mapMouseToGraphCoordinates(sf::Vector2i pos, int64_t currentSideLength)
+        Vector2i mapMouseToGraphCoordinates(sf::Vector2i pos, int32_t currentSideLength)
         {
-            int64_t faH = pos.y / currentSideLength;
-            int64_t faW = pos.x / currentSideLength;
+            int32_t faH = pos.y / currentSideLength;
+            int32_t faW = pos.x / currentSideLength;
             return {faH, faW};
         }
     }
 
-    GraphOperations::GraphOperations(ApplicationState * state_, LatticeGraph * graph_, int64_t nodeSideLength_ )
+    GraphOperations::GraphOperations(ApplicationState * state_, LatticeGraph * graph_, int32_t nodeSideLength_ )
     : applicationStatePtr(state_), graphPtr(graph_), nodeSideLength(nodeSideLength_){ }
 
     void GraphOperations::leftMouseButtonPressed(sf::Vector2i pos)
@@ -34,7 +34,7 @@ namespace Pathfinding::Helpers
         {
             currentMouseAction = MouseAction::SETTING_GOAL;
         }
-        else 
+        else
         {
             currentMouseAction = MouseAction::BLOCKING_NODE;
         }
@@ -73,7 +73,7 @@ namespace Pathfinding::Helpers
         currentMouseAction = MouseAction::IDLE;
     }
 
-    void GraphOperations::resize(int64_t nodeSideLength_)
+    void GraphOperations::resize(int32_t nodeSideLength_)
     {
         nodeSideLength = nodeSideLength_;
     }

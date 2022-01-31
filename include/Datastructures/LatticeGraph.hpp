@@ -15,7 +15,7 @@ namespace Pathfinding::Datastructures
     {
     public:
         LatticeGraph() = default;
-        LatticeGraph(int64_t height, int64_t width);
+        LatticeGraph(int32_t height, int32_t width);
         explicit LatticeGraph(Vector2i dimension);
 
         std::size_t width() const { return graph[0].size(); }
@@ -26,6 +26,11 @@ namespace Pathfinding::Datastructures
         std::vector<Node> & operator[](std::size_t height) { return graph[height]; }
         const std::vector<Node> & operator[](std::size_t height) const { return graph[height]; }
 
+
+        /*
+        Move this to another class
+        */
+       //////////////////////////////////
         Node * node(Vector2i location) { return &graph[location.height][location.width]; }
         const Node * node(Vector2i location) const { return &graph[location.height][location.width]; }
 
@@ -41,8 +46,8 @@ namespace Pathfinding::Datastructures
         void clearNode(Vector2i location);
 
         void resetEndpoints();
-        void resize(int64_t height, int64_t width);
-
+        void resize(int32_t height, int32_t width);
+        ///////////////////////////////////////////////////
     private:
         Vector2D<Node> graph;
         Node * goalNodePtr;

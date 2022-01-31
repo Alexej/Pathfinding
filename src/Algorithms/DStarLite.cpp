@@ -13,11 +13,11 @@ namespace Pathfinding::Algorithms
 
     namespace
     {
-        int64_t cost(const Node *from, const Node *to)
+        double cost(const Node *from, const Node *to)
         {
-            int64_t dx = abs(from->location.width - to->location.width);
-            int64_t dy = abs(from->location.height - to->location.height);
-            return dx - dy == 0 ? 2 : 1;
+            int32_t dx = abs(from->location.width - to->location.width);
+            int32_t dy = abs(from->location.height - to->location.height);
+            return dx - dy == 0 ? 1 : 1;
         }
     }
 
@@ -32,7 +32,7 @@ namespace Pathfinding::Algorithms
     void DStarLite::initialize()
     {
         kM = 0;
-        sLast = graphPtr->startNode();
+        sStart = graphPtr->startNode();
         graphPtr->goalNode()->rhs = 0;
         U.insert(graphPtr->goalNode(), calculateKey(graphPtr->goalNode()));
     }
@@ -55,7 +55,7 @@ namespace Pathfinding::Algorithms
 
     void DStarLite::computeShortestPath()
     {
-        while (U.topKey() < calculateKey(graphPtr->startNode()) || graphPtr->startNode()->rhs != graphPtr->startNode()->g)
+        while (U.topKey() < calculateKey(sStart) || sStart->rhs != sStart->g)
         {
             Key kOld = U.topKey();
             Node *u = U.popD();
@@ -73,7 +73,7 @@ namespace Pathfinding::Algorithms
             }
             else
             {
-                u->g = std::numeric_limits<int64_t>::max();
+                u->g = std::numeric_limits<double>::infinity();
                 for (auto &pred : succ(u))
                 {
                     UpdateVertex(pred);
@@ -85,21 +85,27 @@ namespace Pathfinding::Algorithms
 
     Key DStarLite::calculateKey(Node *s)
     {
-        auto k1New = std::min(s->g, s->rhs + heuristicPtr->calculate(graphPtr->startNode(), s) + kM);
+        auto k1New = std::min(s->g, s->rhs) + heuristicPtr->calculate(sStart, s) + kM;
         auto k2New = std::min(s->g, s->rhs);
         s->key.k1 = k1New;
         s->key.k2 = k2New;
         return {k1New, k2New};
     }
 
-    std::pair<int64_t, Node *> DStarLite::getMinCG(Node *u)
+    /**
+     * @brief returns minimum c(s,s') + g(s') and its node of all successors of u
+     * 
+     * @param u 
+     * @return std::pair<int32_t, Node *> 
+     */
+    std::pair<double, Node *> DStarLite::getMinCG(Node *u)
     {
         auto succs = succ(u);
-        int64_t min = cost(u, succs[0]) + succs[0]->g;
+        double min = cost(u, succs[0]) + succs[0]->g;
         Node * currentNode = succs[0];
-        for (uint64_t i = 1; i < succs.size(); ++i)
+        for (uint32_t i = 1; i < succs.size(); ++i)
         {
-            int64_t currentCost = cost(u, succs[i]) + succs[i]->g;
+            double currentCost = cost(u, succs[i]) + succs[i]->g;
             if (min >= currentCost)
             {
                 min = currentCost;
@@ -112,14 +118,14 @@ namespace Pathfinding::Algorithms
     std::vector<Node *> DStarLite::succ(Node *u)
     {
         std::vector<Node *> succs;
-        int64_t hFrom = u->location.height - 1;
-        int64_t hTo = u->location.height + 1;
-        int64_t wFrom = u->location.width - 1;
-        int64_t wTo = u->location.width + 1;
+        int32_t hFrom = u->location.height - 1;
+        int32_t hTo = u->location.height + 1;
+        int32_t wFrom = u->location.width - 1;
+        int32_t wTo = u->location.width + 1;
 
-        for (int64_t h = hFrom; h <= hTo; ++h)
+        for (int32_t h = hFrom; h <= hTo; ++h)
         {
-            for (int64_t w = wFrom; w <= wTo; ++w)
+            for (int32_t w = wFrom; w <= wTo; ++w)
             {
                 Vector2i location(h, w);
                 if (graphPtr->inBounds(location))
@@ -150,6 +156,16 @@ namespace Pathfinding::Algorithms
         }
     }
 
+
+    void DStarLite::reset()
+    {
+        sStart = nullptr;
+        U.reset();
+        kM = 0;
+        currentPath.clear();
+    }   
+
+
     /**
      * @brief 
      * "After computeShortestPath() returns, one can then follow a shortest path from Sstart 
@@ -158,7 +174,7 @@ namespace Pathfinding::Algorithms
      */
     void DStarLite::computePath()
     {
-        Node * currentNode = graphPtr->startNode();
+        Node * currentNode = sStart;
         while(true)
         {
             currentNode = getMinCG(currentNode).second;
@@ -167,7 +183,6 @@ namespace Pathfinding::Algorithms
                 break;
             }
             currentPath.push_back(currentNode);
-
         }
     }
 }

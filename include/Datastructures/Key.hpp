@@ -8,9 +8,9 @@ namespace Pathfinding::Datastructures
     struct Key
     {
         Key() = default;
-        Key(int64_t k1_, int64_t k2_) : k1(k1_), k2(k2_) {}
-        int64_t k1 = std::numeric_limits<int32_t>::max();
-        int64_t k2 = std::numeric_limits<int32_t>::max();
+        Key(double k1_, double k2_) : k1(k1_), k2(k2_) {}
+        double k1 = std::numeric_limits<double>::infinity();
+        double k2 = std::numeric_limits<double>::infinity();
     };
 
     [[nodiscard]] bool operator<(const Key & lhs, const Key & rhs);

@@ -13,10 +13,9 @@ namespace Pathfinding::Core
     using namespace Pathfinding::Constants;
     using Pathfinding::Datastructures::Vector2i;
     using Pathfinding::Datastructures::NodeState;
-
     namespace
     {
-        sf::Vector2f getNodePosition(Vector2i location, int64_t sideLength)
+        sf::Vector2f getNodePosition(Vector2i location, int32_t sideLength)
         {
             float nodesHorF = static_cast<float>(location.width);
             float nodesVertF = static_cast<float>(location.height);
@@ -26,14 +25,21 @@ namespace Pathfinding::Core
             return {positionHor, positionVer};
         }
 
-        std::string convertIntToStringWithInf(int64_t num)
-        {
-            return num >= std::numeric_limits<int32_t>::max() ? std::string("inf") : std::to_string(num);
-        };
-
         sf::Color convertToSfmlColor(std::array<uint8_t, 3> color)
         {
             return {color[RED], color[GREEN], color[BLUE]};
+        }
+
+        /**
+         * @brief converts double to string and removes zeros and dot.
+         * should be certain that cost, rhs, g and key values are always whole numbers
+         * @param d 
+         * @return std::string 
+         */
+        std::string dToStr(double d)
+        {
+            std::string dStr = std::to_string(d);
+            return dStr.substr(0, dStr.find("."));
         }
 
         sf::Color stateColor(NodeState state)
@@ -111,20 +117,23 @@ namespace Pathfinding::Core
         }
     }
 
-    void Renderer::renderNodeInfo(sf::RenderWindow &window, const Node &node, sf::Vector2f coords, int64_t nodeSideLength)
+    void Renderer::renderNodeInfo(sf::RenderWindow &window, const Node &node, sf::Vector2f coords, int32_t nodeSideLength)
     {
-        text.setString(convertIntToStringWithInf(node.g));
+
+        using std::to_string;
+
+        text.setString(dToStr(node.g));
         text.setPosition(sf::Vector2f(coords.x + NODE_INFO_OFFSET, coords.y + NODE_INFO_OFFSET));
         window.draw(text);
         float widthOfGText = text.getLocalBounds().width;
 
-        text.setString(convertIntToStringWithInf(node.rhs));
+        text.setString(dToStr(node.rhs));
         float widthOfRHSText = text.getLocalBounds().width;
         float freeSpaceHor = nodeSideLength - widthOfGText - widthOfRHSText;
         text.setPosition(sf::Vector2f(coords.x + freeSpaceHor + widthOfGText - NODE_INFO_OFFSET, coords.y + NODE_INFO_OFFSET));
         window.draw(text);
 
-        std::string keyString = "[" + convertIntToStringWithInf(node.key.k1) + ":" + convertIntToStringWithInf(node.key.k2) + "]";
+        std::string keyString = "[" + dToStr(node.key.k1) + ":" + dToStr(node.key.k2) + "]";
         text.setString(keyString);
         float halfOfText = text.getLocalBounds().width / 2;
         float heightKeyOffset = 2 * text.getLocalBounds().height + NODE_INFO_OFFSET;

@@ -17,15 +17,16 @@ namespace Pathfinding::Gui
     class Menu
     {
         private:
-            using fPtrVI = std::function<void(int64_t)>;
+            using fPtrVI = std::function<void(int32_t)>;
             using fPtrVV = std::function<void(void)>;
         public:
             Menu() = default;
-            Menu(ApplicationState * appStat, int64_t offset, int64_t height, int64_t width);
+            Menu(ApplicationState * appStat, int32_t offset, int32_t height, int32_t width);
             void show();
-            void addNumberOfNodesChangedCallback(fPtrVI callBack);
+            void addNumberOfNodesChangedCallBack(fPtrVI callBack);
             void addStepCallBack(fPtrVV callBack);
-            void addStartCallback(fPtrVV callBack);
+            void addStartCallBack(fPtrVV callBack);
+            void addResetCallBack(fPtrVV callBack);
             bool initialized() const;
         private:
             void showCommonElements();
@@ -42,6 +43,7 @@ namespace Pathfinding::Gui
         private:
             fPtrVI numberOfNodesChangedCallBack = nullptr;
             fPtrVV startCallBack = nullptr;
+            fPtrVV resetCallback = nullptr;
             GraphDimension * dimensionPtr;
     };
 }

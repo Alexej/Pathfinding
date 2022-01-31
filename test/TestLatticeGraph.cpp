@@ -11,9 +11,9 @@ TEST_CASE( "Created graph should have apropriate dimensions", "[constructor]" ) 
 
 TEST_CASE( "Every node should have apropriate location", "[constructor]" ) {
     LatticeGraph graph(20,30);
-    for(int64_t h = 0; h < graph.height(); ++h)
+    for(int32_t h = 0; h < graph.height(); ++h)
     {
-        for(int64_t w = 0; w <graph. width(); ++w)
+        for(int32_t w = 0; w <graph. width(); ++w)
         {
             REQUIRE(graph[h][w].location == Vector2i(h,w));
         }

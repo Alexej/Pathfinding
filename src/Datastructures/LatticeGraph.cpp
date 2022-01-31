@@ -4,17 +4,17 @@ namespace Pathfinding::Datastructures
 {
     namespace 
     {
-        void initNode(Node & node, int64_t h, int64_t w)
+        void initNode(Node & node, int32_t h, int32_t w)
         {
             node.location = Vector2i(h, w);
-            node.g = std::numeric_limits<int32_t>::max();
-            node.rhs = std::numeric_limits<int32_t>::max();
+            node.g = std::numeric_limits<double>::infinity();
+            node.rhs = std::numeric_limits<double>::infinity();
             node.key = Key();
             node.state = NodeState::Free;
         }
     }
 
-    LatticeGraph::LatticeGraph(int64_t height, int64_t width)
+    LatticeGraph::LatticeGraph(int32_t height, int32_t width)
     {
         resize(height, width);
     }
@@ -26,29 +26,29 @@ namespace Pathfinding::Datastructures
 
     bool LatticeGraph::inBounds(Vector2i location) const
     {
-        int64_t widthI = static_cast<int64_t>(width());
-        int64_t heightI = static_cast<int64_t>(height());
+        int32_t widthI = static_cast<int32_t>(width());
+        int32_t heightI = static_cast<int32_t>(height());
         return 0 <= location.height && location.height < heightI && 0 <= location.width && location.width < widthI;
     }
 
     void LatticeGraph::resetEndpoints()
     {
-        int64_t heightI = static_cast<int64_t>(height());
-        int64_t widthI = static_cast<int64_t>(width());
+        int32_t heightI = static_cast<int32_t>(height());
+        int32_t widthI = static_cast<int32_t>(width());
         goalNodePtr = &graph[heightI - 1][widthI - 1];
         startNodePtr = &graph[0][0];
         goalNodePtr->state = NodeState::Goal;
         startNodePtr->state = NodeState::Start;
     }
 
-    void LatticeGraph::resize(int64_t height, int64_t width)
+    void LatticeGraph::resize(int32_t height, int32_t width)
     {
         graph.clear();
         graph.resize(height, std::vector<Node>(width));
-        for (int64_t h = 0; h < height; ++h)
+        for (int32_t h = 0; h < height; ++h)
         {
             std::vector<Node> row;
-            for (int64_t w = 0; w < width; ++w)
+            for (int32_t w = 0; w < width; ++w)
             {
                 initNode(graph[h][w], h, w);
             }

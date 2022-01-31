@@ -34,17 +34,18 @@ namespace Pathfinding::Algorithms
             void setHeuristic(std::shared_ptr<AHeuristic> cost);
             void setPathInGraph();
             void computePath();
+            void reset();
         private:
             void UpdateVertex(Node * node);
             Key calculateKey(Node * node);
             std::vector<Node *> succ(Node * node);
-            std::pair<int64_t, Node *> getMinCG(Node * u);
+            std::pair<double, Node *> getMinCG(Node * u);
             void clearPathInGraph();
         private:    
-            LatticeGraph * graphPtr;
-            Node * sLast;
+            LatticeGraph * graphPtr = nullptr;
+            Node * sStart = nullptr;
             PriorityQueue U;
-            int64_t kM;
+            int32_t kM = 0;
             std::shared_ptr<AHeuristic> heuristicPtr = nullptr;
             std::vector<Node *> currentPath;
     };
