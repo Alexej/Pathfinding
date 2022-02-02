@@ -24,7 +24,7 @@ namespace Pathfinding::Algorithms
         {
             int32_t dx = abs(from->location.width - to->location.width);
             int32_t dy = abs(from->location.height - to->location.height);
-            return dx - dy == 0 ? 1 : 1;
+            return dx - dy == 0 ? sqrt(2) : 1;
         }
 
         bool locallyConsistent(Node *node)
@@ -305,16 +305,6 @@ namespace Pathfinding::Algorithms
         {
             nodesChanged.insert(succ);
         }
-        if (!blocked(node))
-        {
-            nodesChanged.insert(node);
-        }
-        else
-        {
-            if(U.contains(node))
-            {
-                U.remove(node);
-            }
-        }
+        nodesChanged.insert(node);
     }
 }
