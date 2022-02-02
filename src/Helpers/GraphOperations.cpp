@@ -3,25 +3,17 @@
 #include "LatticeGraph.hpp"
 #include "Node.hpp"
 #include "ApplicationState.hpp"
+#include "SFMLHelpers.hpp"
+#include "DStarLite.hpp"
 
 namespace Pathfinding::Helpers
 {
-    using Pathfinding::Datastructures::Vector2i;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
+    using Pathfinding::Core::State;
 
-    namespace
-    {
-        Vector2i mapMouseToGraphCoordinates(sf::Vector2i pos, int32_t currentSideLength)
-        {
-            int32_t faH = pos.y / currentSideLength;
-            int32_t faW = pos.x / currentSideLength;
-            return {faH, faW};
-        }
-    }
-
-    GraphOperations::GraphOperations(ApplicationState * state_, LatticeGraph * graph_, int32_t nodeSideLength_ )
-    : applicationStatePtr(state_), graphPtr(graph_), nodeSideLength(nodeSideLength_){ }
+    GraphOperations::GraphOperations(ApplicationState * state_, DStarLite * dstar_, LatticeGraph * graph_, int32_t nodeSideLength_ )
+    : applicationStatePtr(state_), dstarPtr(dstar_), graphPtr(graph_), nodeSideLength(nodeSideLength_){ }
 
     void GraphOperations::leftMouseButtonPressed(sf::Vector2i pos)
     {
@@ -37,12 +29,22 @@ namespace Pathfinding::Helpers
         else
         {
             currentMouseAction = MouseAction::BLOCKING_NODE;
+            Vector2i mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
+            if (graphPtr->inBounds(mappedCoordinates))
+            {
+                blockNodeAndNotifyDstarLiteIfRunning(mappedCoordinates);
+            }
         }
     }
 
     void GraphOperations::rightMouseButtonPressed(sf::Vector2i pos)
     {
         currentMouseAction = MouseAction::CLEARING_NODE;
+        Vector2i mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
+        if (graphPtr->inBounds(mappedCoordinates))
+        {
+            clearNodeAndNotifyDstarLiteIfRunning(mappedCoordinates);
+        }
     }
 
     void GraphOperations::mouseMoved(sf::Vector2i pos)
@@ -59,10 +61,10 @@ namespace Pathfinding::Helpers
                 graphPtr->setGoal(mappedCoordinates);
                 break;
             case MouseAction::BLOCKING_NODE:
-                graphPtr->blockNode(mappedCoordinates);
+                blockNodeAndNotifyDstarLiteIfRunning(mappedCoordinates);
                 break;
             case MouseAction::CLEARING_NODE:
-                graphPtr->clearNode(mappedCoordinates);
+                clearNodeAndNotifyDstarLiteIfRunning(mappedCoordinates);
                 break;
             }
         }
@@ -93,6 +95,30 @@ namespace Pathfinding::Helpers
         if(graphPtr->inBounds(mappedCoordinates))
         {
             applicationStatePtr->setNodeUnderCursor(graphPtr->node(mappedCoordinates));
+        }
+    }
+
+    void GraphOperations::blockNodeAndNotifyDstarLiteIfRunning(Vector2i mappedCoordinates)
+    {
+        if(graphPtr->node(mappedCoordinates)->state != NodeState::Blocked)
+        {
+            graphPtr->blockNode(mappedCoordinates);
+            if(applicationStatePtr->currentState() == State::SEARCHING)
+            {
+                dstarPtr->addChangedNode(graphPtr->node(mappedCoordinates));
+            }
+        }
+    }
+    
+    void GraphOperations::clearNodeAndNotifyDstarLiteIfRunning(Vector2i mappedCoordinates)
+    {
+        if(graphPtr->node(mappedCoordinates)->state != NodeState::Free)
+        {
+            graphPtr->clearNode(mappedCoordinates);
+            if(applicationStatePtr->currentState() == State::SEARCHING)
+            {
+                dstarPtr->addChangedNode(graphPtr->node(mappedCoordinates));
+            }
         }
     }
 }

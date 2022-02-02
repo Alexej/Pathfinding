@@ -44,6 +44,7 @@ namespace Pathfinding::Gui
             fPtrVI numberOfNodesChangedCallBack = nullptr;
             fPtrVV startCallBack = nullptr;
             fPtrVV resetCallback = nullptr;
+            fPtrVV stepCallBack = nullptr;
             GraphDimension * dimensionPtr;
     };
 }

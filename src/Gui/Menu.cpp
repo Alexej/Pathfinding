@@ -14,9 +14,45 @@ using Pathfinding::Core::State;
 using Pathfinding::Core::NumberOfNodes;
 using Pathfinding::Core::NUMBER_OF_NODES_CHAR;
 using Pathfinding::Datastructures::Node;
+using Pathfinding::Datastructures::NodeState;
 
 namespace Pathfinding::Gui
 {
+    namespace
+    {
+        std::string mapNodeStateToText(NodeState state)
+        {
+            std::string str;
+            switch(state)
+            {
+                case NodeState::Blocked:
+                    str = "Blocked";
+                    break;
+                case NodeState::Free:
+                    str = "Free";
+                    break;
+                case NodeState::Frontier:
+                    str = "Frontier";
+                    break;
+                case NodeState::Goal:
+                    str = "Goal";
+                    break;
+                case NodeState::Start:
+                    str = "Start";
+                    break;
+                case NodeState::Visited:
+                    str = "Visited";
+                    break;
+                case NodeState::Path:
+                    str = "Path";
+                    break;
+                case NodeState::Recalculated:
+                    str = "Recalculated";
+                    break;
+            }
+            return str;
+        }
+    }
     Menu::Menu(ApplicationState *appState_, int32_t offset_, int32_t height_, int32_t width_)
         : appStatePtr(appState_), offset(static_cast<float>(offset_)), 
         height(static_cast<float>(height_)), 
@@ -60,7 +96,7 @@ namespace Pathfinding::Gui
         ImGui::Spacing();
         if(ImGui::Button("STEP", ImVec2(width-20,20)))
         {
-            
+            stepCallBack();
         }
     }
 
@@ -107,6 +143,7 @@ namespace Pathfinding::Gui
         ImGui::Text(std::format("RHS: {}", appStatePtr->nodeUnderCursor()->rhs).c_str());
         ImGui::Text(std::format("K1: {}", appStatePtr->nodeUnderCursor()->key.k1).c_str());
         ImGui::Text(std::format("K2: {}", appStatePtr->nodeUnderCursor()->key.k2).c_str());
+        ImGui::Text(std::format("State: {}", mapNodeStateToText(appStatePtr->nodeUnderCursor()->state)).c_str());
         ImGui::Separator();
     }
 
@@ -153,5 +190,10 @@ namespace Pathfinding::Gui
     bool Menu::initialized() const
     {
         return numberOfNodesChangedCallBack != nullptr && startCallBack != nullptr;
+    }
+
+    void Menu::addStepCallBack(fPtrVV callBack)
+    {
+        stepCallBack = callBack;
     }
 }

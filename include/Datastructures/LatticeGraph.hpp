@@ -53,6 +53,7 @@ namespace Pathfinding::Datastructures
         Node * goalNodePtr;
         Node * startNodePtr;
     };
+    
 }
 
 #endif /* FD0247C3_67EB_48FC_909F_6614B9CC4CBC */

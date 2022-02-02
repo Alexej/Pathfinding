@@ -12,7 +12,7 @@ namespace Pathfinding::Algorithms
 {
     using Pathfinding::Abstract::AHeuristic;
     using Pathfinding::Datastructures::Node;
-    class EuclidianHeuristic final : public AHeuristic
+    class DiagonalHeuristic final : public AHeuristic
     {
         public: 
             double calculate(const Node * from, const Node * to) override;

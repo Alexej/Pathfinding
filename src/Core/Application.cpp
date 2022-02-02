@@ -8,25 +8,17 @@
 #include "Vector2.hpp"
 #include <imgui-SFML.h>
 #include <imgui.h>
-#include "EuclidianHeuristic.hpp"
+#include "DiagonalHeuristic.hpp"
+#include "SFMLHelpers.hpp"
 
 #include <iostream>
 
 namespace Pathfinding::Core
 {
     using namespace Pathfinding::Constants;
+    using Pathfinding::Algorithms::DiagonalHeuristic;
     using Pathfinding::Datastructures::Vector2i;
-    using Pathfinding::Algorithms::EuclidianHeuristic;
-
-    namespace
-    {
-        Vector2i mapMouseToGraphCoordinates(sf::Vector2i pos, int32_t currentSideLength)
-        {
-            int32_t faH = pos.y / currentSideLength;
-            int32_t faW = pos.x / currentSideLength;
-            return {faH, faW};
-        }
-    }
+    using Pathfinding::Helpers::mapMouseToGraphCoordinates;
 
     void Application::init()
     {
@@ -36,7 +28,7 @@ namespace Pathfinding::Core
         eventManager = EventManager(&window);
         menu = Menu(&appState, GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH);
         dstar = DStarLite(&graph);
-        graphOps = GraphOperations(&appState, &graph, dimension->currentNodeSideLength());
+        graphOps = GraphOperations(&appState, &dstar, &graph, dimension->currentNodeSideLength());
     }
 
     Application::Application()
@@ -57,8 +49,9 @@ namespace Pathfinding::Core
         menu.addNumberOfNodesChangedCallBack(std::bind(&Application::handleNumberOfNodesChange, this, _1));
         menu.addStartCallBack(std::bind(&Application::startAlgorithm, this));
         menu.addResetCallBack(std::bind(&Application::reset, this));
-        
-        dstar.setHeuristic(std::make_shared<EuclidianHeuristic>());
+        menu.addStepCallBack(std::bind(&DStarLite::moveAgent, &dstar));
+
+        dstar.setHeuristic(std::make_shared<DiagonalHeuristic>());
     }
 
     void Application::startAlgorithm()

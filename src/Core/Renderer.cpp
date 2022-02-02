@@ -68,6 +68,9 @@ namespace Pathfinding::Core
             case NodeState::Path:
                 color = convertToSfmlColor(PATH_NODE_COLOR);
                 break;
+            case NodeState::Recalculated:
+                color = convertToSfmlColor(RECALCULATED_NODE_COLOR);
+                break;
             }
             return color;
         }

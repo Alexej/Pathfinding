@@ -88,7 +88,7 @@ namespace Pathfinding::Datastructures
 
     void LatticeGraph::setStart(Vector2i location)
     {
-        if (node(location)->state == NodeState::Free)
+        if (node(location)->state != NodeState::Goal && node(location)->state != NodeState::Blocked)
         {
             startNodePtr->state = NodeState::Free;
             startNodePtr = &graph[location.height][location.width];
@@ -98,7 +98,7 @@ namespace Pathfinding::Datastructures
 
     void LatticeGraph::blockNode(Vector2i location)
     {
-        if (node(location)->state == NodeState::Free)
+        if (node(location)->state != NodeState::Start && node(location)->state != NodeState::Goal)
         {
             node(location)->state = NodeState::Blocked;
         }

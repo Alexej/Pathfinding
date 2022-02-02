@@ -9,7 +9,8 @@ set(SOURCES_PATHFINDING
   Core/Application.cpp
   Core/ApplicationState.cpp
   Core/Renderer.cpp
-  Algorithms/EuclidianHeuristic.cpp
+  Algorithms/DiagonalHeuristic.cpp
+  Helpers/SFMLHelpers.cpp
   Core/GraphDimension.cpp
   Gui/Menu.cpp
   main.cpp
