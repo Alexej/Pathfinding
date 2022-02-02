@@ -110,7 +110,7 @@ namespace Pathfinding::Algorithms
     }
 
     /**
-     * @brief returns minimum c(s,s') + g(s') and its node of all successors of u
+     * @brief returns minimum cost(s,s') + g(s') and its node of all successors of u
      *
      * @param u
      * @return std::pair<int32_t, Node *>
@@ -118,18 +118,11 @@ namespace Pathfinding::Algorithms
     std::pair<double, Node *> DStarLite::getMinCG(Node *u)
     {
         auto succs = neighbors(u);
-        double min = cost(u, succs[0]) + succs[0]->g;
-        Node *currentNode = succs[0];
-        for (uint32_t i = 1; i < succs.size(); ++i)
+        auto itr = std::min_element(succs.begin(), succs.end(), [&u](const Node * lhs, const Node * rhs)
         {
-            double currentCost = cost(u, succs[i]) + succs[i]->g;
-            if (min >= currentCost)
-            {
-                min = currentCost;
-                currentNode = succs[i];
-            }
-        }
-        return {min, currentNode};
+             return (cost(u, lhs) + lhs->g) < (cost(u, rhs) + rhs->g);
+        });
+        return {(cost(u, *itr) + (*itr)->g), *itr};
     }
 
     /**
