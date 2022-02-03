@@ -27,6 +27,7 @@ namespace Pathfinding::Gui
             void addStepCallBack(fPtrVV callBack);
             void addStartCallBack(fPtrVV callBack);
             void addResetCallBack(fPtrVV callBack);
+            void addRandomGraphCallBack(fPtrVV callBack);
             bool initialized() const;
         private:
             void showCommonElements();
@@ -35,17 +36,20 @@ namespace Pathfinding::Gui
             void showNodeInfoFlag();
             void showSearchingElements();
             void printLargeText(std::string text, double factor);
+            void showAutoStepFlag();
         private:
             float offset; 
             float height; 
             float width;
             ApplicationState * appStatePtr;
             bool nodeInfo;
+            bool autoStep;
         private:
             fPtrVI numberOfNodesChangedCallBack = nullptr;
             fPtrVV startCallBack = nullptr;
             fPtrVV resetCallback = nullptr;
             fPtrVV stepCallBack = nullptr;
+            fPtrVV randomGraphCallBack = nullptr;
             GraphDimension * dimensionPtr;
     };
 }

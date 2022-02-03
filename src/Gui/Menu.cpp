@@ -111,6 +111,7 @@ namespace Pathfinding::Gui
     void Menu::showSearchingElements()
     {
         ImGui::Spacing();
+        showAutoStepFlag();
         if(ImGui::Button("STEP", ImVec2(width-20,20)))
         {
             stepCallBack();
@@ -129,6 +130,22 @@ namespace Pathfinding::Gui
             else
             {
                 appStatePtr->disableNodeInfo();
+            }
+        }
+    }
+
+    void Menu::showAutoStepFlag()
+    {
+        autoStep = appStatePtr->autoStep();
+        if (ImGui::Checkbox("Auto step", &autoStep))
+        {
+            if(autoStep)
+            {
+                appStatePtr->enableAutoStep();
+            }
+            else
+            {
+                appStatePtr->disableAutoStep();
             }
         }
     }
@@ -169,6 +186,7 @@ namespace Pathfinding::Gui
     {
         static int32_t itemCurrent = dimensionPtr->currentNumberOfNodesIndex();
         ImGui::Spacing();
+        showAutoStepFlag();
         ImGui::Text("Number of nodes");
         if (ImGui::Combo("", &itemCurrent, NUMBER_OF_NODES_CHAR, IM_ARRAYSIZE(NUMBER_OF_NODES_CHAR)))
         {
@@ -187,6 +205,11 @@ namespace Pathfinding::Gui
         if(ImGui::Button("Start", ImVec2(width-20,20)))
         {
             startCallBack();
+        }
+
+        if(ImGui::Button("RANDOM GRAPH", ImVec2(width-20,20)))
+        {
+            randomGraphCallBack();
         }
     }
     
@@ -220,5 +243,10 @@ namespace Pathfinding::Gui
         ImGui::SetWindowFontScale(static_cast<float>(factor));
         ImGui::Text(text.c_str());
         ImGui::SetWindowFontScale(1);
+    }
+
+    void Menu::addRandomGraphCallBack(fPtrVV callBack)
+    {
+        randomGraphCallBack = callBack;
     }
 }

@@ -111,4 +111,21 @@ namespace Pathfinding::Datastructures
             node(location)->state = NodeState::Free;
         }
     }
+
+    void initRandomGraph(LatticeGraph & graph)
+    {
+        for (int32_t h = 0; h < graph.height(); ++h)
+        {
+            for (int32_t w = 0; w < graph.width(); ++w)
+            {
+                if(graph[h][w].state == NodeState::Free)
+                {
+                    if(rand() % 2 == 0)
+                    {
+                        graph[h][w].state = NodeState::Blocked;
+                    }
+                }
+            }
+        }
+    }
 }

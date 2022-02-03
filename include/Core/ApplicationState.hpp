@@ -29,12 +29,16 @@ namespace Pathfinding::Core
             GraphDimension & dimension();
             const Node * nodeUnderCursor() const;
             void setNodeUnderCursor(const Node * node);
+            void enableAutoStep();
+            void disableAutoStep();
+            bool autoStep();
         private:
             GraphDimension dim;
             State currentState_;
             bool showNodeInfo_;
             bool stateChanged;
             const Node * nodeUnderCursor_ = nullptr;
+            bool autoStep_;
     };
 }
 

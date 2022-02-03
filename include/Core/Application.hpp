@@ -45,6 +45,7 @@ namespace Pathfinding::Core
         void reset();
         void done();
         void noPath();
+        void randomGraph();
     private:
         ApplicationState appState;
         sf::RenderWindow window;
@@ -55,7 +56,7 @@ namespace Pathfinding::Core
         DStarLite dstar;
         GraphOperations graphOps;
         GraphDimension * dimension;
-        bool noPath_ = false;
+        int32_t accumulator; 
     };
 }
 

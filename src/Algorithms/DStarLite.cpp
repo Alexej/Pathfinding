@@ -86,7 +86,9 @@ namespace Pathfinding::Algorithms
         if(sStart->g == infinity())
         {
             noPathCallBack_();
+            return;
         }
+        computePath();
     }
 
     void DStarLite::computeShortestPath()

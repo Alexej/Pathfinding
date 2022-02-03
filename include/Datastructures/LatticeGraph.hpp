@@ -53,6 +53,8 @@ namespace Pathfinding::Datastructures
         Node * goalNodePtr;
         Node * startNodePtr;
     };
+
+    void initRandomGraph(LatticeGraph & graph);
     
 }
 

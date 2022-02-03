@@ -6,6 +6,7 @@ namespace Pathfinding::Core
     {
         showNodeInfo_ = false;
         stateChanged = false;
+        autoStep_ = false;
         currentState_ = State::READY;
     }
 
@@ -23,6 +24,21 @@ namespace Pathfinding::Core
     void ApplicationState::disableNodeInfo()
     {
         showNodeInfo_ = false;
+    }
+
+    void ApplicationState::enableAutoStep()
+    {
+        autoStep_ = true;
+    }
+
+    void ApplicationState::disableAutoStep()
+    {
+        autoStep_ = false;
+    }
+
+    bool ApplicationState::autoStep()
+    {
+        return autoStep_;
     }
 
     void ApplicationState::setState(State state)

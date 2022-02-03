@@ -34,6 +34,8 @@ namespace Pathfinding::Core
 
     Application::Application()
     {
+        accumulator = 0;
+
         createObbjects();
 
         using sf::Event::EventType::MouseButtonPressed;
@@ -49,6 +51,7 @@ namespace Pathfinding::Core
 
         menu.addNumberOfNodesChangedCallBack(std::bind(&Application::handleNumberOfNodesChange, this, _1));
         menu.addStartCallBack(std::bind(&Application::startAlgorithm, this));
+        menu.addRandomGraphCallBack(std::bind(&Application::randomGraph, this));
         menu.addResetCallBack(std::bind(&Application::reset, this));
         menu.addStepCallBack(std::bind(&DStarLite::moveStart, &dstar));
 
@@ -67,8 +70,6 @@ namespace Pathfinding::Core
 
         dstar.initialize();
         dstar.initialRun();
-        if(appState.currentState() == State::NO_PATH) { return; }
-        dstar.computePath();
     }
 
     void Application::run()
@@ -97,6 +98,15 @@ namespace Pathfinding::Core
 
     void Application::update(sf::Clock &deltaClock)
     {
+        if(appState.currentState() == State::SEARCHING && appState.autoStep())
+        {
+            accumulator += deltaClock.getElapsedTime().asMilliseconds();
+            if(accumulator > 1000)
+            {
+                dstar.moveStart();
+                accumulator = 0;
+            }
+        }
         ImGui::SFML::Update(window, deltaClock.restart());
         eventManager.processEvents();
     }
@@ -142,5 +152,11 @@ namespace Pathfinding::Core
     {
         graphOps.disableObsticlesEvents();
         appState.setState(State::NO_PATH);
+    }
+
+    void Application::randomGraph()
+    {
+        reset();
+        initRandomGraph(graph);
     }
 }
