@@ -36,7 +36,7 @@ namespace Pathfinding::Core
         Application();
         void run();
     private:    
-        void init();
+        void createObbjects();
         void draw();
         void update(sf::Clock &deltaClock);
         void handleInput(sf::Event event);

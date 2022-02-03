@@ -43,9 +43,6 @@ namespace Pathfinding::Gui
                 case NodeState::Visited:
                     str = "Visited";
                     break;
-                case NodeState::Path:
-                    str = "Path";
-                    break;
                 case NodeState::Recalculated:
                     str = "Recalculated";
                     break;

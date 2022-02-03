@@ -161,25 +161,6 @@ namespace Pathfinding::Algorithms
         return nbors;
     }
 
-    void DStarLite::setPathInGraph()
-    {
-        for (auto &node : currentPath)
-        {
-            changeState(node, NodeState::Path);
-        }
-    }
-
-    void DStarLite::clearPathInGraph()
-    {
-        for (auto &node : currentPath)
-        {
-            if(node->state != NodeState::Blocked)
-            {
-                changeState(node, NodeState::Visited);
-            }
-        }
-    }
-
     void DStarLite::reset()
     {
         sStart = nullptr;
@@ -235,24 +216,16 @@ namespace Pathfinding::Algorithms
     {
         currentPath.clear();
         Node *currentNode = sStart;
-        if (*sStart == *graphPtr->goalNode())
-        {
-            return;
-        }
-        while (true)
+        currentPath.push_back(currentNode);
+        while (*currentNode != *graphPtr->goalNode())
         {
             currentNode = getMinCG(currentNode).second;
-            if (*currentNode == *graphPtr->goalNode())
-            {
-                break;
-            }
             currentPath.push_back(currentNode);
         }
     }
 
     void DStarLite::moveStart()
     {
-        clearPathInGraph();
         if (sStart->g == infinity())
         {
             printf("no path");
@@ -286,7 +259,6 @@ namespace Pathfinding::Algorithms
         }
         moveStartToNextInPath();
         computePath();
-        setPathInGraph();
 
         if (*sStart == *graphPtr->goalNode())
         {
@@ -315,4 +287,10 @@ namespace Pathfinding::Algorithms
     {
         doneCallBack_ = callBack;
     }
+
+    std::vector<Node *> DStarLite::path() const
+    {
+        return currentPath;
+    }
+
 }

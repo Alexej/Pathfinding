@@ -43,12 +43,11 @@ namespace Pathfinding::Algorithms
             void initialize();
             void computeShortestPath();
             void setHeuristic(std::shared_ptr<AHeuristic> cost);
-            void setPathInGraph();
             void computePath();
             void reset();
             void moveStart();
-            void clearPathInGraph();
             void addChangedNode(Node * node);
+            std::vector<Node*> path() const;
         private:
             void UpdateVertex(Node * node);
             Key calculateKey(Node * node);

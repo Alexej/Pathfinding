@@ -20,7 +20,7 @@ namespace Pathfinding::Core
     using Pathfinding::Datastructures::Vector2i;
     using Pathfinding::Helpers::mapMouseToGraphCoordinates;
 
-    void Application::init()
+    void Application::createObbjects()
     {
         dimension = &appState.dimension();
         window.create(sf::VideoMode(APPLICATION_WINDOW_WIDTH, GRID_FIELD_HEIGHT), APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close);
@@ -29,13 +29,12 @@ namespace Pathfinding::Core
         menu = Menu(&appState, GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH);
         dstar = DStarLite(&graph);
         graphOps = GraphOperations(&appState, &dstar, &graph, dimension->currentNodeSideLength());
-
-        window.setFramerateLimit(60);
+        renderer = Renderer(&window, &appState);
     }
 
     Application::Application()
     {
-        init();
+        createObbjects();
 
         using sf::Event::EventType::MouseButtonPressed;
         using sf::Event::EventType::MouseButtonReleased;
@@ -55,6 +54,9 @@ namespace Pathfinding::Core
 
         dstar.addDoneCallBack(std::bind(&Application::done, this));
         dstar.setHeuristic(std::make_shared<DiagonalHeuristic>());
+
+        window.setFramerateLimit(60);
+        renderer.init();
     }
 
     void Application::startAlgorithm()
@@ -62,7 +64,6 @@ namespace Pathfinding::Core
         dstar.initialize();
         dstar.computeShortestPath();
         dstar.computePath();
-        dstar.setPathInGraph();
         appState.setState(State::SEARCHING);
         graphOps.disableEndpointsEvent();
     }
@@ -107,7 +108,13 @@ namespace Pathfinding::Core
     {
         window.clear();
         ImGui::SFML::Render(window);
-        renderer.render(window, graph, appState);
+        renderer.render(graph);
+        
+        if(appState.currentState() != State::READY)
+        {
+            renderer.renderPath(dstar.path());
+        }
+
         window.display();
     }
 

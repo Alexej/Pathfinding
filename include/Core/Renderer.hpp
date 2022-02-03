@@ -18,19 +18,26 @@ namespace Pathfinding::Core
     using Pathfinding::Datastructures::Node;
     
     class ApplicationState;
+    class GraphDimension;
     class Renderer
     {
     public:
-        Renderer();
-        void render(sf::RenderWindow &window, const LatticeGraph & graph, ApplicationState & state);
+        Renderer() = default;
+        Renderer(sf::RenderWindow * window, ApplicationState * state);
+        void render(const LatticeGraph & graph);
+        void renderPath(std::vector<Node *> path);
+        void init();
     private:
         void loadFont(std::string font);
-        void drawNode(sf::RenderWindow &window, const Node &node, sf::Vector2f coords);
-        void renderNodeInfo(sf::RenderWindow &window, const Node &node, sf::Vector2f coords, int32_t nodeSideLength);
+        void drawNode(const Node &node, sf::Vector2f coords);
+        void renderNodeInfo(const Node &node, sf::Vector2f coords);
     private:
         sf::RectangleShape nodeRect;
         sf::Text text;
         sf::Font font;
+        sf::RenderWindow * windowPtr = nullptr;
+        ApplicationState * appStatePtr = nullptr;
+        GraphDimension * dimensionPtr = nullptr;
         
         /**
          * ! absolute path bad, fix later.

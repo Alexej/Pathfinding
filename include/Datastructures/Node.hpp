@@ -7,7 +7,7 @@
 
 namespace Pathfinding::Datastructures
 {
-    enum class NodeState {Start, Goal, Free, Blocked, Frontier, Visited, Path, Recalculated};
+    enum class NodeState {Start, Goal, Free, Blocked, Frontier, Visited, Recalculated};
     struct Node
     {
         Vector2i location;

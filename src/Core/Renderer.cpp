@@ -7,6 +7,8 @@
 #include "Node.hpp"
 #include "LatticeGraph.hpp"
 #include "Constants.hpp"
+#include "GraphDimension.hpp"
+#include <SFML/Graphics/CircleShape.hpp>
 
 namespace Pathfinding::Core
 {
@@ -65,9 +67,6 @@ namespace Pathfinding::Core
             case NodeState::Goal:
                 color = convertToSfmlColor(GOAL_NODE_COLOR);
                 break;
-            case NodeState::Path:
-                color = convertToSfmlColor(PATH_NODE_COLOR);
-                break;
             case NodeState::Recalculated:
                 color = convertToSfmlColor(RECALCULATED_NODE_COLOR);
                 break;
@@ -76,7 +75,12 @@ namespace Pathfinding::Core
         }
     }
 
-    Renderer::Renderer()
+
+    Renderer::Renderer(sf::RenderWindow * window, ApplicationState * state)
+    : windowPtr(window), appStatePtr(state), dimensionPtr(&state->dimension())
+    {}
+
+    void Renderer::init()
     {
         loadFont("NugoSansLight.ttf");
         text.setFont(font);
@@ -101,55 +105,93 @@ namespace Pathfinding::Core
         }
     }
 
-    void Renderer::render(sf::RenderWindow &window, const LatticeGraph &graph, ApplicationState & state)
+    void Renderer::render(const LatticeGraph &graph)
     {
-        float sideLength = static_cast<float>(state.dimension().currentNodeSideLength());
+        float sideLength = static_cast<float>(dimensionPtr->currentNodeSideLength());
         nodeRect.setSize(sf::Vector2f(sideLength, sideLength));
         for (std::size_t h = 0; h < graph.height(); ++h)
         {
             for (std::size_t w = 0; w < graph.width(); ++w)
             {
                 auto currentNode = graph[h][w];
-                auto coords = getNodePosition(currentNode.location, state.dimension().currentNodeSideLength());
-                drawNode(window, currentNode, coords);
-                if (state.showNodeInfo())
+                auto coords = getNodePosition(currentNode.location, dimensionPtr->currentNodeSideLength());
+                drawNode(currentNode, coords);
+                if (appStatePtr->showNodeInfo())
                 {
-                    renderNodeInfo(window, currentNode, coords, state.dimension().currentNodeSideLength());
+                    renderNodeInfo(currentNode, coords);
                 }
             }
         }
     }
 
-    void Renderer::renderNodeInfo(sf::RenderWindow &window, const Node &node, sf::Vector2f coords, int32_t nodeSideLength)
+    void Renderer::renderNodeInfo( const Node &node, sf::Vector2f coords)
     {
 
         using std::to_string;
 
         text.setString(dToStr(node.g));
         text.setPosition(sf::Vector2f(coords.x + NODE_INFO_OFFSET, coords.y + NODE_INFO_OFFSET));
-        window.draw(text);
+        windowPtr->draw(text);
         float widthOfGText = text.getLocalBounds().width;
 
         text.setString(dToStr(node.rhs));
         float widthOfRHSText = text.getLocalBounds().width;
-        float freeSpaceHor = nodeSideLength - widthOfGText - widthOfRHSText;
+        float freeSpaceHor = dimensionPtr->currentNodeSideLength() - widthOfGText - widthOfRHSText;
         text.setPosition(sf::Vector2f(coords.x + freeSpaceHor + widthOfGText - NODE_INFO_OFFSET, coords.y + NODE_INFO_OFFSET));
-        window.draw(text);
+        windowPtr->draw(text);
 
         std::string keyString = "[" + dToStr(node.key.k1) + ":" + dToStr(node.key.k2) + "]";
         text.setString(keyString);
         float halfOfText = text.getLocalBounds().width / 2;
-        float heightKeyOffset = 2 * text.getLocalBounds().height + NODE_INFO_OFFSET;
-        float halfOfNode = static_cast<float>(nodeSideLength) / 2;
+        float heightKeyOffset = 2.5 * text.getLocalBounds().height + NODE_INFO_OFFSET;
+        float halfOfNode = static_cast<float>(dimensionPtr->currentNodeSideLength()) / 2;
         float diff = halfOfNode - halfOfText;
         text.setPosition(sf::Vector2f(coords.x + diff, coords.y + NODE_INFO_OFFSET + heightKeyOffset));
-        window.draw(text);
+        windowPtr->draw(text);
     }
 
-    void Renderer::drawNode(sf::RenderWindow &window, const Node &node, sf::Vector2f coords)
+    void Renderer::drawNode(const Node &node, sf::Vector2f coords)
     {
         nodeRect.setPosition(sf::Vector2f(coords.x, coords.y));
         nodeRect.setFillColor(stateColor(node.state));
-        window.draw(nodeRect);
+        windowPtr->draw(nodeRect);
+    }
+
+    void Renderer::renderPath(std::vector<Node *> path)
+    {
+        float halfNodeSize = static_cast<float>(dimensionPtr->currentNodeSideLength()) / 2;
+        float halfNodeSizeSquared = static_cast<float>(pow(halfNodeSize, 2));
+        float diagonalLength = 2 * sqrt(halfNodeSizeSquared + halfNodeSizeSquared);
+        sf::Vector2f pointPositionOffset(halfNodeSize,halfNodeSize);
+
+        sf::CircleShape nodePoint;
+        sf::RectangleShape diagonal;
+        sf::RectangleShape straight;
+
+        float nodePointRadius;
+        if(dimensionPtr->canShowNodeInfo())
+        {
+            nodePointRadius = halfNodeSize / 5;
+        }
+        else
+        {
+            nodePointRadius = halfNodeSize / 2.5;
+        }
+        nodePoint.setRadius(nodePointRadius);
+        nodePoint.setFillColor(convertToSfmlColor(PATH_NODE_COLOR));
+        nodePoint.setOrigin(nodePointRadius, nodePointRadius);
+        nodePoint.setOutlineColor(sf::Color::White);
+        nodePoint.setOutlineThickness(1);
+
+        for(auto & node : path)
+        {
+            if(node->state != NodeState::Blocked)
+            {
+                sf::Vector2f leftCornerOfNodePosition = getNodePosition(node->location, dimensionPtr->currentNodeSideLength());
+                sf::Vector2f nodePointPosition = leftCornerOfNodePosition + pointPositionOffset;
+                nodePoint.setPosition(nodePointPosition);
+                windowPtr->draw(nodePoint);
+            }
+        }
     }
 }
