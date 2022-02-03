@@ -53,6 +53,7 @@ namespace Pathfinding::Core
         menu.addStepCallBack(std::bind(&DStarLite::moveStart, &dstar));
 
         dstar.addDoneCallBack(std::bind(&Application::done, this));
+        dstar.addNoPathCallBack(std::bind(&Application::noPath, this));
         dstar.setHeuristic(std::make_shared<DiagonalHeuristic>());
 
         window.setFramerateLimit(60);
@@ -61,11 +62,13 @@ namespace Pathfinding::Core
 
     void Application::startAlgorithm()
     {
-        dstar.initialize();
-        dstar.computeShortestPath();
-        dstar.computePath();
-        appState.setState(State::SEARCHING);
         graphOps.disableEndpointsEvent();
+        appState.setState(State::SEARCHING);
+
+        dstar.initialize();
+        dstar.initialRun();
+        if(appState.currentState() == State::NO_PATH) { return; }
+        dstar.computePath();
     }
 
     void Application::run()
@@ -109,8 +112,8 @@ namespace Pathfinding::Core
         window.clear();
         ImGui::SFML::Render(window);
         renderer.render(graph);
-        
-        if(appState.currentState() != State::READY)
+
+        if(appState.currentState() == State::DONE || appState.currentState() == State::SEARCHING)
         {
             renderer.renderPath(dstar.path());
         }
@@ -133,5 +136,11 @@ namespace Pathfinding::Core
     {
         graphOps.disableObsticlesEvents();
         appState.setState(State::DONE);
+    }
+
+    void Application::noPath()
+    {
+        graphOps.disableObsticlesEvents();
+        appState.setState(State::NO_PATH);
     }
 }

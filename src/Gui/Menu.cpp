@@ -43,9 +43,6 @@ namespace Pathfinding::Gui
                 case NodeState::Visited:
                     str = "Visited";
                     break;
-                case NodeState::Recalculated:
-                    str = "Recalculated";
-                    break;
             }
             return str;
         }
@@ -63,6 +60,9 @@ namespace Pathfinding::Gui
                     break;
                 case State::DONE:
                     str = "DONE";
+                    break;
+                case State::NO_PATH:
+                    str = "NO_PATH";
                     break;
             }
             return str;

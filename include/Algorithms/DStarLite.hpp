@@ -40,25 +40,28 @@ namespace Pathfinding::Algorithms
             DStarLite() = default;
             explicit DStarLite(LatticeGraph * graph);
             void addDoneCallBack(std::function<void(void)> callBack);
+            void addNoPathCallBack(std::function<void(void)> callBack);
             void initialize();
-            void computeShortestPath();
             void setHeuristic(std::shared_ptr<AHeuristic> cost);
             void computePath();
             void reset();
             void moveStart();
             void addChangedNode(Node * node);
             std::vector<Node*> path() const;
+            void initialRun();
         private:
+            void computeShortestPath();
             void UpdateVertex(Node * node);
             Key calculateKey(Node * node);
             std::vector<Node *> neighbors(Node * node);
-            std::pair<double, Node *> getMinCG(Node * u);
+            std::pair<double, Node *> getMinCG(Node * u, std::vector<Node *> succs);
             Node * popFromQueueAndUpdateState();
             void insertIntoQueueAndUpdateState(Node * node);
             void removeFromQUeueAndUpdateState(Node * node);
             void updateNeighbors(Node * node);
             void changeState(Node * node, NodeState state);
             void moveStartToNextInPath();
+            bool computeShortestPathExitCondition();
         private:    
             LatticeGraph * graphPtr = nullptr;
             Node * sStart = nullptr;
@@ -69,6 +72,7 @@ namespace Pathfinding::Algorithms
             std::vector<Node *> currentPath;
             std::unordered_set<Node *> nodesChanged;
             std::function<void(void)> doneCallBack_;
+            std::function<void(void)> noPathCallBack_;
     };
 }
 

@@ -16,7 +16,7 @@ namespace Pathfinding::Core
     using namespace Pathfinding::Constants;
     using Pathfinding::Datastructures::Node;
     struct Node;
-    enum class State{ READY, SEARCHING, DONE};
+    enum class State{ READY, SEARCHING, DONE, NO_PATH};
     class ApplicationState
     {
         public:

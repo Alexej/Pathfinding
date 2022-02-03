@@ -44,6 +44,7 @@ namespace Pathfinding::Core
         void startAlgorithm();
         void reset();
         void done();
+        void noPath();
     private:
         ApplicationState appState;
         sf::RenderWindow window;
@@ -54,6 +55,7 @@ namespace Pathfinding::Core
         DStarLite dstar;
         GraphOperations graphOps;
         GraphDimension * dimension;
+        bool noPath_ = false;
     };
 }
 

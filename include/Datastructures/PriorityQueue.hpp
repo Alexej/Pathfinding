@@ -48,8 +48,12 @@ namespace Pathfinding::Datastructures
             std::make_heap(this->c.begin(), this->c.end(), this->comp);
         }
 
-        Key topKey()
+        Key topKey() const
         {
+            if(this->empty())
+            {
+                return Key();
+            }
             return this->top().first;
         }
 

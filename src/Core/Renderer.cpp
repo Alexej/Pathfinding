@@ -143,7 +143,7 @@ namespace Pathfinding::Core
         std::string keyString = "[" + dToStr(node.key.k1) + ":" + dToStr(node.key.k2) + "]";
         text.setString(keyString);
         float halfOfText = text.getLocalBounds().width / 2;
-        float heightKeyOffset = 2.5 * text.getLocalBounds().height + NODE_INFO_OFFSET;
+        float heightKeyOffset = 2.5f * text.getLocalBounds().height + NODE_INFO_OFFSET;
         float halfOfNode = static_cast<float>(dimensionPtr->currentNodeSideLength()) / 2;
         float diff = halfOfNode - halfOfText;
         text.setPosition(sf::Vector2f(coords.x + diff, coords.y + NODE_INFO_OFFSET + heightKeyOffset));
@@ -175,7 +175,7 @@ namespace Pathfinding::Core
         }
         else
         {
-            nodePointRadius = halfNodeSize / 2.5;
+            nodePointRadius = halfNodeSize / 2.5f;
         }
         nodePoint.setRadius(nodePointRadius);
         nodePoint.setFillColor(convertToSfmlColor(PATH_NODE_COLOR));

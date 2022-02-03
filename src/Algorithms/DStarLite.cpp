@@ -64,7 +64,11 @@ namespace Pathfinding::Algorithms
     {
         if (u != graphPtr->goalNode())
         {
-            u->rhs = getMinCG(u).first;
+            auto succs = neighbors(u);
+            if(!succs.empty())
+            {
+                u->rhs = getMinCG(u, succs).first;
+            }
         }
         if (U.contains(u))
         {
@@ -73,6 +77,15 @@ namespace Pathfinding::Algorithms
         if (!locallyConsistent(u))
         {
             insertIntoQueueAndUpdateState(u);
+        }
+    }
+
+    void DStarLite::initialRun()
+    {
+        computeShortestPath();
+        if(sStart->g == infinity())
+        {
+            noPathCallBack_();
         }
     }
 
@@ -97,11 +110,6 @@ namespace Pathfinding::Algorithms
                 updateNeighbors(u);
                 UpdateVertex(u);
             }
-            if(U.empty())
-            {
-                doneCallBack_();
-                break;
-            }
         }
     }
 
@@ -120,9 +128,8 @@ namespace Pathfinding::Algorithms
      * @param u
      * @return std::pair<int32_t, Node *>
      */
-    std::pair<double, Node *> DStarLite::getMinCG(Node *u)
+    std::pair<double, Node *> DStarLite::getMinCG(Node * u, std::vector<Node *> succs)
     {
-        auto succs = neighbors(u);
         auto itr = std::min_element(succs.begin(), succs.end(), [&u](const Node * lhs, const Node * rhs)
         {
              return (cost(u, lhs) + lhs->g) < (cost(u, rhs) + rhs->g);
@@ -151,7 +158,7 @@ namespace Pathfinding::Algorithms
                 Vector2i location(h, w);
                 if (graphPtr->inBounds(location))
                 {
-                    if (node->location != location && graphPtr->node(location)->state != NodeState::Blocked)
+                    if (node->location != location && !blocked(graphPtr->node(location)))
                     {
                         nbors.push_back(graphPtr->node(location));
                     }
@@ -219,18 +226,19 @@ namespace Pathfinding::Algorithms
         currentPath.push_back(currentNode);
         while (*currentNode != *graphPtr->goalNode())
         {
-            currentNode = getMinCG(currentNode).second;
+            auto succs = neighbors(currentNode);
+            if(succs.empty())
+            {
+                noPathCallBack_();
+                return;
+            }
+            currentNode = getMinCG(currentNode, succs).second;
             currentPath.push_back(currentNode);
         }
     }
 
     void DStarLite::moveStart()
     {
-        if (sStart->g == infinity())
-        {
-            printf("no path");
-            return;
-        }
         if (!nodesChanged.empty())
         {
             kM = kM + heuristicPtr->calculate(sLast, sStart);
@@ -251,25 +259,34 @@ namespace Pathfinding::Algorithms
                 else
                 {
                     UpdateVertex(node); 
-                    //changeState(node, NodeState::Recalculated);
                 }
             }
             nodesChanged.clear();
             computeShortestPath();
         }
+
+        if (sStart->g == infinity())
+        {
+            noPathCallBack_();
+            return;
+        }
+
         moveStartToNextInPath();
         computePath();
 
         if (*sStart == *graphPtr->goalNode())
         {
             doneCallBack_();
+            return;
         }
     }
 
     void DStarLite::moveStartToNextInPath()
     {
         Node *prevStart = sStart;
-        sStart = getMinCG(sStart).second;
+        auto succs = neighbors(sStart);
+        if(succs.empty()) { return; }
+        sStart = getMinCG(sStart, succs).second;
         graphPtr->setStart(sStart->location);
         prevStart->state = NodeState::Visited;
     }
@@ -288,9 +305,13 @@ namespace Pathfinding::Algorithms
         doneCallBack_ = callBack;
     }
 
+    void DStarLite::addNoPathCallBack(std::function<void(void)> callBack)
+    {
+        noPathCallBack_ = callBack;
+    }
+
     std::vector<Node *> DStarLite::path() const
     {
         return currentPath;
     }
-
 }
