@@ -17,7 +17,7 @@ namespace Pathfinding::Core
 {
     using namespace Pathfinding::Constants;
     using Pathfinding::Algorithms::DiagonalHeuristic;
-    using Pathfinding::Datastructures::Vector2i;
+    using Pathfinding::Datastructures::Vec2i;
     using Pathfinding::Helpers::mapMouseToGraphCoordinates;
 
     void Application::createObbjects()
@@ -101,7 +101,7 @@ namespace Pathfinding::Core
         if(appState.currentState() == State::SEARCHING && appState.autoStep())
         {
             accumulator += deltaClock.getElapsedTime().asMilliseconds();
-            if(accumulator > 1000)
+            if(accumulator > 500)
             {
                 dstar.moveStart();
                 accumulator = 0;

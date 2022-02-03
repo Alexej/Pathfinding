@@ -14,15 +14,21 @@ namespace Pathfinding::Datastructures
      * @tparam T 
      */
     template<typename T>
-    struct Vector2
+    struct Vec2
     {
-        Vector2() = default;
-        Vector2(T height_, T width_) : height(height_), width(width_) {}
+        Vec2() = default;
+        Vec2(T height_, T width_) : height(height_), width(width_) {}
         T height = 0;
         T width = 0;
-        auto operator<=>(const Vector2<T> &) const = default;
+        auto operator<=>(const Vec2<T> &) const = default;
     };
-    using Vector2i = Vector2<int32_t>;
+
+    template<typename T>
+    Vec2<T> operator-(const Vec2<T> lhs, const Vec2<T> rhs)
+    {
+        return {lhs.height - rhs.height, lhs.width - rhs.width};
+    }
+    using Vec2i = Vec2<int32_t>;
 }
 
 #endif /* C71A173D_A9A7_4ABC_B640_D4C5497B6103 */

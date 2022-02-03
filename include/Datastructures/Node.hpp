@@ -10,7 +10,7 @@ namespace Pathfinding::Datastructures
     enum class NodeState {Start, Goal, Free, Blocked, Frontier, Visited, Recalculated};
     struct Node
     {
-        Vector2i location;
+        Vec2i location;
         NodeState state;
         double rhs = std::numeric_limits<double>::infinity();
         double g = std::numeric_limits<double>::infinity();

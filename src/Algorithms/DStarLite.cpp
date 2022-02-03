@@ -10,7 +10,7 @@
 namespace Pathfinding::Algorithms
 {
     using Pathfinding::Datastructures::NodeState;
-    using Pathfinding::Datastructures::Vector2i;
+    using Pathfinding::Datastructures::Vec2i;
     using Pathfinding::Core::State;
 
     namespace
@@ -157,7 +157,7 @@ namespace Pathfinding::Algorithms
         {
             for (int32_t w = wFrom; w <= wTo; ++w)
             {
-                Vector2i location(h, w);
+                Vec2i location(h, w);
                 if (graphPtr->inBounds(location))
                 {
                     if (node->location != location && !blocked(graphPtr->node(location)))

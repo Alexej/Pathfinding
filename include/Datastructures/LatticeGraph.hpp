@@ -16,12 +16,12 @@ namespace Pathfinding::Datastructures
     public:
         LatticeGraph() = default;
         LatticeGraph(int32_t height, int32_t width);
-        explicit LatticeGraph(Vector2i dimension);
+        explicit LatticeGraph(Vec2i dimension);
 
         std::size_t width() const { return graph[0].size(); }
         std::size_t height() const { return graph.size(); }
 
-        bool inBounds(Vector2i location) const;
+        bool inBounds(Vec2i location) const;
 
         std::vector<Node> & operator[](std::size_t height) { return graph[height]; }
         const std::vector<Node> & operator[](std::size_t height) const { return graph[height]; }
@@ -31,8 +31,8 @@ namespace Pathfinding::Datastructures
         Move this to another class
         */
        //////////////////////////////////
-        Node * node(Vector2i location) { return &graph[location.height][location.width]; }
-        const Node * node(Vector2i location) const { return &graph[location.height][location.width]; }
+        Node * node(Vec2i location) { return &graph[location.height][location.width]; }
+        const Node * node(Vec2i location) const { return &graph[location.height][location.width]; }
 
         const Node * startNode() const;
         const Node * goalNode() const;
@@ -40,10 +40,10 @@ namespace Pathfinding::Datastructures
         Node * startNode();
         Node * goalNode();
 
-        void setGoal(Vector2i location);
-        void setStart(Vector2i location);
-        void blockNode(Vector2i location);
-        void clearNode(Vector2i location);
+        void setGoal(Vec2i location);
+        void setStart(Vec2i location);
+        void blockNode(Vec2i location);
+        void clearNode(Vec2i location);
 
         void resetEndpoints();
         void resize(int32_t height, int32_t width);

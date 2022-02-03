@@ -6,7 +6,7 @@ namespace Pathfinding::Datastructures
     {
         void initNode(Node & node, int32_t h, int32_t w)
         {
-            node.location = Vector2i(h, w);
+            node.location = Vec2i(h, w);
             node.g = std::numeric_limits<double>::infinity();
             node.rhs = std::numeric_limits<double>::infinity();
             node.key = Key();
@@ -19,12 +19,12 @@ namespace Pathfinding::Datastructures
         resize(height, width);
     }
 
-    LatticeGraph::LatticeGraph(Vector2i dimension)
+    LatticeGraph::LatticeGraph(Vec2i dimension)
     {
         resize(dimension.height, dimension.width);
     }
 
-    bool LatticeGraph::inBounds(Vector2i location) const
+    bool LatticeGraph::inBounds(Vec2i location) const
     {
         int32_t widthI = static_cast<int32_t>(width());
         int32_t heightI = static_cast<int32_t>(height());
@@ -76,7 +76,7 @@ namespace Pathfinding::Datastructures
         return goalNodePtr;
     }
 
-    void LatticeGraph::setGoal(Vector2i location)
+    void LatticeGraph::setGoal(Vec2i location)
     {
         if (node(location)->state == NodeState::Free)
         {
@@ -86,7 +86,7 @@ namespace Pathfinding::Datastructures
         }
     }
 
-    void LatticeGraph::setStart(Vector2i location)
+    void LatticeGraph::setStart(Vec2i location)
     {
         if (node(location)->state != NodeState::Goal && node(location)->state != NodeState::Blocked)
         {
@@ -96,7 +96,7 @@ namespace Pathfinding::Datastructures
         }
     }
 
-    void LatticeGraph::blockNode(Vector2i location)
+    void LatticeGraph::blockNode(Vec2i location)
     {
         if (node(location)->state != NodeState::Start && node(location)->state != NodeState::Goal)
         {
@@ -104,7 +104,7 @@ namespace Pathfinding::Datastructures
         }
     }
 
-    void LatticeGraph::clearNode(Vector2i location)
+    void LatticeGraph::clearNode(Vec2i location)
     {
         if (node(location)->state == NodeState::Blocked)
         {

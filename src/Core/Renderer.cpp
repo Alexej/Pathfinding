@@ -13,11 +13,11 @@
 namespace Pathfinding::Core
 {
     using namespace Pathfinding::Constants;
-    using Pathfinding::Datastructures::Vector2i;
     using Pathfinding::Datastructures::NodeState;
+    using Pathfinding::Datastructures::Vec2i;
     namespace
     {
-        sf::Vector2f getNodePosition(Vector2i location, int32_t sideLength)
+        sf::Vector2f getNodePosition(Vec2i location, int32_t sideLength)
         {
             float nodesHorF = static_cast<float>(location.width);
             float nodesVertF = static_cast<float>(location.height);
@@ -35,8 +35,8 @@ namespace Pathfinding::Core
         /**
          * @brief converts double to string and removes zeros and dot.
          * should be certain that cost, rhs, g and key values are always whole numbers
-         * @param d 
-         * @return std::string 
+         * @param d
+         * @return std::string
          */
         std::string dToStr(double d)
         {
@@ -73,12 +73,37 @@ namespace Pathfinding::Core
             }
             return color;
         }
+
+        double getAngleBetweenTwoNodes(Node *n1, Node *n2)
+        {
+            double angle;
+            Vec2i diff = n2->location - n1->location;
+            if (diff == Vec2i(-1, 1)){  angle = 45; }
+            else if (diff == Vec2i(-1, 0)){ angle = 90; }
+            else if (diff == Vec2i(-1, -1)){angle = 135; }
+            else if (diff == Vec2i(0, -1)){ angle = 180; }
+            else if (diff == Vec2i(1, 0)){ angle = 270; }
+            else if (diff == Vec2i(1, -1)){ angle = 225; }
+            else if (diff == Vec2i(1, 1)){ angle = 315; }
+            else if (diff == Vec2i(0, 1)){ angle = 0; }
+            return angle;
+        }
+
+        bool diagonal(double angle)
+        {
+            return angle == 45 || angle == 135 || angle == 225 || angle == 315;
+        }
+
+        bool startsOrendsInThisNode(const Node * node, const sf::RectangleShape & shape)
+        {
+            
+        }
     }
 
-
-    Renderer::Renderer(sf::RenderWindow * window, ApplicationState * state)
-    : windowPtr(window), appStatePtr(state), dimensionPtr(&state->dimension())
-    {}
+    Renderer::Renderer(sf::RenderWindow *window, ApplicationState *state)
+        : windowPtr(window), appStatePtr(state), dimensionPtr(&state->dimension())
+    {
+    }
 
     void Renderer::init()
     {
@@ -124,7 +149,7 @@ namespace Pathfinding::Core
         }
     }
 
-    void Renderer::renderNodeInfo( const Node &node, sf::Vector2f coords)
+    void Renderer::renderNodeInfo(const Node &node, sf::Vector2f coords)
     {
 
         using std::to_string;
@@ -159,17 +184,18 @@ namespace Pathfinding::Core
 
     void Renderer::renderPath(std::vector<Node *> path)
     {
-        float halfNodeSize = static_cast<float>(dimensionPtr->currentNodeSideLength()) / 2;
+        float straightLineLength = static_cast<float>(dimensionPtr->currentNodeSideLength());
+        float halfNodeSize = straightLineLength / 2;
         float halfNodeSizeSquared = static_cast<float>(pow(halfNodeSize, 2));
-        float diagonalLength = 2 * sqrt(halfNodeSizeSquared + halfNodeSizeSquared);
-        sf::Vector2f pointPositionOffset(halfNodeSize,halfNodeSize);
+        float diagonalLineLength = 2 * sqrt(halfNodeSizeSquared + halfNodeSizeSquared);
+        sf::Vector2f pointPositionOffset(halfNodeSize, halfNodeSize);
 
         sf::CircleShape nodePoint;
-        sf::RectangleShape diagonal;
-        sf::RectangleShape straight;
+        sf::RectangleShape diagonalLine;
+        sf::RectangleShape straightLine;
 
         float nodePointRadius;
-        if(dimensionPtr->canShowNodeInfo())
+        if (dimensionPtr->canShowNodeInfo())
         {
             nodePointRadius = halfNodeSize / 5;
         }
@@ -177,15 +203,56 @@ namespace Pathfinding::Core
         {
             nodePointRadius = halfNodeSize / 2.5f;
         }
+
+        float lineThickness = nodePointRadius / 2;
+        diagonalLine.setFillColor(convertToSfmlColor(PATH_NODE_COLOR));
+        straightLine.setFillColor(convertToSfmlColor(PATH_NODE_COLOR));
+
+        diagonalLine.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
+        diagonalLine.setOutlineThickness(NODE_OUTLINE_THICKNESS);
+
+        straightLine.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
+        straightLine.setOutlineThickness(NODE_OUTLINE_THICKNESS);
+
+        straightLine.setSize(sf::Vector2f(straightLineLength, lineThickness));
+        diagonalLine.setSize(sf::Vector2f(diagonalLineLength, lineThickness));
+
+        straightLine.setOrigin(sf::Vector2f(0, lineThickness / 2));
+        diagonalLine.setOrigin(sf::Vector2f(0, lineThickness / 2));
+
+        for (std::size_t i = 0; i < path.size(); ++i)
+        {
+            Node *currentNode = path[i];
+            if (i + 1 < path.size())
+            {
+                Node *nextNode = path[i + 1];
+                double angle = getAngleBetweenTwoNodes(currentNode, nextNode);
+                sf::Vector2f centerOfCurrentNode = getNodePosition(currentNode->location, dimensionPtr->currentNodeSideLength());
+                centerOfCurrentNode += sf::Vector2f(halfNodeSize,halfNodeSize);
+                if(diagonal(angle))
+                {
+                    diagonalLine.setPosition(sf::Vector2f(centerOfCurrentNode));
+                    diagonalLine.setRotation(-angle);
+                    windowPtr->draw(diagonalLine);
+                }
+                else
+                {
+                    straightLine.setPosition(sf::Vector2f(centerOfCurrentNode));
+                    straightLine.setRotation(-angle);
+                    windowPtr->draw(straightLine);
+                }
+            }
+        }
+
         nodePoint.setRadius(nodePointRadius);
         nodePoint.setFillColor(convertToSfmlColor(PATH_NODE_COLOR));
         nodePoint.setOrigin(nodePointRadius, nodePointRadius);
-        nodePoint.setOutlineColor(sf::Color::White);
-        nodePoint.setOutlineThickness(1);
+        nodePoint.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
+        nodePoint.setOutlineThickness(NODE_OUTLINE_THICKNESS);
 
-        for(auto & node : path)
+        for (auto &node : path)
         {
-            if(node->state != NodeState::Blocked)
+            if (node->state != NodeState::Blocked)
             {
                 sf::Vector2f leftCornerOfNodePosition = getNodePosition(node->location, dimensionPtr->currentNodeSideLength());
                 sf::Vector2f nodePointPosition = leftCornerOfNodePosition + pointPositionOffset;

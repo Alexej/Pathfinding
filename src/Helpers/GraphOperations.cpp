@@ -17,7 +17,7 @@ namespace Pathfinding::Helpers
 
     void GraphOperations::leftMouseButtonPressed(sf::Vector2i pos)
     {
-        Vector2i mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
+        Vec2i mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
         if (mappedCoordinates == graphPtr->startNode()->location && endpointsEvents())
         {
             currentMouseAction = MouseAction::SETTING_START;
@@ -39,7 +39,7 @@ namespace Pathfinding::Helpers
     void GraphOperations::rightMouseButtonPressed(sf::Vector2i pos)
     {
         currentMouseAction = MouseAction::CLEARING_NODE;
-        Vector2i mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
+        Vec2i mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
         if (graphPtr->inBounds(mappedCoordinates))
         {
             clearNodeAndNotifyDstarLiteIfRunning(mappedCoordinates);
@@ -48,7 +48,7 @@ namespace Pathfinding::Helpers
 
     void GraphOperations::mouseMoved(sf::Vector2i pos)
     {
-        Vector2i mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
+        Vec2i mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
         if (graphPtr->inBounds(mappedCoordinates))
         {
             switch (currentMouseAction)
@@ -108,14 +108,14 @@ namespace Pathfinding::Helpers
 
     void GraphOperations::nodeUnderCursor(sf::Vector2i pos)
     {
-        Vector2i mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
+        Vec2i mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
         if(graphPtr->inBounds(mappedCoordinates))
         {
             applicationStatePtr->setNodeUnderCursor(graphPtr->node(mappedCoordinates));
         }
     }
 
-    void GraphOperations::blockNodeAndNotifyDstarLiteIfRunning(Vector2i mappedCoordinates)
+    void GraphOperations::blockNodeAndNotifyDstarLiteIfRunning(Vec2i mappedCoordinates)
     {
         // Ignore operations without state change or when event deactivated
         if(graphPtr->node(mappedCoordinates)->state != NodeState::Blocked && obsticlesEvents())
@@ -128,7 +128,7 @@ namespace Pathfinding::Helpers
         }
     }
     
-    void GraphOperations::clearNodeAndNotifyDstarLiteIfRunning(Vector2i mappedCoordinates)
+    void GraphOperations::clearNodeAndNotifyDstarLiteIfRunning(Vec2i mappedCoordinates)
     {
         if(graphPtr->node(mappedCoordinates)->state != NodeState::Free && obsticlesEvents())
         {

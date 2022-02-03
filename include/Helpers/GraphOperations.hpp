@@ -25,7 +25,7 @@ namespace Pathfinding::Helpers
     using Pathfinding::Datastructures::LatticeGraph;
     using Pathfinding::Core::ApplicationState;
     using Pathfinding::Algorithms::DStarLite;
-    using Pathfinding::Datastructures::Vector2i;
+    using Pathfinding::Datastructures::Vec2i;
 
     enum class MouseAction
     {
@@ -53,8 +53,8 @@ namespace Pathfinding::Helpers
         void enableObsticlesEvents();
         bool endpointsEvents() const;
         bool obsticlesEvents() const;
-        void blockNodeAndNotifyDstarLiteIfRunning(Vector2i mappedCoordinates);
-        void clearNodeAndNotifyDstarLiteIfRunning(Vector2i mappedCoordinates);
+        void blockNodeAndNotifyDstarLiteIfRunning(Vec2i mappedCoordinates);
+        void clearNodeAndNotifyDstarLiteIfRunning(Vec2i mappedCoordinates);
     private:
         MouseAction currentMouseAction = MouseAction::IDLE;
         LatticeGraph *graphPtr;

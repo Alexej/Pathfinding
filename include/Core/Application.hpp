@@ -26,7 +26,7 @@ namespace Pathfinding::Core
     using Pathfinding::Events::EventManager;
     using Pathfinding::Algorithms::DStarLite;
     using Pathfinding::Datastructures::LatticeGraph;
-    using Pathfinding::Datastructures::Vector2i;
+    using Pathfinding::Datastructures::Vec2i;
     using Pathfinding::Helpers::GraphOperations;
     using Pathfinding::Core::GraphDimension;
 
