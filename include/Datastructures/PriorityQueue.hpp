@@ -9,7 +9,13 @@
 #include "Node.hpp"
 #include "Key.hpp"
 
-
+/**
+ * @brief 
+ * PA* always expands the vertex in the priority queue with the smallest key.
+ * The keys of the vertices expanded by LPA* are
+ * nondecreasing over time just like the f-values of the vertices
+ * expanded by A* (since the heuristics are consistent).
+ */
 namespace Pathfinding::Datastructures
 {
     using queueElement = std::pair<Key, Node*>;

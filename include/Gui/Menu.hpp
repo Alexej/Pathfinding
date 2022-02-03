@@ -34,6 +34,7 @@ namespace Pathfinding::Gui
             void showNodeInfoInMenu();
             void showNodeInfoFlag();
             void showSearchingElements();
+            void printLargeText(std::string text, double factor);
         private:
             float offset; 
             float height; 

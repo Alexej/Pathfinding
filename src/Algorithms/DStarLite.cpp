@@ -5,13 +5,13 @@
 #include "LatticeGraph.hpp"
 #include "Vector2.hpp"
 #include "DiagonalHeuristic.hpp"
-
-#include <iostream>
+#include "ApplicationState.hpp"
 
 namespace Pathfinding::Algorithms
 {
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vector2i;
+    using Pathfinding::Core::State;
 
     namespace
     {
@@ -24,7 +24,7 @@ namespace Pathfinding::Algorithms
         {
             int32_t dx = abs(from->location.width - to->location.width);
             int32_t dy = abs(from->location.height - to->location.height);
-            return dx - dy == 0 ? sqrt(2) : 1;
+            return dx - dy == 0 ? static_cast<int>(10 * sqrt(2)) : 10;
         }
 
         bool locallyConsistent(Node *node)
@@ -97,6 +97,11 @@ namespace Pathfinding::Algorithms
                 updateNeighbors(u);
                 UpdateVertex(u);
             }
+            if(U.empty())
+            {
+                doneCallBack_();
+                break;
+            }
         }
     }
 
@@ -126,18 +131,18 @@ namespace Pathfinding::Algorithms
     }
 
     /**
-     * @brief same as succ and pred.
+     * @brief returns successors/predecessors of a node.
      *
-     * @param u
+     * @param node
      * @return std::vector<Node *>
      */
-    std::vector<Node *> DStarLite::neighbors(Node *u)
+    std::vector<Node *> DStarLite::neighbors(Node *node)
     {
         std::vector<Node *> nbors;
-        int32_t hFrom = u->location.height - 1;
-        int32_t hTo = u->location.height + 1;
-        int32_t wFrom = u->location.width - 1;
-        int32_t wTo = u->location.width + 1;
+        int32_t hFrom = node->location.height - 1;
+        int32_t hTo = node->location.height + 1;
+        int32_t wFrom = node->location.width - 1;
+        int32_t wTo = node->location.width + 1;
 
         for (int32_t h = hFrom; h <= hTo; ++h)
         {
@@ -146,7 +151,7 @@ namespace Pathfinding::Algorithms
                 Vector2i location(h, w);
                 if (graphPtr->inBounds(location))
                 {
-                    if (u->location != location && graphPtr->node(location)->state != NodeState::Blocked)
+                    if (node->location != location && graphPtr->node(location)->state != NodeState::Blocked)
                     {
                         nbors.push_back(graphPtr->node(location));
                     }
@@ -222,9 +227,9 @@ namespace Pathfinding::Algorithms
 
     /**
      * @brief
-     * "After computeShortestPath() returns, one can then follow a shortest path from Sstart
-     * to Sgoal by always moving from the current vertex s, starting at Sstart, to any successor s'
-     * that minimizes c(s,s') + g(s') until Sgoal is reached(ties can be broken arbitrarily).""
+     * "After computeShortestPath() returns, one can then follow a shortest path from sStart
+     * to sGoal by always moving from the current vertex s, starting at Sstart, to any successor s'
+     * that minimizes c(s,s') + g(s') until sGoal is reached(ties can be broken arbitrarily).""
      */
     void DStarLite::computePath()
     {
@@ -245,49 +250,47 @@ namespace Pathfinding::Algorithms
         }
     }
 
-    void DStarLite::moveAgent()
+    void DStarLite::moveStart()
     {
         clearPathInGraph();
-        if (*sStart != *graphPtr->goalNode())
+        if (sStart->g == infinity())
         {
-            if (sStart->g == infinity())
+            printf("no path");
+            return;
+        }
+        if (!nodesChanged.empty())
+        {
+            kM = kM + heuristicPtr->calculate(sLast, sStart);
+            sLast = sStart;
+            for (auto &node : nodesChanged)
             {
-                printf("no path");
-                return;
-            }
-            if (!nodesChanged.empty())
-            {
-                kM = kM + heuristicPtr->calculate(sLast, sStart);
-                sLast = sStart;
-                for (auto &node : nodesChanged)
+                /**
+                 * @brief Ignoring blocked nodes since they can't be tranversed,
+                 * remove them from priority queue if present.
+                 */
+                if(blocked(node))
                 {
-                    if(blocked(node))
+                    if(U.contains(node))
                     {
-                        if(U.contains(node))
-                        {
-                            U.remove(node);
-                        }
-                    }
-                    /**
-                     * @brief We need to check whether the node is blocked or not
-                     *  because its state can change while in nodesChanged vector(trough adjacent blocked nodes).
-                     */
-                    else
-                    {
-                        UpdateVertex(node); 
-                        changeState(node, NodeState::Recalculated);
+                        U.remove(node);
                     }
                 }
-                nodesChanged.clear();
-                computeShortestPath();
+                else
+                {
+                    UpdateVertex(node); 
+                    //changeState(node, NodeState::Recalculated);
+                }
             }
-            moveStartToNextInPath();
-            computePath();
-            setPathInGraph();
+            nodesChanged.clear();
+            computeShortestPath();
         }
-        else
+        moveStartToNextInPath();
+        computePath();
+        setPathInGraph();
+
+        if (*sStart == *graphPtr->goalNode())
         {
-            printf("Found path");
+            doneCallBack_();
         }
     }
 
@@ -306,5 +309,10 @@ namespace Pathfinding::Algorithms
             nodesChanged.insert(succ);
         }
         nodesChanged.insert(node);
+    }
+
+    void DStarLite::addDoneCallBack(std::function<void(void)> callBack)
+    {
+        doneCallBack_ = callBack;
     }
 }

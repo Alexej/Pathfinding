@@ -4,6 +4,7 @@
 #include "PriorityQueue.hpp"
 #include <memory>
 #include <unordered_set>
+#include <functional>
 
 namespace Pathfinding::Datastructures
 {
@@ -18,6 +19,11 @@ namespace Pathfinding::Abstract
     class AHeuristic;
 }
 
+namespace Pathfinding::Core
+{
+    class ApplicationState;
+}
+
 namespace Pathfinding::Algorithms
 {
     using Pathfinding::Datastructures::LatticeGraph;
@@ -26,19 +32,21 @@ namespace Pathfinding::Algorithms
     using Pathfinding::Datastructures::Key;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Abstract::AHeuristic;
+    using Pathfinding::Core::ApplicationState;
 
     class DStarLite
     {
         public:
             DStarLite() = default;
             explicit DStarLite(LatticeGraph * graph);
+            void addDoneCallBack(std::function<void(void)> callBack);
             void initialize();
             void computeShortestPath();
             void setHeuristic(std::shared_ptr<AHeuristic> cost);
             void setPathInGraph();
             void computePath();
             void reset();
-            void moveAgent();
+            void moveStart();
             void clearPathInGraph();
             void addChangedNode(Node * node);
         private:
@@ -61,6 +69,7 @@ namespace Pathfinding::Algorithms
             std::shared_ptr<AHeuristic> heuristicPtr = nullptr;
             std::vector<Node *> currentPath;
             std::unordered_set<Node *> nodesChanged;
+            std::function<void(void)> doneCallBack_;
     };
 }
 

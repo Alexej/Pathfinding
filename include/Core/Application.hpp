@@ -43,6 +43,7 @@ namespace Pathfinding::Core
         void handleNumberOfNodesChange(int32_t index);
         void startAlgorithm();
         void reset();
+        void done();
     private:
         ApplicationState appState;
         sf::RenderWindow window;

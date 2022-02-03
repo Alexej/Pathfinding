@@ -29,6 +29,8 @@ namespace Pathfinding::Core
         menu = Menu(&appState, GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH);
         dstar = DStarLite(&graph);
         graphOps = GraphOperations(&appState, &dstar, &graph, dimension->currentNodeSideLength());
+
+        window.setFramerateLimit(60);
     }
 
     Application::Application()
@@ -49,8 +51,9 @@ namespace Pathfinding::Core
         menu.addNumberOfNodesChangedCallBack(std::bind(&Application::handleNumberOfNodesChange, this, _1));
         menu.addStartCallBack(std::bind(&Application::startAlgorithm, this));
         menu.addResetCallBack(std::bind(&Application::reset, this));
-        menu.addStepCallBack(std::bind(&DStarLite::moveAgent, &dstar));
+        menu.addStepCallBack(std::bind(&DStarLite::moveStart, &dstar));
 
+        dstar.addDoneCallBack(std::bind(&Application::done, this));
         dstar.setHeuristic(std::make_shared<DiagonalHeuristic>());
     }
 
@@ -61,7 +64,7 @@ namespace Pathfinding::Core
         dstar.computePath();
         dstar.setPathInGraph();
         appState.setState(State::SEARCHING);
-        graphOps.disableEnpointsEvent();
+        graphOps.disableEndpointsEvent();
     }
 
     void Application::run()
@@ -115,6 +118,13 @@ namespace Pathfinding::Core
         dstar.reset();
         appState.setState(State::READY);
         graphOps.enableEndPointsEvent();
+        graphOps.enableObsticlesEvents();
         appState.setNodeUnderCursor(nullptr);
+    }
+
+    void Application::done()
+    {
+        graphOps.disableObsticlesEvents();
+        appState.setState(State::DONE);
     }
 }

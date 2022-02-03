@@ -52,6 +52,24 @@ namespace Pathfinding::Gui
             }
             return str;
         }
+
+        std::string mapStateToText(State state)
+        {
+            std::string str;
+            switch(state)
+            {
+                case State::READY:
+                    str = "READY";
+                    break;
+                case State::SEARCHING:
+                    str = "SEARCHING";
+                    break;
+                case State::DONE:
+                    str = "DONE";
+                    break;
+            }
+            return str;
+        }
     }
     Menu::Menu(ApplicationState *appState_, int32_t offset_, int32_t height_, int32_t width_)
         : appStatePtr(appState_), offset(static_cast<float>(offset_)), 
@@ -81,6 +99,8 @@ namespace Pathfinding::Gui
             break;
             case State::SEARCHING:
                 showSearchingElements();
+            break;
+            case State::DONE:
             break;
 
         }
@@ -132,6 +152,7 @@ namespace Pathfinding::Gui
         {
             showNodeInfoInMenu();
         }
+        printLargeText(std::format("State: {}", mapStateToText(appStatePtr->currentState())), 2);
     }
 
     void Menu::showNodeInfoInMenu()
@@ -195,5 +216,12 @@ namespace Pathfinding::Gui
     void Menu::addStepCallBack(fPtrVV callBack)
     {
         stepCallBack = callBack;
+    }
+
+    void Menu::printLargeText(std::string text, double factor)
+    {
+        ImGui::SetWindowFontScale(static_cast<float>(factor));
+        ImGui::Text(text.c_str());
+        ImGui::SetWindowFontScale(1);
     }
 }

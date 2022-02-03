@@ -47,8 +47,12 @@ namespace Pathfinding::Helpers
         void nodeUnderCursor(sf::Vector2i pos);
         void mouseMoved(sf::Vector2i pos);
         void resize(int32_t nodeSideLength);
-        void disableEnpointsEvent();
+        void disableEndpointsEvent();
         void enableEndPointsEvent();
+        void disableObsticlesEvents();
+        void enableObsticlesEvents();
+        bool endpointsEvents() const;
+        bool obsticlesEvents() const;
         void blockNodeAndNotifyDstarLiteIfRunning(Vector2i mappedCoordinates);
         void clearNodeAndNotifyDstarLiteIfRunning(Vector2i mappedCoordinates);
     private:
@@ -56,7 +60,8 @@ namespace Pathfinding::Helpers
         LatticeGraph *graphPtr;
         DStarLite * dstarPtr;
         ApplicationState * applicationStatePtr;
-        bool endPointsEvent = true;
+        bool endPointsEvents_ = true;
+        bool obsticlesEvents_ = true;
         int32_t nodeSideLength;
     };
 }
