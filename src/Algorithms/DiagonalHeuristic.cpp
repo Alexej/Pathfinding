@@ -3,6 +3,8 @@
 
 namespace Pathfinding::Algorithms
 {
+    using Pathfinding::Datastructures::Node;
+
     double DiagonalHeuristic::calculate(const Node *from, const Node *to)
     {
         double D = 10 * 1;

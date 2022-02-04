@@ -7,7 +7,16 @@
 
 namespace Pathfinding::Datastructures
 {
-    enum class NodeState {Start, Goal, Free, Blocked, Frontier, Visited, Recalculated};
+    enum class NodeState
+    {
+        Start,
+        Goal,
+        Free,
+        Blocked,
+        Frontier,
+        Visited,
+        Recalculated
+    };
     struct Node
     {
         Vec2i location;
@@ -17,7 +26,7 @@ namespace Pathfinding::Datastructures
         Key key;
     };
 
-    bool operator==(const Node & lhs, const Node & rhs);
+    bool operator==(const Node &lhs, const Node &rhs);
 }
 
 #endif /* EA7DED5B_A2DD_40EB_9E16_BAB60E8C98E4 */

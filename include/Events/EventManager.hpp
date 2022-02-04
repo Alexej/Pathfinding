@@ -12,16 +12,17 @@ namespace Pathfinding::Events
 {
     class EventManager
     {
-        public:
-            EventManager() = default;
-            explicit EventManager(sf::RenderWindow * window);
-            void addBinding(MouseEvent event, std::function< void(sf::Vector2i) > callbackFunc);
-            void pushEvent(sf::Event event);
-            void processEvents();
-        private:
-            sf::RenderWindow * windowPtr;
-            std::deque<sf::Event> eventQueue;
-            std::vector<std::pair<MouseEvent, std::function< void(sf::Vector2i)>>> callBacks;
+    public:
+        EventManager() = default;
+        explicit EventManager(sf::RenderWindow *window);
+        void addBinding(MouseEvent event, std::function<void(sf::Vector2i)> callbackFunc);
+        void pushEvent(sf::Event event);
+        void processEvents();
+
+    private:
+        sf::RenderWindow *windowPtr;
+        std::deque<sf::Event> eventQueue;
+        std::vector<std::pair<MouseEvent, std::function<void(sf::Vector2i)>>> callBacks;
     };
 }
 

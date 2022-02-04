@@ -10,12 +10,14 @@ namespace Pathfinding::Datastructures
 
 namespace Pathfinding::Abstract
 {
-    using Pathfinding::Datastructures::Node;
     class AHeuristic
     {
-        public:
-            virtual double calculate(const Node * from, const Node * to) = 0;
-            virtual ~AHeuristic() = default;
+    private:
+        using PDNode = Pathfinding::Datastructures::Node;
+
+    public:
+        virtual double calculate(const PDNode *from, const PDNode *to) = 0;
+        virtual ~AHeuristic() = default;
     };
 }
 

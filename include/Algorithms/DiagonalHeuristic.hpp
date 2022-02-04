@@ -10,12 +10,13 @@ namespace Pathfinding::Datastrucutres
 
 namespace Pathfinding::Algorithms
 {
-    using Pathfinding::Abstract::AHeuristic;
-    using Pathfinding::Datastructures::Node;
-    class DiagonalHeuristic final : public AHeuristic
+    class DiagonalHeuristic final : public Pathfinding::Abstract::AHeuristic
     {
-        public: 
-            double calculate(const Node * from, const Node * to) override;
+    private:
+        using PDNode = Pathfinding::Datastructures::Node;
+
+    public:
+        double calculate(const PDNode *from, const PDNode *to) override;
     };
 }
 

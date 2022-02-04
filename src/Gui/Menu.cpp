@@ -1,48 +1,47 @@
 #include <imgui-SFML.h>
 #include <imgui.h>
+#include <format>
 
 #include "Constants.hpp"
 #include "Menu.hpp"
 #include "ApplicationState.hpp"
 #include "GraphDimension.hpp"
 #include "Node.hpp"
-#include <format>
-
-using namespace Pathfinding::Constants;
-using Pathfinding::Core::ApplicationState;
-using Pathfinding::Core::State;
-using Pathfinding::Core::NumberOfNodes;
-using Pathfinding::Core::NUMBER_OF_NODES_CHAR;
-using Pathfinding::Datastructures::Node;
-using Pathfinding::Datastructures::NodeState;
 
 namespace Pathfinding::Gui
 {
+    using namespace Pathfinding::Constants;
+    using Pathfinding::Core::ApplicationState;
+    using Pathfinding::Core::NUMBER_OF_NODES_CHAR;
+    using Pathfinding::Core::NumberOfNodes;
+    using Pathfinding::Core::State;
+    using Pathfinding::Datastructures::Node;
+    using Pathfinding::Datastructures::NodeState;
     namespace
     {
         std::string mapNodeStateToText(NodeState state)
         {
             std::string str;
-            switch(state)
+            switch (state)
             {
-                case NodeState::Blocked:
-                    str = "Blocked";
-                    break;
-                case NodeState::Free:
-                    str = "Free";
-                    break;
-                case NodeState::Frontier:
-                    str = "Frontier";
-                    break;
-                case NodeState::Goal:
-                    str = "Goal";
-                    break;
-                case NodeState::Start:
-                    str = "Start";
-                    break;
-                case NodeState::Visited:
-                    str = "Visited";
-                    break;
+            case NodeState::Blocked:
+                str = "Blocked";
+                break;
+            case NodeState::Free:
+                str = "Free";
+                break;
+            case NodeState::Frontier:
+                str = "Frontier";
+                break;
+            case NodeState::Goal:
+                str = "Goal";
+                break;
+            case NodeState::Start:
+                str = "Start";
+                break;
+            case NodeState::Visited:
+                str = "Visited";
+                break;
             }
             return str;
         }
@@ -50,31 +49,31 @@ namespace Pathfinding::Gui
         std::string mapStateToText(State state)
         {
             std::string str;
-            switch(state)
+            switch (state)
             {
-                case State::READY:
-                    str = "READY";
-                    break;
-                case State::SEARCHING:
-                    str = "SEARCHING";
-                    break;
-                case State::DONE:
-                    str = "DONE";
-                    break;
-                case State::NO_PATH:
-                    str = "NO_PATH";
-                    break;
+            case State::READY:
+                str = "READY";
+                break;
+            case State::SEARCHING:
+                str = "SEARCHING";
+                break;
+            case State::DONE:
+                str = "DONE";
+                break;
+            case State::NO_PATH:
+                str = "NO_PATH";
+                break;
             }
             return str;
         }
     }
     Menu::Menu(ApplicationState *appState_, int32_t offset_, int32_t height_, int32_t width_)
-        : appStatePtr(appState_), offset(static_cast<float>(offset_)), 
-        height(static_cast<float>(height_)), 
-        width(static_cast<float>(width_)) 
-        {
-            dimensionPtr = &appStatePtr->dimension();
-        }
+        : appStatePtr(appState_), offset(static_cast<float>(offset_)),
+          height(static_cast<float>(height_)),
+          width(static_cast<float>(width_))
+    {
+        dimensionPtr = &appStatePtr->dimension();
+    }
 
     void Menu::show()
     {
@@ -89,17 +88,16 @@ namespace Pathfinding::Gui
 
         ImGui::Begin("Configuration", nullptr, window_flags);
 
-        switch(appStatePtr->currentState())
+        switch (appStatePtr->currentState())
         {
-            case State::READY:
-                showReadyStateElements();
+        case State::READY:
+            showReadyStateElements();
             break;
-            case State::SEARCHING:
-                showSearchingElements();
+        case State::SEARCHING:
+            showSearchingElements();
             break;
-            case State::DONE:
+        case State::DONE:
             break;
-
         }
 
         ImGui::Separator();
@@ -112,7 +110,7 @@ namespace Pathfinding::Gui
     {
         ImGui::Spacing();
         showAutoStepFlag();
-        if(ImGui::Button("STEP", ImVec2(width-20,20)))
+        if (ImGui::Button("STEP", ImVec2(width - 20, 20)))
         {
             stepCallBack();
         }
@@ -123,7 +121,7 @@ namespace Pathfinding::Gui
         nodeInfo = appStatePtr->showNodeInfo();
         if (ImGui::Checkbox("Render Node Info", &nodeInfo))
         {
-            if(nodeInfo)
+            if (nodeInfo)
             {
                 appStatePtr->enableNodeInfo();
             }
@@ -139,7 +137,7 @@ namespace Pathfinding::Gui
         autoStep = appStatePtr->autoStep();
         if (ImGui::Checkbox("Auto step", &autoStep))
         {
-            if(autoStep)
+            if (autoStep)
             {
                 appStatePtr->enableAutoStep();
             }
@@ -157,12 +155,12 @@ namespace Pathfinding::Gui
             showNodeInfoFlag();
         }
         ImGui::Spacing();
-        if(ImGui::Button("RESET", ImVec2(width-20,20)))
+        if (ImGui::Button("RESET", ImVec2(width - 20, 20)))
         {
             resetCallback();
         }
         ImGui::Spacing();
-        if(appStatePtr->nodeUnderCursor() != nullptr)
+        if (appStatePtr->nodeUnderCursor() != nullptr)
         {
             showNodeInfoInMenu();
         }
@@ -172,8 +170,9 @@ namespace Pathfinding::Gui
     void Menu::showNodeInfoInMenu()
     {
         ImGui::Separator();
-        ImGui::Text(std::format("Height: {} Width: {}", appStatePtr->nodeUnderCursor()->location.height, 
-                                                      appStatePtr->nodeUnderCursor()->location.width).c_str());
+        ImGui::Text(std::format("Height: {} Width: {}", appStatePtr->nodeUnderCursor()->location.height,
+                                appStatePtr->nodeUnderCursor()->location.width)
+                        .c_str());
         ImGui::Text(std::format("G: {}", appStatePtr->nodeUnderCursor()->g).c_str());
         ImGui::Text(std::format("RHS: {}", appStatePtr->nodeUnderCursor()->rhs).c_str());
         ImGui::Text(std::format("K1: {}", appStatePtr->nodeUnderCursor()->key.k1).c_str());
@@ -202,17 +201,17 @@ namespace Pathfinding::Gui
         };
 
         ImGui::Spacing();
-        if(ImGui::Button("Start", ImVec2(width-20,20)))
+        if (ImGui::Button("Start", ImVec2(width - 20, 20)))
         {
             startCallBack();
         }
 
-        if(ImGui::Button("RANDOM GRAPH", ImVec2(width-20,20)))
+        if (ImGui::Button("RANDOM GRAPH", ImVec2(width - 20, 20)))
         {
             randomGraphCallBack();
         }
     }
-    
+
     void Menu::addNumberOfNodesChangedCallBack(fPtrVI callBack)
     {
         numberOfNodesChangedCallBack = callBack;

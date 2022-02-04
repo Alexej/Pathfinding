@@ -1,6 +1,5 @@
 #include "GraphDimension.hpp"
 
-
 namespace Pathfinding::Core
 {
     void GraphDimension::setCurrentNumberOfNodes(NumberOfNodes numOfNodes)
@@ -42,7 +41,7 @@ namespace Pathfinding::Core
     {
         return currentNumberOfNodesInRow();
     }
-    
+
     int32_t GraphDimension::height() const
     {
         return currentNumberOfNodesInRow();

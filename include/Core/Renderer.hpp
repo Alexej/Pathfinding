@@ -14,31 +14,35 @@ namespace Pathfinding::Datastructures
 
 namespace Pathfinding::Core
 {
-    using Pathfinding::Datastructures::LatticeGraph;
-    using Pathfinding::Datastructures::Node;
-    
+
     class ApplicationState;
     class GraphDimension;
     class Renderer
     {
+    private:
+        using PDLatticeGraph = Pathfinding::Datastructures::LatticeGraph;
+        using PDNode = Pathfinding::Datastructures::Node;
+
     public:
         Renderer() = default;
-        Renderer(sf::RenderWindow * window, ApplicationState * state);
-        void render(const LatticeGraph & graph);
-        void renderPath(std::vector<Node *> path);
+        Renderer(sf::RenderWindow *window, ApplicationState *state);
+        void render(const PDLatticeGraph &graph);
+        void renderPath(std::vector<PDNode *> path);
         void init();
+
     private:
         void loadFont(std::string font);
-        void drawNode(const Node &node, sf::Vector2f coords);
-        void renderNodeInfo(const Node &node, sf::Vector2f coords);
+        void drawNode(const PDNode &node, sf::Vector2f coords);
+        void renderNodeInfo(const PDNode &node, sf::Vector2f coords);
+
     private:
         sf::RectangleShape nodeRect;
         sf::Text text;
         sf::Font font;
-        sf::RenderWindow * windowPtr = nullptr;
-        ApplicationState * appStatePtr = nullptr;
-        GraphDimension * dimensionPtr = nullptr;
-        
+        sf::RenderWindow *windowPtr = nullptr;
+        ApplicationState *appStatePtr = nullptr;
+        GraphDimension *dimensionPtr = nullptr;
+
         /**
          * ! absolute path bad, fix later.
          */

@@ -2,9 +2,9 @@
 
 namespace Pathfinding::Datastructures
 {
-    namespace 
+    namespace
     {
-        void initNode(Node & node, int32_t h, int32_t w)
+        void initNode(Node &node, int32_t h, int32_t w)
         {
             node.location = Vec2i(h, w);
             node.g = std::numeric_limits<double>::infinity();
@@ -112,15 +112,15 @@ namespace Pathfinding::Datastructures
         }
     }
 
-    void initRandomGraph(LatticeGraph & graph)
+    void initRandomGraph(LatticeGraph &graph)
     {
         for (int32_t h = 0; h < graph.height(); ++h)
         {
             for (int32_t w = 0; w < graph.width(); ++w)
             {
-                if(graph[h][w].state == NodeState::Free)
+                if (graph[h][w].state == NodeState::Free)
                 {
-                    if(rand() % 2 == 0)
+                    if (rand() % 3 == 0)
                     {
                         graph[h][w].state = NodeState::Blocked;
                     }

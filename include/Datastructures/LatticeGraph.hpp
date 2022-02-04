@@ -1,18 +1,17 @@
 #ifndef FD0247C3_67EB_48FC_909F_6614B9CC4CBC
 #define FD0247C3_67EB_48FC_909F_6614B9CC4CBC
 
-#include <vector>
 #include "Node.hpp"
+
+#include <vector>
 #include <unordered_map>
 
 namespace Pathfinding::Datastructures
 {
 
-    template <typename Type>
-    using Vector2D = std::vector<std::vector<Type>>;
-    
     class LatticeGraph
     {
+
     public:
         LatticeGraph() = default;
         LatticeGraph(int32_t height, int32_t width);
@@ -23,22 +22,21 @@ namespace Pathfinding::Datastructures
 
         bool inBounds(Vec2i location) const;
 
-        std::vector<Node> & operator[](std::size_t height) { return graph[height]; }
-        const std::vector<Node> & operator[](std::size_t height) const { return graph[height]; }
-
+        std::vector<Node> &operator[](std::size_t height) { return graph[height]; }
+        const std::vector<Node> &operator[](std::size_t height) const { return graph[height]; }
 
         /*
         Move this to another class
         */
-       //////////////////////////////////
-        Node * node(Vec2i location) { return &graph[location.height][location.width]; }
-        const Node * node(Vec2i location) const { return &graph[location.height][location.width]; }
+        //////////////////////////////////
+        Node *node(Vec2i location) { return &graph[location.height][location.width]; }
+        const Node *node(Vec2i location) const { return &graph[location.height][location.width]; }
 
-        const Node * startNode() const;
-        const Node * goalNode() const;
+        const Node *startNode() const;
+        const Node *goalNode() const;
 
-        Node * startNode();
-        Node * goalNode();
+        Node *startNode();
+        Node *goalNode();
 
         void setGoal(Vec2i location);
         void setStart(Vec2i location);
@@ -49,13 +47,17 @@ namespace Pathfinding::Datastructures
         void resize(int32_t height, int32_t width);
         ///////////////////////////////////////////////////
     private:
+        template <typename Type>
+        using Vector2D = std::vector<std::vector<Type>>;
+
+    private:
         Vector2D<Node> graph;
-        Node * goalNodePtr;
-        Node * startNodePtr;
+        Node *goalNodePtr;
+        Node *startNodePtr;
     };
 
-    void initRandomGraph(LatticeGraph & graph);
-    
+    void initRandomGraph(LatticeGraph &graph);
+
 }
 
 #endif /* FD0247C3_67EB_48FC_909F_6614B9CC4CBC */

@@ -8,7 +8,7 @@ namespace Pathfinding::Events
     struct MouseEvent
     {
         MouseEvent(bool eventOnly_, sf::Event::EventType event_, sf::Mouse::Button button_)
-        : eventOnly(eventOnly_), event(event_), button(button_){}
+            : eventOnly(eventOnly_), event(event_), button(button_) {}
         bool eventOnly = false;
         sf::Event::EventType event;
         sf::Mouse::Button button;

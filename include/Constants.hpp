@@ -47,4 +47,3 @@ namespace Pathfinding::Constants
 }
 
 #endif /* A2338B5A_9164_4556_99CB_AA1F92239E7A */
-

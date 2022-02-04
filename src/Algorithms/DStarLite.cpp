@@ -9,9 +9,12 @@
 
 namespace Pathfinding::Algorithms
 {
+    using Pathfinding::Abstract::AHeuristic;
+    using Pathfinding::Datastructures::Key;
+    using Pathfinding::Datastructures::LatticeGraph;
+    using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
-    using Pathfinding::Core::State;
 
     namespace
     {
@@ -37,7 +40,7 @@ namespace Pathfinding::Algorithms
             return node->g > node->rhs;
         }
 
-        bool blocked(Node * node)
+        bool blocked(Node *node)
         {
             return node->state == NodeState::Blocked;
         }
@@ -65,7 +68,7 @@ namespace Pathfinding::Algorithms
         if (u != graphPtr->goalNode())
         {
             auto succs = neighbors(u);
-            if(!succs.empty())
+            if (!succs.empty())
             {
                 u->rhs = getMinCG(u, succs).first;
             }
@@ -83,7 +86,7 @@ namespace Pathfinding::Algorithms
     void DStarLite::initialRun()
     {
         computeShortestPath();
-        if(sStart->g == infinity())
+        if (sStart->g == infinity())
         {
             noPathCallBack_();
             return;
@@ -130,12 +133,10 @@ namespace Pathfinding::Algorithms
      * @param u
      * @return std::pair<int32_t, Node *>
      */
-    std::pair<double, Node *> DStarLite::getMinCG(Node * u, std::vector<Node *> succs)
+    std::pair<double, Node *> DStarLite::getMinCG(Node *u, std::vector<Node *> succs)
     {
-        auto itr = std::min_element(succs.begin(), succs.end(), [&u](const Node * lhs, const Node * rhs)
-        {
-             return (cost(u, lhs) + lhs->g) < (cost(u, rhs) + rhs->g);
-        });
+        auto itr = std::min_element(succs.begin(), succs.end(), [&u](const Node *lhs, const Node *rhs)
+                                    { return (cost(u, lhs) + lhs->g) < (cost(u, rhs) + rhs->g); });
         return {(cost(u, *itr) + (*itr)->g), *itr};
     }
 
@@ -229,7 +230,7 @@ namespace Pathfinding::Algorithms
         while (*currentNode != *graphPtr->goalNode())
         {
             auto succs = neighbors(currentNode);
-            if(succs.empty())
+            if (succs.empty())
             {
                 noPathCallBack_();
                 return;
@@ -251,16 +252,16 @@ namespace Pathfinding::Algorithms
                  * @brief Ignoring blocked nodes since they can't be tranversed,
                  * remove them from priority queue if present.
                  */
-                if(blocked(node))
+                if (blocked(node))
                 {
-                    if(U.contains(node))
+                    if (U.contains(node))
                     {
                         U.remove(node);
                     }
                 }
                 else
                 {
-                    UpdateVertex(node); 
+                    UpdateVertex(node);
                 }
             }
             nodesChanged.clear();
@@ -287,7 +288,10 @@ namespace Pathfinding::Algorithms
     {
         Node *prevStart = sStart;
         auto succs = neighbors(sStart);
-        if(succs.empty()) { return; }
+        if (succs.empty())
+        {
+            return;
+        }
         sStart = getMinCG(sStart, succs).second;
         graphPtr->setStart(sStart->location);
         prevStart->state = NodeState::Visited;
@@ -295,7 +299,7 @@ namespace Pathfinding::Algorithms
 
     void DStarLite::addChangedNode(Node *node)
     {
-        for(auto & succ : neighbors(node))
+        for (auto &succ : neighbors(node))
         {
             nodesChanged.insert(succ);
         }

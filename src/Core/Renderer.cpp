@@ -1,6 +1,7 @@
 #include "Renderer.hpp"
 
 #include <array>
+#include <SFML/Graphics/CircleShape.hpp>
 
 #include "Constants.hpp"
 #include "ApplicationState.hpp"
@@ -8,13 +9,15 @@
 #include "LatticeGraph.hpp"
 #include "Constants.hpp"
 #include "GraphDimension.hpp"
-#include <SFML/Graphics/CircleShape.hpp>
 
 namespace Pathfinding::Core
 {
     using namespace Pathfinding::Constants;
+    using Pathfinding::Datastructures::LatticeGraph;
+    using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
+
     namespace
     {
         sf::Vector2f getNodePosition(Vec2i location, int32_t sideLength)

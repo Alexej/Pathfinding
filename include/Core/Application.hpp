@@ -7,35 +7,32 @@
 #include <stdint.h>
 #include <deque>
 
-#include "Constants.hpp"
 #include "Renderer.hpp"
 #include "LatticeGraph.hpp"
 #include "ApplicationState.hpp"
-#include "Vector2.hpp"
 #include "EventManager.hpp"
 #include "Menu.hpp"
 #include "DStarLite.hpp"
 #include "GraphOperations.hpp"
 #include "GraphDimension.hpp"
 
-
 namespace Pathfinding::Core
 {
-    using namespace Pathfinding::Constants;
-    using Pathfinding::Gui::Menu;
-    using Pathfinding::Events::EventManager;
-    using Pathfinding::Algorithms::DStarLite;
-    using Pathfinding::Datastructures::LatticeGraph;
-    using Pathfinding::Datastructures::Vec2i;
-    using Pathfinding::Helpers::GraphOperations;
-    using Pathfinding::Core::GraphDimension;
 
     class Application
     {
+    private:
+        using PGMenu = Pathfinding::Gui::Menu;
+        using PEEventManager = Pathfinding::Events::EventManager;
+        using PADStarLite = Pathfinding::Algorithms::DStarLite;
+        using PALatticeGraph = Pathfinding::Datastructures::LatticeGraph;
+        using PHGraphOperations = Pathfinding::Helpers::GraphOperations;
+
     public:
         Application();
         void run();
-    private:    
+
+    private:
         void createObbjects();
         void draw();
         void update(sf::Clock &deltaClock);
@@ -46,17 +43,18 @@ namespace Pathfinding::Core
         void done();
         void noPath();
         void randomGraph();
+
     private:
         ApplicationState appState;
         sf::RenderWindow window;
         Renderer renderer;
-        LatticeGraph graph;
-        EventManager eventManager;
-        Menu menu;
-        DStarLite dstar;
-        GraphOperations graphOps;
-        GraphDimension * dimension;
-        int32_t accumulator; 
+        PALatticeGraph graph;
+        PEEventManager eventManager;
+        PGMenu menu;
+        PADStarLite dstar;
+        PHGraphOperations graphOps;
+        GraphDimension *dimension;
+        int32_t accumulator;
     };
 }
 

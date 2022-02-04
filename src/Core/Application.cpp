@@ -1,24 +1,25 @@
 #include "Application.hpp"
-#include "Constants.hpp"
 
+#include <imgui-SFML.h>
+#include <imgui.h>
+
+#include "Constants.hpp"
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/Event.hpp>
 #include "Constants.hpp"
 #include "Node.hpp"
-#include "Vector2.hpp"
-#include <imgui-SFML.h>
-#include <imgui.h>
 #include "DiagonalHeuristic.hpp"
 #include "SFMLHelpers.hpp"
-
-#include <iostream>
 
 namespace Pathfinding::Core
 {
     using namespace Pathfinding::Constants;
     using Pathfinding::Algorithms::DiagonalHeuristic;
-    using Pathfinding::Datastructures::Vec2i;
-    using Pathfinding::Helpers::mapMouseToGraphCoordinates;
+    using Pathfinding::Algorithms::DStarLite;
+    using Pathfinding::Datastructures::LatticeGraph;
+    using Pathfinding::Events::EventManager;
+    using Pathfinding::Gui::Menu;
+    using Pathfinding::Helpers::GraphOperations;
 
     void Application::createObbjects()
     {
@@ -98,10 +99,10 @@ namespace Pathfinding::Core
 
     void Application::update(sf::Clock &deltaClock)
     {
-        if(appState.currentState() == State::SEARCHING && appState.autoStep())
+        if (appState.currentState() == State::SEARCHING && appState.autoStep())
         {
             accumulator += deltaClock.getElapsedTime().asMilliseconds();
-            if(accumulator > 500)
+            if (accumulator > 500)
             {
                 dstar.moveStart();
                 accumulator = 0;
@@ -123,7 +124,7 @@ namespace Pathfinding::Core
         ImGui::SFML::Render(window);
         renderer.render(graph);
 
-        if(appState.currentState() == State::DONE || appState.currentState() == State::SEARCHING)
+        if (appState.currentState() == State::DONE || appState.currentState() == State::SEARCHING)
         {
             renderer.renderPath(dstar.path());
         }

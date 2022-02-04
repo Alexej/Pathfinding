@@ -2,7 +2,7 @@
 
 using Pathfinding::Core::Application;
 
-int main() 
+int main()
 {
     Application app;
     app.run();

@@ -12,16 +12,16 @@ namespace Pathfinding::Core
 
 namespace Pathfinding::Gui
 {
-    using Pathfinding::Core::ApplicationState;
-    using Pathfinding::Core::GraphDimension;
     class Menu
     {
         private:
+            using PCApplicationState = Pathfinding::Core::ApplicationState;
+            using PCGraphDimension = Pathfinding::Core::GraphDimension;
             using fPtrVI = std::function<void(int32_t)>;
             using fPtrVV = std::function<void(void)>;
         public:
             Menu() = default;
-            Menu(ApplicationState * appStat, int32_t offset, int32_t height, int32_t width);
+            Menu(PCApplicationState * appStat, int32_t offset, int32_t height, int32_t width);
             void show();
             void addNumberOfNodesChangedCallBack(fPtrVI callBack);
             void addStepCallBack(fPtrVV callBack);
@@ -41,7 +41,7 @@ namespace Pathfinding::Gui
             float offset; 
             float height; 
             float width;
-            ApplicationState * appStatePtr;
+            PCApplicationState * appStatePtr;
             bool nodeInfo;
             bool autoStep;
         private:
@@ -50,7 +50,7 @@ namespace Pathfinding::Gui
             fPtrVV resetCallback = nullptr;
             fPtrVV stepCallBack = nullptr;
             fPtrVV randomGraphCallBack = nullptr;
-            GraphDimension * dimensionPtr;
+            PCGraphDimension * dimensionPtr;
     };
 }
 

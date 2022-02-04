@@ -1,10 +1,10 @@
 #ifndef AB283A7C_08BA_4585_A98A_76E2641DDE71
 #define AB283A7C_08BA_4585_A98A_76E2641DDE71
 
-#include "PriorityQueue.hpp"
 #include <memory>
 #include <unordered_set>
 #include <functional>
+#include "PriorityQueue.hpp"
 
 namespace Pathfinding::Datastructures
 {
@@ -19,60 +19,57 @@ namespace Pathfinding::Abstract
     class AHeuristic;
 }
 
-namespace Pathfinding::Core
-{
-    class ApplicationState;
-}
-
 namespace Pathfinding::Algorithms
 {
-    using Pathfinding::Datastructures::LatticeGraph;
-    using Pathfinding::Datastructures::PriorityQueue;
-    using Pathfinding::Datastructures::Node;
-    using Pathfinding::Datastructures::Key;
-    using Pathfinding::Datastructures::NodeState;
-    using Pathfinding::Abstract::AHeuristic;
-    using Pathfinding::Core::ApplicationState;
-
     class DStarLite
     {
-        public:
-            DStarLite() = default;
-            explicit DStarLite(LatticeGraph * graph);
-            void addDoneCallBack(std::function<void(void)> callBack);
-            void addNoPathCallBack(std::function<void(void)> callBack);
-            void initialize();
-            void setHeuristic(std::shared_ptr<AHeuristic> cost);
-            void computePath();
-            void reset();
-            void moveStart();
-            void addChangedNode(Node * node);
-            std::vector<Node*> path() const;
-            void initialRun();
-        private:
-            void computeShortestPath();
-            void UpdateVertex(Node * node);
-            Key calculateKey(Node * node);
-            std::vector<Node *> neighbors(Node * node);
-            std::pair<double, Node *> getMinCG(Node * u, std::vector<Node *> succs);
-            Node * popFromQueueAndUpdateState();
-            void insertIntoQueueAndUpdateState(Node * node);
-            void removeFromQUeueAndUpdateState(Node * node);
-            void updateNeighbors(Node * node);
-            void changeState(Node * node, NodeState state);
-            void moveStartToNextInPath();
-            bool computeShortestPathExitCondition();
-        private:    
-            LatticeGraph * graphPtr = nullptr;
-            Node * sStart = nullptr;
-            Node * sLast = nullptr;
-            PriorityQueue U;
-            double kM = 0;
-            std::shared_ptr<AHeuristic> heuristicPtr = nullptr;
-            std::vector<Node *> currentPath;
-            std::unordered_set<Node *> nodesChanged;
-            std::function<void(void)> doneCallBack_;
-            std::function<void(void)> noPathCallBack_;
+    private:
+        using PDLatticeGraph = Pathfinding::Datastructures::LatticeGraph;
+        using PDPriorityQueue = Pathfinding::Datastructures::PriorityQueue;
+        using PDNode = Pathfinding::Datastructures::Node;
+        using PDKey = Pathfinding::Datastructures::Key;
+        using PDNodeState = Pathfinding::Datastructures::NodeState;
+        using PAAHeuristic = Pathfinding::Abstract::AHeuristic;
+
+    public:
+        DStarLite() = default;
+        explicit DStarLite(PDLatticeGraph *graph);
+        void addDoneCallBack(std::function<void(void)> callBack);
+        void addNoPathCallBack(std::function<void(void)> callBack);
+        void initialize();
+        void setHeuristic(std::shared_ptr<PAAHeuristic> cost);
+        void computePath();
+        void reset();
+        void moveStart();
+        void addChangedNode(PDNode *node);
+        std::vector<PDNode *> path() const;
+        void initialRun();
+
+    private:
+        void computeShortestPath();
+        void UpdateVertex(PDNode *node);
+        PDKey calculateKey(PDNode *node);
+        std::vector<PDNode *> neighbors(PDNode *node);
+        std::pair<double, PDNode *> getMinCG(PDNode *u, std::vector<PDNode *> succs);
+        PDNode *popFromQueueAndUpdateState();
+        void insertIntoQueueAndUpdateState(PDNode *node);
+        void removeFromQUeueAndUpdateState(PDNode *node);
+        void updateNeighbors(PDNode *node);
+        void changeState(PDNode *node, PDNodeState state);
+        void moveStartToNextInPath();
+        bool computeShortestPathExitCondition();
+
+    private:
+        PDLatticeGraph *graphPtr = nullptr;
+        PDNode *sStart = nullptr;
+        PDNode *sLast = nullptr;
+        PDPriorityQueue U;
+        std::shared_ptr<PAAHeuristic> heuristicPtr = nullptr;
+        std::vector<PDNode *> currentPath;
+        std::unordered_set<PDNode *> nodesChanged;
+        std::function<void(void)> doneCallBack_;
+        std::function<void(void)> noPathCallBack_;
+        double kM = 0;
     };
 }
 

@@ -22,10 +22,6 @@ namespace Pathfinding::Algorithms
 
 namespace Pathfinding::Helpers
 {
-    using Pathfinding::Datastructures::LatticeGraph;
-    using Pathfinding::Core::ApplicationState;
-    using Pathfinding::Algorithms::DStarLite;
-    using Pathfinding::Datastructures::Vec2i;
 
     enum class MouseAction
     {
@@ -38,9 +34,15 @@ namespace Pathfinding::Helpers
 
     class GraphOperations
     {
+    private:
+        using PDLatticeGraph = Pathfinding::Datastructures::LatticeGraph;
+        using PCApplicationState = Pathfinding::Core::ApplicationState;
+        using PADStarLite = Pathfinding::Algorithms::DStarLite;
+        using PDVec2i = Pathfinding::Datastructures::Vec2i;
+
     public:
         GraphOperations() = default;
-        GraphOperations(ApplicationState * state, DStarLite* dstar, LatticeGraph *graph, int32_t nodeSideLength);
+        GraphOperations(PCApplicationState *state, PADStarLite *dstar, PDLatticeGraph *graph, int32_t nodeSideLength);
         void rightMouseButtonPressed(sf::Vector2i pos);
         void leftMouseButtonPressed(sf::Vector2i pos);
         void mouseButtonReleased(sf::Vector2i pos);
@@ -53,13 +55,14 @@ namespace Pathfinding::Helpers
         void enableObsticlesEvents();
         bool endpointsEvents() const;
         bool obsticlesEvents() const;
-        void blockNodeAndNotifyDstarLiteIfRunning(Vec2i mappedCoordinates);
-        void clearNodeAndNotifyDstarLiteIfRunning(Vec2i mappedCoordinates);
+        void blockNodeAndNotifyDstarLiteIfRunning(PDVec2i mappedCoordinates);
+        void clearNodeAndNotifyDstarLiteIfRunning(PDVec2i mappedCoordinates);
+
     private:
         MouseAction currentMouseAction = MouseAction::IDLE;
-        LatticeGraph *graphPtr;
-        DStarLite * dstarPtr;
-        ApplicationState * applicationStatePtr;
+        PDLatticeGraph *graphPtr;
+        PADStarLite *dstarPtr;
+        PCApplicationState *applicationStatePtr;
         bool endPointsEvents_ = true;
         bool obsticlesEvents_ = true;
         int32_t nodeSideLength;

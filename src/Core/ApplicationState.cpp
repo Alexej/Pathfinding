@@ -2,6 +2,8 @@
 
 namespace Pathfinding::Core
 {
+    using Pathfinding::Datastructures::Node;
+
     ApplicationState::ApplicationState()
     {
         showNodeInfo_ = false;
@@ -9,7 +11,6 @@ namespace Pathfinding::Core
         autoStep_ = false;
         currentState_ = State::READY;
     }
-
 
     bool ApplicationState::showNodeInfo() const
     {
@@ -49,19 +50,19 @@ namespace Pathfinding::Core
     State ApplicationState::currentState() const
     {
         return currentState_;
-    } 
+    }
 
-    GraphDimension & ApplicationState::dimension()
+    GraphDimension &ApplicationState::dimension()
     {
         return dim;
     }
 
-    const Node * ApplicationState::nodeUnderCursor() const
+    const Node *ApplicationState::nodeUnderCursor() const
     {
         return nodeUnderCursor_;
     }
 
-    void ApplicationState::setNodeUnderCursor(const Node * node)
+    void ApplicationState::setNodeUnderCursor(const Node *node)
     {
         nodeUnderCursor_ = node;
     }

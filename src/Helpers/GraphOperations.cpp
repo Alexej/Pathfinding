@@ -8,12 +8,16 @@
 
 namespace Pathfinding::Helpers
 {
+    using Pathfinding::Algorithms::DStarLite;
+    using Pathfinding::Core::ApplicationState;
+    using Pathfinding::Core::State;
+    using Pathfinding::Datastructures::LatticeGraph;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
-    using Pathfinding::Core::State;
+    using Pathfinding::Datastructures::Vec2i;
 
-    GraphOperations::GraphOperations(ApplicationState * state_, DStarLite * dstar_, LatticeGraph * graph_, int32_t nodeSideLength_ )
-    : applicationStatePtr(state_), dstarPtr(dstar_), graphPtr(graph_), nodeSideLength(nodeSideLength_){ }
+    GraphOperations::GraphOperations(ApplicationState *state_, DStarLite *dstar_, LatticeGraph *graph_, int32_t nodeSideLength_)
+        : applicationStatePtr(state_), dstarPtr(dstar_), graphPtr(graph_), nodeSideLength(nodeSideLength_) {}
 
     void GraphOperations::leftMouseButtonPressed(sf::Vector2i pos)
     {
@@ -109,7 +113,7 @@ namespace Pathfinding::Helpers
     void GraphOperations::nodeUnderCursor(sf::Vector2i pos)
     {
         Vec2i mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
-        if(graphPtr->inBounds(mappedCoordinates))
+        if (graphPtr->inBounds(mappedCoordinates))
         {
             applicationStatePtr->setNodeUnderCursor(graphPtr->node(mappedCoordinates));
         }
@@ -117,23 +121,23 @@ namespace Pathfinding::Helpers
 
     void GraphOperations::blockNodeAndNotifyDstarLiteIfRunning(Vec2i mappedCoordinates)
     {
-        // Ignore operations without state change or when event deactivated
-        if(graphPtr->node(mappedCoordinates)->state != NodeState::Blocked && obsticlesEvents())
+        // Ignore operations without node state change or when events deactivated
+        if (graphPtr->node(mappedCoordinates)->state != NodeState::Blocked && obsticlesEvents())
         {
             graphPtr->blockNode(mappedCoordinates);
-            if(applicationStatePtr->currentState() == State::SEARCHING)
+            if (applicationStatePtr->currentState() == State::SEARCHING)
             {
                 dstarPtr->addChangedNode(graphPtr->node(mappedCoordinates));
             }
         }
     }
-    
+
     void GraphOperations::clearNodeAndNotifyDstarLiteIfRunning(Vec2i mappedCoordinates)
     {
-        if(graphPtr->node(mappedCoordinates)->state != NodeState::Free && obsticlesEvents())
+        if (graphPtr->node(mappedCoordinates)->state != NodeState::Free && obsticlesEvents())
         {
             graphPtr->clearNode(mappedCoordinates);
-            if(applicationStatePtr->currentState() == State::SEARCHING)
+            if (applicationStatePtr->currentState() == State::SEARCHING)
             {
                 dstarPtr->addChangedNode(graphPtr->node(mappedCoordinates));
             }

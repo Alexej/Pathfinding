@@ -4,41 +4,46 @@
 #include "Constants.hpp"
 #include "GraphDimension.hpp"
 
-
 namespace Pathfinding::Datastructures
 {
     struct Node;
 }
 
-
 namespace Pathfinding::Core
 {
-    using namespace Pathfinding::Constants;
-    using Pathfinding::Datastructures::Node;
-    struct Node;
-    enum class State{ READY, SEARCHING, DONE, NO_PATH};
+    enum class State
+    {
+        READY,
+        SEARCHING,
+        DONE,
+        NO_PATH
+    };
     class ApplicationState
     {
-        public:
-            ApplicationState();
-            bool showNodeInfo() const;
-            void enableNodeInfo();
-            void disableNodeInfo();
-            void setState(State state);
-            State currentState() const; 
-            GraphDimension & dimension();
-            const Node * nodeUnderCursor() const;
-            void setNodeUnderCursor(const Node * node);
-            void enableAutoStep();
-            void disableAutoStep();
-            bool autoStep();
-        private:
-            GraphDimension dim;
-            State currentState_;
-            bool showNodeInfo_;
-            bool stateChanged;
-            const Node * nodeUnderCursor_ = nullptr;
-            bool autoStep_;
+    private:
+        using PDNode = Pathfinding::Datastructures::Node;
+
+    public:
+        ApplicationState();
+        bool showNodeInfo() const;
+        void enableNodeInfo();
+        void disableNodeInfo();
+        void setState(State state);
+        State currentState() const;
+        GraphDimension &dimension();
+        const PDNode *nodeUnderCursor() const;
+        void setNodeUnderCursor(const PDNode *node);
+        void enableAutoStep();
+        void disableAutoStep();
+        bool autoStep();
+
+    private:
+        GraphDimension dim;
+        State currentState_;
+        bool showNodeInfo_;
+        bool stateChanged;
+        const PDNode *nodeUnderCursor_ = nullptr;
+        bool autoStep_;
     };
 }
 
