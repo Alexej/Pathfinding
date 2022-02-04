@@ -4,7 +4,7 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
-#include <stdint.h>
+#include <cstdint>
 #include <deque>
 
 #include "Renderer.hpp"

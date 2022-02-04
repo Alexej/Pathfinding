@@ -2,7 +2,8 @@
 #define A6575B6A_BD50_4D9E_97EF_154E649DEAFC
 
 #include <SFML/System/Vector2.hpp>
-#include <stdint.h>
+#include <cstdint>
+
 #include "Vector2.hpp"
 
 namespace Pathfinding::Datastructures

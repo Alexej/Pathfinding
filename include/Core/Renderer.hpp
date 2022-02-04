@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
+#include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Font.hpp>
 
@@ -34,11 +35,17 @@ namespace Pathfinding::Core
         void loadFont(std::string font);
         void drawNode(const PDNode &node, sf::Vector2f coords);
         void renderNodeInfo(const PDNode &node, sf::Vector2f coords);
+        void renderPathLineEndPoints(std::vector<PDNode *> path, sf::Vector2f pointPositionOffset);
+        void renderPathLines(std::vector<PDNode *> path, sf::Vector2f pointPositionOffset);
 
     private:
         sf::RectangleShape nodeRect;
         sf::Text text;
         sf::Font font;
+        sf::CircleShape nodePoint;
+        sf::RectangleShape diagonalLine;
+        sf::RectangleShape straightLine;
+
         sf::RenderWindow *windowPtr = nullptr;
         ApplicationState *appStatePtr = nullptr;
         GraphDimension *dimensionPtr = nullptr;

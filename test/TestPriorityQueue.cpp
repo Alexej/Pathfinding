@@ -19,9 +19,9 @@ TEST_CASE( "Adding elements to the queue should increase the size", "[size]" )
     Node * n2 = new Node();
     Node * n3 = new Node();
 
-    n1->location = Vector2i(1,2);
-    n2->location = Vector2i(3,5);
-    n3->location = Vector2i(7,9);
+    n1->location = Vec2i(1,2);
+    n2->location = Vec2i(3,5);
+    n3->location = Vec2i(7,9);
 
     PriorityQueue queue;
 
@@ -45,10 +45,10 @@ TEST_CASE( "topKey should return the smallest key", "[topKey]" )
     Node * n3 = new Node();
     Node * n4 = new Node();
 
-    n1->location = Vector2i(1,2);
-    n2->location = Vector2i(3,5);
-    n3->location = Vector2i(7,9);
-    n4->location = Vector2i(43,1);
+    n1->location = Vec2i(1,2);
+    n2->location = Vec2i(3,5);
+    n3->location = Vec2i(7,9);
+    n4->location = Vec2i(43,1);
 
     Key k1(23,42);
     Key k2(21,52);
@@ -77,10 +77,10 @@ TEST_CASE( "testing contains function", "[contains]" )
     Node * n3 = new Node();
     Node * n4 = new Node();
 
-    n1->location = Vector2i(1,2);
-    n2->location = Vector2i(3,5);
-    n3->location = Vector2i(7,9);
-    n4->location = Vector2i(43,1);
+    n1->location = Vec2i(1,2);
+    n2->location = Vec2i(3,5);
+    n3->location = Vec2i(7,9);
+    n4->location = Vec2i(43,1);
 
     Key k1(23,42);
     Key k2(21,52);
@@ -110,10 +110,10 @@ TEST_CASE( "pop should return the node with the smallest key and delete in from 
     Node * n3 = new Node();
     Node * n4 = new Node();
 
-    n1->location = Vector2i(1,2);
-    n2->location = Vector2i(3,5);
-    n3->location = Vector2i(7,9);
-    n4->location = Vector2i(43,1);
+    n1->location = Vec2i(1,2);
+    n2->location = Vec2i(3,5);
+    n3->location = Vec2i(7,9);
+    n4->location = Vec2i(43,1);
 
     Key k1(23,42);
     Key k2(21,52);
@@ -134,4 +134,13 @@ TEST_CASE( "pop should return the node with the smallest key and delete in from 
     delete n2;
     delete n3;
     delete n4;
+}
+
+
+TEST_CASE( "empty priority queue should return inf inf when topKey is called", "[pop]" ) 
+{
+    PriorityQueue queue;
+    auto topKey = queue.topKey();
+    auto inf = std::numeric_limits<double>::infinity();
+    REQUIRE(topKey == Key(inf,inf));
 }

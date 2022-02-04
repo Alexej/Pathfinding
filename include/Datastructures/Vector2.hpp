@@ -2,7 +2,8 @@
 #define C71A173D_A9A7_4ABC_B640_D4C5497B6103
 
 #include <compare>
-#include <stdint.h>
+#include <cstdint>
+
 
 namespace Pathfinding::Datastructures
 {

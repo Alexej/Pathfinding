@@ -9,6 +9,8 @@ namespace Pathfinding::Core
         showNodeInfo_ = false;
         stateChanged = false;
         autoStep_ = false;
+        path_ = true;
+        pathLines_ = true;
         currentState_ = State::READY;
     }
 
@@ -37,7 +39,7 @@ namespace Pathfinding::Core
         autoStep_ = false;
     }
 
-    bool ApplicationState::autoStep()
+    bool ApplicationState::autoStep() const
     {
         return autoStep_;
     }
@@ -66,4 +68,32 @@ namespace Pathfinding::Core
     {
         nodeUnderCursor_ = node;
     }
+
+    bool ApplicationState::showPathLines() const
+    {
+        return pathLines_;
+    }
+    bool ApplicationState::showPath() const
+    {
+        return path_;
+    }
+
+    void ApplicationState::enablePath()
+    {
+        path_ = true;
+    }
+    void ApplicationState::disablePath()
+    {
+        path_ = false;
+    }
+
+    void ApplicationState::enablePathLines()
+    {
+        pathLines_ = true;
+    }
+    void ApplicationState::disablePathLines()
+    {
+        pathLines_ = false;
+    }
+
 }

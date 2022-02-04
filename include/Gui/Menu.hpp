@@ -37,13 +37,16 @@ namespace Pathfinding::Gui
             void showSearchingElements();
             void printLargeText(std::string text, double factor);
             void showAutoStepFlag();
+            void showPathFlags();
         private:
             float offset; 
             float height; 
             float width;
-            PCApplicationState * appStatePtr;
             bool nodeInfo;
             bool autoStep;
+            bool showPathLines;
+            bool showPath;
+            PCApplicationState * appStatePtr;
         private:
             fPtrVI numberOfNodesChangedCallBack = nullptr;
             fPtrVV startCallBack = nullptr;

@@ -20,10 +20,10 @@ namespace Pathfinding::Core
 
     namespace
     {
-        sf::Vector2f getNodePosition(Vec2i location, int32_t sideLength)
+        sf::Vector2f getNodePosition(Node * node, int32_t sideLength)
         {
-            float nodesHorF = static_cast<float>(location.width);
-            float nodesVertF = static_cast<float>(location.height);
+            float nodesHorF = static_cast<float>(node->location.width);
+            float nodesVertF = static_cast<float>(node->location.height);
             float sideLengthF = static_cast<float>(sideLength);
             float positionHor = nodesHorF * sideLengthF;
             float positionVer = nodesVertF * sideLengthF;
@@ -130,12 +130,26 @@ namespace Pathfinding::Core
     void Renderer::init()
     {
         loadFont("NugoSansLight.ttf");
+
         text.setFont(font);
         text.setStyle(sf::Text::Bold);
+
         nodeRect.setOutlineThickness(NODE_OUTLINE_THICKNESS);
         nodeRect.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
+
         text.setCharacterSize(NODE_INFO_TEXT_SIZE);
         text.setFillColor(convertToSfmlColor(NODE_INFO_COLOR));
+
+        nodePoint.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
+        nodePoint.setOutlineThickness(NODE_OUTLINE_THICKNESS);
+
+        diagonalLine.setFillColor(convertToSfmlColor(PATH_NODE_COLOR));
+        diagonalLine.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
+        diagonalLine.setOutlineThickness(NODE_OUTLINE_THICKNESS);
+
+        straightLine.setFillColor(convertToSfmlColor(PATH_NODE_COLOR));
+        straightLine.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
+        straightLine.setOutlineThickness(NODE_OUTLINE_THICKNESS);
     }
 
     /**
@@ -161,7 +175,7 @@ namespace Pathfinding::Core
             for (std::size_t w = 0; w < graph.width(); ++w)
             {
                 auto currentNode = graph[h][w];
-                auto coords = getNodePosition(currentNode.location, dimensionPtr->currentNodeSideLength());
+                auto coords = getNodePosition(&currentNode, dimensionPtr->currentNodeSideLength());
                 drawNode(currentNode, coords);
                 if (appStatePtr->showNodeInfo())
                 {
@@ -208,15 +222,9 @@ namespace Pathfinding::Core
     {
         float straightLineLength = static_cast<float>(dimensionPtr->currentNodeSideLength());
         float halfNodeSize = straightLineLength / 2;
-        float halfNodeSizeSquared = static_cast<float>(pow(halfNodeSize, 2));
-        float diagonalLineLength = 2 * sqrt(halfNodeSizeSquared + halfNodeSizeSquared);
-        sf::Vector2f pointPositionOffset(halfNodeSize, halfNodeSize);
-
-        sf::CircleShape nodePoint;
-        sf::RectangleShape diagonalLine;
-        sf::RectangleShape straightLine;
 
         float nodePointRadius;
+
         if (dimensionPtr->canShowNodeInfo())
         {
             nodePointRadius = halfNodeSize / 5;
@@ -226,15 +234,13 @@ namespace Pathfinding::Core
             nodePointRadius = halfNodeSize / 2.5f;
         }
 
+        nodePoint.setRadius(nodePointRadius);
+        nodePoint.setOrigin(nodePointRadius, nodePointRadius);
+
+        float halfNodeSizeSquared = static_cast<float>(pow(straightLineLength / 2, 2));
+
         float lineThickness = nodePointRadius / 2;
-        diagonalLine.setFillColor(convertToSfmlColor(PATH_NODE_COLOR));
-        straightLine.setFillColor(convertToSfmlColor(PATH_NODE_COLOR));
-
-        diagonalLine.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
-        diagonalLine.setOutlineThickness(NODE_OUTLINE_THICKNESS);
-
-        straightLine.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
-        straightLine.setOutlineThickness(NODE_OUTLINE_THICKNESS);
+        float diagonalLineLength = 2 * sqrt(halfNodeSizeSquared + halfNodeSizeSquared);
 
         straightLine.setSize(sf::Vector2f(straightLineLength, lineThickness));
         diagonalLine.setSize(sf::Vector2f(diagonalLineLength, lineThickness));
@@ -242,38 +248,24 @@ namespace Pathfinding::Core
         straightLine.setOrigin(sf::Vector2f(0, lineThickness / 2));
         diagonalLine.setOrigin(sf::Vector2f(0, lineThickness / 2));
 
-        for (std::size_t i = 0; i < path.size(); ++i)
+        sf::Vector2f pointPositionOffset(halfNodeSize, halfNodeSize);
+
+        if(appStatePtr->showPathLines() && appStatePtr->showPath())
         {
-            Node *currentNode = path[i];
-            if (i + 1 < path.size())
-            {
-                Node *nextNode = path[i + 1];
-                float angle = static_cast<float>(getAngleBetweenTwoNodes(currentNode, nextNode));
-                sf::Vector2f centerOfCurrentNode = getNodePosition(currentNode->location, dimensionPtr->currentNodeSideLength());
-                centerOfCurrentNode += sf::Vector2f(halfNodeSize, halfNodeSize);
-                if (diagonal(angle))
-                {
-                    diagonalLine.setPosition(sf::Vector2f(centerOfCurrentNode));
-                    diagonalLine.setRotation(angle);
-                    windowPtr->draw(diagonalLine);
-                }
-                else
-                {
-                    straightLine.setPosition(sf::Vector2f(centerOfCurrentNode));
-                    straightLine.setRotation(angle);
-                    windowPtr->draw(straightLine);
-                }
-            }
+            renderPathLines(path, pointPositionOffset);
         }
+        if(appStatePtr->showPath())
+        {
+            renderPathLineEndPoints(path, pointPositionOffset);
+        }
+        
+    }
 
-        nodePoint.setRadius(nodePointRadius);
-        nodePoint.setOrigin(nodePointRadius, nodePointRadius);
-        nodePoint.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
-        nodePoint.setOutlineThickness(NODE_OUTLINE_THICKNESS);
-
+    void Renderer::renderPathLineEndPoints(std::vector<Node *> path, sf::Vector2f pointPositionOffset)
+    {
         for (auto &node : path)
         {
-            sf::Vector2f leftCornerOfNodePosition = getNodePosition(node->location, dimensionPtr->currentNodeSideLength());
+            sf::Vector2f leftCornerOfNodePosition = getNodePosition(node, dimensionPtr->currentNodeSideLength());
             sf::Vector2f nodePointPosition = leftCornerOfNodePosition + pointPositionOffset;
             nodePoint.setFillColor(convertToSfmlColor(PATH_NODE_COLOR));
             nodePoint.setPosition(nodePointPosition);
@@ -288,4 +280,31 @@ namespace Pathfinding::Core
             }
         }
     }
+
+    void Renderer::renderPathLines(std::vector<Node *> path, sf::Vector2f pointPositionOffset)
+    {
+        for (auto currentNodeItr = path.begin(); currentNodeItr != path.end(); ++currentNodeItr)
+        {
+            if (auto nextNode = std::next(currentNodeItr,1); nextNode != path.end())
+            {
+                sf::Vector2f centerOfCurrentNode = getNodePosition(*currentNodeItr, dimensionPtr->currentNodeSideLength()) + pointPositionOffset;
+                float angle = static_cast<float>(getAngleBetweenTwoNodes(*currentNodeItr, *nextNode));
+                if (diagonal(angle))
+                {
+                    diagonalLine.setPosition(sf::Vector2f(centerOfCurrentNode));
+                    diagonalLine.setRotation(angle);
+                    windowPtr->draw(diagonalLine);
+                }
+                else
+                {
+                    straightLine.setPosition(sf::Vector2f(centerOfCurrentNode));
+                    straightLine.setRotation(angle);
+                    windowPtr->draw(straightLine);
+                }
+            }
+        }
+    }
 }
+
+
+

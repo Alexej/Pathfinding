@@ -1,7 +1,7 @@
 #ifndef EA7DED5B_A2DD_40EB_9E16_BAB60E8C98E4
 #define EA7DED5B_A2DD_40EB_9E16_BAB60E8C98E4
 
-#include <stdint.h>
+#include <cstdint>
 #include "Vector2.hpp"
 #include "Key.hpp"
 

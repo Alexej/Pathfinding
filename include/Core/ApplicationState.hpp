@@ -35,8 +35,13 @@ namespace Pathfinding::Core
         void setNodeUnderCursor(const PDNode *node);
         void enableAutoStep();
         void disableAutoStep();
-        bool autoStep();
-
+        bool autoStep() const;
+        bool showPathLines() const;
+        bool showPath() const;
+        void enablePath();
+        void disablePath();
+        void enablePathLines();
+        void disablePathLines();
     private:
         GraphDimension dim;
         State currentState_;
@@ -44,6 +49,8 @@ namespace Pathfinding::Core
         bool stateChanged;
         const PDNode *nodeUnderCursor_ = nullptr;
         bool autoStep_;
+        bool path_;
+        bool pathLines_;
     };
 }
 

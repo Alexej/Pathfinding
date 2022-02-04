@@ -103,13 +103,13 @@ namespace Pathfinding::Gui
         ImGui::Separator();
         ImGui::Spacing();
         showCommonElements();
+        ImGui::Separator();
         ImGui::End();
     }
 
     void Menu::showSearchingElements()
     {
         ImGui::Spacing();
-        showAutoStepFlag();
         if (ImGui::Button("STEP", ImVec2(width - 20, 20)))
         {
             stepCallBack();
@@ -150,26 +150,31 @@ namespace Pathfinding::Gui
 
     void Menu::showCommonElements()
     {
+        showAutoStepFlag();
+        ImGui::Spacing();
+        showPathFlags();
+        ImGui::Spacing();
         if (dimensionPtr->canShowNodeInfo())
         {
             showNodeInfoFlag();
         }
         ImGui::Spacing();
+        if (appStatePtr->nodeUnderCursor() != nullptr)
+        {
+            ImGui::Separator();
+            showNodeInfoInMenu();
+            ImGui::Separator();
+        }
+        printLargeText(std::format("State: {}", mapStateToText(appStatePtr->currentState())), 2);
+        ImGui::Spacing();
         if (ImGui::Button("RESET", ImVec2(width - 20, 20)))
         {
             resetCallback();
         }
-        ImGui::Spacing();
-        if (appStatePtr->nodeUnderCursor() != nullptr)
-        {
-            showNodeInfoInMenu();
-        }
-        printLargeText(std::format("State: {}", mapStateToText(appStatePtr->currentState())), 2);
     }
 
     void Menu::showNodeInfoInMenu()
     {
-        ImGui::Separator();
         ImGui::Text(std::format("Height: {} Width: {}", appStatePtr->nodeUnderCursor()->location.height,
                                 appStatePtr->nodeUnderCursor()->location.width)
                         .c_str());
@@ -178,14 +183,12 @@ namespace Pathfinding::Gui
         ImGui::Text(std::format("K1: {}", appStatePtr->nodeUnderCursor()->key.k1).c_str());
         ImGui::Text(std::format("K2: {}", appStatePtr->nodeUnderCursor()->key.k2).c_str());
         ImGui::Text(std::format("State: {}", mapNodeStateToText(appStatePtr->nodeUnderCursor()->state)).c_str());
-        ImGui::Separator();
     }
 
     void Menu::showReadyStateElements()
     {
         static int32_t itemCurrent = dimensionPtr->currentNumberOfNodesIndex();
         ImGui::Spacing();
-        showAutoStepFlag();
         ImGui::Text("Number of nodes");
         if (ImGui::Combo("", &itemCurrent, NUMBER_OF_NODES_CHAR, IM_ARRAYSIZE(NUMBER_OF_NODES_CHAR)))
         {
@@ -247,5 +250,37 @@ namespace Pathfinding::Gui
     void Menu::addRandomGraphCallBack(fPtrVV callBack)
     {
         randomGraphCallBack = callBack;
+    }
+
+    void Menu::showPathFlags()
+    {
+        showPath = appStatePtr->showPath();
+        if (ImGui::Checkbox("Render path", &showPath))
+        {
+            if (showPath)
+            {
+                appStatePtr->enablePath();
+            }
+            else
+            {
+                appStatePtr->disablePath();
+            }
+        }
+
+        showPathLines = appStatePtr->showPathLines();
+        if (showPath)
+        {
+            if (ImGui::Checkbox("Render path lines", &showPathLines))
+            {
+                if (showPathLines)
+                {
+                    appStatePtr->enablePathLines();
+                }
+                else
+                {
+                    appStatePtr->disablePathLines();
+                }
+            }
+        }
     }
 }
