@@ -21,13 +21,27 @@ namespace Pathfinding::Datastructures
         T height = 0;
         T width = 0;
         auto operator<=>(const Vec2<T> &) const = default;
+
+        Vec2& operator+=(const Vec2& rhs)
+        {
+            this->height += rhs.height;
+            this->width += rhs.width;
+            return *this;
+        }
     };
 
     template<typename T>
-    Vec2<T> operator-(const Vec2<T> lhs, const Vec2<T> rhs)
+    Vec2<T> operator-(const Vec2<T> & lhs, const Vec2<T> & rhs)
     {
         return {lhs.height - rhs.height, lhs.width - rhs.width};
     }
+
+    template<typename T>
+    Vec2<T> operator+(Vec2<T> lhs, const Vec2<T> rhs)
+    {
+        return lhs += rhs;
+    }
+    
     using Vec2i = Vec2<int32_t>;
 }
 

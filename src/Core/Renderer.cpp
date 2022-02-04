@@ -78,25 +78,44 @@ namespace Pathfinding::Core
         {
             double angle;
             Vec2i diff = n2->location - n1->location;
-            if (diff == Vec2i(-1, 1)){  angle = 45; }
-            else if (diff == Vec2i(-1, 0)){ angle = 90; }
-            else if (diff == Vec2i(-1, -1)){angle = 135; }
-            else if (diff == Vec2i(0, -1)){ angle = 180; }
-            else if (diff == Vec2i(1, 0)){ angle = 270; }
-            else if (diff == Vec2i(1, -1)){ angle = 225; }
-            else if (diff == Vec2i(1, 1)){ angle = 315; }
-            else if (diff == Vec2i(0, 1)){ angle = 0; }
+            if (diff == Vec2i(1, 1))
+            {
+                angle = 45;
+            }
+            else if (diff == Vec2i(1, 0))
+            {
+                angle = 90;
+            }
+            else if (diff == Vec2i(1, -1))
+            {
+                angle = 135;
+            }
+            else if (diff == Vec2i(0, -1))
+            {
+                angle = 180;
+            }
+            else if (diff == Vec2i(-1, -1))
+            {
+                angle = 225;
+            }
+            else if (diff == Vec2i(-1, 0))
+            {
+                angle = 270;
+            }
+            else if (diff == Vec2i(-1, 1))
+            {
+                angle = 315;
+            }
+            else if (diff == Vec2i(0, 1))
+            {
+                angle = 0;
+            }
             return angle;
         }
 
         bool diagonal(double angle)
         {
             return angle == 45 || angle == 135 || angle == 225 || angle == 315;
-        }
-
-        bool startsOrendsInThisNode(const Node * node, const sf::RectangleShape & shape)
-        {
-            
         }
     }
 
@@ -226,37 +245,42 @@ namespace Pathfinding::Core
             if (i + 1 < path.size())
             {
                 Node *nextNode = path[i + 1];
-                double angle = getAngleBetweenTwoNodes(currentNode, nextNode);
+                float angle = static_cast<float>(getAngleBetweenTwoNodes(currentNode, nextNode));
                 sf::Vector2f centerOfCurrentNode = getNodePosition(currentNode->location, dimensionPtr->currentNodeSideLength());
-                centerOfCurrentNode += sf::Vector2f(halfNodeSize,halfNodeSize);
-                if(diagonal(angle))
+                centerOfCurrentNode += sf::Vector2f(halfNodeSize, halfNodeSize);
+                if (diagonal(angle))
                 {
                     diagonalLine.setPosition(sf::Vector2f(centerOfCurrentNode));
-                    diagonalLine.setRotation(-angle);
+                    diagonalLine.setRotation(angle);
                     windowPtr->draw(diagonalLine);
                 }
                 else
                 {
                     straightLine.setPosition(sf::Vector2f(centerOfCurrentNode));
-                    straightLine.setRotation(-angle);
+                    straightLine.setRotation(angle);
                     windowPtr->draw(straightLine);
                 }
             }
         }
 
         nodePoint.setRadius(nodePointRadius);
-        nodePoint.setFillColor(convertToSfmlColor(PATH_NODE_COLOR));
         nodePoint.setOrigin(nodePointRadius, nodePointRadius);
         nodePoint.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
         nodePoint.setOutlineThickness(NODE_OUTLINE_THICKNESS);
 
         for (auto &node : path)
         {
+            sf::Vector2f leftCornerOfNodePosition = getNodePosition(node->location, dimensionPtr->currentNodeSideLength());
+            sf::Vector2f nodePointPosition = leftCornerOfNodePosition + pointPositionOffset;
+            nodePoint.setFillColor(convertToSfmlColor(PATH_NODE_COLOR));
+            nodePoint.setPosition(nodePointPosition);
             if (node->state != NodeState::Blocked)
             {
-                sf::Vector2f leftCornerOfNodePosition = getNodePosition(node->location, dimensionPtr->currentNodeSideLength());
-                sf::Vector2f nodePointPosition = leftCornerOfNodePosition + pointPositionOffset;
-                nodePoint.setPosition(nodePointPosition);
+                windowPtr->draw(nodePoint);
+            }
+            else
+            {
+                nodePoint.setFillColor(sf::Color::Red);
                 windowPtr->draw(nodePoint);
             }
         }
