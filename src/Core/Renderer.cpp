@@ -9,6 +9,7 @@
 #include "LatticeGraph.hpp"
 #include "Constants.hpp"
 #include "GraphDimension.hpp"
+#include "ResourcePaths.hpp"
 
 namespace Pathfinding::Core
 {
@@ -17,6 +18,8 @@ namespace Pathfinding::Core
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
+    using Pathfinding::Helpers::pathToFont;
+
 
     namespace
     {
@@ -160,7 +163,8 @@ namespace Pathfinding::Core
      */
     void Renderer::loadFont(std::string fontName)
     {
-        if (!font.loadFromFile(fontPath + fontName))
+
+        if (!font.loadFromFile(pathToFont() + fontName))
         {
             throw std::exception("Couldn't find font");
         }

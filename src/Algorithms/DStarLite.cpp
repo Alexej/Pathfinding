@@ -197,6 +197,10 @@ namespace Pathfinding::Algorithms
     void DStarLite::insertIntoQueueAndUpdateState(Node *node)
     {
         U.insert(node, calculateKey(node));
+        if(!node->visitedOnce)
+        {
+            node->visitedOnce = true;
+        }
         changeState(node, NodeState::Frontier);
     }
 

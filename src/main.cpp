@@ -1,10 +1,13 @@
 #include "Application.hpp"
-
-using Pathfinding::Core::Application;
+#include <iostream>
+#include <filesystem>
+#include "ResourcePaths.hpp"
 
 int main()
 {
+    using Pathfinding::Core::Application;
     Application app;
     app.run();
+ 
     return 0;
 }

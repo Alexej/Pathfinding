@@ -24,6 +24,7 @@ namespace Pathfinding::Datastructures
         double rhs = std::numeric_limits<double>::infinity();
         double g = std::numeric_limits<double>::infinity();
         Key key;
+        bool visitedOnce = false;
     };
 
     bool operator==(const Node &lhs, const Node &rhs);

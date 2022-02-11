@@ -7,6 +7,9 @@
 
 namespace Pathfinding::Constants
 {
+
+    // System
+    constexpr auto ROOT_DIR_NAME = "Pathfinding";
     // Strings
     constexpr auto APPLICATION_TITLE = "Pathfinding";
 

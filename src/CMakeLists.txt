@@ -10,6 +10,7 @@ set(SOURCES_PATHFINDING
   Core/ApplicationState.cpp
   Core/Renderer.cpp
   Algorithms/DiagonalHeuristic.cpp
+  Helpers/ResourcePaths.cpp
   Helpers/SFMLHelpers.cpp
   Core/GraphDimension.cpp
   Gui/Menu.cpp

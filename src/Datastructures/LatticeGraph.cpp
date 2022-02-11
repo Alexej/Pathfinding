@@ -81,7 +81,7 @@ namespace Pathfinding::Datastructures
         if (node(location)->state == NodeState::Free)
         {
             goalNodePtr->state = NodeState::Free;
-            goalNodePtr = &graph[location.height][location.width];
+            goalNodePtr = node(location);
             goalNodePtr->state = NodeState::Goal;
         }
     }
@@ -91,7 +91,7 @@ namespace Pathfinding::Datastructures
         if (node(location)->state != NodeState::Goal && node(location)->state != NodeState::Blocked)
         {
             startNodePtr->state = NodeState::Free;
-            startNodePtr = &graph[location.height][location.width];
+            startNodePtr = node(location);
             startNodePtr->state = NodeState::Start;
         }
     }
@@ -108,7 +108,14 @@ namespace Pathfinding::Datastructures
     {
         if (node(location)->state == NodeState::Blocked)
         {
-            node(location)->state = NodeState::Free;
+            if(node(location)->visitedOnce)
+            {
+                node(location)->state = NodeState::Visited;
+            }
+            else
+            {
+                node(location)->state = NodeState::Free;
+            }
         }
     }
 
@@ -118,12 +125,9 @@ namespace Pathfinding::Datastructures
         {
             for (int32_t w = 0; w < graph.width(); ++w)
             {
-                if (graph[h][w].state == NodeState::Free)
+                if (graph[h][w].state == NodeState::Free && rand() % 3 == 0)
                 {
-                    if (rand() % 3 == 0)
-                    {
-                        graph[h][w].state = NodeState::Blocked;
-                    }
+                    graph[h][w].state = NodeState::Blocked;
                 }
             }
         }

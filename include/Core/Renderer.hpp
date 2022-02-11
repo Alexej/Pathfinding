@@ -7,6 +7,7 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Font.hpp>
 
+
 namespace Pathfinding::Datastructures
 {
     class LatticeGraph;
@@ -45,15 +46,9 @@ namespace Pathfinding::Core
         sf::CircleShape nodePoint;
         sf::RectangleShape diagonalLine;
         sf::RectangleShape straightLine;
-
         sf::RenderWindow *windowPtr = nullptr;
         ApplicationState *appStatePtr = nullptr;
         GraphDimension *dimensionPtr = nullptr;
-
-        /**
-         * ! absolute path bad, fix later.
-         */
-        std::string fontPath = "C:\\Users\\alexe\\Desktop\\project\\Pathfinding\\dependencies\\fonts\\";
     };
 }
 
