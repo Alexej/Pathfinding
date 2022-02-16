@@ -6,6 +6,7 @@
 #include "Vector2.hpp"
 #include "DiagonalHeuristic.hpp"
 #include "ApplicationState.hpp"
+#include "DStarLiteHelpers.hpp"
 
 namespace Pathfinding::Algorithms
 {
@@ -15,34 +16,16 @@ namespace Pathfinding::Algorithms
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
+    using Pathfinding::Helpers::DStarLiteHelpers;
+    using Pathfinding::Datastructures::neighbors;
 
     namespace
     {
-        double infinity()
-        {
-            return std::numeric_limits<double>::infinity();
-        }
-
         double cost(const Node *from, const Node *to)
         {
             int32_t dx = abs(from->location.width - to->location.width);
             int32_t dy = abs(from->location.height - to->location.height);
             return dx - dy == 0 ? static_cast<int>(10 * sqrt(2)) : 10;
-        }
-
-        bool locallyConsistent(Node *node)
-        {
-            return node->g == node->rhs;
-        }
-
-        bool locallyOverconsistent(Node *node)
-        {
-            return node->g > node->rhs;
-        }
-
-        bool blocked(Node *node)
-        {
-            return node->state == NodeState::Blocked;
         }
     }
 
@@ -60,14 +43,14 @@ namespace Pathfinding::Algorithms
         sStart = graphPtr->startNode();
         sLast = sStart;
         graphPtr->goalNode()->rhs = 0;
-        U.insert(graphPtr->goalNode(), calculateKey(graphPtr->goalNode()));
+        insertIntoQueueAndUpdateState(graphPtr->goalNode());
     }
 
     void DStarLite::UpdateVertex(Node *u)
     {
         if (u != graphPtr->goalNode())
         {
-            auto succs = neighbors(u);
+            auto succs = neighbors(*graphPtr, u);
             if (!succs.empty())
             {
                 u->rhs = getMinCG(u, succs).first;
@@ -77,7 +60,7 @@ namespace Pathfinding::Algorithms
         {
             removeFromQUeueAndUpdateState(u);
         }
-        if (!locallyConsistent(u))
+        if (!DStarLiteHelpers::locallyConsistent(u))
         {
             insertIntoQueueAndUpdateState(u);
         }
@@ -86,7 +69,7 @@ namespace Pathfinding::Algorithms
     void DStarLite::initialRun()
     {
         computeShortestPath();
-        if (sStart->g == infinity())
+        if (sStart->g == DStarLiteHelpers::infinity())
         {
             noPathCallBack_();
             return;
@@ -96,7 +79,7 @@ namespace Pathfinding::Algorithms
 
     void DStarLite::computeShortestPath()
     {
-        while (U.topKey() < calculateKey(sStart) || !locallyConsistent(sStart))
+        while (U.topKey() < calculateKey(sStart) || !DStarLiteHelpers::locallyConsistent(sStart))
         {
             Key kOld = U.topKey();
             Node *u = popFromQueueAndUpdateState();
@@ -104,14 +87,14 @@ namespace Pathfinding::Algorithms
             {
                 insertIntoQueueAndUpdateState(u);
             }
-            else if (locallyOverconsistent(u))
+            else if (DStarLiteHelpers::locallyOverconsistent(u))
             {
                 u->g = u->rhs;
                 updateNeighbors(u);
             }
             else
             {
-                u->g = infinity();
+                u->g = DStarLiteHelpers::infinity();
                 updateNeighbors(u);
                 UpdateVertex(u);
             }
@@ -140,37 +123,6 @@ namespace Pathfinding::Algorithms
         return {(cost(u, *itr) + (*itr)->g), *itr};
     }
 
-    /**
-     * @brief returns successors/predecessors of a node.
-     *
-     * @param node
-     * @return std::vector<Node *>
-     */
-    std::vector<Node *> DStarLite::neighbors(Node *node)
-    {
-        std::vector<Node *> nbors;
-        int32_t hFrom = node->location.height - 1;
-        int32_t hTo = node->location.height + 1;
-        int32_t wFrom = node->location.width - 1;
-        int32_t wTo = node->location.width + 1;
-
-        for (int32_t h = hFrom; h <= hTo; ++h)
-        {
-            for (int32_t w = wFrom; w <= wTo; ++w)
-            {
-                Vec2i location(h, w);
-                if (graphPtr->inBounds(location))
-                {
-                    if (node->location != location && !blocked(graphPtr->node(location)))
-                    {
-                        nbors.push_back(graphPtr->node(location));
-                    }
-                }
-            }
-        }
-        return nbors;
-    }
-
     void DStarLite::reset()
     {
         sStart = nullptr;
@@ -184,35 +136,42 @@ namespace Pathfinding::Algorithms
     Node *DStarLite::popFromQueueAndUpdateState()
     {
         Node *u = U.popD();
-        changeState(u, NodeState::Visited);
+        changeNodeState(u, NodeState::Visited);
         return u;
     }
 
     void DStarLite::removeFromQUeueAndUpdateState(Node *node)
     {
         U.remove(node);
-        changeState(node, NodeState::Visited);
+        changeNodeState(node, NodeState::Visited);
+    }
+
+
+    void DStarLite::insertIntoQueueAndUpdateKey(Node * node)
+    {
+        calculateKey(node);
+        U.insert(node);
     }
 
     void DStarLite::insertIntoQueueAndUpdateState(Node *node)
     {
-        U.insert(node, calculateKey(node));
+        insertIntoQueueAndUpdateKey(node);
         if(!node->visitedOnce)
         {
             node->visitedOnce = true;
         }
-        changeState(node, NodeState::Frontier);
+        changeNodeState(node, NodeState::Frontier);
     }
 
     void DStarLite::updateNeighbors(Node *node)
     {
-        for (auto &pred : neighbors(node))
+        for (auto &pred : neighbors(*graphPtr, node))
         {
             UpdateVertex(pred);
         }
     }
 
-    void DStarLite::changeState(Node *node, NodeState newState)
+    void DStarLite::changeNodeState(Node *node, NodeState newState)
     {
         if (*node != *graphPtr->goalNode() && *node != *graphPtr->startNode())
         {
@@ -233,7 +192,7 @@ namespace Pathfinding::Algorithms
         currentPath.push_back(currentNode);
         while (*currentNode != *graphPtr->goalNode())
         {
-            auto succs = neighbors(currentNode);
+            auto succs = neighbors(*graphPtr, currentNode);
             if (succs.empty())
             {
                 noPathCallBack_();
@@ -253,10 +212,10 @@ namespace Pathfinding::Algorithms
             for (auto &node : nodesChanged)
             {
                 /**
-                 * @brief Ignoring blocked nodes since they can't be tranversed,
+                 * @brief Ignoring blocked nodes since they can't be traversed,
                  * remove them from priority queue if present.
                  */
-                if (blocked(node))
+                if (DStarLiteHelpers::blocked(node))
                 {
                     if (U.contains(node))
                     {
@@ -272,7 +231,7 @@ namespace Pathfinding::Algorithms
             computeShortestPath();
         }
 
-        if (sStart->g == infinity())
+        if (sStart->g == DStarLiteHelpers::infinity())
         {
             noPathCallBack_();
             return;
@@ -291,7 +250,7 @@ namespace Pathfinding::Algorithms
     void DStarLite::moveStartToNextInPath()
     {
         Node *prevStart = sStart;
-        auto succs = neighbors(sStart);
+        auto succs = neighbors(*graphPtr, sStart);
         if (succs.empty())
         {
             return;
@@ -303,7 +262,7 @@ namespace Pathfinding::Algorithms
 
     void DStarLite::addChangedNode(Node *node)
     {
-        for (auto &succ : neighbors(node))
+        for (auto &succ : neighbors(*graphPtr, node))
         {
             nodesChanged.insert(succ);
         }

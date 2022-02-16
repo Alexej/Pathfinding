@@ -1,7 +1,10 @@
 #include "LatticeGraph.hpp"
+#include "DStarLiteHelpers.hpp"
 
 namespace Pathfinding::Datastructures
 {
+    using Pathfinding::Helpers::DStarLiteHelpers;
+
     namespace
     {
         void initNode(Node &node, int32_t h, int32_t w)
@@ -131,5 +134,27 @@ namespace Pathfinding::Datastructures
                 }
             }
         }
+    }
+
+    std::vector<Node*> neighbors(LatticeGraph & graph, Node * node)
+    {
+        std::vector<Node *> nbors;
+        int32_t hFrom = node->location.height - 1;
+        int32_t hTo = node->location.height + 1;
+        int32_t wFrom = node->location.width - 1;
+        int32_t wTo = node->location.width + 1;
+
+        for (int32_t h = hFrom; h <= hTo; ++h)
+        {
+            for (int32_t w = wFrom; w <= wTo; ++w)
+            {
+                Vec2i location(h, w);
+                if (graph.inBounds(location) && node->location != location && !DStarLiteHelpers::blocked(graph.node(location)))
+                {
+                    nbors.push_back(graph.node(location));
+                }
+            }
+        }
+        return nbors;
     }
 }

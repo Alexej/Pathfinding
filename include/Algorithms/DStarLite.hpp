@@ -49,16 +49,15 @@ namespace Pathfinding::Algorithms
         void computeShortestPath();
         void UpdateVertex(PDNode *node);
         PDKey calculateKey(PDNode *node);
-        std::vector<PDNode *> neighbors(PDNode *node);
         std::pair<double, PDNode *> getMinCG(PDNode *u, std::vector<PDNode *> succs);
         PDNode *popFromQueueAndUpdateState();
         void insertIntoQueueAndUpdateState(PDNode *node);
         void removeFromQUeueAndUpdateState(PDNode *node);
         void updateNeighbors(PDNode *node);
-        void changeState(PDNode *node, PDNodeState state);
+        void changeNodeState(PDNode *node, PDNodeState state);
         void moveStartToNextInPath();
         bool computeShortestPathExitCondition();
-
+        void insertIntoQueueAndUpdateKey(PDNode * node);
     private:
         PDLatticeGraph *graphPtr = nullptr;
         PDNode *sStart = nullptr;

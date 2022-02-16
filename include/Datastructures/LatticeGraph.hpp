@@ -2,9 +2,7 @@
 #define FD0247C3_67EB_48FC_909F_6614B9CC4CBC
 
 #include "Node.hpp"
-
 #include <vector>
-#include <unordered_map>
 
 namespace Pathfinding::Datastructures
 {
@@ -57,6 +55,7 @@ namespace Pathfinding::Datastructures
     };
 
     void initRandomGraph(LatticeGraph &graph);
+    std::vector<Node*> neighbors(LatticeGraph & graph, Node * node);
 
 }
 

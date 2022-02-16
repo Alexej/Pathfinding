@@ -5,23 +5,22 @@
 #include <vector>
 #include <list>
 #include <functional>
-#include <utility>
 #include "Node.hpp"
 #include "Key.hpp"
 
-/**
- * @brief
- * PA* always expands the vertex in the priority queue with the smallest key.
- * The keys of the vertices expanded by LPA* are
- * nondecreasing over time just like the f-values of the vertices
- * expanded by A* (since the heuristics are consistent).
- */
+
 namespace Pathfinding::Datastructures
 {
+    class NodeComperator
+    {
+    public:
+        bool operator() (const Node * lhs, const Node * rhs)
+        {
+            return lhs->key > rhs->key;
+        }
+    };
 
-    class PriorityQueue final : public std::priority_queue<std::pair<Key, Node *>,
-                                                           std::vector<std::pair<Key, Node *>>,
-                                                           std::greater<std::pair<Key, Node *>>>
+    class PriorityQueue final : public std::priority_queue<Node *, std::vector<Node *>, NodeComperator>
     {
     public:
         auto begin() { return this->c.begin(); }
@@ -31,15 +30,20 @@ namespace Pathfinding::Datastructures
 
         void remove(Node *node)
         {
-            auto it = std::find_if(this->c.begin(), this->c.end(), [&node](const std::pair<Key, Node *> &element)
-                                   { return element.second == node; });
+            auto it = std::find_if(this->c.begin(), this->c.end(), 
+            
+                [&node](const Node * element)
+                { 
+                    return *element == *node; 
+                });
+
             this->c.erase(it);
             std::make_heap(this->c.begin(), this->c.end(), this->comp);
         }
 
-        void insert(Node *node, Key key)
+        void insert(Node *node)
         {
-            this->push(std::make_pair(key, node));
+            this->push(node);
         }
 
         void reset()
@@ -54,26 +58,27 @@ namespace Pathfinding::Datastructures
             {
                 return Key();
             }
-            return this->top().first;
+            return this->top()->key;
         }
 
         Node *popD()
         {
             auto topNode = this->top();
             pop();
-            return topNode.second;
+            return topNode;
         }
 
         bool contains(const Node *node)
         {
-            return std::find_if(this->c.begin(), this->c.end(), [&node](const std::pair<Key, Node *> &input)
-                                { return *input.second == *node; }) != this->c.end();
+            return std::find_if(this->c.begin(), this->c.end(), 
+            [&node](const Node* input)
+            { 
+                return *input == *node; 
+            }) != this->c.end();
         }
 
     private:
-        using std::priority_queue<std::pair<Key, Node *>,
-                                  std::vector<std::pair<Key, Node *>>,
-                                  std::greater<std::pair<Key, Node *>>>::pop;
+        using std::priority_queue<Node *, std::vector<Node *>, NodeComperator>::pop;
     };
 }
 
