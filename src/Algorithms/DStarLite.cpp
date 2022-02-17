@@ -13,17 +13,17 @@ namespace Pathfinding::Algorithms
     using Pathfinding::Abstract::AHeuristic;
     using Pathfinding::Datastructures::Key;
     using Pathfinding::Datastructures::LatticeGraph;
+    using Pathfinding::Datastructures::neighbors;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
     using Pathfinding::Helpers::DStarLiteHelpers;
-    using Pathfinding::Datastructures::neighbors;
 
     namespace
     {
         double cost(const Node *from, const Node *to)
         {
-            if(DStarLiteHelpers::blocked(to) || DStarLiteHelpers::blocked(from))
+            if (DStarLiteHelpers::blocked(to) || DStarLiteHelpers::blocked(from))
             {
                 return DStarLiteHelpers::infinity();
             }
@@ -55,8 +55,7 @@ namespace Pathfinding::Algorithms
     {
         if (u != graphPtr->goalNode())
         {
-            auto succs = neighbors(*graphPtr, u);
-            u->rhs = getMinCG(u, succs).first;
+            u->rhs = getMinCG(u).first;
         }
         if (U.contains(u))
         {
@@ -112,18 +111,13 @@ namespace Pathfinding::Algorithms
         return {k1New, k2New};
     }
 
-    /**
-     * @brief returns minimum cost(s,s') + g(s') and its node of all successors of u
-     *
-     * @param u
-     * @return std::pair<int32_t, Node *>
-     */
-    std::pair<double, Node *> DStarLite::getMinCG(Node *u, std::vector<Node *> succs)
+    std::pair<double, Node *> DStarLite::getMinCG(Node *u)
     {
-        auto itr = std::min_element(succs.begin(), succs.end(), 
+        auto succs = neighbors(*graphPtr, u);
+        auto itr = std::min_element(succs.begin(), succs.end(),
             [&u](const Node *lhs, const Node *rhs)
-            { 
-                return (cost(u, lhs) + lhs->g) < (cost(u, rhs) + rhs->g); 
+            {
+                return (cost(u, lhs) + lhs->g) < (cost(u, rhs) + rhs->g);
             });
         return {(cost(u, *itr) + (*itr)->g), *itr};
     }
@@ -141,7 +135,10 @@ namespace Pathfinding::Algorithms
     Node *DStarLite::popFromQueueAndUpdateState()
     {
         Node *u = U.popD();
-        if(DStarLiteHelpers::blocked(u)) { return u; }
+        if (DStarLiteHelpers::blocked(u))
+        {
+            return u;
+        }
         changeNodeState(u, NodeState::Visited);
         return u;
     }
@@ -149,12 +146,14 @@ namespace Pathfinding::Algorithms
     void DStarLite::removeFromQUeueAndUpdateState(Node *node)
     {
         U.remove(node);
-        if(DStarLiteHelpers::blocked(node)) { return; }
+        if (DStarLiteHelpers::blocked(node))
+        {
+            return;
+        }
         changeNodeState(node, NodeState::Visited);
     }
 
-
-    void DStarLite::insertIntoQueueAndUpdateKey(Node * node)
+    void DStarLite::insertIntoQueueAndUpdateKey(Node *node)
     {
         calculateKey(node);
         U.insert(node);
@@ -163,11 +162,14 @@ namespace Pathfinding::Algorithms
     void DStarLite::insertIntoQueueAndUpdateState(Node *node)
     {
         insertIntoQueueAndUpdateKey(node);
-        if(!node->visitedOnce)
+        if (!node->visitedOnce)
         {
             node->visitedOnce = true;
         }
-        if(DStarLiteHelpers::blocked(node)) { return; }
+        if (DStarLiteHelpers::blocked(node))
+        {
+            return;
+        }
         changeNodeState(node, NodeState::Frontier);
     }
 
@@ -187,12 +189,6 @@ namespace Pathfinding::Algorithms
         }
     }
 
-    /**
-     * @brief
-     * "After computeShortestPath() returns, one can then follow a shortest path from sStart
-     * to sGoal by always moving from the current vertex s, starting at Sstart, to any successor s'
-     * that minimizes c(s,s') + g(s') until sGoal is reached(ties can be broken arbitrarily).""
-     */
     void DStarLite::computePath()
     {
         currentPath.clear();
@@ -200,13 +196,7 @@ namespace Pathfinding::Algorithms
         currentPath.push_back(currentNode);
         while (*currentNode != *graphPtr->goalNode())
         {
-            auto succs = neighbors(*graphPtr, currentNode);
-            if (succs.empty())
-            {
-                noPathCallBack_();
-                return;
-            }
-            currentNode = getMinCG(currentNode, succs).second;
+            currentNode = getMinCG(currentNode).second;
             currentPath.push_back(currentNode);
         }
     }
@@ -244,8 +234,7 @@ namespace Pathfinding::Algorithms
     void DStarLite::moveStartToNextInPath()
     {
         Node *prevStart = sStart;
-        auto succs = neighbors(*graphPtr, sStart);
-        sStart = getMinCG(sStart, succs).second;
+        sStart = getMinCG(sStart).second;
         graphPtr->setStart(sStart->location);
         prevStart->state = NodeState::Visited;
     }

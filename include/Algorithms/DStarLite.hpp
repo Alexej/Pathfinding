@@ -49,7 +49,7 @@ namespace Pathfinding::Algorithms
         void computeShortestPath();
         void UpdateVertex(PDNode *node);
         PDKey calculateKey(PDNode *node);
-        std::pair<double, PDNode *> getMinCG(PDNode *u, std::vector<PDNode *> succs);
+        std::pair<double, PDNode *> getMinCG(PDNode *u);
         PDNode *popFromQueueAndUpdateState();
         void insertIntoQueueAndUpdateState(PDNode *node);
         void removeFromQUeueAndUpdateState(PDNode *node);
