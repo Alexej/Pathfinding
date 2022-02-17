@@ -120,28 +120,12 @@ namespace Pathfinding::Algorithms
      */
     std::pair<double, Node *> DStarLite::getMinCG(Node *u, std::vector<Node *> succs)
     {
-        /*
         auto itr = std::min_element(succs.begin(), succs.end(), 
             [&u](const Node *lhs, const Node *rhs)
             { 
                 return (cost(u, lhs) + lhs->g) < (cost(u, rhs) + rhs->g); 
             });
         return {(cost(u, *itr) + (*itr)->g), *itr};
-        */
-
-        double minRhs = cost(succs[0], u) + succs[0]->g;
-        Node * relatedNode = succs[0];
-        for(int i = 1 ; i < succs.size(); ++i)
-        {
-            double currentMinRhs = cost(succs[i], u) + succs[i]->g;
-            Node * currentrelatedNode = succs[i];
-            if(currentMinRhs < minRhs)
-            {
-                minRhs = currentMinRhs;
-                relatedNode = currentrelatedNode;
-            }
-        }
-        return {minRhs, relatedNode};
     }
 
     void DStarLite::reset()
