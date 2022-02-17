@@ -17,17 +17,17 @@ namespace Pathfinding::Helpers
                 return std::numeric_limits<double>::infinity();
             }
 
-            static bool locallyConsistent(PDNode *node)
+            static bool locallyConsistent(const PDNode *node)
             {
                 return node->g == node->rhs;
             }
 
-            static bool locallyOverconsistent(PDNode *node)
+            static bool locallyOverconsistent(const PDNode *node)
             {
                 return node->g > node->rhs;
             }
 
-            static bool blocked(PDNode *node)
+            static bool blocked(const PDNode *node)
             {
                 return node->state == PDNodeState::Blocked;
             }

@@ -149,7 +149,7 @@ namespace Pathfinding::Datastructures
             for (int32_t w = wFrom; w <= wTo; ++w)
             {
                 Vec2i location(h, w);
-                if (graph.inBounds(location) && node->location != location && !DStarLiteHelpers::blocked(graph.node(location)))
+                if (graph.inBounds(location) && node->location != location)
                 {
                     nbors.push_back(graph.node(location));
                 }

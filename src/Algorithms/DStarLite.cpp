@@ -23,6 +23,11 @@ namespace Pathfinding::Algorithms
     {
         double cost(const Node *from, const Node *to)
         {
+            if(DStarLiteHelpers::blocked(to) || DStarLiteHelpers::blocked(from))
+            {
+                return DStarLiteHelpers::infinity();
+            }
+
             int32_t dx = abs(from->location.width - to->location.width);
             int32_t dy = abs(from->location.height - to->location.height);
             return dx - dy == 0 ? static_cast<int>(10 * sqrt(2)) : 10;
@@ -51,10 +56,7 @@ namespace Pathfinding::Algorithms
         if (u != graphPtr->goalNode())
         {
             auto succs = neighbors(*graphPtr, u);
-            if (!succs.empty())
-            {
-                u->rhs = getMinCG(u, succs).first;
-            }
+            u->rhs = getMinCG(u, succs).first;
         }
         if (U.contains(u))
         {
@@ -118,9 +120,28 @@ namespace Pathfinding::Algorithms
      */
     std::pair<double, Node *> DStarLite::getMinCG(Node *u, std::vector<Node *> succs)
     {
-        auto itr = std::min_element(succs.begin(), succs.end(), [&u](const Node *lhs, const Node *rhs)
-                                    { return (cost(u, lhs) + lhs->g) < (cost(u, rhs) + rhs->g); });
+        /*
+        auto itr = std::min_element(succs.begin(), succs.end(), 
+            [&u](const Node *lhs, const Node *rhs)
+            { 
+                return (cost(u, lhs) + lhs->g) < (cost(u, rhs) + rhs->g); 
+            });
         return {(cost(u, *itr) + (*itr)->g), *itr};
+        */
+
+        double minRhs = cost(succs[0], u) + succs[0]->g;
+        Node * relatedNode = succs[0];
+        for(int i = 1 ; i < succs.size(); ++i)
+        {
+            double currentMinRhs = cost(succs[i], u) + succs[i]->g;
+            Node * currentrelatedNode = succs[i];
+            if(currentMinRhs < minRhs)
+            {
+                minRhs = currentMinRhs;
+                relatedNode = currentrelatedNode;
+            }
+        }
+        return {minRhs, relatedNode};
     }
 
     void DStarLite::reset()
@@ -136,6 +157,7 @@ namespace Pathfinding::Algorithms
     Node *DStarLite::popFromQueueAndUpdateState()
     {
         Node *u = U.popD();
+        if(DStarLiteHelpers::blocked(u)) { return u; }
         changeNodeState(u, NodeState::Visited);
         return u;
     }
@@ -143,6 +165,7 @@ namespace Pathfinding::Algorithms
     void DStarLite::removeFromQUeueAndUpdateState(Node *node)
     {
         U.remove(node);
+        if(DStarLiteHelpers::blocked(node)) { return; }
         changeNodeState(node, NodeState::Visited);
     }
 
@@ -160,6 +183,7 @@ namespace Pathfinding::Algorithms
         {
             node->visitedOnce = true;
         }
+        if(DStarLiteHelpers::blocked(node)) { return; }
         changeNodeState(node, NodeState::Frontier);
     }
 
@@ -211,21 +235,7 @@ namespace Pathfinding::Algorithms
             sLast = sStart;
             for (auto &node : nodesChanged)
             {
-                /**
-                 * @brief Ignoring blocked nodes since they can't be traversed,
-                 * remove them from priority queue if present.
-                 */
-                if (DStarLiteHelpers::blocked(node))
-                {
-                    if (U.contains(node))
-                    {
-                        U.remove(node);
-                    }
-                }
-                else
-                {
-                    UpdateVertex(node);
-                }
+                UpdateVertex(node);
             }
             nodesChanged.clear();
             computeShortestPath();
@@ -251,10 +261,6 @@ namespace Pathfinding::Algorithms
     {
         Node *prevStart = sStart;
         auto succs = neighbors(*graphPtr, sStart);
-        if (succs.empty())
-        {
-            return;
-        }
         sStart = getMinCG(sStart, succs).second;
         graphPtr->setStart(sStart->location);
         prevStart->state = NodeState::Visited;
