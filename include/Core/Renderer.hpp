@@ -12,6 +12,7 @@ namespace Pathfinding::Datastructures
 {
     class LatticeGraph;
     struct Node;
+    enum class NodeState;
 }
 
 namespace Pathfinding::Core
@@ -24,6 +25,7 @@ namespace Pathfinding::Core
     private:
         using PDLatticeGraph = Pathfinding::Datastructures::LatticeGraph;
         using PDNode = Pathfinding::Datastructures::Node;
+        using PDNodeState = Pathfinding::Datastructures::NodeState;
 
     public:
         Renderer() = default;
@@ -31,6 +33,8 @@ namespace Pathfinding::Core
         void render(const PDLatticeGraph &graph);
         void renderPath(std::vector<PDNode *> path);
         void init();
+        void update();
+        void reset();
 
     private:
         void loadFont(std::string font);
@@ -38,7 +42,8 @@ namespace Pathfinding::Core
         void renderNodeInfo(const PDNode &node, sf::Vector2f coords);
         void renderPathLineEndPoints(std::vector<PDNode *> path, sf::Vector2f pointPositionOffset);
         void renderPathLines(std::vector<PDNode *> path, sf::Vector2f pointPositionOffset);
-
+        sf::Color stateColor(PDNodeState state);
+        void updateColor();
     private:
         sf::RectangleShape nodeRect;
         sf::Text text;
@@ -49,6 +54,11 @@ namespace Pathfinding::Core
         sf::RenderWindow *windowPtr = nullptr;
         ApplicationState *appStatePtr = nullptr;
         GraphDimension *dimensionPtr = nullptr;
+        sf::Color goalNodeDiff = sf::Color::Black;
+        sf::Color visitedNodeDiff = sf::Color::Black;
+        sf::Color goalColor;
+        sf::Color visitedColor;
+        bool colorUp = false;
     };
 }
 

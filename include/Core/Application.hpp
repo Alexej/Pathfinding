@@ -14,7 +14,6 @@
 #include "Menu.hpp"
 #include "DStarLite.hpp"
 #include "GraphOperations.hpp"
-#include "GraphDimension.hpp"
 
 namespace Pathfinding::Core
 {
@@ -53,7 +52,8 @@ namespace Pathfinding::Core
         PGMenu menu;
         PADStarLite dstar;
         PHGraphOperations graphOps;
-        GraphDimension *dimension;
+        GraphDimension *dimensionPtr;
+        AlgorithmStepSpeed *algoStepSpeedPtr;
         int32_t accumulator;
     };
 }

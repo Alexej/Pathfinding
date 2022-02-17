@@ -3,6 +3,7 @@
 
 #include "Constants.hpp"
 #include "GraphDimension.hpp"
+#include "AlgorithmStepSpeed.hpp"
 
 namespace Pathfinding::Datastructures
 {
@@ -42,8 +43,11 @@ namespace Pathfinding::Core
         void disablePath();
         void enablePathLines();
         void disablePathLines();
+        void setAlgorithmStepSpeed(AlgorithmStepSpeed algoStepSpeed);
+        AlgorithmStepSpeed & algorithmStepSpeed();
     private:
         GraphDimension dim;
+        AlgorithmStepSpeed stepSpeed;
         State currentState_;
         bool showNodeInfo_;
         bool stateChanged;

@@ -8,6 +8,7 @@ namespace Pathfinding::Core
 {
     class ApplicationState;
     class GraphDimension;
+    class AlgorithmStepSpeed;
 }
 
 namespace Pathfinding::Gui
@@ -17,6 +18,7 @@ namespace Pathfinding::Gui
         private:
             using PCApplicationState = Pathfinding::Core::ApplicationState;
             using PCGraphDimension = Pathfinding::Core::GraphDimension;
+            using PCAlgorithmStepSpeed = Pathfinding::Core::AlgorithmStepSpeed;
             using fPtrVI = std::function<void(int32_t)>;
             using fPtrVV = std::function<void(void)>;
         public:
@@ -38,6 +40,7 @@ namespace Pathfinding::Gui
             void printLargeText(std::string text, double factor);
             void showAutoStepFlag();
             void showPathFlags();
+            void showAlgorithmStepSpeed();
         private:
             float offset; 
             float height; 
@@ -54,6 +57,7 @@ namespace Pathfinding::Gui
             fPtrVV stepCallBack = nullptr;
             fPtrVV randomGraphCallBack = nullptr;
             PCGraphDimension * dimensionPtr;
+            PCAlgorithmStepSpeed * algoStepSpeedPtr;
     };
 }
 

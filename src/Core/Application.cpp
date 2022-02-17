@@ -10,6 +10,9 @@
 #include "Node.hpp"
 #include "DiagonalHeuristic.hpp"
 #include "SFMLHelpers.hpp"
+#include "GraphDimension.hpp"
+#include "AlgorithmStepSpeed.hpp"
+#include <iostream>
 
 namespace Pathfinding::Core
 {
@@ -23,14 +26,18 @@ namespace Pathfinding::Core
 
     void Application::createObbjects()
     {
-        dimension = &appState.dimension();
+        dimensionPtr = &appState.dimension();
+        algoStepSpeedPtr = &appState.algorithmStepSpeed();
         window.create(sf::VideoMode(APPLICATION_WINDOW_WIDTH, GRID_FIELD_HEIGHT), APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close);
-        graph = LatticeGraph(dimension->width(), dimension->height());
+        graph = LatticeGraph(dimensionPtr->width(), dimensionPtr->height());
         eventManager = EventManager(&window);
         menu = Menu(&appState, GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH);
         dstar = DStarLite(&graph);
-        graphOps = GraphOperations(&appState, &dstar, &graph, dimension->currentNodeSideLength());
+        graphOps = GraphOperations(&appState, &dstar, &graph, dimensionPtr->currentNodeSideLength());
         renderer = Renderer(&window, &appState);
+
+        AlgorithmStepSpeed stepSpeed({100,200,400,800,1600,0});
+        appState.setAlgorithmStepSpeed(stepSpeed);
     }
 
     Application::Application()
@@ -99,10 +106,12 @@ namespace Pathfinding::Core
 
     void Application::update(sf::Clock &deltaClock)
     {
+        int32_t dt = deltaClock.getElapsedTime().asMilliseconds();
+        renderer.update();
         if (appState.currentState() == State::SEARCHING && appState.autoStep())
         {
-            accumulator += deltaClock.getElapsedTime().asMilliseconds();
-            if (accumulator > 500)
+            accumulator += dt;
+            if (accumulator > algoStepSpeedPtr->getCurrentStepSpeed())
             {
                 dstar.moveStart();
                 accumulator = 0;
@@ -114,7 +123,7 @@ namespace Pathfinding::Core
 
     void Application::handleNumberOfNodesChange(int32_t index)
     {
-        dimension->setCurrentNumberOfNodesIndex(index);
+        dimensionPtr->setCurrentNumberOfNodesIndex(index);
         reset();
     }
 
@@ -134,13 +143,14 @@ namespace Pathfinding::Core
 
     void Application::reset()
     {
-        graph.resize(dimension->height(), dimension->width());
-        graphOps.resize(dimension->currentNodeSideLength());
+        graph.resize(dimensionPtr->height(), dimensionPtr->width());
+        graphOps.resize(dimensionPtr->currentNodeSideLength());
         dstar.reset();
         appState.setState(State::READY);
         graphOps.enableEndPointsEvent();
         graphOps.enableObsticlesEvents();
         appState.setNodeUnderCursor(nullptr);
+        renderer.reset();
     }
 
     void Application::done()

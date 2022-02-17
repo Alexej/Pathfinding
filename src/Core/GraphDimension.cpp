@@ -2,19 +2,9 @@
 
 namespace Pathfinding::Core
 {
-    void GraphDimension::setCurrentNumberOfNodes(NumberOfNodes numOfNodes)
-    {
-        currentNumberOfNodes_ = numOfNodes;
-    }
-
     int32_t GraphDimension::currentNumberOfNodesIndex() const
     {
         return static_cast<int32_t>(currentNumberOfNodes_);
-    }
-
-    NumberOfNodes GraphDimension::currentNumberOfNodes() const
-    {
-        return currentNumberOfNodes_;
     }
 
     int32_t GraphDimension::currentNodeSideLength() const

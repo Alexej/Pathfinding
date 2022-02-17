@@ -17,10 +17,8 @@ namespace Pathfinding::Core
     class GraphDimension
     {
     public:
-        void setCurrentNumberOfNodes(NumberOfNodes numOfNodes);
         void setCurrentNumberOfNodesIndex(int32_t index);
         int32_t currentNumberOfNodesIndex() const;
-        NumberOfNodes currentNumberOfNodes() const;
         int32_t currentNodeSideLength() const;
         int32_t currentNumberOfNodesInRow() const;
         bool canShowNodeInfo() const;

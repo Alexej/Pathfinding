@@ -13,6 +13,7 @@ set(SOURCES_PATHFINDING
   Helpers/ResourcePaths.cpp
   Helpers/SFMLHelpers.cpp
   Core/GraphDimension.cpp
+  Core/AlgorithmStepSpeed.cpp
   Gui/Menu.cpp
   main.cpp
 )

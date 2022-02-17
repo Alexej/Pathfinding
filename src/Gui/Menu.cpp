@@ -6,7 +6,30 @@
 #include "Menu.hpp"
 #include "ApplicationState.hpp"
 #include "GraphDimension.hpp"
+#include "AlgorithmStepSpeed.hpp"
 #include "Node.hpp"
+
+/*
+https://eliasdaler.github.io/using-imgui-with-sfml-pt2/#combobox-listbox
+*/
+namespace ImGui
+{
+    static auto vector_getter = [](void* vec, int idx, const char** out_text)
+    {
+        auto& vector = *static_cast<std::vector<std::string>*>(vec);
+        if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
+        *out_text = vector.at(idx).c_str();
+        return true;
+    };
+
+    bool custom_combo(const char* label, int* currIndex, std::vector<std::string>& values)
+    {
+        if (values.empty()) { return false; }
+        return Combo(label, currIndex, vector_getter,
+            static_cast<void*>(&values), static_cast<int32_t>(values.size()));
+    }
+}
+
 
 namespace Pathfinding::Gui
 {
@@ -17,6 +40,8 @@ namespace Pathfinding::Gui
     using Pathfinding::Core::State;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
+    using Pathfinding::Core::AlgorithmStepSpeed;
+
     namespace
     {
         std::string mapNodeStateToText(NodeState state)
@@ -73,6 +98,7 @@ namespace Pathfinding::Gui
           width(static_cast<float>(width_))
     {
         dimensionPtr = &appStatePtr->dimension();
+        algoStepSpeedPtr = &appStatePtr->algorithmStepSpeed();
     }
 
     void Menu::show()
@@ -150,6 +176,7 @@ namespace Pathfinding::Gui
 
     void Menu::showCommonElements()
     {
+        showAlgorithmStepSpeed();
         showAutoStepFlag();
         ImGui::Spacing();
         showPathFlags();
@@ -173,6 +200,18 @@ namespace Pathfinding::Gui
         }
     }
 
+    void Menu::showAlgorithmStepSpeed()
+    {
+        static int32_t itemCurrentSpeed = algoStepSpeedPtr->getCurrentStepSpeedIndex();
+        ImGui::Spacing();
+        auto speeds = algoStepSpeedPtr->getStepSpeedVecString();
+        if(ImGui::custom_combo("StepSpeed", &itemCurrentSpeed, speeds))
+        {
+            algoStepSpeedPtr->setCurrentAlgorithmStepSpeedIndex(itemCurrentSpeed);
+        }
+    }
+
+
     void Menu::showNodeInfoInMenu()
     {
         ImGui::Text(std::format("Height: {} Width: {}", appStatePtr->nodeUnderCursor()->location.height,
@@ -187,19 +226,19 @@ namespace Pathfinding::Gui
 
     void Menu::showReadyStateElements()
     {
-        static int32_t itemCurrent = dimensionPtr->currentNumberOfNodesIndex();
+        static int32_t itemCurrentNode = dimensionPtr->currentNumberOfNodesIndex();
         ImGui::Spacing();
         ImGui::Text("Number of nodes");
-        if (ImGui::Combo("", &itemCurrent, NUMBER_OF_NODES_CHAR, IM_ARRAYSIZE(NUMBER_OF_NODES_CHAR)))
+        if (ImGui::Combo("", &itemCurrentNode, NUMBER_OF_NODES_CHAR, IM_ARRAYSIZE(NUMBER_OF_NODES_CHAR)))
         {
-            if (dimensionPtr->currentNumberOfNodesIndex() != itemCurrent)
+            if (dimensionPtr->currentNumberOfNodesIndex() != itemCurrentNode)
             {
                 if (dimensionPtr->canShowNodeInfo())
                 {
                     appStatePtr->disableNodeInfo();
                     nodeInfo = false;
                 }
-                numberOfNodesChangedCallBack(itemCurrent);
+                numberOfNodesChangedCallBack(itemCurrentNode);
             }
         };
 

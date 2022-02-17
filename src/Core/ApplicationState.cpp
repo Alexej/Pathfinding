@@ -96,4 +96,13 @@ namespace Pathfinding::Core
         pathLines_ = false;
     }
 
+    void ApplicationState::setAlgorithmStepSpeed(AlgorithmStepSpeed algoStepSpeed)
+    {
+        stepSpeed = algoStepSpeed;
+    }
+
+    AlgorithmStepSpeed & ApplicationState::algorithmStepSpeed()
+    {
+        return stepSpeed;
+    }
 }

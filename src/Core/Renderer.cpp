@@ -20,10 +20,9 @@ namespace Pathfinding::Core
     using Pathfinding::Datastructures::Vec2i;
     using Pathfinding::Helpers::pathToFont;
 
-
     namespace
     {
-        sf::Vector2f getNodePosition(Node * node, int32_t sideLength)
+        sf::Vector2f getNodePosition(Node *node, int32_t sideLength)
         {
             float nodesHorF = static_cast<float>(node->location.width);
             float nodesVertF = static_cast<float>(node->location.height);
@@ -40,7 +39,7 @@ namespace Pathfinding::Core
 
         /**
          * @brief converts double to string and removes zeros and dot.
-         * should be certain that cost, rhs, g and key values are always whole numbers
+         * under the assumption  rhs, g and key values are always integers.
          * @param d
          * @return std::string
          */
@@ -48,36 +47,6 @@ namespace Pathfinding::Core
         {
             std::string dStr = std::to_string(d);
             return dStr.substr(0, dStr.find("."));
-        }
-
-        sf::Color stateColor(NodeState state)
-        {
-            sf::Color color;
-            switch (state)
-            {
-            case NodeState::Free:
-                color = convertToSfmlColor(FREE_NODE_COLOR);
-                break;
-            case NodeState::Blocked:
-                color = convertToSfmlColor(BLOCKED_NODE_COLOR);
-                break;
-            case NodeState::Frontier:
-                color = convertToSfmlColor(FRONTIER_NODE_COLOR);
-                break;
-            case NodeState::Visited:
-                color = convertToSfmlColor(VISITED_NODE_COLOR);
-                break;
-            case NodeState::Start:
-                color = convertToSfmlColor(START_NODE_COLOR);
-                break;
-            case NodeState::Goal:
-                color = convertToSfmlColor(GOAL_NODE_COLOR);
-                break;
-            case NodeState::Recalculated:
-                color = convertToSfmlColor(RECALCULATED_NODE_COLOR);
-                break;
-            }
-            return color;
         }
 
         double getAngleBetweenTwoNodes(Node *n1, Node *n2)
@@ -153,6 +122,8 @@ namespace Pathfinding::Core
         straightLine.setFillColor(convertToSfmlColor(PATH_NODE_COLOR));
         straightLine.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
         straightLine.setOutlineThickness(NODE_OUTLINE_THICKNESS);
+
+        reset();
     }
 
     /**
@@ -168,6 +139,36 @@ namespace Pathfinding::Core
         {
             throw std::exception("Couldn't find font");
         }
+    }
+
+    sf::Color Renderer::stateColor(NodeState state)
+    {
+        sf::Color color;
+        switch (state)
+        {
+        case NodeState::Free:
+            color = convertToSfmlColor(FREE_NODE_COLOR);
+            break;
+        case NodeState::Blocked:
+            color = convertToSfmlColor(BLOCKED_NODE_COLOR);
+            break;
+        case NodeState::Frontier:
+            color = convertToSfmlColor(FRONTIER_NODE_COLOR);
+            break;
+        case NodeState::Visited:
+            color = visitedColor;
+            break;
+        case NodeState::Start:
+            color = convertToSfmlColor(START_NODE_COLOR);
+            break;
+        case NodeState::Goal:
+            color = goalColor;
+            break;
+        case NodeState::Recalculated:
+            color = convertToSfmlColor(RECALCULATED_NODE_COLOR);
+            break;
+        }
+        return color;
     }
 
     void Renderer::render(const LatticeGraph &graph)
@@ -254,15 +255,14 @@ namespace Pathfinding::Core
 
         sf::Vector2f pointPositionOffset(halfNodeSize, halfNodeSize);
 
-        if(appStatePtr->showPathLines() && appStatePtr->showPath())
+        if (appStatePtr->showPathLines() && appStatePtr->showPath())
         {
             renderPathLines(path, pointPositionOffset);
         }
-        if(appStatePtr->showPath())
+        if (appStatePtr->showPath())
         {
             renderPathLineEndPoints(path, pointPositionOffset);
         }
-        
     }
 
     void Renderer::renderPathLineEndPoints(std::vector<Node *> path, sf::Vector2f pointPositionOffset)
@@ -289,7 +289,7 @@ namespace Pathfinding::Core
     {
         for (auto currentNodeItr = path.begin(); currentNodeItr != path.end(); ++currentNodeItr)
         {
-            if (auto nextNode = std::next(currentNodeItr,1); nextNode != path.end())
+            if (auto nextNode = std::next(currentNodeItr, 1); nextNode != path.end())
             {
                 sf::Vector2f centerOfCurrentNode = getNodePosition(*currentNodeItr, dimensionPtr->currentNodeSideLength()) + pointPositionOffset;
                 float angle = static_cast<float>(getAngleBetweenTwoNodes(*currentNodeItr, *nextNode));
@@ -308,7 +308,46 @@ namespace Pathfinding::Core
             }
         }
     }
+
+    void Renderer::updateColor()
+    {
+        switch (appStatePtr->currentState())
+        {
+        case State::DONE:
+            if (colorUp)
+            {
+                if (goalColor.r == 255) { colorUp = false; }
+                else {goalColor.r += 5;}
+            }
+            else if (!colorUp)
+            {
+                if (goalColor.r == 0) { colorUp = true; }
+                else {goalColor.r -= 5;}
+            }
+            break;
+        case State::NO_PATH:
+            if (colorUp)
+            {
+                if (visitedColor.g == 255) { colorUp = false; }
+                else {visitedColor.g += 5;}
+            }
+            else if (!colorUp)
+            {
+                if (visitedColor.g == 0) { colorUp = true; }
+                else {visitedColor.g -= 5;}
+            }
+            break;
+        }
+    }
+
+    void Renderer::update()
+    {
+        updateColor();
+    }
+
+    void Renderer::reset()
+    {
+        goalColor = convertToSfmlColor(GOAL_NODE_COLOR);
+        visitedColor = convertToSfmlColor(VISITED_NODE_COLOR);
+    }
 }
-
-
-
