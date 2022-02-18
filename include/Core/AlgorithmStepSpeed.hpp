@@ -12,7 +12,6 @@ namespace Pathfinding::Core
     {
     public:
         AlgorithmStepSpeed(std::initializer_list<int32_t> list);
-        AlgorithmStepSpeed(int32_t stepSpeed);
         AlgorithmStepSpeed();
         const std::vector<std::string> &getStepSpeedVecString() const;
         int32_t getCurrentStepSpeedIndex() const;

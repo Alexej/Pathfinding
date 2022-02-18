@@ -1,30 +1,57 @@
 #include "GraphDimension.hpp"
+#include <cmath>
 
 namespace Pathfinding::Core
 {
+
+    GraphDimension::GraphDimension(int32_t sideLength, std::initializer_list<int32_t> numberOfNodesInRow_)
+    : numberOfNodesInRow(numberOfNodesInRow_)
+    {
+        for(auto numOfNodes : numberOfNodesInRow)
+        {
+            if(sideLength % numOfNodes != 0)
+            {
+                throw std::exception("Wrong dimensions entered");
+            }
+            int32_t numberOfNodes = static_cast<int32_t>(std::pow(numOfNodes, 2));
+            numberOfNodesInt.push_back(numberOfNodes);
+            numberOfNodesString.push_back(std::to_string(numberOfNodes));
+            nodeSideLengths.push_back(sideLength / numOfNodes);
+            setCurrentNumberOfNodesIndex(0);
+        }
+    }
+
+    GraphDimension::GraphDimension()
+    : GraphDimension(800,{10}) {}
+
     int32_t GraphDimension::currentNumberOfNodesIndex() const
     {
-        return static_cast<int32_t>(currentNumberOfNodes_);
+        return currentNumberOfNodesIndex_;
+    }
+
+    int32_t GraphDimension::currentNumberOfNodes() const
+    {
+        return numberOfNodesInt[currentNumberOfNodesIndex_];
     }
 
     int32_t GraphDimension::currentNodeSideLength() const
     {
-        return NODE_SIDE_LENGTH[static_cast<int32_t>(currentNumberOfNodes_)];
+        return nodeSideLengths[currentNumberOfNodesIndex_];
     }
 
     int32_t GraphDimension::currentNumberOfNodesInRow() const
     {
-        return NUMBER_OF_NODES_IN_ROW[static_cast<int32_t>(currentNumberOfNodes_)];
+        return numberOfNodesInRow[currentNumberOfNodesIndex_];
     }
 
     bool GraphDimension::canShowNodeInfo() const
     {
-        return currentNumberOfNodes_ == NUMBER_OF_NODES_FOR_RENDER_INFO;
+        return currentNodeSideLength() >= 80;
     }
 
     void GraphDimension::setCurrentNumberOfNodesIndex(int32_t index)
     {
-        currentNumberOfNodes_ = static_cast<NumberOfNodes>(index);
+        currentNumberOfNodesIndex_ = index;
     }
 
     int32_t GraphDimension::width() const
@@ -35,5 +62,10 @@ namespace Pathfinding::Core
     int32_t GraphDimension::height() const
     {
         return currentNumberOfNodesInRow();
+    }
+
+    const std::vector<std::string> & GraphDimension::getNumberOfNodesInRowString() const
+    {
+        return numberOfNodesString;
     }
 }

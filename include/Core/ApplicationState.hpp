@@ -25,13 +25,13 @@ namespace Pathfinding::Core
         using PDNode = Pathfinding::Datastructures::Node;
 
     public:
-        ApplicationState();
+        ApplicationState() = default;
+        ApplicationState(GraphDimension dimension, AlgorithmStepSpeed stepSpeed);
         bool showNodeInfo() const;
         void enableNodeInfo();
         void disableNodeInfo();
         void setState(State state);
         State currentState() const;
-        GraphDimension &dimension();
         const PDNode *nodeUnderCursor() const;
         void setNodeUnderCursor(const PDNode *node);
         void enableAutoStep();
@@ -43,11 +43,11 @@ namespace Pathfinding::Core
         void disablePath();
         void enablePathLines();
         void disablePathLines();
-        void setAlgorithmStepSpeed(AlgorithmStepSpeed algoStepSpeed);
+        GraphDimension &dimension();
         AlgorithmStepSpeed & algorithmStepSpeed();
     private:
-        GraphDimension dim;
-        AlgorithmStepSpeed stepSpeed;
+        GraphDimension dimension_;
+        AlgorithmStepSpeed stepSpeed_;
         State currentState_;
         bool showNodeInfo_;
         bool stateChanged;

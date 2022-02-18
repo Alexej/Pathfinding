@@ -209,7 +209,10 @@ namespace Pathfinding::Core
         std::string keyString = "[" + dToStr(node.key.k1) + ":" + dToStr(node.key.k2) + "]";
         text.setString(keyString);
         float halfOfText = text.getLocalBounds().width / 2;
-        float heightKeyOffset = 2.5f * text.getLocalBounds().height + NODE_INFO_OFFSET;
+
+        float buttomOfTopRow = text.getLocalBounds().height + NODE_INFO_OFFSET;
+        float heightKeyOffset = dimensionPtr->currentNodeSideLength() - buttomOfTopRow - NODE_INFO_OFFSET;
+
         float halfOfNode = static_cast<float>(dimensionPtr->currentNodeSideLength()) / 2;
         float diff = halfOfNode - halfOfText;
         text.setPosition(sf::Vector2f(coords.x + diff, coords.y + NODE_INFO_OFFSET + heightKeyOffset));
@@ -316,25 +319,49 @@ namespace Pathfinding::Core
         case State::DONE:
             if (colorUp)
             {
-                if (goalColor.r == 255) { colorUp = false; }
-                else {goalColor.r += 5;}
+                if (goalColor.r == 255)
+                {
+                    colorUp = false;
+                }
+                else
+                {
+                    goalColor.r += 5;
+                }
             }
             else if (!colorUp)
             {
-                if (goalColor.r == 0) { colorUp = true; }
-                else {goalColor.r -= 5;}
+                if (goalColor.r == 0)
+                {
+                    colorUp = true;
+                }
+                else
+                {
+                    goalColor.r -= 5;
+                }
             }
             break;
         case State::NO_PATH:
             if (colorUp)
             {
-                if (visitedColor.g == 255) { colorUp = false; }
-                else {visitedColor.g += 5;}
+                if (visitedColor.g == 255)
+                {
+                    colorUp = false;
+                }
+                else
+                {
+                    visitedColor.g += 5;
+                }
             }
             else if (!colorUp)
             {
-                if (visitedColor.g == 0) { colorUp = true; }
-                else {visitedColor.g -= 5;}
+                if (visitedColor.g == 0)
+                {
+                    colorUp = true;
+                }
+                else
+                {
+                    visitedColor.g -= 5;
+                }
             }
             break;
         }

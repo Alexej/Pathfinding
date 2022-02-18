@@ -43,7 +43,7 @@ namespace Pathfinding::Helpers
 
     public:
         GraphOperations() = default;
-        GraphOperations(PCApplicationState *state, PADStarLite *dstar, PDLatticeGraph *graph, int32_t nodeSideLength);
+        GraphOperations(PCApplicationState *state, PADStarLite *dstar, PDLatticeGraph *graph);
         void rightMouseButtonPressed(sf::Vector2i pos);
         void leftMouseButtonPressed(sf::Vector2i pos);
         void mouseButtonReleased(sf::Vector2i pos);
@@ -56,6 +56,7 @@ namespace Pathfinding::Helpers
         void enableObsticlesEvents();
         bool endpointsEvents() const;
         bool obsticlesEvents() const;
+    private:
         void blockNodeAndNotifyDstarLiteIfRunning(PDVec2i mappedCoordinates);
         void clearNodeAndNotifyDstarLiteIfRunning(PDVec2i mappedCoordinates);
 

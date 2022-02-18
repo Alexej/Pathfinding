@@ -13,15 +13,9 @@ namespace Pathfinding::Core
     }
 
     AlgorithmStepSpeed::AlgorithmStepSpeed()
-    : AlgorithmStepSpeed(1000)
+    : AlgorithmStepSpeed({1000})
     {}
     
-    AlgorithmStepSpeed::AlgorithmStepSpeed(int32_t stepSpeed)
-    {
-        stepSpeedVecInt.push_back(stepSpeed);
-        stepSpeedVecString.push_back(std::to_string(stepSpeed));
-        currentStepSpeedIndex = 0;
-    }
     
     const std::vector<std::string> & AlgorithmStepSpeed::getStepSpeedVecString() const
     {

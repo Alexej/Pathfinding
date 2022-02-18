@@ -35,8 +35,6 @@ namespace Pathfinding::Gui
 {
     using namespace Pathfinding::Constants;
     using Pathfinding::Core::ApplicationState;
-    using Pathfinding::Core::NUMBER_OF_NODES_CHAR;
-    using Pathfinding::Core::NumberOfNodes;
     using Pathfinding::Core::State;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
@@ -176,7 +174,8 @@ namespace Pathfinding::Gui
 
     void Menu::showCommonElements()
     {
-        showAlgorithmStepSpeed();
+        ImGui::Spacing();
+        showAlgorithmStepSpeedComboBox();
         showAutoStepFlag();
         ImGui::Spacing();
         showPathFlags();
@@ -200,10 +199,9 @@ namespace Pathfinding::Gui
         }
     }
 
-    void Menu::showAlgorithmStepSpeed()
+    void Menu::showAlgorithmStepSpeedComboBox()
     {
         static int32_t itemCurrentSpeed = algoStepSpeedPtr->getCurrentStepSpeedIndex();
-        ImGui::Spacing();
         auto speeds = algoStepSpeedPtr->getStepSpeedVecString();
         if(ImGui::custom_combo("StepSpeed", &itemCurrentSpeed, speeds))
         {
@@ -211,6 +209,21 @@ namespace Pathfinding::Gui
         }
     }
 
+
+    void Menu::showNumberOfNodesComboBox()
+    {
+        static int32_t itemCurrentNumberOfNodes = dimensionPtr->currentNumberOfNodesIndex();
+        auto numberOfNodesInRow = dimensionPtr->getNumberOfNodesInRowString();
+        if(ImGui::custom_combo("NumberOfNodes", &itemCurrentNumberOfNodes, numberOfNodesInRow))
+        {
+            numberOfNodesChangedCallBack(itemCurrentNumberOfNodes);
+            if (!dimensionPtr->canShowNodeInfo())
+            {
+                appStatePtr->disableNodeInfo();
+                nodeInfo = false;
+            }
+        }
+    }
 
     void Menu::showNodeInfoInMenu()
     {
@@ -226,21 +239,8 @@ namespace Pathfinding::Gui
 
     void Menu::showReadyStateElements()
     {
-        static int32_t itemCurrentNode = dimensionPtr->currentNumberOfNodesIndex();
         ImGui::Spacing();
-        ImGui::Text("Number of nodes");
-        if (ImGui::Combo("", &itemCurrentNode, NUMBER_OF_NODES_CHAR, IM_ARRAYSIZE(NUMBER_OF_NODES_CHAR)))
-        {
-            if (dimensionPtr->currentNumberOfNodesIndex() != itemCurrentNode)
-            {
-                if (dimensionPtr->canShowNodeInfo())
-                {
-                    appStatePtr->disableNodeInfo();
-                    nodeInfo = false;
-                }
-                numberOfNodesChangedCallBack(itemCurrentNode);
-            }
-        };
+        showNumberOfNodesComboBox();
 
         ImGui::Spacing();
         if (ImGui::Button("Start", ImVec2(width - 20, 20)))

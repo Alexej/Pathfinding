@@ -4,7 +4,8 @@ namespace Pathfinding::Core
 {
     using Pathfinding::Datastructures::Node;
 
-    ApplicationState::ApplicationState()
+    ApplicationState::ApplicationState(GraphDimension dim, AlgorithmStepSpeed speed)
+    : dimension_(dim), stepSpeed_(speed)
     {
         showNodeInfo_ = false;
         stateChanged = false;
@@ -56,7 +57,7 @@ namespace Pathfinding::Core
 
     GraphDimension &ApplicationState::dimension()
     {
-        return dim;
+        return dimension_;
     }
 
     const Node *ApplicationState::nodeUnderCursor() const
@@ -96,13 +97,8 @@ namespace Pathfinding::Core
         pathLines_ = false;
     }
 
-    void ApplicationState::setAlgorithmStepSpeed(AlgorithmStepSpeed algoStepSpeed)
-    {
-        stepSpeed = algoStepSpeed;
-    }
-
     AlgorithmStepSpeed & ApplicationState::algorithmStepSpeed()
     {
-        return stepSpeed;
+        return stepSpeed_;
     }
 }

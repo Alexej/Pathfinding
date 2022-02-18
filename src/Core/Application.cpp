@@ -26,18 +26,16 @@ namespace Pathfinding::Core
 
     void Application::createObbjects()
     {
-        dimensionPtr = &appState.dimension();
-        algoStepSpeedPtr = &appState.algorithmStepSpeed();
+        AlgorithmStepSpeed stepSpeed({100,200,400,800,1600,0});
+        GraphDimension dimension(GRID_FIELD_WIDTH, {4,8, 10, 20, 25, 40, 80});
+        appState = ApplicationState(dimension, stepSpeed);
+        graph = LatticeGraph(dimension.width(), dimension.height());
         window.create(sf::VideoMode(APPLICATION_WINDOW_WIDTH, GRID_FIELD_HEIGHT), APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close);
-        graph = LatticeGraph(dimensionPtr->width(), dimensionPtr->height());
         eventManager = EventManager(&window);
         menu = Menu(&appState, GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH);
         dstar = DStarLite(&graph);
-        graphOps = GraphOperations(&appState, &dstar, &graph, dimensionPtr->currentNodeSideLength());
+        graphOps = GraphOperations(&appState, &dstar, &graph);
         renderer = Renderer(&window, &appState);
-
-        AlgorithmStepSpeed stepSpeed({100,200,400,800,1600,0});
-        appState.setAlgorithmStepSpeed(stepSpeed);
     }
 
     Application::Application()
@@ -61,7 +59,7 @@ namespace Pathfinding::Core
         menu.addStartCallBack(std::bind(&Application::startAlgorithm, this));
         menu.addRandomGraphCallBack(std::bind(&Application::randomGraph, this));
         menu.addResetCallBack(std::bind(&Application::reset, this));
-        menu.addStepCallBack(std::bind(&DStarLite::moveStart, &dstar));
+        menu.addStepCallBack(std::bind(&Application::step, this));
 
         dstar.addDoneCallBack(std::bind(&Application::done, this));
         dstar.addNoPathCallBack(std::bind(&Application::noPath, this));
@@ -69,6 +67,9 @@ namespace Pathfinding::Core
 
         window.setFramerateLimit(60);
         renderer.init();
+
+        dimensionPtr = &appState.dimension();
+        algoStepSpeedPtr = &appState.algorithmStepSpeed();
     }
 
     void Application::startAlgorithm()
@@ -169,5 +170,10 @@ namespace Pathfinding::Core
     {
         reset();
         initRandomGraph(graph);
+    }
+
+    void Application::step()
+    {
+        dstar.moveStart();
     }
 }

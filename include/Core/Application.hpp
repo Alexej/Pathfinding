@@ -42,7 +42,7 @@ namespace Pathfinding::Core
         void done();
         void noPath();
         void randomGraph();
-
+        void step();
     private:
         ApplicationState appState;
         sf::RenderWindow window;

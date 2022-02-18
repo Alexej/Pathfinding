@@ -40,7 +40,8 @@ namespace Pathfinding::Gui
             void printLargeText(std::string text, double factor);
             void showAutoStepFlag();
             void showPathFlags();
-            void showAlgorithmStepSpeed();
+            void showAlgorithmStepSpeedComboBox();
+            void showNumberOfNodesComboBox();
         private:
             float offset; 
             float height; 

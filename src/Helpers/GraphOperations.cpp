@@ -16,8 +16,8 @@ namespace Pathfinding::Helpers
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
 
-    GraphOperations::GraphOperations(ApplicationState *state_, DStarLite *dstar_, LatticeGraph *graph_, int32_t nodeSideLength_)
-        : applicationStatePtr(state_), dstarPtr(dstar_), graphPtr(graph_), nodeSideLength(nodeSideLength_) {}
+    GraphOperations::GraphOperations(ApplicationState *state_, DStarLite *dstar_, LatticeGraph *graph_)
+        : applicationStatePtr(state_), dstarPtr(dstar_), graphPtr(graph_), nodeSideLength(state_->dimension().currentNodeSideLength()) {}
 
     void GraphOperations::leftMouseButtonPressed(sf::Vector2i pos)
     {
