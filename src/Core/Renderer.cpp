@@ -97,6 +97,7 @@ namespace Pathfinding::Core
     Renderer::Renderer(sf::RenderWindow *window, ApplicationState *state)
         : windowPtr(window), appStatePtr(state), dimensionPtr(&state->dimension())
     {
+        init();
     }
 
     void Renderer::init()
@@ -134,7 +135,6 @@ namespace Pathfinding::Core
      */
     void Renderer::loadFont(std::string fontName)
     {
-
         if (!font.loadFromFile(pathToFont() + fontName))
         {
             throw std::exception("Couldn't find font");
@@ -325,7 +325,7 @@ namespace Pathfinding::Core
                 }
                 else
                 {
-                    goalColor.r += 5;
+                    goalColor.r += COLOR_CHANGE_DIFF;
                 }
             }
             else if (!colorUp)
@@ -336,7 +336,7 @@ namespace Pathfinding::Core
                 }
                 else
                 {
-                    goalColor.r -= 5;
+                    goalColor.r -= COLOR_CHANGE_DIFF;
                 }
             }
             break;
@@ -349,7 +349,7 @@ namespace Pathfinding::Core
                 }
                 else
                 {
-                    visitedColor.g += 5;
+                    visitedColor.g += COLOR_CHANGE_DIFF;
                 }
             }
             else if (!colorUp)
@@ -360,7 +360,7 @@ namespace Pathfinding::Core
                 }
                 else
                 {
-                    visitedColor.g -= 5;
+                    visitedColor.g -= COLOR_CHANGE_DIFF;
                 }
             }
             break;

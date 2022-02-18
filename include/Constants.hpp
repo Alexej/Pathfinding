@@ -37,6 +37,8 @@ namespace Pathfinding::Constants
     constexpr std::size_t GREEN = 1;
     constexpr std::size_t BLUE = 2;
 
+    constexpr uint8_t COLOR_CHANGE_DIFF = 5;
+
     // Rendering
     constexpr auto NODE_OUTLINE_THICKNESS = 1.0f;
     constexpr auto NODE_INFO_OFFSET = 8.0f;

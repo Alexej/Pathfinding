@@ -6,6 +6,7 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Font.hpp>
+#include "IRenderer.hpp"
 
 
 namespace Pathfinding::Datastructures
@@ -17,10 +18,9 @@ namespace Pathfinding::Datastructures
 
 namespace Pathfinding::Core
 {
-
     class ApplicationState;
     class GraphDimension;
-    class Renderer
+    class Renderer final : public Pathfinding::Abstract::IRenderer
     {
     private:
         using PDLatticeGraph = Pathfinding::Datastructures::LatticeGraph;
@@ -30,13 +30,13 @@ namespace Pathfinding::Core
     public:
         Renderer() = default;
         Renderer(sf::RenderWindow *window, ApplicationState *state);
-        void render(const PDLatticeGraph &graph);
-        void renderPath(std::vector<PDNode *> path);
-        void init();
-        void update();
-        void reset();
+        void render(const PDLatticeGraph &graph) override;
+        void renderPath(std::vector<PDNode *> path) override;
+        void update() override;
+        void reset() override;
 
     private:
+        void init();
         void loadFont(std::string font);
         void drawNode(const PDNode &node, sf::Vector2f coords);
         void renderNodeInfo(const PDNode &node, sf::Vector2f coords);

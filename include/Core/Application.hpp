@@ -14,6 +14,7 @@
 #include "Menu.hpp"
 #include "DStarLite.hpp"
 #include "GraphOperations.hpp"
+#include <memory>
 
 namespace Pathfinding::Core
 {
@@ -26,6 +27,7 @@ namespace Pathfinding::Core
         using PADStarLite = Pathfinding::Algorithms::DStarLite;
         using PALatticeGraph = Pathfinding::Datastructures::LatticeGraph;
         using PHGraphOperations = Pathfinding::Helpers::GraphOperations;
+        using PAIRenderer = Pathfinding::Abstract::IRenderer;
 
     public:
         Application();
@@ -44,17 +46,20 @@ namespace Pathfinding::Core
         void randomGraph();
         void step();
     private:
+        std::unique_ptr<PAIRenderer> rendererUPtr;
+        std::unique_ptr<PGMenu> menuUPtr;
+        std::unique_ptr<PEEventManager> eventManagerUPtr;
+        std::unique_ptr<PADStarLite> dstarLiteUPtr;
+        std::unique_ptr<PHGraphOperations> graphOpsUPtr;
+
         ApplicationState appState;
         sf::RenderWindow window;
-        Renderer renderer;
         PALatticeGraph graph;
-        PEEventManager eventManager;
-        PGMenu menu;
-        PADStarLite dstar;
-        PHGraphOperations graphOps;
+
+        int32_t accumulator;
+        // For easier access
         GraphDimension *dimensionPtr;
         AlgorithmStepSpeed *algoStepSpeedPtr;
-        int32_t accumulator;
     };
 }
 

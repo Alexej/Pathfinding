@@ -3,12 +3,15 @@
 
 #include <SFML/System/Vector2.hpp>
 #include <cstdint>
+#include <functional>
 
 #include "Vector2.hpp"
+#include "IGraphOperations.hpp"
 
 namespace Pathfinding::Datastructures
 {
     class LatticeGraph;
+    struct Node;
 }
 
 namespace Pathfinding::Core
@@ -33,35 +36,37 @@ namespace Pathfinding::Helpers
         IDLE
     };
 
-    class GraphOperations
+    class GraphOperations final : public Pathfinding::Abstract::IGraphOperations
     {
     private:
         using PDLatticeGraph = Pathfinding::Datastructures::LatticeGraph;
         using PCApplicationState = Pathfinding::Core::ApplicationState;
         using PADStarLite = Pathfinding::Algorithms::DStarLite;
         using PDVec2i = Pathfinding::Datastructures::Vec2i;
-
+        using PDNode = Pathfinding::Datastructures::Node;
     public:
         GraphOperations() = default;
-        GraphOperations(PCApplicationState *state, PADStarLite *dstar, PDLatticeGraph *graph);
-        void rightMouseButtonPressed(sf::Vector2i pos);
-        void leftMouseButtonPressed(sf::Vector2i pos);
-        void mouseButtonReleased(sf::Vector2i pos);
-        void nodeUnderCursor(sf::Vector2i pos);
-        void mouseMoved(sf::Vector2i pos);
-        void resize(int32_t nodeSideLength);
-        void disableEndpointsEvent();
-        void enableEndPointsEvent();
-        void disableObsticlesEvents();
-        void enableObsticlesEvents();
-        bool endpointsEvents() const;
-        bool obsticlesEvents() const;
+        GraphOperations(PCApplicationState *state, PDLatticeGraph *graph);
+        void rightMouseButtonPressed(sf::Vector2i pos) override;
+        void leftMouseButtonPressed(sf::Vector2i pos) override;
+        void mouseButtonReleased(sf::Vector2i pos) override;
+        void nodeUnderCursor(sf::Vector2i pos) override;
+        void mouseMoved(sf::Vector2i pos) override;
+        void resize(int32_t nodeSideLength) override;
+        void disableEndpointsEvent() override;
+        void enableEndPointsEvent() override;
+        void disableObsticlesEvents() override;
+        void enableObsticlesEvents() override;
+        bool endpointsEvents() const override;
+        bool obsticlesEvents() const override;
+        void addEdgeChangeCallBack(std::function<void(PDNode * node)> callBack) override;
     private:
-        void blockNodeAndNotifyDstarLiteIfRunning(PDVec2i mappedCoordinates);
-        void clearNodeAndNotifyDstarLiteIfRunning(PDVec2i mappedCoordinates);
+        void blockNodeAndNotifyAlgorithm(PDVec2i mappedCoordinates);
+        void clearNodeAndNotifyAlgorithm(PDVec2i mappedCoordinates);
 
     private:
         MouseAction currentMouseAction = MouseAction::IDLE;
+        std::function<void(PDNode * node)> edgeChangeCallBack;
         PDLatticeGraph *graphPtr;
         PADStarLite *dstarPtr;
         PCApplicationState *applicationStatePtr;

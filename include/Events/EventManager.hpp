@@ -7,17 +7,18 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <vector>
 #include "MouseEvent.hpp"
+#include "IEventManager.hpp"
 
 namespace Pathfinding::Events
 {
-    class EventManager
+    class EventManager final : public Pathfinding::Abstract::IEventManager
     {
     public:
         EventManager() = default;
         explicit EventManager(sf::RenderWindow *window);
-        void addBinding(MouseEvent event, std::function<void(sf::Vector2i)> callbackFunc);
-        void pushEvent(sf::Event event);
-        void processEvents();
+        void addBinding(MouseEvent event, std::function<void(sf::Vector2i)> callbackFunc) override;
+        void pushEvent(sf::Event event) override;
+        void processEvents() override;
 
     private:
         sf::RenderWindow *windowPtr;

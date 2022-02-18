@@ -4,6 +4,8 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <functional>
 
+#include "IMenu.hpp"
+
 namespace Pathfinding::Core
 {
     class ApplicationState;
@@ -13,7 +15,7 @@ namespace Pathfinding::Core
 
 namespace Pathfinding::Gui
 {
-    class Menu
+    class Menu final : public Pathfinding::Abstract::IMenu
     {
         private:
             using PCApplicationState = Pathfinding::Core::ApplicationState;
@@ -24,13 +26,13 @@ namespace Pathfinding::Gui
         public:
             Menu() = default;
             Menu(PCApplicationState * appStat, int32_t offset, int32_t height, int32_t width);
-            void show();
-            void addNumberOfNodesChangedCallBack(fPtrVI callBack);
-            void addStepCallBack(fPtrVV callBack);
-            void addStartCallBack(fPtrVV callBack);
-            void addResetCallBack(fPtrVV callBack);
-            void addRandomGraphCallBack(fPtrVV callBack);
-            bool initialized() const;
+            void show() override;
+            void addNumberOfNodesChangedCallBack(fPtrVI callBack) override;
+            void addStepCallBack(fPtrVV callBack) override;
+            void addStartCallBack(fPtrVV callBack) override;
+            void addResetCallBack(fPtrVV callBack) override;
+            void addRandomGraphCallBack(fPtrVV callBack) override;
+            bool initialized() const override;
         private:
             void showCommonElements();
             void showReadyStateElements();

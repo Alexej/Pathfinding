@@ -16,8 +16,8 @@ namespace Pathfinding::Helpers
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
 
-    GraphOperations::GraphOperations(ApplicationState *state_, DStarLite *dstar_, LatticeGraph *graph_)
-        : applicationStatePtr(state_), dstarPtr(dstar_), graphPtr(graph_), nodeSideLength(state_->dimension().currentNodeSideLength()) {}
+    GraphOperations::GraphOperations(ApplicationState *state_, LatticeGraph *graph_)
+        : applicationStatePtr(state_), graphPtr(graph_), nodeSideLength(state_->dimension().currentNodeSideLength()) {}
 
     void GraphOperations::leftMouseButtonPressed(sf::Vector2i pos)
     {
@@ -35,7 +35,7 @@ namespace Pathfinding::Helpers
             currentMouseAction = MouseAction::BLOCKING_NODE;
             if (graphPtr->inBounds(mappedCoordinates))
             {
-                blockNodeAndNotifyDstarLiteIfRunning(mappedCoordinates);
+                blockNodeAndNotifyAlgorithm(mappedCoordinates);
             }
         }
     }
@@ -46,7 +46,7 @@ namespace Pathfinding::Helpers
         Vec2i mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
         if (graphPtr->inBounds(mappedCoordinates))
         {
-            clearNodeAndNotifyDstarLiteIfRunning(mappedCoordinates);
+            clearNodeAndNotifyAlgorithm(mappedCoordinates);
         }
     }
 
@@ -64,10 +64,10 @@ namespace Pathfinding::Helpers
                 graphPtr->setGoal(mappedCoordinates);
                 break;
             case MouseAction::BLOCKING_NODE:
-                blockNodeAndNotifyDstarLiteIfRunning(mappedCoordinates);
+                blockNodeAndNotifyAlgorithm(mappedCoordinates);
                 break;
             case MouseAction::CLEARING_NODE:
-                clearNodeAndNotifyDstarLiteIfRunning(mappedCoordinates);
+                clearNodeAndNotifyAlgorithm(mappedCoordinates);
                 break;
             }
         }
@@ -119,7 +119,7 @@ namespace Pathfinding::Helpers
         }
     }
 
-    void GraphOperations::blockNodeAndNotifyDstarLiteIfRunning(Vec2i mappedCoordinates)
+    void GraphOperations::blockNodeAndNotifyAlgorithm(Vec2i mappedCoordinates)
     {
         // Ignore operations without node state change or when events deactivated
         if (graphPtr->node(mappedCoordinates)->state != NodeState::Blocked && obsticlesEvents())
@@ -127,20 +127,25 @@ namespace Pathfinding::Helpers
             graphPtr->blockNode(mappedCoordinates);
             if (applicationStatePtr->currentState() == State::SEARCHING)
             {
-                dstarPtr->addChangedNode(graphPtr->node(mappedCoordinates));
+                edgeChangeCallBack(graphPtr->node(mappedCoordinates));
             }
         }
     }
 
-    void GraphOperations::clearNodeAndNotifyDstarLiteIfRunning(Vec2i mappedCoordinates)
+    void GraphOperations::clearNodeAndNotifyAlgorithm(Vec2i mappedCoordinates)
     {
         if (graphPtr->node(mappedCoordinates)->state != NodeState::Free && obsticlesEvents())
         {
             graphPtr->clearNode(mappedCoordinates);
             if (applicationStatePtr->currentState() == State::SEARCHING)
             {
-                dstarPtr->addChangedNode(graphPtr->node(mappedCoordinates));
+                edgeChangeCallBack(graphPtr->node(mappedCoordinates));
             }
         }
+    }
+
+    void GraphOperations::addEdgeChangeCallBack(std::function<void(PDNode * node)> callBack)
+    {
+        edgeChangeCallBack = callBack;
     }
 }

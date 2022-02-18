@@ -13,6 +13,7 @@
 #include "GraphDimension.hpp"
 #include "AlgorithmStepSpeed.hpp"
 #include <iostream>
+#include "IDStarLite.hpp"
 
 namespace Pathfinding::Core
 {
@@ -23,19 +24,21 @@ namespace Pathfinding::Core
     using Pathfinding::Events::EventManager;
     using Pathfinding::Gui::Menu;
     using Pathfinding::Helpers::GraphOperations;
+    using Pathfinding::Abstract::IDStarLite;
 
     void Application::createObbjects()
     {
         AlgorithmStepSpeed stepSpeed({100,200,400,800,1600,0});
-        GraphDimension dimension(GRID_FIELD_WIDTH, {4,8, 10, 20, 25, 40, 80});
+        GraphDimension dimension(GRID_FIELD_WIDTH, {8, 10, 20, 25, 40, 80});
         appState = ApplicationState(dimension, stepSpeed);
         graph = LatticeGraph(dimension.width(), dimension.height());
         window.create(sf::VideoMode(APPLICATION_WINDOW_WIDTH, GRID_FIELD_HEIGHT), APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close);
-        eventManager = EventManager(&window);
-        menu = Menu(&appState, GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH);
-        dstar = DStarLite(&graph);
-        graphOps = GraphOperations(&appState, &dstar, &graph);
-        renderer = Renderer(&window, &appState);
+
+        eventManagerUPtr = std::make_unique<EventManager>(&window);
+        menuUPtr = std::make_unique<Menu>(&appState, GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH);
+        dstarLiteUPtr = std::make_unique<DStarLite>(&graph);
+        graphOpsUPtr = std::make_unique<GraphOperations>(&appState, &graph);
+        rendererUPtr = std::make_unique<Renderer>(&window, &appState);
     }
 
     Application::Application()
@@ -49,36 +52,36 @@ namespace Pathfinding::Core
         using sf::Event::EventType::MouseMoved;
         using std::placeholders::_1;
 
-        eventManager.addBinding({EVENT_AND_KEY, MouseButtonPressed, sf::Mouse::Left}, std::bind(&GraphOperations::leftMouseButtonPressed, &graphOps, _1));
-        eventManager.addBinding({EVENT_AND_KEY, MouseButtonPressed, sf::Mouse::Right}, std::bind(&GraphOperations::rightMouseButtonPressed, &graphOps, _1));
-        eventManager.addBinding({EVENT_ONLY, MouseButtonReleased, NO_MOUSE_BUTTON}, std::bind(&GraphOperations::mouseButtonReleased, &graphOps, _1));
-        eventManager.addBinding({EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON}, std::bind(&GraphOperations::mouseMoved, &graphOps, _1));
-        eventManager.addBinding({EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON}, std::bind(&GraphOperations::nodeUnderCursor, &graphOps, _1));
+        eventManagerUPtr->addBinding({EVENT_AND_KEY, MouseButtonPressed, sf::Mouse::Left}, std::bind(&GraphOperations::leftMouseButtonPressed, graphOpsUPtr.get(), _1));
+        eventManagerUPtr->addBinding({EVENT_AND_KEY, MouseButtonPressed, sf::Mouse::Right}, std::bind(&GraphOperations::rightMouseButtonPressed, graphOpsUPtr.get(), _1));
+        eventManagerUPtr->addBinding({EVENT_ONLY, MouseButtonReleased, NO_MOUSE_BUTTON}, std::bind(&GraphOperations::mouseButtonReleased, graphOpsUPtr.get(), _1));
+        eventManagerUPtr->addBinding({EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON}, std::bind(&GraphOperations::mouseMoved, graphOpsUPtr.get(), _1));
+        eventManagerUPtr->addBinding({EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON}, std::bind(&GraphOperations::nodeUnderCursor, graphOpsUPtr.get(), _1));
 
-        menu.addNumberOfNodesChangedCallBack(std::bind(&Application::handleNumberOfNodesChange, this, _1));
-        menu.addStartCallBack(std::bind(&Application::startAlgorithm, this));
-        menu.addRandomGraphCallBack(std::bind(&Application::randomGraph, this));
-        menu.addResetCallBack(std::bind(&Application::reset, this));
-        menu.addStepCallBack(std::bind(&Application::step, this));
+        menuUPtr->addNumberOfNodesChangedCallBack(std::bind(&Application::handleNumberOfNodesChange, this, _1));
+        menuUPtr->addStartCallBack(std::bind(&Application::startAlgorithm, this));
+        menuUPtr->addRandomGraphCallBack(std::bind(&Application::randomGraph, this));
+        menuUPtr->addResetCallBack(std::bind(&Application::reset, this));
+        menuUPtr->addStepCallBack(std::bind(&Application::step, this));
 
-        dstar.addDoneCallBack(std::bind(&Application::done, this));
-        dstar.addNoPathCallBack(std::bind(&Application::noPath, this));
-        dstar.setHeuristic(std::make_shared<DiagonalHeuristic>());
+        dstarLiteUPtr->addDoneCallBack(std::bind(&Application::done, this));
+        dstarLiteUPtr->addNoPathCallBack(std::bind(&Application::noPath, this));
+        dstarLiteUPtr->setHeuristic(std::make_shared<DiagonalHeuristic>());
+
+        graphOpsUPtr->addEdgeChangeCallBack(std::bind(&IDStarLite::addChangedNode, dstarLiteUPtr.get(), _1));
 
         window.setFramerateLimit(60);
-        renderer.init();
-
         dimensionPtr = &appState.dimension();
         algoStepSpeedPtr = &appState.algorithmStepSpeed();
     }
 
     void Application::startAlgorithm()
     {
-        graphOps.disableEndpointsEvent();
+        graphOpsUPtr->disableEndpointsEvent();
         appState.setState(State::SEARCHING);
 
-        dstar.initialize();
-        dstar.initialRun();
+        dstarLiteUPtr->initialize();
+        dstarLiteUPtr->initialRun();
     }
 
     void Application::run()
@@ -93,7 +96,7 @@ namespace Pathfinding::Core
                 handleInput(event);
             }
             update(deltaClock);
-            menu.show();
+            menuUPtr->show();
             draw();
         }
         ImGui::SFML::Shutdown();
@@ -102,24 +105,24 @@ namespace Pathfinding::Core
     void Application::handleInput(sf::Event event)
     {
         ImGui::SFML::ProcessEvent(event);
-        eventManager.pushEvent(event);
+        eventManagerUPtr->pushEvent(event);
     }
 
     void Application::update(sf::Clock &deltaClock)
     {
         int32_t dt = deltaClock.getElapsedTime().asMilliseconds();
-        renderer.update();
+        rendererUPtr->update();
         if (appState.currentState() == State::SEARCHING && appState.autoStep())
         {
             accumulator += dt;
             if (accumulator > algoStepSpeedPtr->getCurrentStepSpeed())
             {
-                dstar.moveStart();
+                dstarLiteUPtr->moveStart();
                 accumulator = 0;
             }
         }
         ImGui::SFML::Update(window, deltaClock.restart());
-        eventManager.processEvents();
+        eventManagerUPtr->processEvents();
     }
 
     void Application::handleNumberOfNodesChange(int32_t index)
@@ -132,11 +135,11 @@ namespace Pathfinding::Core
     {
         window.clear();
         ImGui::SFML::Render(window);
-        renderer.render(graph);
+        rendererUPtr->render(graph);
 
         if (appState.currentState() == State::DONE || appState.currentState() == State::SEARCHING)
         {
-            renderer.renderPath(dstar.path());
+            rendererUPtr->renderPath(dstarLiteUPtr->path());
         }
 
         window.display();
@@ -145,24 +148,24 @@ namespace Pathfinding::Core
     void Application::reset()
     {
         graph.resize(dimensionPtr->height(), dimensionPtr->width());
-        graphOps.resize(dimensionPtr->currentNodeSideLength());
-        dstar.reset();
+        graphOpsUPtr->resize(dimensionPtr->currentNodeSideLength());
+        dstarLiteUPtr->reset();
         appState.setState(State::READY);
-        graphOps.enableEndPointsEvent();
-        graphOps.enableObsticlesEvents();
+        graphOpsUPtr->enableEndPointsEvent();
+        graphOpsUPtr->enableObsticlesEvents();
         appState.setNodeUnderCursor(nullptr);
-        renderer.reset();
+        rendererUPtr->reset();
     }
 
     void Application::done()
     {
-        graphOps.disableObsticlesEvents();
+        graphOpsUPtr->disableObsticlesEvents();
         appState.setState(State::DONE);
     }
 
     void Application::noPath()
     {
-        graphOps.disableObsticlesEvents();
+        graphOpsUPtr->disableObsticlesEvents();
         appState.setState(State::NO_PATH);
     }
 
@@ -174,6 +177,6 @@ namespace Pathfinding::Core
 
     void Application::step()
     {
-        dstar.moveStart();
+        dstarLiteUPtr->moveStart();
     }
 }

@@ -5,6 +5,7 @@
 #include <unordered_set>
 #include <functional>
 #include "PriorityQueue.hpp"
+#include "IDStarLite.hpp"
 
 namespace Pathfinding::Datastructures
 {
@@ -21,7 +22,7 @@ namespace Pathfinding::Abstract
 
 namespace Pathfinding::Algorithms
 {
-    class DStarLite
+    class DStarLite final : public Pathfinding::Abstract::IDStarLite
     {
     private:
         using PDLatticeGraph = Pathfinding::Datastructures::LatticeGraph;
@@ -30,21 +31,19 @@ namespace Pathfinding::Algorithms
         using PDKey = Pathfinding::Datastructures::Key;
         using PDNodeState = Pathfinding::Datastructures::NodeState;
         using PAAHeuristic = Pathfinding::Abstract::AHeuristic;
-
     public:
         DStarLite() = default;
         explicit DStarLite(PDLatticeGraph *graph);
-        void addDoneCallBack(std::function<void(void)> callBack);
-        void addNoPathCallBack(std::function<void(void)> callBack);
-        void initialize();
-        void setHeuristic(std::shared_ptr<PAAHeuristic> cost);
-        void computePath();
-        void reset();
-        void moveStart();
-        void addChangedNode(PDNode *node);
-        std::vector<PDNode *> path() const;
-        void initialRun();
-
+        void addDoneCallBack(std::function<void(void)> callBack) override;
+        void addNoPathCallBack(std::function<void(void)> callBack) override;
+        void initialize() override;
+        void setHeuristic(std::shared_ptr<PAAHeuristic> cost) override;
+        void computePath() override;
+        void reset() override;
+        void moveStart() override;
+        void addChangedNode(PDNode *node) override;
+        std::vector<PDNode *> path() const override;
+        void initialRun() override;
     private:
         void computeShortestPath();
         void UpdateVertex(PDNode *node);
