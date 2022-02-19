@@ -10,6 +10,8 @@
 #include "Constants.hpp"
 #include "GraphDimension.hpp"
 #include "ResourcePaths.hpp"
+#include "ALatticeGraphWrapper.hpp"
+#include "IApplicationState.hpp"
 
 namespace Pathfinding::Core
 {
@@ -19,6 +21,8 @@ namespace Pathfinding::Core
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
     using Pathfinding::Helpers::pathToFont;
+    using Pathfinding::Abstract::IApplicationState;
+    using Pathfinding::Abstract::ALatticeGraphWrapper;
 
     namespace
     {
@@ -94,8 +98,8 @@ namespace Pathfinding::Core
         }
     }
 
-    Renderer::Renderer(sf::RenderWindow *window, ApplicationState *state)
-        : windowPtr(window), appStatePtr(state), dimensionPtr(&state->dimension())
+    Renderer::Renderer(sf::RenderWindow *window, std::shared_ptr<IApplicationState> appStateSPtr_)
+        : windowPtr(window), appStateSPtr(appStateSPtr_), dimensionPtr(&appStateSPtr->dimension())
     {
         init();
     }
@@ -124,6 +128,7 @@ namespace Pathfinding::Core
         straightLine.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
         straightLine.setOutlineThickness(NODE_OUTLINE_THICKNESS);
 
+        resize();
         reset();
     }
 
@@ -171,20 +176,25 @@ namespace Pathfinding::Core
         return color;
     }
 
-    void Renderer::render(const LatticeGraph &graph)
+    void Renderer::resize()
     {
         float sideLength = static_cast<float>(dimensionPtr->currentNodeSideLength());
         nodeRect.setSize(sf::Vector2f(sideLength, sideLength));
-        for (std::size_t h = 0; h < graph.height(); ++h)
+    }
+
+    void Renderer::render(const std::shared_ptr<ALatticeGraphWrapper> latticeGraphWrapperSPtr)
+    {
+        for (std::size_t h = 0; h < latticeGraphWrapperSPtr->height(); ++h)
         {
-            for (std::size_t w = 0; w < graph.width(); ++w)
+            for (std::size_t w = 0; w < latticeGraphWrapperSPtr->width(); ++w)
             {
-                auto currentNode = graph[h][w];
-                auto coords = getNodePosition(&currentNode, dimensionPtr->currentNodeSideLength());
-                drawNode(currentNode, coords);
-                if (appStatePtr->showNodeInfo())
+                auto currentLocation = Vec2i(static_cast<int32_t>(h),static_cast<int32_t>(w));
+                auto currentNode = latticeGraphWrapperSPtr->node(currentLocation);
+                auto coords = getNodePosition(currentNode, dimensionPtr->currentNodeSideLength());
+                drawNode(*currentNode, coords);
+                if (appStateSPtr->showNodeInfo())
                 {
-                    renderNodeInfo(currentNode, coords);
+                    renderNodeInfo(*currentNode, coords);
                 }
             }
         }
@@ -258,11 +268,11 @@ namespace Pathfinding::Core
 
         sf::Vector2f pointPositionOffset(halfNodeSize, halfNodeSize);
 
-        if (appStatePtr->showPathLines() && appStatePtr->showPath())
+        if (appStateSPtr->showPathLines() && appStateSPtr->showPath())
         {
             renderPathLines(path, pointPositionOffset);
         }
-        if (appStatePtr->showPath())
+        if (appStateSPtr->showPath())
         {
             renderPathLineEndPoints(path, pointPositionOffset);
         }
@@ -314,7 +324,7 @@ namespace Pathfinding::Core
 
     void Renderer::updateColor()
     {
-        switch (appStatePtr->currentState())
+        switch (appStateSPtr->currentState())
         {
         case State::DONE:
             if (colorUp)

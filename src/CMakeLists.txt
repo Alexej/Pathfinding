@@ -1,19 +1,20 @@
 
 set(SOURCES_PATHFINDING
-  Datastructures/LatticeGraph.cpp
-  Helpers/GraphOperations.cpp
   Algorithms/DStarLite.cpp
+  Algorithms/DiagonalHeuristic.cpp
   Events/EventManager.cpp
+  Datastructures/LatticeGraph.cpp
   Datastructures/Node.cpp
+  Datastructures/LatticeGraphWrapper.cpp
   Datastructures/Key.cpp
   Core/Application.cpp
   Core/ApplicationState.cpp
   Core/Renderer.cpp
-  Algorithms/DiagonalHeuristic.cpp
-  Helpers/ResourcePaths.cpp
-  Helpers/SFMLHelpers.cpp
   Core/GraphDimension.cpp
   Core/AlgorithmStepSpeed.cpp
+  Helpers/ResourcePaths.cpp
+  Helpers/SFMLHelpers.cpp
+  Helpers/GraphOperations.cpp
   Gui/Menu.cpp
   main.cpp
 )

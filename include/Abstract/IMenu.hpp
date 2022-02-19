@@ -18,6 +18,7 @@ namespace Pathfinding::Abstract
             virtual void addResetCallBack(fPtrVV callBack) = 0;
             virtual void addRandomGraphCallBack(fPtrVV callBack) = 0;
             virtual bool initialized() const = 0;
+            virtual ~IMenu() = default;
     };
 }
 

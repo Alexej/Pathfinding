@@ -16,23 +16,27 @@
 #include "GraphOperations.hpp"
 #include <memory>
 
+namespace Pathfinding::Abstract
+{
+    class ALatticeGraphWrapper;
+}
+
 namespace Pathfinding::Core
 {
-
     class Application
     {
     private:
-        using PGMenu = Pathfinding::Gui::Menu;
-        using PEEventManager = Pathfinding::Events::EventManager;
-        using PADStarLite = Pathfinding::Algorithms::DStarLite;
+        using PAIMenu = Pathfinding::Abstract::IMenu;
+        using PAIEventManager = Pathfinding::Abstract::IEventManager;
+        using PAIDStarLite = Pathfinding::Abstract::IDStarLite;
         using PALatticeGraph = Pathfinding::Datastructures::LatticeGraph;
-        using PHGraphOperations = Pathfinding::Helpers::GraphOperations;
+        using PAIGraphOperations = Pathfinding::Abstract::IGraphOperations;
         using PAIRenderer = Pathfinding::Abstract::IRenderer;
-
+        using PAIApplicationState = Pathfinding::Abstract::IApplicationState;
+        using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
     public:
         Application();
         void run();
-
     private:
         void createObbjects();
         void draw();
@@ -47,17 +51,16 @@ namespace Pathfinding::Core
         void step();
     private:
         std::unique_ptr<PAIRenderer> rendererUPtr;
-        std::unique_ptr<PGMenu> menuUPtr;
-        std::unique_ptr<PEEventManager> eventManagerUPtr;
-        std::unique_ptr<PADStarLite> dstarLiteUPtr;
-        std::unique_ptr<PHGraphOperations> graphOpsUPtr;
-
-        ApplicationState appState;
-        sf::RenderWindow window;
-        PALatticeGraph graph;
+        std::unique_ptr<PAIMenu> menuUPtr;
+        std::unique_ptr<PAIEventManager> eventManagerUPtr;
+        std::unique_ptr<PAIDStarLite> dstarLiteUPtr;
+        std::unique_ptr<PAIGraphOperations> graphOpsUPtr;
+        std::shared_ptr<PAIApplicationState> appStateSPtr;
+        std::shared_ptr<PAALatticeGraphWrapper> latGraphWrapUPtr;
 
         int32_t accumulator;
         // For easier access
+        sf::RenderWindow window;
         GraphDimension *dimensionPtr;
         AlgorithmStepSpeed *algoStepSpeedPtr;
     };

@@ -9,7 +9,7 @@
 
 namespace Pathfinding::Datastructures
 {
-    class LatticeGraph;
+    class LatticeGraphWrapper;
     struct Node;
     struct Key;
     enum class NodeState;
@@ -18,6 +18,7 @@ namespace Pathfinding::Datastructures
 namespace Pathfinding::Abstract
 {
     class AHeuristic;
+    class ALatticeGraphWrapper;
 }
 
 namespace Pathfinding::Algorithms
@@ -25,7 +26,7 @@ namespace Pathfinding::Algorithms
     class DStarLite final : public Pathfinding::Abstract::IDStarLite
     {
     private:
-        using PDLatticeGraph = Pathfinding::Datastructures::LatticeGraph;
+        using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
         using PDPriorityQueue = Pathfinding::Datastructures::PriorityQueue;
         using PDNode = Pathfinding::Datastructures::Node;
         using PDKey = Pathfinding::Datastructures::Key;
@@ -33,7 +34,7 @@ namespace Pathfinding::Algorithms
         using PAAHeuristic = Pathfinding::Abstract::AHeuristic;
     public:
         DStarLite() = default;
-        explicit DStarLite(PDLatticeGraph *graph);
+        explicit DStarLite(std::shared_ptr<PAALatticeGraphWrapper> latticeGraphWrapperSPtr);
         void addDoneCallBack(std::function<void(void)> callBack) override;
         void addNoPathCallBack(std::function<void(void)> callBack) override;
         void initialize() override;
@@ -58,7 +59,7 @@ namespace Pathfinding::Algorithms
         bool computeShortestPathExitCondition();
         void insertIntoQueueAndUpdateKey(PDNode * node);
     private:
-        PDLatticeGraph *graphPtr = nullptr;
+        std::shared_ptr<PAALatticeGraphWrapper> latticeGraphWrapperSPtr = nullptr;
         PDNode *sStart = nullptr;
         PDNode *sLast = nullptr;
         PDPriorityQueue U;

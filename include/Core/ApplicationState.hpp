@@ -4,6 +4,7 @@
 #include "Constants.hpp"
 #include "GraphDimension.hpp"
 #include "AlgorithmStepSpeed.hpp"
+#include "IApplicationState.hpp"
 
 namespace Pathfinding::Datastructures
 {
@@ -19,32 +20,31 @@ namespace Pathfinding::Core
         DONE,
         NO_PATH
     };
-    class ApplicationState
+    class ApplicationState final : public Pathfinding::Abstract::IApplicationState
     {
     private:
         using PDNode = Pathfinding::Datastructures::Node;
-
     public:
         ApplicationState() = default;
         ApplicationState(GraphDimension dimension, AlgorithmStepSpeed stepSpeed);
-        bool showNodeInfo() const;
-        void enableNodeInfo();
-        void disableNodeInfo();
-        void setState(State state);
-        State currentState() const;
-        const PDNode *nodeUnderCursor() const;
-        void setNodeUnderCursor(const PDNode *node);
-        void enableAutoStep();
-        void disableAutoStep();
-        bool autoStep() const;
-        bool showPathLines() const;
-        bool showPath() const;
-        void enablePath();
-        void disablePath();
-        void enablePathLines();
-        void disablePathLines();
-        GraphDimension &dimension();
-        AlgorithmStepSpeed & algorithmStepSpeed();
+        bool showNodeInfo() const override;
+        void enableNodeInfo() override;
+        void disableNodeInfo() override;
+        void setState(State state) override;
+        State currentState() const override;
+        const PDNode *nodeUnderCursor() const override;
+        void setNodeUnderCursor(const PDNode *node) override;
+        void enableAutoStep() override;
+        void disableAutoStep() override;
+        bool autoStep() const override;
+        bool showPathLines() const override;
+        bool showPath() const override;
+        void enablePath() override;
+        void disablePath() override;
+        void enablePathLines() override;
+        void disablePathLines() override;
+        GraphDimension &dimension() override;
+        AlgorithmStepSpeed & algorithmStepSpeed() override;
     private:
         GraphDimension dimension_;
         AlgorithmStepSpeed stepSpeed_;

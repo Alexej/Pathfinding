@@ -7,17 +7,18 @@
 #include "DiagonalHeuristic.hpp"
 #include "ApplicationState.hpp"
 #include "DStarLiteHelpers.hpp"
+#include "ALatticeGraphWrapper.hpp"
 
 namespace Pathfinding::Algorithms
 {
     using Pathfinding::Abstract::AHeuristic;
     using Pathfinding::Datastructures::Key;
     using Pathfinding::Datastructures::LatticeGraph;
-    using Pathfinding::Datastructures::neighbors;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
     using Pathfinding::Helpers::DStarLiteHelpers;
+    using Pathfinding::Abstract::ALatticeGraphWrapper;
 
     namespace
     {
@@ -34,8 +35,8 @@ namespace Pathfinding::Algorithms
         }
     }
 
-    DStarLite::DStarLite(LatticeGraph *graph)
-        : graphPtr(graph) {}
+    DStarLite::DStarLite(std::shared_ptr<ALatticeGraphWrapper> latticeGraphWrapperSPtr_)
+        : latticeGraphWrapperSPtr(latticeGraphWrapperSPtr_) {}
 
     void DStarLite::setHeuristic(std::shared_ptr<AHeuristic> heuristicPtr_)
     {
@@ -45,15 +46,15 @@ namespace Pathfinding::Algorithms
     void DStarLite::initialize()
     {
         kM = 0;
-        sStart = graphPtr->startNode();
+        sStart = latticeGraphWrapperSPtr->startNode();
         sLast = sStart;
-        graphPtr->goalNode()->rhs = 0;
-        insertIntoQueueAndUpdateState(graphPtr->goalNode());
+        latticeGraphWrapperSPtr->goalNode()->rhs = 0;
+        insertIntoQueueAndUpdateState(latticeGraphWrapperSPtr->goalNode());
     }
 
     void DStarLite::UpdateVertex(Node *u)
     {
-        if (u != graphPtr->goalNode())
+        if (u != latticeGraphWrapperSPtr->goalNode())
         {
             u->rhs = getMinCG(u).first;
         }
@@ -113,7 +114,7 @@ namespace Pathfinding::Algorithms
 
     std::pair<double, Node *> DStarLite::getMinCG(Node *u)
     {
-        auto succs = neighbors(*graphPtr, u);
+        auto succs = latticeGraphWrapperSPtr->neighbors(u);
         auto itr = std::min_element(succs.begin(), succs.end(),
             [&u](const Node *lhs, const Node *rhs)
             {
@@ -175,7 +176,7 @@ namespace Pathfinding::Algorithms
 
     void DStarLite::updateNeighbors(Node *node)
     {
-        for (auto &pred : neighbors(*graphPtr, node))
+        for (auto &pred : latticeGraphWrapperSPtr->neighbors(node))
         {
             UpdateVertex(pred);
         }
@@ -183,7 +184,7 @@ namespace Pathfinding::Algorithms
 
     void DStarLite::changeNodeState(Node *node, NodeState newState)
     {
-        if (*node != *graphPtr->goalNode() && *node != *graphPtr->startNode())
+        if (*node != *latticeGraphWrapperSPtr->goalNode() && *node != *latticeGraphWrapperSPtr->startNode())
         {
             node->state = newState;
         }
@@ -194,7 +195,7 @@ namespace Pathfinding::Algorithms
         currentPath.clear();
         Node *currentNode = sStart;
         currentPath.push_back(currentNode);
-        while (*currentNode != *graphPtr->goalNode())
+        while (*currentNode != *latticeGraphWrapperSPtr->goalNode())
         {
             currentNode = getMinCG(currentNode).second;
             currentPath.push_back(currentNode);
@@ -224,7 +225,7 @@ namespace Pathfinding::Algorithms
         moveStartToNextInPath();
         computePath();
 
-        if (*sStart == *graphPtr->goalNode())
+        if (*sStart == *latticeGraphWrapperSPtr->goalNode())
         {
             doneCallBack_();
             return;
@@ -235,13 +236,13 @@ namespace Pathfinding::Algorithms
     {
         Node *prevStart = sStart;
         sStart = getMinCG(sStart).second;
-        graphPtr->setStart(sStart->location);
+        latticeGraphWrapperSPtr->setStart(sStart->location);
         prevStart->state = NodeState::Visited;
     }
 
     void DStarLite::addChangedNode(Node *node)
     {
-        for (auto &succ : neighbors(*graphPtr, node))
+        for (auto &succ : latticeGraphWrapperSPtr->neighbors(node))
         {
             nodesChanged.insert(succ);
         }

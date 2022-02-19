@@ -28,6 +28,8 @@ namespace Pathfinding::Abstract
             virtual void addChangedNode(PDNode *node) = 0;
             virtual std::vector<PDNode *> path() const = 0;
             virtual void initialRun() = 0;
+            virtual ~IDStarLite() = default;
+
     };
 }
 

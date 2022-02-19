@@ -13,19 +13,24 @@ namespace Pathfinding::Core
     class AlgorithmStepSpeed;
 }
 
+namespace Pathfinding::Abstract
+{
+    class IApplicationState;
+}
+
 namespace Pathfinding::Gui
 {
     class Menu final : public Pathfinding::Abstract::IMenu
     {
         private:
-            using PCApplicationState = Pathfinding::Core::ApplicationState;
+            using PAIApplicationState = Pathfinding::Abstract::IApplicationState;
             using PCGraphDimension = Pathfinding::Core::GraphDimension;
             using PCAlgorithmStepSpeed = Pathfinding::Core::AlgorithmStepSpeed;
             using fPtrVI = std::function<void(int32_t)>;
             using fPtrVV = std::function<void(void)>;
         public:
             Menu() = default;
-            Menu(PCApplicationState * appStat, int32_t offset, int32_t height, int32_t width);
+            Menu(std::shared_ptr<PAIApplicationState> stateSPtr, int32_t offset, int32_t height, int32_t width);
             void show() override;
             void addNumberOfNodesChangedCallBack(fPtrVI callBack) override;
             void addStepCallBack(fPtrVV callBack) override;
@@ -52,7 +57,7 @@ namespace Pathfinding::Gui
             bool autoStep;
             bool showPathLines;
             bool showPath;
-            PCApplicationState * appStatePtr;
+            std::shared_ptr<PAIApplicationState>  appStateSPtr;
         private:
             fPtrVI numberOfNodesChangedCallBack = nullptr;
             fPtrVV startCallBack = nullptr;

@@ -24,6 +24,12 @@ namespace Pathfinding::Algorithms
     class DStarLite;
 }
 
+namespace Pathfinding::Abstract
+{
+    class IApplicationState;
+    class ALatticeGraphWrapper;
+}
+
 namespace Pathfinding::Helpers
 {
 
@@ -39,14 +45,15 @@ namespace Pathfinding::Helpers
     class GraphOperations final : public Pathfinding::Abstract::IGraphOperations
     {
     private:
-        using PDLatticeGraph = Pathfinding::Datastructures::LatticeGraph;
-        using PCApplicationState = Pathfinding::Core::ApplicationState;
+        using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
+        using PAIApplicationState = Pathfinding::Abstract::IApplicationState;
         using PADStarLite = Pathfinding::Algorithms::DStarLite;
         using PDVec2i = Pathfinding::Datastructures::Vec2i;
         using PDNode = Pathfinding::Datastructures::Node;
     public:
         GraphOperations() = default;
-        GraphOperations(PCApplicationState *state, PDLatticeGraph *graph);
+        GraphOperations(std::shared_ptr<PAIApplicationState> appStateSPtr, 
+                        std::shared_ptr<PAALatticeGraphWrapper> latGraphWrapperUPtr);
         void rightMouseButtonPressed(sf::Vector2i pos) override;
         void leftMouseButtonPressed(sf::Vector2i pos) override;
         void mouseButtonReleased(sf::Vector2i pos) override;
@@ -67,9 +74,9 @@ namespace Pathfinding::Helpers
     private:
         MouseAction currentMouseAction = MouseAction::IDLE;
         std::function<void(PDNode * node)> edgeChangeCallBack;
-        PDLatticeGraph *graphPtr;
+        std::shared_ptr<PAALatticeGraphWrapper> latGraphWrapperUPtr;
         PADStarLite *dstarPtr;
-        PCApplicationState *applicationStatePtr;
+        std::shared_ptr<PAIApplicationState> appStateSPtr;
         bool endPointsEvents_ = true;
         bool obsticlesEvents_ = true;
         int32_t nodeSideLength;

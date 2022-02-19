@@ -5,9 +5,12 @@
 #include "ApplicationState.hpp"
 #include "SFMLHelpers.hpp"
 #include "DStarLite.hpp"
+#include "IApplicationState.hpp"
+#include "ALatticeGraphWrapper.hpp"
 
 namespace Pathfinding::Helpers
 {
+    using Pathfinding::Abstract::IApplicationState;
     using Pathfinding::Algorithms::DStarLite;
     using Pathfinding::Core::ApplicationState;
     using Pathfinding::Core::State;
@@ -15,25 +18,29 @@ namespace Pathfinding::Helpers
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
+    using Pathfinding::Abstract::ALatticeGraphWrapper;
 
-    GraphOperations::GraphOperations(ApplicationState *state_, LatticeGraph *graph_)
-        : applicationStatePtr(state_), graphPtr(graph_), nodeSideLength(state_->dimension().currentNodeSideLength()) {}
+    GraphOperations::GraphOperations(std::shared_ptr<IApplicationState> appStateSPtr_, 
+                                     std::shared_ptr<ALatticeGraphWrapper> latGraphWrapperUPtr_)
+        : appStateSPtr(appStateSPtr_), 
+        latGraphWrapperUPtr(latGraphWrapperUPtr_), 
+        nodeSideLength(appStateSPtr_->dimension().currentNodeSideLength()) {}
 
     void GraphOperations::leftMouseButtonPressed(sf::Vector2i pos)
     {
         Vec2i mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
-        if (mappedCoordinates == graphPtr->startNode()->location && endpointsEvents())
+        if (mappedCoordinates == latGraphWrapperUPtr->startNode()->location && endpointsEvents())
         {
             currentMouseAction = MouseAction::SETTING_START;
         }
-        else if (mappedCoordinates == graphPtr->goalNode()->location && endpointsEvents())
+        else if (mappedCoordinates == latGraphWrapperUPtr->goalNode()->location && endpointsEvents())
         {
             currentMouseAction = MouseAction::SETTING_GOAL;
         }
         else
         {
             currentMouseAction = MouseAction::BLOCKING_NODE;
-            if (graphPtr->inBounds(mappedCoordinates))
+            if (latGraphWrapperUPtr->inBounds(mappedCoordinates))
             {
                 blockNodeAndNotifyAlgorithm(mappedCoordinates);
             }
@@ -44,7 +51,7 @@ namespace Pathfinding::Helpers
     {
         currentMouseAction = MouseAction::CLEARING_NODE;
         Vec2i mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
-        if (graphPtr->inBounds(mappedCoordinates))
+        if (latGraphWrapperUPtr->inBounds(mappedCoordinates))
         {
             clearNodeAndNotifyAlgorithm(mappedCoordinates);
         }
@@ -53,15 +60,15 @@ namespace Pathfinding::Helpers
     void GraphOperations::mouseMoved(sf::Vector2i pos)
     {
         Vec2i mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
-        if (graphPtr->inBounds(mappedCoordinates))
+        if (latGraphWrapperUPtr->inBounds(mappedCoordinates))
         {
             switch (currentMouseAction)
             {
             case MouseAction::SETTING_START:
-                graphPtr->setStart(mappedCoordinates);
+                latGraphWrapperUPtr->setStart(mappedCoordinates);
                 break;
             case MouseAction::SETTING_GOAL:
-                graphPtr->setGoal(mappedCoordinates);
+                latGraphWrapperUPtr->setGoal(mappedCoordinates);
                 break;
             case MouseAction::BLOCKING_NODE:
                 blockNodeAndNotifyAlgorithm(mappedCoordinates);
@@ -113,38 +120,38 @@ namespace Pathfinding::Helpers
     void GraphOperations::nodeUnderCursor(sf::Vector2i pos)
     {
         Vec2i mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
-        if (graphPtr->inBounds(mappedCoordinates))
+        if (latGraphWrapperUPtr->inBounds(mappedCoordinates))
         {
-            applicationStatePtr->setNodeUnderCursor(graphPtr->node(mappedCoordinates));
+            appStateSPtr->setNodeUnderCursor(latGraphWrapperUPtr->node(mappedCoordinates));
         }
     }
 
     void GraphOperations::blockNodeAndNotifyAlgorithm(Vec2i mappedCoordinates)
     {
         // Ignore operations without node state change or when events deactivated
-        if (graphPtr->node(mappedCoordinates)->state != NodeState::Blocked && obsticlesEvents())
+        if (latGraphWrapperUPtr->node(mappedCoordinates)->state != NodeState::Blocked && obsticlesEvents())
         {
-            graphPtr->blockNode(mappedCoordinates);
-            if (applicationStatePtr->currentState() == State::SEARCHING)
+            latGraphWrapperUPtr->blockNode(mappedCoordinates);
+            if (appStateSPtr->currentState() == State::SEARCHING)
             {
-                edgeChangeCallBack(graphPtr->node(mappedCoordinates));
+                edgeChangeCallBack(latGraphWrapperUPtr->node(mappedCoordinates));
             }
         }
     }
 
     void GraphOperations::clearNodeAndNotifyAlgorithm(Vec2i mappedCoordinates)
     {
-        if (graphPtr->node(mappedCoordinates)->state != NodeState::Free && obsticlesEvents())
+        if (latGraphWrapperUPtr->node(mappedCoordinates)->state != NodeState::Free && obsticlesEvents())
         {
-            graphPtr->clearNode(mappedCoordinates);
-            if (applicationStatePtr->currentState() == State::SEARCHING)
+            latGraphWrapperUPtr->clearNode(mappedCoordinates);
+            if (appStateSPtr->currentState() == State::SEARCHING)
             {
-                edgeChangeCallBack(graphPtr->node(mappedCoordinates));
+                edgeChangeCallBack(latGraphWrapperUPtr->node(mappedCoordinates));
             }
         }
     }
 
-    void GraphOperations::addEdgeChangeCallBack(std::function<void(PDNode * node)> callBack)
+    void GraphOperations::addEdgeChangeCallBack(std::function<void(PDNode *node)> callBack)
     {
         edgeChangeCallBack = callBack;
     }

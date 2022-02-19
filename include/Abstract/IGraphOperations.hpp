@@ -29,6 +29,8 @@ namespace Pathfinding::Abstract
             virtual bool endpointsEvents() const = 0;
             virtual bool obsticlesEvents() const = 0;
             virtual void addEdgeChangeCallBack(std::function<void(PDNode * node)> callBack) = 0;
+            virtual ~IGraphOperations() = default;
+
     };
 }
 

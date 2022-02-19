@@ -14,6 +14,10 @@
 #include "AlgorithmStepSpeed.hpp"
 #include <iostream>
 #include "IDStarLite.hpp"
+#include "IGraphOperations.hpp"
+#include "GraphOperations.hpp"
+#include "LatticeGraphWrapper.hpp"
+#include "ILatticeGraph.hpp"
 
 namespace Pathfinding::Core
 {
@@ -23,22 +27,27 @@ namespace Pathfinding::Core
     using Pathfinding::Datastructures::LatticeGraph;
     using Pathfinding::Events::EventManager;
     using Pathfinding::Gui::Menu;
-    using Pathfinding::Helpers::GraphOperations;
+    using Pathfinding::Abstract::IGraphOperations;
     using Pathfinding::Abstract::IDStarLite;
+    using Pathfinding::Helpers::GraphOperations;
+    using Pathfinding::Datastructures::LatticeGraphWrapper;
+    using Pathfinding::Abstract::ILatticeGraph;
+
 
     void Application::createObbjects()
     {
         AlgorithmStepSpeed stepSpeed({100,200,400,800,1600,0});
         GraphDimension dimension(GRID_FIELD_WIDTH, {8, 10, 20, 25, 40, 80});
-        appState = ApplicationState(dimension, stepSpeed);
-        graph = LatticeGraph(dimension.width(), dimension.height());
-        window.create(sf::VideoMode(APPLICATION_WINDOW_WIDTH, GRID_FIELD_HEIGHT), APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close);
 
+        std::unique_ptr<ILatticeGraph> latticeGtaph = std::make_unique<LatticeGraph>(dimension.width(), dimension.height());
+        latGraphWrapUPtr = std::make_shared<LatticeGraphWrapper>(std::move(latticeGtaph));
+        window.create(sf::VideoMode(APPLICATION_WINDOW_WIDTH, GRID_FIELD_HEIGHT), APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close);
+        appStateSPtr = std::make_shared<ApplicationState>(dimension, stepSpeed);
         eventManagerUPtr = std::make_unique<EventManager>(&window);
-        menuUPtr = std::make_unique<Menu>(&appState, GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH);
-        dstarLiteUPtr = std::make_unique<DStarLite>(&graph);
-        graphOpsUPtr = std::make_unique<GraphOperations>(&appState, &graph);
-        rendererUPtr = std::make_unique<Renderer>(&window, &appState);
+        menuUPtr = std::make_unique<Menu>(appStateSPtr, GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH);
+        dstarLiteUPtr = std::make_unique<DStarLite>(latGraphWrapUPtr);
+        graphOpsUPtr = std::make_unique<GraphOperations>(appStateSPtr, latGraphWrapUPtr);
+        rendererUPtr = std::make_unique<Renderer>(&window, appStateSPtr);
     }
 
     Application::Application()
@@ -52,11 +61,11 @@ namespace Pathfinding::Core
         using sf::Event::EventType::MouseMoved;
         using std::placeholders::_1;
 
-        eventManagerUPtr->addBinding({EVENT_AND_KEY, MouseButtonPressed, sf::Mouse::Left}, std::bind(&GraphOperations::leftMouseButtonPressed, graphOpsUPtr.get(), _1));
-        eventManagerUPtr->addBinding({EVENT_AND_KEY, MouseButtonPressed, sf::Mouse::Right}, std::bind(&GraphOperations::rightMouseButtonPressed, graphOpsUPtr.get(), _1));
-        eventManagerUPtr->addBinding({EVENT_ONLY, MouseButtonReleased, NO_MOUSE_BUTTON}, std::bind(&GraphOperations::mouseButtonReleased, graphOpsUPtr.get(), _1));
-        eventManagerUPtr->addBinding({EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON}, std::bind(&GraphOperations::mouseMoved, graphOpsUPtr.get(), _1));
-        eventManagerUPtr->addBinding({EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON}, std::bind(&GraphOperations::nodeUnderCursor, graphOpsUPtr.get(), _1));
+        eventManagerUPtr->addBinding({EVENT_AND_KEY, MouseButtonPressed, sf::Mouse::Left}, std::bind(&IGraphOperations::leftMouseButtonPressed, graphOpsUPtr.get(), _1));
+        eventManagerUPtr->addBinding({EVENT_AND_KEY, MouseButtonPressed, sf::Mouse::Right}, std::bind(&IGraphOperations::rightMouseButtonPressed, graphOpsUPtr.get(), _1));
+        eventManagerUPtr->addBinding({EVENT_ONLY, MouseButtonReleased, NO_MOUSE_BUTTON}, std::bind(&IGraphOperations::mouseButtonReleased, graphOpsUPtr.get(), _1));
+        eventManagerUPtr->addBinding({EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON}, std::bind(&IGraphOperations::mouseMoved, graphOpsUPtr.get(), _1));
+        eventManagerUPtr->addBinding({EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON}, std::bind(&IGraphOperations::nodeUnderCursor, graphOpsUPtr.get(), _1));
 
         menuUPtr->addNumberOfNodesChangedCallBack(std::bind(&Application::handleNumberOfNodesChange, this, _1));
         menuUPtr->addStartCallBack(std::bind(&Application::startAlgorithm, this));
@@ -71,14 +80,14 @@ namespace Pathfinding::Core
         graphOpsUPtr->addEdgeChangeCallBack(std::bind(&IDStarLite::addChangedNode, dstarLiteUPtr.get(), _1));
 
         window.setFramerateLimit(60);
-        dimensionPtr = &appState.dimension();
-        algoStepSpeedPtr = &appState.algorithmStepSpeed();
+        dimensionPtr = &appStateSPtr->dimension();
+        algoStepSpeedPtr = &appStateSPtr->algorithmStepSpeed();
     }
 
     void Application::startAlgorithm()
     {
         graphOpsUPtr->disableEndpointsEvent();
-        appState.setState(State::SEARCHING);
+        appStateSPtr->setState(State::SEARCHING);
 
         dstarLiteUPtr->initialize();
         dstarLiteUPtr->initialRun();
@@ -112,7 +121,7 @@ namespace Pathfinding::Core
     {
         int32_t dt = deltaClock.getElapsedTime().asMilliseconds();
         rendererUPtr->update();
-        if (appState.currentState() == State::SEARCHING && appState.autoStep())
+        if (appStateSPtr->currentState() == State::SEARCHING && appStateSPtr->autoStep())
         {
             accumulator += dt;
             if (accumulator > algoStepSpeedPtr->getCurrentStepSpeed())
@@ -128,6 +137,8 @@ namespace Pathfinding::Core
     void Application::handleNumberOfNodesChange(int32_t index)
     {
         dimensionPtr->setCurrentNumberOfNodesIndex(index);
+        rendererUPtr->resize();
+        graphOpsUPtr->resize(dimensionPtr->currentNodeSideLength());
         reset();
     }
 
@@ -135,9 +146,9 @@ namespace Pathfinding::Core
     {
         window.clear();
         ImGui::SFML::Render(window);
-        rendererUPtr->render(graph);
+        rendererUPtr->render(latGraphWrapUPtr);
 
-        if (appState.currentState() == State::DONE || appState.currentState() == State::SEARCHING)
+        if (appStateSPtr->currentState() == State::DONE || appStateSPtr->currentState() == State::SEARCHING)
         {
             rendererUPtr->renderPath(dstarLiteUPtr->path());
         }
@@ -147,32 +158,31 @@ namespace Pathfinding::Core
 
     void Application::reset()
     {
-        graph.resize(dimensionPtr->height(), dimensionPtr->width());
-        graphOpsUPtr->resize(dimensionPtr->currentNodeSideLength());
         dstarLiteUPtr->reset();
-        appState.setState(State::READY);
+        latGraphWrapUPtr->resize(dimensionPtr->height(), dimensionPtr->width());    
+        appStateSPtr->setState(State::READY);
         graphOpsUPtr->enableEndPointsEvent();
         graphOpsUPtr->enableObsticlesEvents();
-        appState.setNodeUnderCursor(nullptr);
+        appStateSPtr->setNodeUnderCursor(nullptr);
         rendererUPtr->reset();
     }
 
     void Application::done()
     {
         graphOpsUPtr->disableObsticlesEvents();
-        appState.setState(State::DONE);
+        appStateSPtr->setState(State::DONE);
     }
 
     void Application::noPath()
     {
         graphOpsUPtr->disableObsticlesEvents();
-        appState.setState(State::NO_PATH);
+        appStateSPtr->setState(State::NO_PATH);
     }
 
     void Application::randomGraph()
     {
         reset();
-        initRandomGraph(graph);
+        latGraphWrapUPtr->initRandomGraph();
     }
 
     void Application::step()

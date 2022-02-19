@@ -20,6 +20,7 @@ namespace Pathfinding::Abstract
             virtual void addBinding(PEMouseEvent event, std::function<void(sf::Vector2i)> callbackFunc) = 0;
             virtual void pushEvent(sf::Event event) = 0;
             virtual void processEvents() = 0;
+            virtual ~IEventManager() = default;
     };
 }
 

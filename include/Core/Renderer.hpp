@@ -8,12 +8,17 @@
 #include <SFML/Graphics/Font.hpp>
 #include "IRenderer.hpp"
 
-
 namespace Pathfinding::Datastructures
 {
     class LatticeGraph;
     struct Node;
     enum class NodeState;
+}
+
+namespace Pathfinding::Abstract
+{
+    class IApplicationState;
+    class ALatticeGraphWrapper;
 }
 
 namespace Pathfinding::Core
@@ -26,14 +31,17 @@ namespace Pathfinding::Core
         using PDLatticeGraph = Pathfinding::Datastructures::LatticeGraph;
         using PDNode = Pathfinding::Datastructures::Node;
         using PDNodeState = Pathfinding::Datastructures::NodeState;
+        using PAIApplicationState = Pathfinding::Abstract::IApplicationState;
+        using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
 
     public:
         Renderer() = default;
-        Renderer(sf::RenderWindow *window, ApplicationState *state);
-        void render(const PDLatticeGraph &graph) override;
+        Renderer(sf::RenderWindow *window, std::shared_ptr<PAIApplicationState> appStateSPtr);
+        void render(const std::shared_ptr<PAALatticeGraphWrapper> latticeGraphWrapperSPtr) override;
         void renderPath(std::vector<PDNode *> path) override;
         void update() override;
         void reset() override;
+        void resize() override;
 
     private:
         void init();
@@ -44,6 +52,7 @@ namespace Pathfinding::Core
         void renderPathLines(std::vector<PDNode *> path, sf::Vector2f pointPositionOffset);
         sf::Color stateColor(PDNodeState state);
         void updateColor();
+
     private:
         sf::RectangleShape nodeRect;
         sf::Text text;
@@ -52,7 +61,7 @@ namespace Pathfinding::Core
         sf::RectangleShape diagonalLine;
         sf::RectangleShape straightLine;
         sf::RenderWindow *windowPtr = nullptr;
-        ApplicationState *appStatePtr = nullptr;
+        std::shared_ptr<PAIApplicationState> appStateSPtr = nullptr;
         GraphDimension *dimensionPtr = nullptr;
         sf::Color goalNodeDiff = sf::Color::Black;
         sf::Color visitedNodeDiff = sf::Color::Black;

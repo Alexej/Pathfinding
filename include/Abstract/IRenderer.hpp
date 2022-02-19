@@ -11,16 +11,24 @@ namespace Pathfinding::Datastructures
 
 namespace Pathfinding::Abstract
 {
+    class ALatticeGraphWrapper;
+}
+
+namespace Pathfinding::Abstract
+{
     class IRenderer
     {
         private:
             using PDNode = Pathfinding::Datastructures::Node;
             using PDLatticeGraph = Pathfinding::Datastructures::LatticeGraph;
+            using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
         public:
-            virtual void render(const PDLatticeGraph &graph) = 0;
+            virtual void render(const std::shared_ptr<PAALatticeGraphWrapper> latticeGraphWrapperSPtr) = 0;
             virtual void renderPath(std::vector<PDNode *> path) = 0;
             virtual void update() = 0;
             virtual void reset() = 0;
+            virtual void resize() = 0;
+            virtual ~IRenderer() = default;
     };
 }
 
