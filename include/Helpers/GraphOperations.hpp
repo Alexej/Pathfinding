@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <functional>
 
-#include "Vector2.hpp"
+#include "Vec2.hpp"
 #include "IGraphOperations.hpp"
 
 namespace Pathfinding::Datastructures

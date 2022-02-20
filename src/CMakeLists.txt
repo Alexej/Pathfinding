@@ -15,6 +15,7 @@ set(SOURCES_PATHFINDING
   Helpers/ResourcePaths.cpp
   Helpers/SFMLHelpers.cpp
   Helpers/GraphOperations.cpp
+  Helpers/ALatGrWrHelpers.cpp
   Gui/Menu.cpp
   main.cpp
 )

@@ -3,7 +3,8 @@
 
 #include <memory>
 #include <vector>
-#include "Vector2.hpp"
+#include "Vec2.hpp"
+#include "Resizable2DArray.hpp"
 
 namespace Pathfinding::Datastructures
 {
@@ -13,7 +14,7 @@ namespace Pathfinding::Datastructures
 namespace Pathfinding::Abstract
 {
     class ILatticeGraph;
-    class ALatticeGraphWrapper
+    class ALatticeGraphWrapper : public Resizable2DArray
     {
     private:
         using PDVec2i = Pathfinding::Datastructures::Vec2i;
@@ -24,24 +25,16 @@ namespace Pathfinding::Abstract
             : latGraphUPtr(std::move(latGraphUPtr_))
         {
         }
-
-        virtual void resize(int32_t height, int32_t width) = 0;
-        virtual std::vector<PDNode *> neighbors(PDNode *node) = 0;
+        virtual void setGoal(PDVec2i location) = 0;
+        virtual void setStart(PDVec2i location) = 0;
         virtual const PDNode *startNode() const = 0;
         virtual const PDNode *goalNode() const = 0;
         virtual PDNode *startNode() = 0;
         virtual PDNode *goalNode() = 0;
-        virtual void setGoal(PDVec2i location) = 0;
-        virtual void setStart(PDVec2i location) = 0;
-        virtual void blockNode(PDVec2i location) = 0;
-        virtual void clearNode(PDVec2i location) = 0;
-        virtual void resetEndpoints() = 0;
-        virtual bool inBounds(PDVec2i location) const = 0;
         virtual PDNode *node(PDVec2i location) = 0;
         virtual const PDNode *node(PDVec2i location) const = 0;
-        virtual void initRandomGraph() = 0;
-        virtual std::size_t width() const = 0;
-        virtual std::size_t height() const = 0;
+        virtual bool inBounds(PDVec2i location) const = 0;
+        virtual void resetEndpoints() = 0;
         virtual ~ALatticeGraphWrapper() = default;
 
     protected:

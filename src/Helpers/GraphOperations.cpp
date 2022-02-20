@@ -1,5 +1,5 @@
 #include "GraphOperations.hpp"
-#include "Vector2.hpp"
+#include "Vec2.hpp"
 #include "LatticeGraph.hpp"
 #include "Node.hpp"
 #include "ApplicationState.hpp"
@@ -7,6 +7,8 @@
 #include "DStarLite.hpp"
 #include "IApplicationState.hpp"
 #include "ALatticeGraphWrapper.hpp"
+#include "LatticeGraphWrapper.hpp"
+#include "ALatGrWrHelpers.hpp"
 
 namespace Pathfinding::Helpers
 {
@@ -19,6 +21,7 @@ namespace Pathfinding::Helpers
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
     using Pathfinding::Abstract::ALatticeGraphWrapper;
+    using Pathfinding::Helpers::ALatGrWrHelpers;
 
     GraphOperations::GraphOperations(std::shared_ptr<IApplicationState> appStateSPtr_, 
                                      std::shared_ptr<ALatticeGraphWrapper> latGraphWrapperUPtr_)
@@ -131,7 +134,7 @@ namespace Pathfinding::Helpers
         // Ignore operations without node state change or when events deactivated
         if (latGraphWrapperUPtr->node(mappedCoordinates)->state != NodeState::Blocked && obsticlesEvents())
         {
-            latGraphWrapperUPtr->blockNode(mappedCoordinates);
+            ALatGrWrHelpers::blockNode(latGraphWrapperUPtr, mappedCoordinates);
             if (appStateSPtr->currentState() == State::SEARCHING)
             {
                 edgeChangeCallBack(latGraphWrapperUPtr->node(mappedCoordinates));
@@ -143,7 +146,7 @@ namespace Pathfinding::Helpers
     {
         if (latGraphWrapperUPtr->node(mappedCoordinates)->state != NodeState::Free && obsticlesEvents())
         {
-            latGraphWrapperUPtr->clearNode(mappedCoordinates);
+            ALatGrWrHelpers::clearNode(latGraphWrapperUPtr, mappedCoordinates);
             if (appStateSPtr->currentState() == State::SEARCHING)
             {
                 edgeChangeCallBack(latGraphWrapperUPtr->node(mappedCoordinates));

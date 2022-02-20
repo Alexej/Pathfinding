@@ -18,6 +18,7 @@
 #include "GraphOperations.hpp"
 #include "LatticeGraphWrapper.hpp"
 #include "ILatticeGraph.hpp"
+#include "ALatGrWrHelpers.hpp"
 
 namespace Pathfinding::Core
 {
@@ -32,15 +33,16 @@ namespace Pathfinding::Core
     using Pathfinding::Helpers::GraphOperations;
     using Pathfinding::Datastructures::LatticeGraphWrapper;
     using Pathfinding::Abstract::ILatticeGraph;
+    using Pathfinding::Helpers::ALatGrWrHelpers;
 
 
     void Application::createObbjects()
     {
         AlgorithmStepSpeed stepSpeed({100,200,400,800,1600,0});
-        GraphDimension dimension(GRID_FIELD_WIDTH, {8, 10, 20, 25, 40, 80});
+        GraphDimension dimension(GRID_FIELD_WIDTH, {8, 10, 20, 25, 40});
 
-        std::unique_ptr<ILatticeGraph> latticeGtaph = std::make_unique<LatticeGraph>(dimension.width(), dimension.height());
-        latGraphWrapUPtr = std::make_shared<LatticeGraphWrapper>(std::move(latticeGtaph));
+        std::unique_ptr<ILatticeGraph> latticeGraph = std::make_unique<LatticeGraph>(dimension.width(), dimension.height());
+        latGraphWrapUPtr = std::make_shared<LatticeGraphWrapper>(std::move(latticeGraph));
         window.create(sf::VideoMode(APPLICATION_WINDOW_WIDTH, GRID_FIELD_HEIGHT), APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close);
         appStateSPtr = std::make_shared<ApplicationState>(dimension, stepSpeed);
         eventManagerUPtr = std::make_unique<EventManager>(&window);
@@ -182,7 +184,7 @@ namespace Pathfinding::Core
     void Application::randomGraph()
     {
         reset();
-        latGraphWrapUPtr->initRandomGraph();
+        ALatGrWrHelpers::initRandomGraph(latGraphWrapUPtr);
     }
 
     void Application::step()
