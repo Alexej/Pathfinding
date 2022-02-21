@@ -17,6 +17,7 @@ set(SOURCES_PATHFINDING
   Helpers/SFMLHelpers.cpp
   Helpers/GraphOperations.cpp
   Helpers/ALatGrWrHelpers.cpp
+  Helpers/ApplicationBuilder.cpp
   Gui/Menu.cpp
   main.cpp
 )

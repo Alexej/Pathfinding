@@ -2,94 +2,16 @@
 
 #include <imgui-SFML.h>
 #include <imgui.h>
-
-#include "Constants.hpp"
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/Event.hpp>
-#include "Constants.hpp"
-#include "Node.hpp"
-#include "DiagonalHeuristic.hpp"
-#include "SFMLHelpers.hpp"
-#include "GraphDimension.hpp"
-#include "AlgorithmStepSpeed.hpp"
-#include <iostream>
-#include "IDStarLite.hpp"
-#include "IGraphOperations.hpp"
-#include "GraphOperations.hpp"
-#include "LatticeGraphWrapper.hpp"
-#include "ILatticeGraph.hpp"
+
 #include "ALatGrWrHelpers.hpp"
-#include "DefaultCostFunction.hpp"
+#include "LatticeGraphWrapper.hpp"
 
 namespace Pathfinding::Core
 {
-    using namespace Pathfinding::Constants;
-    using Pathfinding::Abstract::IDStarLite;
-    using Pathfinding::Abstract::IGraphOperations;
-    using Pathfinding::Abstract::ILatticeGraph;
-    using Pathfinding::Algorithms::DefaultCostFunction;
-    using Pathfinding::Algorithms::DiagonalHeuristic;
-    using Pathfinding::Algorithms::DStarLite;
-    using Pathfinding::Datastructures::LatticeGraph;
-    using Pathfinding::Datastructures::LatticeGraphWrapper;
-    using Pathfinding::Events::EventManager;
-    using Pathfinding::Gui::Menu;
     using Pathfinding::Helpers::ALatGrWrHelpers;
-    using Pathfinding::Helpers::GraphOperations;
-
-    void Application::createObbjects()
-    {
-        AlgorithmStepSpeed stepSpeed({100, 200, 400, 800, 1600, 0});
-        GraphDimension dimension(GRID_FIELD_WIDTH, {8, 10, 20, 25, 40});
-
-        std::unique_ptr<ILatticeGraph> latticeGraph = std::make_unique<LatticeGraph>(dimension.width(), dimension.height());
-        latGraphWrapUPtr = std::make_shared<LatticeGraphWrapper>(std::move(latticeGraph));
-        window.create(sf::VideoMode(APPLICATION_WINDOW_WIDTH, GRID_FIELD_HEIGHT), APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close);
-        appStateSPtr = std::make_shared<ApplicationState>(dimension, stepSpeed);
-        eventManagerUPtr = std::make_unique<EventManager>(&window);
-        menuUPtr = std::make_unique<Menu>(appStateSPtr, GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH);
-        dstarLiteUPtr = std::make_unique<DStarLite>(latGraphWrapUPtr);
-        graphOpsUPtr = std::make_unique<GraphOperations>(appStateSPtr, latGraphWrapUPtr);
-        rendererUPtr = std::make_unique<Renderer>(&window, appStateSPtr);
-    }
-
-    Application::Application()
-    {
-        accumulator = 0;
-
-        createObbjects();
-
-        using sf::Event::EventType::MouseButtonPressed;
-        using sf::Event::EventType::MouseButtonReleased;
-        using sf::Event::EventType::MouseMoved;
-        using std::placeholders::_1;
-
-        eventManagerUPtr->addBinding({EVENT_AND_KEY, MouseButtonPressed, sf::Mouse::Left}, std::bind(&IGraphOperations::leftMouseButtonPressed, graphOpsUPtr.get(), _1));
-        eventManagerUPtr->addBinding({EVENT_AND_KEY, MouseButtonPressed, sf::Mouse::Right}, std::bind(&IGraphOperations::rightMouseButtonPressed, graphOpsUPtr.get(), _1));
-        eventManagerUPtr->addBinding({EVENT_ONLY, MouseButtonReleased, NO_MOUSE_BUTTON}, std::bind(&IGraphOperations::mouseButtonReleased, graphOpsUPtr.get(), _1));
-        eventManagerUPtr->addBinding({EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON}, std::bind(&IGraphOperations::mouseMoved, graphOpsUPtr.get(), _1));
-        eventManagerUPtr->addBinding({EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON}, std::bind(&IGraphOperations::nodeUnderCursor, graphOpsUPtr.get(), _1));
-
-        menuUPtr->addNumberOfNodesChangedCallBack(std::bind(&Application::handleNumberOfNodesChange, this, _1));
-        menuUPtr->addStartCallBack(std::bind(&Application::startAlgorithm, this));
-        menuUPtr->addRandomGraphCallBack(std::bind(&Application::randomGraph, this));
-        menuUPtr->addResetCallBack(std::bind(&Application::reset, this));
-        menuUPtr->addStepCallBack(std::bind(&Application::step, this));
-
-        dstarLiteUPtr->addDoneCallBack(std::bind(&Application::done, this));
-        dstarLiteUPtr->addNoPathCallBack(std::bind(&Application::noPath, this));
-
-        int32_t diagonalMovement = static_cast<int32_t>(sqrt(2)* 10);
-        int32_t striaghtMovement = 10;
-        dstarLiteUPtr->setHeuristic(std::make_unique<DiagonalHeuristic>(diagonalMovement, striaghtMovement));
-        dstarLiteUPtr->setCostFunction(std::make_unique<DefaultCostFunction>(diagonalMovement, striaghtMovement));
-
-        graphOpsUPtr->addEdgeChangeCallBack(std::bind(&IDStarLite::addChangedNode, dstarLiteUPtr.get(), _1));
-
-        window.setFramerateLimit(60);
-        dimensionPtr = &appStateSPtr->dimension();
-        algoStepSpeedPtr = &appStateSPtr->algorithmStepSpeed();
-    }
+    using Pathfinding::Datastructures::LatticeGraphWrapper;
 
     void Application::startAlgorithm()
     {

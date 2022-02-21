@@ -5,7 +5,7 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <SFML/Window/Event.hpp>
 #include <cstdint>
-#include <deque>
+#include <memory>
 
 #include "Renderer.hpp"
 #include "LatticeGraph.hpp"
@@ -14,17 +14,23 @@
 #include "Menu.hpp"
 #include "DStarLite.hpp"
 #include "GraphOperations.hpp"
-#include <memory>
+#include "IApplication.hpp"
 
 namespace Pathfinding::Abstract
 {
     class ALatticeGraphWrapper;
 }
 
+namespace Pathfinding::Helpers
+{
+    class ApplicationBuilder;
+}
+
 namespace Pathfinding::Core
 {
-    class Application
+    class Application final : public Pathfinding::Abstract::IApplication
     {
+        friend Pathfinding::Helpers::ApplicationBuilder;
     private:
         using PAIMenu = Pathfinding::Abstract::IMenu;
         using PAIEventManager = Pathfinding::Abstract::IEventManager;
@@ -35,10 +41,9 @@ namespace Pathfinding::Core
         using PAIApplicationState = Pathfinding::Abstract::IApplicationState;
         using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
     public:
-        Application();
+        Application() = default;
         void run();
     private:
-        void createObbjects();
         void draw();
         void update(sf::Clock &deltaClock);
         void handleInput(sf::Event event);
