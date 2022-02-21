@@ -2,6 +2,7 @@
 set(SOURCES_PATHFINDING
   Algorithms/DStarLite.cpp
   Algorithms/DiagonalHeuristic.cpp
+  Algorithms/DefaultCostFunction.cpp
   Events/EventManager.cpp
   Datastructures/LatticeGraph.cpp
   Datastructures/Node.cpp

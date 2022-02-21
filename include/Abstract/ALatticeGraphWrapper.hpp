@@ -19,7 +19,6 @@ namespace Pathfinding::Abstract
     private:
         using PDVec2i = Pathfinding::Datastructures::Vec2i;
         using PDNode = Pathfinding::Datastructures::Node;
-
     public:
         explicit ALatticeGraphWrapper(std::unique_ptr<ILatticeGraph> latGraphUPtr_)
             : latGraphUPtr(std::move(latGraphUPtr_))
@@ -36,7 +35,6 @@ namespace Pathfinding::Abstract
         virtual bool inBounds(PDVec2i location) const = 0;
         virtual void resetEndpoints() = 0;
         virtual ~ALatticeGraphWrapper() = default;
-
     protected:
         std::unique_ptr<ILatticeGraph> latGraphUPtr = nullptr;
     };

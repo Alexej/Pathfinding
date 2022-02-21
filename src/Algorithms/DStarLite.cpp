@@ -10,10 +10,12 @@
 #include "ALatticeGraphWrapper.hpp"
 #include "LatticeGraphWrapper.hpp"
 #include "ALatGrWrHelpers.hpp"
+#include "ICostFunction.hpp"
 
 namespace Pathfinding::Algorithms
 {
-    using Pathfinding::Abstract::AHeuristic;
+    using Pathfinding::Abstract::IHeuristic;
+    using Pathfinding::Abstract::ICostFunction;
     using Pathfinding::Abstract::ALatticeGraphWrapper;
     using Pathfinding::Datastructures::Key;
     using Pathfinding::Datastructures::LatticeGraph;
@@ -22,28 +24,19 @@ namespace Pathfinding::Algorithms
     using Pathfinding::Datastructures::Vec2i;
     using Pathfinding::Helpers::DStarLiteHelpers;
     using Pathfinding::Helpers::ALatGrWrHelpers;
-
-    namespace
-    {
-        double cost(const Node *from, const Node *to)
-        {
-            if (DStarLiteHelpers::blocked(to) || DStarLiteHelpers::blocked(from))
-            {
-                return DStarLiteHelpers::infinity();
-            }
-
-            int32_t dx = abs(from->location.width - to->location.width);
-            int32_t dy = abs(from->location.height - to->location.height);
-            return dx - dy == 0 ? static_cast<int>(10 * sqrt(2)) : 10;
-        }
-    }
+    using Pathfinding::Abstract::ICostFunction;
 
     DStarLite::DStarLite(std::shared_ptr<ALatticeGraphWrapper> latticeGraphWrapperSPtr_)
         : latticeGraphWrapperSPtr(latticeGraphWrapperSPtr_) {}
 
-    void DStarLite::setHeuristic(std::shared_ptr<AHeuristic> heuristicPtr_)
+    void DStarLite::setHeuristic(std::unique_ptr<IHeuristic> heuristicUPtr_)
     {
-        heuristicPtr = heuristicPtr_;
+        heuristicUPtr = std::move(heuristicUPtr_);
+    }
+
+    void DStarLite::setCostFunction(std::unique_ptr<ICostFunction> costUPtr_)
+    {
+        costUPtr = std::move(costUPtr_);
     }
 
     void DStarLite::initialize()
@@ -108,22 +101,23 @@ namespace Pathfinding::Algorithms
 
     Key DStarLite::calculateKey(Node *s)
     {
-        auto k1New = std::min(s->g, s->rhs) + heuristicPtr->calculate(sStart, s) + kM;
+        auto k1New = std::min(s->g, s->rhs) + heuristicUPtr->calculate(sStart, s) + kM;
         auto k2New = std::min(s->g, s->rhs);
         s->key.k1 = k1New;
         s->key.k2 = k2New;
         return {k1New, k2New};
     }
 
+
     std::pair<double, Node *> DStarLite::getMinCG(Node *u)
     {
         auto succs = ALatGrWrHelpers::neighbors(latticeGraphWrapperSPtr, u);
         auto itr = std::min_element(succs.begin(), succs.end(),
-                [&u](const Node *lhs, const Node *rhs)
-                {
-                    return (cost(u, lhs) + lhs->g) < (cost(u, rhs) + rhs->g);
-                });
-        return {(cost(u, *itr) + (*itr)->g), *itr};
+        [this, &u](const Node *lhs, const Node *rhs)
+        {
+            return costThisFar(u,lhs) < costThisFar(u,rhs);
+        });
+        return {costThisFar(u, *itr), *itr};
     }
 
     void DStarLite::reset()
@@ -209,7 +203,7 @@ namespace Pathfinding::Algorithms
     {
         if (!nodesChanged.empty())
         {
-            kM = kM + heuristicPtr->calculate(sLast, sStart);
+            kM = kM + heuristicUPtr->calculate(sLast, sStart);
             sLast = sStart;
             for (auto &node : nodesChanged)
             {
@@ -265,5 +259,10 @@ namespace Pathfinding::Algorithms
     std::vector<Node *> DStarLite::path() const
     {
         return currentPath;
+    }
+
+    double DStarLite::costThisFar(const Node * u, const Node * neighbor)
+    {
+        return costUPtr->calculate(u, neighbor) + neighbor->g;
     }
 }

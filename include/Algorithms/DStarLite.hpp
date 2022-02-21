@@ -17,8 +17,9 @@ namespace Pathfinding::Datastructures
 
 namespace Pathfinding::Abstract
 {
-    class AHeuristic;
+    class IHeuristic;
     class ALatticeGraphWrapper;
+    class ICostFunction;
 }
 
 namespace Pathfinding::Algorithms
@@ -31,14 +32,16 @@ namespace Pathfinding::Algorithms
         using PDNode = Pathfinding::Datastructures::Node;
         using PDKey = Pathfinding::Datastructures::Key;
         using PDNodeState = Pathfinding::Datastructures::NodeState;
-        using PAAHeuristic = Pathfinding::Abstract::AHeuristic;
+        using PAIHeuristic = Pathfinding::Abstract::IHeuristic;
+        using PAICostFunction = Pathfinding::Abstract::ICostFunction;
     public:
         DStarLite() = default;
         explicit DStarLite(std::shared_ptr<PAALatticeGraphWrapper> latticeGraphWrapperSPtr);
         void addDoneCallBack(std::function<void(void)> callBack) override;
         void addNoPathCallBack(std::function<void(void)> callBack) override;
         void initialize() override;
-        void setHeuristic(std::shared_ptr<PAAHeuristic> cost) override;
+        void setHeuristic(std::unique_ptr<PAIHeuristic> cost) override;
+        void setCostFunction(std::unique_ptr<PAICostFunction> cost) override;
         void computePath() override;
         void reset() override;
         void moveStart() override;
@@ -58,12 +61,14 @@ namespace Pathfinding::Algorithms
         void moveStartToNextInPath();
         bool computeShortestPathExitCondition();
         void insertIntoQueueAndUpdateKey(PDNode * node);
+        double costThisFar(const PDNode * u, const PDNode * neighbor);
     private:
         std::shared_ptr<PAALatticeGraphWrapper> latticeGraphWrapperSPtr = nullptr;
         PDNode *sStart = nullptr;
         PDNode *sLast = nullptr;
         PDPriorityQueue U;
-        std::shared_ptr<PAAHeuristic> heuristicPtr = nullptr;
+        std::unique_ptr<PAIHeuristic> heuristicUPtr = nullptr;
+        std::unique_ptr<PAICostFunction> costUPtr = nullptr;
         std::vector<PDNode *> currentPath;
         std::unordered_set<PDNode *> nodesChanged;
         std::function<void(void)> doneCallBack_;

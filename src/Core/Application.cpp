@@ -19,26 +19,27 @@
 #include "LatticeGraphWrapper.hpp"
 #include "ILatticeGraph.hpp"
 #include "ALatGrWrHelpers.hpp"
+#include "DefaultCostFunction.hpp"
 
 namespace Pathfinding::Core
 {
     using namespace Pathfinding::Constants;
+    using Pathfinding::Abstract::IDStarLite;
+    using Pathfinding::Abstract::IGraphOperations;
+    using Pathfinding::Abstract::ILatticeGraph;
+    using Pathfinding::Algorithms::DefaultCostFunction;
     using Pathfinding::Algorithms::DiagonalHeuristic;
     using Pathfinding::Algorithms::DStarLite;
     using Pathfinding::Datastructures::LatticeGraph;
+    using Pathfinding::Datastructures::LatticeGraphWrapper;
     using Pathfinding::Events::EventManager;
     using Pathfinding::Gui::Menu;
-    using Pathfinding::Abstract::IGraphOperations;
-    using Pathfinding::Abstract::IDStarLite;
-    using Pathfinding::Helpers::GraphOperations;
-    using Pathfinding::Datastructures::LatticeGraphWrapper;
-    using Pathfinding::Abstract::ILatticeGraph;
     using Pathfinding::Helpers::ALatGrWrHelpers;
-
+    using Pathfinding::Helpers::GraphOperations;
 
     void Application::createObbjects()
     {
-        AlgorithmStepSpeed stepSpeed({100,200,400,800,1600,0});
+        AlgorithmStepSpeed stepSpeed({100, 200, 400, 800, 1600, 0});
         GraphDimension dimension(GRID_FIELD_WIDTH, {8, 10, 20, 25, 40});
 
         std::unique_ptr<ILatticeGraph> latticeGraph = std::make_unique<LatticeGraph>(dimension.width(), dimension.height());
@@ -77,7 +78,11 @@ namespace Pathfinding::Core
 
         dstarLiteUPtr->addDoneCallBack(std::bind(&Application::done, this));
         dstarLiteUPtr->addNoPathCallBack(std::bind(&Application::noPath, this));
-        dstarLiteUPtr->setHeuristic(std::make_shared<DiagonalHeuristic>());
+
+        int32_t diagonalMovement = static_cast<int32_t>(sqrt(2)* 10);
+        int32_t striaghtMovement = 10;
+        dstarLiteUPtr->setHeuristic(std::make_unique<DiagonalHeuristic>(diagonalMovement, striaghtMovement));
+        dstarLiteUPtr->setCostFunction(std::make_unique<DefaultCostFunction>(diagonalMovement, striaghtMovement));
 
         graphOpsUPtr->addEdgeChangeCallBack(std::bind(&IDStarLite::addChangedNode, dstarLiteUPtr.get(), _1));
 
@@ -161,7 +166,7 @@ namespace Pathfinding::Core
     void Application::reset()
     {
         dstarLiteUPtr->reset();
-        latGraphWrapUPtr->resize(dimensionPtr->height(), dimensionPtr->width());    
+        latGraphWrapUPtr->resize(dimensionPtr->height(), dimensionPtr->width());
         appStateSPtr->setState(State::READY);
         graphOpsUPtr->enableEndPointsEvent();
         graphOpsUPtr->enableObsticlesEvents();
