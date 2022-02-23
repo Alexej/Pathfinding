@@ -16,17 +16,15 @@ namespace Pathfinding::Helpers
 
     void ALatGrWrHelpers::initRandomGraph(std::shared_ptr<ALatticeGraphWrapper> latGraphWrapperSPtr)
     {
-        for (int32_t h = 0; h < latGraphWrapperSPtr->height(); ++h)
+        iterateOverALatticeGraphWrapper(latGraphWrapperSPtr, [](PDNode * node, int32_t h, int32_t w)
         {
-            for (int32_t w = 0; w < latGraphWrapperSPtr->width(); ++w)
+            if (node->state == NodeState::Free && rand() % 3 == 0)
             {
-                if (latGraphWrapperSPtr->node(Vec2i(h, w))->state == NodeState::Free && rand() % 3 == 0)
-                {
-                    latGraphWrapperSPtr->node(Vec2i(h, w))->state = NodeState::Blocked;
-                }
-            }
-        }
+                node->state = NodeState::Blocked;
+            } 
+        });
     }
+
     std::vector<Node *> 
     ALatGrWrHelpers::neighbors(std::shared_ptr<ALatticeGraphWrapper> latGraphWrapperSPtr, Node *node_)
     {
@@ -70,6 +68,30 @@ namespace Pathfinding::Helpers
             else
             {
                 latGraphWrapper->node(location)->state = NodeState::Free;
+            }
+        }
+    }
+
+    void  ALatGrWrHelpers::iterateOverALatticeGraphWrapperConst(const std::shared_ptr<ALatticeGraphWrapper> latticeGraphWrapperSPtr,
+                                                                 std::function<void(const Node * node, int32_t h, int32_t w)> func)
+    {
+        for (int32_t h = 0; h < latticeGraphWrapperSPtr->height(); ++h)
+        {
+            for (int32_t w = 0; w < latticeGraphWrapperSPtr->width(); ++w)
+            {
+                func(latticeGraphWrapperSPtr->node(Vec2i(h,w)), h,w);
+            }
+        }
+    }
+
+    void  ALatGrWrHelpers::iterateOverALatticeGraphWrapper(std::shared_ptr<ALatticeGraphWrapper> latticeGraphWrapperSPtr,
+                                                                 std::function<void(Node * node, int32_t h, int32_t w)> func)
+    {
+        for (int32_t h = 0; h < latticeGraphWrapperSPtr->height(); ++h)
+        {
+            for (int32_t w = 0; w < latticeGraphWrapperSPtr->width(); ++w)
+            {
+                func(latticeGraphWrapperSPtr->node(Vec2i(h,w)), h,w);
             }
         }
     }

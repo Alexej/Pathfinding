@@ -66,6 +66,10 @@ namespace Pathfinding::Helpers
         applicationUPtr->accumulator = 0;
         instantiateObjects();
         initializeObjects();
+
+        /**
+         * !implicit upcast!
+         */
         return std::move(applicationUPtr);
     }
 

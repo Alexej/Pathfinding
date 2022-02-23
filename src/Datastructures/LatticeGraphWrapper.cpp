@@ -77,7 +77,7 @@ namespace Pathfinding::Datastructures
 
     void LatticeGraphWrapper::setStart(Vec2i location)
     {
-        if (node(location)->state != NodeState::Goal)
+        if (node(location)->state != NodeState::Goal && node(location)->state != NodeState::Blocked)
         {
             startNodePtr->state = NodeState::Free;
             startNodePtr = node(location);

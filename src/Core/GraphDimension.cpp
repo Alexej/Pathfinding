@@ -1,17 +1,24 @@
 #include "GraphDimension.hpp"
 #include <cmath>
+#include "WrongNodeNumberForDImensionException.hpp"
+
+#include <iostream>
 
 namespace Pathfinding::Core
 {
+    using Pathfinding::Exceptions::WrongNodeNumberForDImensionException;
 
     GraphDimension::GraphDimension(int32_t sideLength, std::initializer_list<int32_t> numberOfNodesInRow_)
-    : numberOfNodesInRow(numberOfNodesInRow_)
+        : numberOfNodesInRow(numberOfNodesInRow_)
     {
-        for(auto numOfNodes : numberOfNodesInRow)
+        for (auto numOfNodes : numberOfNodesInRow)
         {
-            if(sideLength % numOfNodes != 0)
+            if (sideLength % numOfNodes != 0)
             {
-                throw std::exception("Wrong dimensions entered");
+                throw WrongNodeNumberForDImensionException("Wrong dimensions entered",
+                                                           "GraphDimension.cpp",
+                                                           14,
+                                                           "GraphDimension::GraphDimension(int32_t sideLength, std::initializer_list<int32_t> numberOfNodesInRow_)");
             }
             int32_t numberOfNodes = static_cast<int32_t>(std::pow(numOfNodes, 2));
             numberOfNodesInt.push_back(numberOfNodes);
@@ -22,7 +29,7 @@ namespace Pathfinding::Core
     }
 
     GraphDimension::GraphDimension()
-    : GraphDimension(800,{10}) {}
+        : GraphDimension(800, {10}) {}
 
     int32_t GraphDimension::currentNumberOfNodesIndex() const
     {
@@ -64,7 +71,7 @@ namespace Pathfinding::Core
         return currentNumberOfNodesInRow();
     }
 
-    const std::vector<std::string> & GraphDimension::getNumberOfNodesInRowString() const
+    const std::vector<std::string> &GraphDimension::getNumberOfNodesInRowString() const
     {
         return numberOfNodesString;
     }

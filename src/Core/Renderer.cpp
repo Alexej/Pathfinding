@@ -12,21 +12,25 @@
 #include "ResourcePaths.hpp"
 #include "ALatticeGraphWrapper.hpp"
 #include "IApplicationState.hpp"
+#include "ALatGrWrHelpers.hpp"
+#include "CouldNotLoadFontException.hpp"
 
 namespace Pathfinding::Core
 {
     using namespace Pathfinding::Constants;
+    using Pathfinding::Abstract::ALatticeGraphWrapper;
+    using Pathfinding::Abstract::IApplicationState;
     using Pathfinding::Datastructures::LatticeGraph;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
+    using Pathfinding::Exceptions::CouldNotLoadFontException;
+    using Pathfinding::Helpers::ALatGrWrHelpers;
     using Pathfinding::Helpers::pathToFont;
-    using Pathfinding::Abstract::IApplicationState;
-    using Pathfinding::Abstract::ALatticeGraphWrapper;
 
     namespace
     {
-        sf::Vector2f getNodePosition(Node *node, int32_t sideLength)
+        sf::Vector2f getNodePosition(const Node *node, int32_t sideLength)
         {
             float nodesHorF = static_cast<float>(node->location.width);
             float nodesVertF = static_cast<float>(node->location.height);
@@ -142,7 +146,10 @@ namespace Pathfinding::Core
     {
         if (!font.loadFromFile(pathToFont() + fontName))
         {
-            throw std::exception("Couldn't find font");
+            throw CouldNotLoadFontException("Could not load font",
+                                            "Renderer.cpp",
+                                            152,
+                                            "void Renderer::loadFont(std::string fontName)");
         }
     }
 
@@ -184,20 +191,16 @@ namespace Pathfinding::Core
 
     void Renderer::render(const std::shared_ptr<ALatticeGraphWrapper> latticeGraphWrapperSPtr)
     {
-        for (std::size_t h = 0; h < latticeGraphWrapperSPtr->height(); ++h)
-        {
-            for (std::size_t w = 0; w < latticeGraphWrapperSPtr->width(); ++w)
-            {
-                auto currentLocation = Vec2i(static_cast<int32_t>(h),static_cast<int32_t>(w));
-                auto currentNode = latticeGraphWrapperSPtr->node(currentLocation);
-                auto coords = getNodePosition(currentNode, dimensionPtr->currentNodeSideLength());
-                drawNode(*currentNode, coords);
-                if (appStateSPtr->showNodeInfo())
-                {
-                    renderNodeInfo(*currentNode, coords);
-                }
-            }
-        }
+        ALatGrWrHelpers::iterateOverALatticeGraphWrapperConst(latticeGraphWrapperSPtr,
+                                                              [this](const Node *node, int32_t h, int32_t w)
+                                                              {
+                                                                  auto coords = getNodePosition(node, dimensionPtr->currentNodeSideLength());
+                                                                  drawNode(*node, coords);
+                                                                  if (appStateSPtr->showNodeInfo())
+                                                                  {
+                                                                      renderNodeInfo(*node, coords);
+                                                                  }
+                                                              });
     }
 
     void Renderer::renderNodeInfo(const Node &node, sf::Vector2f coords)

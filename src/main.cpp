@@ -1,27 +1,54 @@
+#include <iostream>
+#include <memory>
+
+
 #include "Application.hpp"
 #include "ApplicationBuilder.hpp"
 #include "IApplication.hpp"
 
-#include <iostream>
-#include <filesystem>
-#include <memory>
+
+#include "CouldNotFindPathToFontException.hpp"
+#include "CouldNotLoadFontException.hpp"
+#include "WrongNodeNumberForDImensionException.hpp"
+
+
+using Pathfinding::Abstract::IApplication;
+using Pathfinding::Core::Application;
+using Pathfinding::Exceptions::CouldNotFindPathToFontException;
+using Pathfinding::Exceptions::CouldNotLoadFontException;
+using Pathfinding::Exceptions::WrongNodeNumberForDImensionException;
+using Pathfinding::Helpers::ApplicationBuilder;
 
 
 int main()
 {
-    using Pathfinding::Core::Application;
-    using Pathfinding::Abstract::IApplication;
-    using Pathfinding::Helpers::ApplicationBuilder;
-
     ApplicationBuilder appBuilder;
+    std::unique_ptr<IApplication> app = nullptr;
 
-    appBuilder.setStepSpeed({100, 200, 400, 800, 1600, 0});
+    try
+    {
+        appBuilder.setStepSpeed({100, 200, 400, 800, 1600, 0});
+        appBuilder.setDimension({8, 10, 20, 25, 40});
+        appBuilder.setCosts(static_cast<int32_t>(sqrt(2) * 10), 10 * 1);
+        app = appBuilder.make();
+    }
+    catch (CouldNotFindPathToFontException &exception)
+    {
+        std::cout << exception.what() << "\n";
+        return -1;
+    }
+    catch (CouldNotLoadFontException &exception)
+    {
+        std::cout << exception.what() << "\n";
+        return -1;
+    }
+    catch (WrongNodeNumberForDImensionException &exception)
+    {
+        std::cout << exception.what() << "\n";
+        return -1;
+    }
 
-    appBuilder.setDimension({8, 10, 20, 25, 40});
-
-    appBuilder.setCosts(static_cast<int32_t>(sqrt(2)* 10), 10 * 1);
-
-    std::unique_ptr<IApplication> app = appBuilder.make();
     app->run();
+
     return 0;
 }

@@ -2,8 +2,9 @@
 #define A8F39E2A_B87B_43DF_A67F_993CBD86DC47
 
 #include <vector>
-#include "Vec2.hpp"
 #include <memory>
+#include <functional>
+#include "Vec2.hpp"
 
 namespace Pathfinding::Abstract
 {
@@ -28,6 +29,10 @@ namespace Pathfinding::Helpers
         static void initRandomGraph(std::shared_ptr<PAALatticeGraphWrapper> latGraphWrapperSPtr);
         static void blockNode(std::shared_ptr<PAALatticeGraphWrapper> latGraphWrapperSPtr, PDVec2i location);
         static void clearNode(std::shared_ptr<PAALatticeGraphWrapper> latGraphWrapperSPtr, PDVec2i location);
+        static void  iterateOverALatticeGraphWrapperConst(const std::shared_ptr<PAALatticeGraphWrapper> latticeGraphWrapperSPtr,
+                                                     std::function<void(const PDNode * node, int32_t h, int32_t w)>);
+        static void  iterateOverALatticeGraphWrapper(std::shared_ptr<PAALatticeGraphWrapper> latticeGraphWrapperSPtr,
+                                                     std::function<void(PDNode * node, int32_t h, int32_t w)>);
     };
 }
 
