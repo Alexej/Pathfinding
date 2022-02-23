@@ -16,7 +16,7 @@ namespace Pathfinding::Core
     void Application::startAlgorithm()
     {
         graphOpsUPtr->disableEndpointsEvent();
-        appStateSPtr->setState(State::SEARCHING);
+        appState.currentState = State::SEARCHING;
 
         dstarLiteUPtr->initialize();
         dstarLiteUPtr->initialRun();
@@ -50,7 +50,7 @@ namespace Pathfinding::Core
     {
         int32_t dt = deltaClock.getElapsedTime().asMilliseconds();
         rendererUPtr->update();
-        if (appStateSPtr->currentState() == State::SEARCHING && appStateSPtr->autoStep())
+        if (appState.currentState == State::SEARCHING && appState.autoStep)
         {
             accumulator += dt;
             if (accumulator > algoStepSpeedPtr->getCurrentStepSpeed())
@@ -77,7 +77,7 @@ namespace Pathfinding::Core
         ImGui::SFML::Render(window);
         rendererUPtr->render(latGraphWrapUPtr);
 
-        if (appStateSPtr->currentState() == State::DONE || appStateSPtr->currentState() == State::SEARCHING)
+        if (appState.currentState == State::DONE || appState.currentState == State::SEARCHING)
         {
             rendererUPtr->renderPath(dstarLiteUPtr->path());
         }
@@ -89,23 +89,23 @@ namespace Pathfinding::Core
     {
         dstarLiteUPtr->reset();
         latGraphWrapUPtr->resize(dimensionPtr->height(), dimensionPtr->width());
-        appStateSPtr->setState(State::READY);
+        appState.currentState = State::READY;
         graphOpsUPtr->enableEndPointsEvent();
         graphOpsUPtr->enableObsticlesEvents();
-        appStateSPtr->setNodeUnderCursor(nullptr);
+        appState.nodeUnderCursor = nullptr;
         rendererUPtr->reset();
     }
 
     void Application::done()
     {
         graphOpsUPtr->disableObsticlesEvents();
-        appStateSPtr->setState(State::DONE);
+        appState.currentState = State::DONE;
     }
 
     void Application::noPath()
     {
         graphOpsUPtr->disableObsticlesEvents();
-        appStateSPtr->setState(State::NO_PATH);
+        appState.currentState = State::NO_PATH;
     }
 
     void Application::randomGraph()

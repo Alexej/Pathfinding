@@ -11,7 +11,6 @@
 #include "GraphDimension.hpp"
 #include "ResourcePaths.hpp"
 #include "ALatticeGraphWrapper.hpp"
-#include "IApplicationState.hpp"
 #include "ALatGrWrHelpers.hpp"
 #include "CouldNotLoadFontException.hpp"
 
@@ -102,8 +101,8 @@ namespace Pathfinding::Core
         }
     }
 
-    Renderer::Renderer(sf::RenderWindow *window, std::shared_ptr<IApplicationState> appStateSPtr_)
-        : windowPtr(window), appStateSPtr(appStateSPtr_), dimensionPtr(&appStateSPtr->dimension())
+    Renderer::Renderer(sf::RenderWindow *window, ApplicationState * appStateSPtr_)
+        : windowPtr(window), appStateSPtr(appStateSPtr_), dimensionPtr(&appStateSPtr->dimension)
     {
         init();
     }
@@ -196,7 +195,7 @@ namespace Pathfinding::Core
                                                               {
                                                                   auto coords = getNodePosition(node, dimensionPtr->currentNodeSideLength());
                                                                   drawNode(*node, coords);
-                                                                  if (appStateSPtr->showNodeInfo())
+                                                                  if (appStateSPtr->showNodeInfo)
                                                                   {
                                                                       renderNodeInfo(*node, coords);
                                                                   }
@@ -271,11 +270,11 @@ namespace Pathfinding::Core
 
         sf::Vector2f pointPositionOffset(halfNodeSize, halfNodeSize);
 
-        if (appStateSPtr->showPathLines() && appStateSPtr->showPath())
+        if (appStateSPtr->showPathLines && appStateSPtr->showPath)
         {
             renderPathLines(path, pointPositionOffset);
         }
-        if (appStateSPtr->showPath())
+        if (appStateSPtr->showPath)
         {
             renderPathLineEndPoints(path, pointPositionOffset);
         }
@@ -327,7 +326,7 @@ namespace Pathfinding::Core
 
     void Renderer::updateColor()
     {
-        switch (appStateSPtr->currentState())
+        switch (appStateSPtr->currentState)
         {
         case State::DONE:
             if (colorUp)

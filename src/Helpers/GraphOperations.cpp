@@ -5,14 +5,12 @@
 #include "ApplicationState.hpp"
 #include "SFMLHelpers.hpp"
 #include "DStarLite.hpp"
-#include "IApplicationState.hpp"
 #include "ALatticeGraphWrapper.hpp"
 #include "LatticeGraphWrapper.hpp"
 #include "ALatGrWrHelpers.hpp"
 
 namespace Pathfinding::Helpers
 {
-    using Pathfinding::Abstract::IApplicationState;
     using Pathfinding::Algorithms::DStarLite;
     using Pathfinding::Core::ApplicationState;
     using Pathfinding::Core::State;
@@ -23,11 +21,11 @@ namespace Pathfinding::Helpers
     using Pathfinding::Abstract::ALatticeGraphWrapper;
     using Pathfinding::Helpers::ALatGrWrHelpers;
 
-    GraphOperations::GraphOperations(std::shared_ptr<IApplicationState> appStateSPtr_, 
+    GraphOperations::GraphOperations(ApplicationState * appStateSPtr_, 
                                      std::shared_ptr<ALatticeGraphWrapper> latGraphWrapperUPtr_)
         : appStateSPtr(appStateSPtr_), 
         latGraphWrapperUPtr(latGraphWrapperUPtr_), 
-        nodeSideLength(appStateSPtr_->dimension().currentNodeSideLength()) {}
+        nodeSideLength(appStateSPtr_->dimension.currentNodeSideLength()) {}
 
     void GraphOperations::leftMouseButtonPressed(sf::Vector2i pos)
     {
@@ -125,7 +123,7 @@ namespace Pathfinding::Helpers
         Vec2i mappedCoordinates = mapMouseToGraphCoordinates(pos, nodeSideLength);
         if (latGraphWrapperUPtr->inBounds(mappedCoordinates))
         {
-            appStateSPtr->setNodeUnderCursor(latGraphWrapperUPtr->node(mappedCoordinates));
+            appStateSPtr->nodeUnderCursor = latGraphWrapperUPtr->node(mappedCoordinates);
         }
     }
 
@@ -135,7 +133,7 @@ namespace Pathfinding::Helpers
         if (latGraphWrapperUPtr->node(mappedCoordinates)->state != NodeState::Blocked && obsticlesEvents())
         {
             ALatGrWrHelpers::blockNode(latGraphWrapperUPtr, mappedCoordinates);
-            if (appStateSPtr->currentState() == State::SEARCHING)
+            if (appStateSPtr->currentState == State::SEARCHING)
             {
                 edgeChangeCallBack(latGraphWrapperUPtr->node(mappedCoordinates));
             }
@@ -147,7 +145,7 @@ namespace Pathfinding::Helpers
         if (latGraphWrapperUPtr->node(mappedCoordinates)->state != NodeState::Free && obsticlesEvents())
         {
             ALatGrWrHelpers::clearNode(latGraphWrapperUPtr, mappedCoordinates);
-            if (appStateSPtr->currentState() == State::SEARCHING)
+            if (appStateSPtr->currentState == State::SEARCHING)
             {
                 edgeChangeCallBack(latGraphWrapperUPtr->node(mappedCoordinates));
             }

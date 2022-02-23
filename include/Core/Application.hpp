@@ -38,7 +38,7 @@ namespace Pathfinding::Core
         using PALatticeGraph = Pathfinding::Datastructures::LatticeGraph;
         using PAIGraphOperations = Pathfinding::Abstract::IGraphOperations;
         using PAIRenderer = Pathfinding::Abstract::IRenderer;
-        using PAIApplicationState = Pathfinding::Abstract::IApplicationState;
+        using PCApplicationState = Pathfinding::Core::ApplicationState;
         using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
     public:
         Application() = default;
@@ -60,11 +60,11 @@ namespace Pathfinding::Core
         std::unique_ptr<PAIEventManager> eventManagerUPtr;
         std::unique_ptr<PAIDStarLite> dstarLiteUPtr;
         std::unique_ptr<PAIGraphOperations> graphOpsUPtr;
-        std::shared_ptr<PAIApplicationState> appStateSPtr;
         std::shared_ptr<PAALatticeGraphWrapper> latGraphWrapUPtr;
 
         int32_t accumulator;
         // For easier access
+        PCApplicationState appState;
         sf::RenderWindow window;
         GraphDimension *dimensionPtr;
         AlgorithmStepSpeed *algoStepSpeedPtr;

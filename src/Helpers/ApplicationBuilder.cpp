@@ -15,6 +15,7 @@
 #include "DiagonalHeuristic.hpp"
 #include "DefaultCostFunction.hpp"
 #include "IGraphOperations.hpp"
+#include "ApplicationState.hpp"
 
 namespace Pathfinding::Helpers
 {
@@ -34,6 +35,7 @@ namespace Pathfinding::Helpers
     using Pathfinding::Datastructures::LatticeGraph;
     using Pathfinding::Datastructures::LatticeGraphWrapper;
     using Pathfinding::Events::EventManager;
+    using Pathfinding::Core::ApplicationState;
     using Pathfinding::Gui::Menu;
     using std::placeholders::_1;
     using sf::Event::EventType::MouseButtonPressed;
@@ -78,12 +80,12 @@ namespace Pathfinding::Helpers
         std::unique_ptr<ILatticeGraph> latticeGraph = std::make_unique<LatticeGraph>(dimension.width(), dimension.height());
         applicationUPtr->latGraphWrapUPtr = std::make_shared<LatticeGraphWrapper>(std::move(latticeGraph));
         applicationUPtr->window.create(sf::VideoMode(APPLICATION_WINDOW_WIDTH, GRID_FIELD_HEIGHT), APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close);
-        applicationUPtr->appStateSPtr = std::make_shared<ApplicationState>(dimension, stepSpeed);
+        applicationUPtr->appState = ApplicationState(dimension, stepSpeed);
         applicationUPtr->eventManagerUPtr = std::make_unique<EventManager>(&applicationUPtr->window);
-        applicationUPtr->menuUPtr = std::make_unique<Menu>(applicationUPtr->appStateSPtr, GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH);
+        applicationUPtr->menuUPtr = std::make_unique<Menu>(&applicationUPtr->appState, GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH);
         applicationUPtr->dstarLiteUPtr = std::make_unique<DStarLite>(applicationUPtr->latGraphWrapUPtr);
-        applicationUPtr->graphOpsUPtr = std::make_unique<GraphOperations>(applicationUPtr->appStateSPtr, applicationUPtr->latGraphWrapUPtr);
-        applicationUPtr->rendererUPtr = std::make_unique<Renderer>(&applicationUPtr->window, applicationUPtr->appStateSPtr);
+        applicationUPtr->graphOpsUPtr = std::make_unique<GraphOperations>(&applicationUPtr->appState, applicationUPtr->latGraphWrapUPtr);
+        applicationUPtr->rendererUPtr = std::make_unique<Renderer>(&applicationUPtr->window, &applicationUPtr->appState);
     }
 
 
@@ -95,28 +97,26 @@ namespace Pathfinding::Helpers
 
         applicationUPtr->graphOpsUPtr->addEdgeChangeCallBack(std::bind(&IDStarLite::addChangedNode, applicationUPtr->dstarLiteUPtr.get(), _1));
         applicationUPtr->window.setFramerateLimit(60);
-        applicationUPtr->dimensionPtr = &applicationUPtr->appStateSPtr->dimension();
-        applicationUPtr->algoStepSpeedPtr = &applicationUPtr->appStateSPtr->algorithmStepSpeed();
+        applicationUPtr->dimensionPtr = &applicationUPtr->appState.dimension;
+        applicationUPtr->algoStepSpeedPtr = &applicationUPtr->appState.stepSpeed;
     }
 
     void ApplicationBuilder::createEventManagerBindings()
     {
-
-
         applicationUPtr->eventManagerUPtr->addBinding({EVENT_AND_KEY, MouseButtonPressed, sf::Mouse::Left},
-                                                      std::bind(&IGraphOperations::leftMouseButtonPressed, applicationUPtr->graphOpsUPtr.get(), _1));
+        std::bind(&IGraphOperations::leftMouseButtonPressed, applicationUPtr->graphOpsUPtr.get(), _1));
 
         applicationUPtr->eventManagerUPtr->addBinding({EVENT_AND_KEY, MouseButtonPressed, sf::Mouse::Right},
-                                                      std::bind(&IGraphOperations::rightMouseButtonPressed, applicationUPtr->graphOpsUPtr.get(), _1));
+        std::bind(&IGraphOperations::rightMouseButtonPressed, applicationUPtr->graphOpsUPtr.get(), _1));
 
         applicationUPtr->eventManagerUPtr->addBinding({EVENT_ONLY, MouseButtonReleased, NO_MOUSE_BUTTON},
-                                                      std::bind(&IGraphOperations::mouseButtonReleased, applicationUPtr->graphOpsUPtr.get(), _1));
+        std::bind(&IGraphOperations::mouseButtonReleased, applicationUPtr->graphOpsUPtr.get(), _1));
 
         applicationUPtr->eventManagerUPtr->addBinding({EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON},
-                                                      std::bind(&IGraphOperations::mouseMoved, applicationUPtr->graphOpsUPtr.get(), _1));
+        std::bind(&IGraphOperations::mouseMoved, applicationUPtr->graphOpsUPtr.get(), _1));
 
         applicationUPtr->eventManagerUPtr->addBinding({EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON},
-                                                      std::bind(&IGraphOperations::nodeUnderCursor, applicationUPtr->graphOpsUPtr.get(), _1));
+        std::bind(&IGraphOperations::nodeUnderCursor, applicationUPtr->graphOpsUPtr.get(), _1));
     }
 
     void ApplicationBuilder::setMenuCallBacks()

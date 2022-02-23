@@ -23,7 +23,7 @@ namespace Pathfinding::Abstract
 
 namespace Pathfinding::Core
 {
-    class ApplicationState;
+    struct ApplicationState;
     class GraphDimension;
     class Renderer final : public Pathfinding::Abstract::IRenderer
     {
@@ -31,12 +31,12 @@ namespace Pathfinding::Core
         using PDLatticeGraph = Pathfinding::Datastructures::LatticeGraph;
         using PDNode = Pathfinding::Datastructures::Node;
         using PDNodeState = Pathfinding::Datastructures::NodeState;
-        using PAIApplicationState = Pathfinding::Abstract::IApplicationState;
+        using PCApplicationState = Pathfinding::Core::ApplicationState;
         using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
 
     public:
         Renderer() = default;
-        Renderer(sf::RenderWindow *window, std::shared_ptr<PAIApplicationState> appStateSPtr);
+        Renderer(sf::RenderWindow *window, ApplicationState * appStateSPtr);
         void render(const std::shared_ptr<PAALatticeGraphWrapper> latticeGraphWrapperSPtr) override;
         void renderPath(std::vector<PDNode *> path) override;
         void update() override;
@@ -60,10 +60,10 @@ namespace Pathfinding::Core
         sf::CircleShape nodePoint;
         sf::RectangleShape diagonalLine;
         sf::RectangleShape straightLine;
-        sf::RenderWindow *windowPtr = nullptr;
-        std::shared_ptr<PAIApplicationState> appStateSPtr = nullptr;
-        GraphDimension *dimensionPtr = nullptr;
         sf::Color goalNodeDiff = sf::Color::Black;
+        sf::RenderWindow *windowPtr = nullptr;
+        PCApplicationState * appStateSPtr = nullptr;
+        GraphDimension *dimensionPtr = nullptr;
         sf::Color visitedNodeDiff = sf::Color::Black;
         sf::Color goalColor;
         sf::Color visitedColor;

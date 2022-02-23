@@ -8,7 +8,6 @@
 #include "GraphDimension.hpp"
 #include "AlgorithmStepSpeed.hpp"
 #include "Node.hpp"
-#include "IApplicationState.hpp"
 
 /*
 https://eliasdaler.github.io/using-imgui-with-sfml-pt2/#combobox-listbox
@@ -40,7 +39,6 @@ namespace Pathfinding::Gui
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Core::AlgorithmStepSpeed;
-    using Pathfinding::Abstract::IApplicationState;
 
     namespace
     {
@@ -92,13 +90,13 @@ namespace Pathfinding::Gui
             return str;
         }
     }
-    Menu::Menu(std::shared_ptr<IApplicationState> appStateSPtr_, int32_t offset_, int32_t height_, int32_t width_)
-        : appStateSPtr(appStateSPtr_), offset(static_cast<float>(offset_)),
-          height(static_cast<float>(height_)),
-          width(static_cast<float>(width_))
+    Menu::Menu(ApplicationState * appStatePtr_, int32_t offset_, int32_t height_, int32_t width_)
+    : appStatePtr(appStatePtr_), offset(static_cast<float>(offset_)),
+        height(static_cast<float>(height_)),
+        width(static_cast<float>(width_))
     {
-        dimensionPtr = &appStateSPtr->dimension();
-        algoStepSpeedPtr = &appStateSPtr->algorithmStepSpeed();
+        dimensionPtr = &appStatePtr->dimension;
+        algoStepSpeedPtr = &appStatePtr->stepSpeed;
     }
 
     void Menu::show()
@@ -114,7 +112,7 @@ namespace Pathfinding::Gui
 
         ImGui::Begin("Configuration", nullptr, window_flags);
 
-        switch (appStateSPtr->currentState())
+        switch (appStatePtr->currentState)
         {
         case State::READY:
             showReadyStateElements();
@@ -144,34 +142,12 @@ namespace Pathfinding::Gui
 
     void Menu::showNodeInfoFlag()
     {
-        nodeInfo = appStateSPtr->showNodeInfo();
-        if (ImGui::Checkbox("Render Node Info", &nodeInfo))
-        {
-            if (nodeInfo)
-            {
-                appStateSPtr->enableNodeInfo();
-            }
-            else
-            {
-                appStateSPtr->disableNodeInfo();
-            }
-        }
+        ImGui::Checkbox("Render Node Info", &appStatePtr->showNodeInfo);
     }
 
     void Menu::showAutoStepFlag()
     {
-        autoStep = appStateSPtr->autoStep();
-        if (ImGui::Checkbox("Auto step", &autoStep))
-        {
-            if (autoStep)
-            {
-                appStateSPtr->enableAutoStep();
-            }
-            else
-            {
-                appStateSPtr->disableAutoStep();
-            }
-        }
+        ImGui::Checkbox("Auto step", &appStatePtr->autoStep);
     }
 
     void Menu::showCommonElements()
@@ -187,13 +163,13 @@ namespace Pathfinding::Gui
             showNodeInfoFlag();
         }
         ImGui::Spacing();
-        if (appStateSPtr->nodeUnderCursor() != nullptr)
+        if (appStatePtr->nodeUnderCursor != nullptr)
         {
             ImGui::Separator();
             showNodeInfoInMenu();
             ImGui::Separator();
         }
-        printLargeText(std::format("State: {}", mapStateToText(appStateSPtr->currentState())), 2);
+        printLargeText(std::format("State: {}", mapStateToText(appStatePtr->currentState)), 2);
         ImGui::Spacing();
         if (ImGui::Button("RESET", ImVec2(width - 20, 20)))
         {
@@ -221,7 +197,7 @@ namespace Pathfinding::Gui
             numberOfNodesChangedCallBack(itemCurrentNumberOfNodes);
             if (!dimensionPtr->canShowNodeInfo())
             {
-                appStateSPtr->disableNodeInfo();
+                appStatePtr->showNodeInfo = false;
                 nodeInfo = false;
             }
         }
@@ -229,14 +205,14 @@ namespace Pathfinding::Gui
 
     void Menu::showNodeInfoInMenu()
     {
-        ImGui::Text(std::format("Height: {} Width: {}", appStateSPtr->nodeUnderCursor()->location.height,
-                                appStateSPtr->nodeUnderCursor()->location.width)
+        ImGui::Text(std::format("Height: {} Width: {}", appStatePtr->nodeUnderCursor->location.height,
+                                                        appStatePtr->nodeUnderCursor->location.width)
                         .c_str());
-        ImGui::Text(std::format("G: {}", appStateSPtr->nodeUnderCursor()->g).c_str());
-        ImGui::Text(std::format("RHS: {}", appStateSPtr->nodeUnderCursor()->rhs).c_str());
-        ImGui::Text(std::format("K1: {}", appStateSPtr->nodeUnderCursor()->key.k1).c_str());
-        ImGui::Text(std::format("K2: {}", appStateSPtr->nodeUnderCursor()->key.k2).c_str());
-        ImGui::Text(std::format("State: {}", mapNodeStateToText(appStateSPtr->nodeUnderCursor()->state)).c_str());
+        ImGui::Text(std::format("G: {}", appStatePtr->nodeUnderCursor->g).c_str());
+        ImGui::Text(std::format("RHS: {}", appStatePtr->nodeUnderCursor->rhs).c_str());
+        ImGui::Text(std::format("K1: {}", appStatePtr->nodeUnderCursor->key.k1).c_str());
+        ImGui::Text(std::format("K2: {}", appStatePtr->nodeUnderCursor->key.k2).c_str());
+        ImGui::Text(std::format("State: {}", mapNodeStateToText(appStatePtr->nodeUnderCursor->state)).c_str());
     }
 
     void Menu::showReadyStateElements()
@@ -295,33 +271,10 @@ namespace Pathfinding::Gui
 
     void Menu::showPathFlags()
     {
-        showPath = appStateSPtr->showPath();
-        if (ImGui::Checkbox("Render path", &showPath))
+        ImGui::Checkbox("Render path", &appStatePtr->showPath);
+        if (appStatePtr->showPath)
         {
-            if (showPath)
-            {
-                appStateSPtr->enablePath();
-            }
-            else
-            {
-                appStateSPtr->disablePath();
-            }
-        }
-
-        showPathLines = appStateSPtr->showPathLines();
-        if (showPath)
-        {
-            if (ImGui::Checkbox("Render path lines", &showPathLines))
-            {
-                if (showPathLines)
-                {
-                    appStateSPtr->enablePathLines();
-                }
-                else
-                {
-                    appStateSPtr->disablePathLines();
-                }
-            }
+            ImGui::Checkbox("Render path lines", &appStatePtr->showPathLines);
         }
     }
 }
