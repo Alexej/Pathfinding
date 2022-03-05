@@ -1,27 +1,28 @@
 #include <iostream>
 #include <memory>
 
-
 #include "Application.hpp"
 #include "ApplicationBuilder.hpp"
 #include "IApplication.hpp"
 
-
 #include "CouldNotFindPathToFontException.hpp"
 #include "CouldNotLoadFontException.hpp"
-#include "WrongNodeNumberForDImensionException.hpp"
+#include "WrongNodeNumberForDimensionException.hpp"
 
 
-using Pathfinding::Abstract::IApplication;
-using Pathfinding::Core::Application;
-using Pathfinding::Exceptions::CouldNotFindPathToFontException;
-using Pathfinding::Exceptions::CouldNotLoadFontException;
-using Pathfinding::Exceptions::WrongNodeNumberForDImensionException;
-using Pathfinding::Helpers::ApplicationBuilder;
+#include <cmath>
+#include <numbers>
 
 
 int main()
-{
+{   
+    using Pathfinding::Abstract::IApplication;
+    using Pathfinding::Core::Application;
+    using Pathfinding::Exceptions::CouldNotFindPathToFontException;
+    using Pathfinding::Exceptions::CouldNotLoadFontException;
+    using Pathfinding::Exceptions::WrongNodeNumberForDimensionException;
+    using Pathfinding::Helpers::ApplicationBuilder;
+
     ApplicationBuilder appBuilder;
     std::unique_ptr<IApplication> app = nullptr;
 
@@ -42,7 +43,7 @@ int main()
         std::cout << exception.what() << "\n";
         return -1;
     }
-    catch (WrongNodeNumberForDImensionException &exception)
+    catch (WrongNodeNumberForDimensionException &exception)
     {
         std::cout << exception.what() << "\n";
         return -1;

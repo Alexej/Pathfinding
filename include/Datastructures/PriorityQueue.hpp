@@ -23,11 +23,6 @@ namespace Pathfinding::Datastructures
     class PriorityQueue final : public std::priority_queue<Node *, std::vector<Node *>, NodeComperator>
     {
     public:
-        auto begin() { return this->c.begin(); }
-        auto end() { return this->c.end(); }
-        auto begin() const { return this->c.cbegin(); }
-        auto end() const { return this->c.cend(); }
-
         void remove(Node *node)
         {
             auto it = std::find_if(this->c.begin(), this->c.end(), 

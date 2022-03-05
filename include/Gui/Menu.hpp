@@ -39,7 +39,6 @@ namespace Pathfinding::Gui
             void showNodeInfoInMenu();
             void showNodeInfoFlag();
             void showSearchingElements();
-            void printLargeText(std::string text, double factor);
             void showAutoStepFlag();
             void showPathFlags();
             void showAlgorithmStepSpeedComboBox();
@@ -48,10 +47,6 @@ namespace Pathfinding::Gui
             float offset; 
             float height; 
             float width;
-            bool nodeInfo;
-            bool autoStep;
-            bool showPathLines;
-            bool showPath;
             PCApplicationState * appStatePtr;
         private:
             fPtrVI numberOfNodesChangedCallBack = nullptr;

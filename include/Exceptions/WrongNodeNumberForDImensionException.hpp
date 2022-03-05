@@ -5,7 +5,7 @@
 
 namespace Pathfinding::Exceptions
 {
-    class WrongNodeNumberForDImensionException final : public Pathfinding::Abstract::AException
+    class WrongNodeNumberForDimensionException final : public Pathfinding::Abstract::AException
     {
         public:
         WrongNodeNumberForDImensionException(const char* msg, const char* file_, int line_, const char* func_, const char* info_ = "")

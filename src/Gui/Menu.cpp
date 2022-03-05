@@ -8,27 +8,7 @@
 #include "GraphDimension.hpp"
 #include "AlgorithmStepSpeed.hpp"
 #include "Node.hpp"
-
-/*
-https://eliasdaler.github.io/using-imgui-with-sfml-pt2/#combobox-listbox
-*/
-namespace ImGui
-{
-    static auto vector_getter = [](void* vec, int idx, const char** out_text)
-    {
-        auto& vector = *static_cast<std::vector<std::string>*>(vec);
-        if (idx < 0 || idx >= static_cast<int>(vector.size())) { return false; }
-        *out_text = vector.at(idx).c_str();
-        return true;
-    };
-
-    bool custom_combo(const char* label, int* currIndex, std::vector<std::string>& values)
-    {
-        if (values.empty()) { return false; }
-        return Combo(label, currIndex, vector_getter,
-            static_cast<void*>(&values), static_cast<int32_t>(values.size()));
-    }
-}
+#include "GuiHelpers.hpp"
 
 
 namespace Pathfinding::Gui
@@ -39,57 +19,10 @@ namespace Pathfinding::Gui
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Core::AlgorithmStepSpeed;
+    using Pathfinding::Helpers::mapNodeStateToText;
+    using Pathfinding::Helpers::mapStateToText;
+    using Pathfinding::Helpers::printLargeText;
 
-    namespace
-    {
-        std::string mapNodeStateToText(NodeState state)
-        {
-            std::string str;
-            switch (state)
-            {
-            case NodeState::Blocked:
-                str = "Blocked";
-                break;
-            case NodeState::Free:
-                str = "Free";
-                break;
-            case NodeState::Frontier:
-                str = "Frontier";
-                break;
-            case NodeState::Goal:
-                str = "Goal";
-                break;
-            case NodeState::Start:
-                str = "Start";
-                break;
-            case NodeState::Visited:
-                str = "Visited";
-                break;
-            }
-            return str;
-        }
-
-        std::string mapStateToText(State state)
-        {
-            std::string str;
-            switch (state)
-            {
-            case State::READY:
-                str = "READY";
-                break;
-            case State::SEARCHING:
-                str = "SEARCHING";
-                break;
-            case State::DONE:
-                str = "DONE";
-                break;
-            case State::NO_PATH:
-                str = "NO_PATH";
-                break;
-            }
-            return str;
-        }
-    }
     Menu::Menu(ApplicationState * appStatePtr_, int32_t offset_, int32_t height_, int32_t width_)
     : appStatePtr(appStatePtr_), offset(static_cast<float>(offset_)),
         height(static_cast<float>(height_)),
@@ -198,7 +131,6 @@ namespace Pathfinding::Gui
             if (!dimensionPtr->canShowNodeInfo())
             {
                 appStatePtr->showNodeInfo = false;
-                nodeInfo = false;
             }
         }
     }
@@ -255,13 +187,6 @@ namespace Pathfinding::Gui
     void Menu::addStepCallBack(fPtrVV callBack)
     {
         stepCallBack = callBack;
-    }
-
-    void Menu::printLargeText(std::string text, double factor)
-    {
-        ImGui::SetWindowFontScale(static_cast<float>(factor));
-        ImGui::Text(text.c_str());
-        ImGui::SetWindowFontScale(1);
     }
 
     void Menu::addRandomGraphCallBack(fPtrVV callBack)

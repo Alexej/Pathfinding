@@ -1,5 +1,7 @@
 #include "Renderer.hpp"
 
+#include <cmath>
+#include <numbers>
 #include <array>
 #include <SFML/Graphics/CircleShape.hpp>
 
@@ -58,46 +60,16 @@ namespace Pathfinding::Core
 
         double getAngleBetweenTwoNodes(Node *n1, Node *n2)
         {
-            double angle;
-            Vec2i diff = n2->location - n1->location;
-            if (diff == Vec2i(1, 1))
-            {
-                angle = 45;
-            }
-            else if (diff == Vec2i(1, 0))
-            {
-                angle = 90;
-            }
-            else if (diff == Vec2i(1, -1))
-            {
-                angle = 135;
-            }
-            else if (diff == Vec2i(0, -1))
-            {
-                angle = 180;
-            }
-            else if (diff == Vec2i(-1, -1))
-            {
-                angle = 225;
-            }
-            else if (diff == Vec2i(-1, 0))
-            {
-                angle = 270;
-            }
-            else if (diff == Vec2i(-1, 1))
-            {
-                angle = 315;
-            }
-            else if (diff == Vec2i(0, 1))
-            {
-                angle = 0;
-            }
-            return angle;
+            float y1 = static_cast<float>(n1->location.height);
+            float x1 = static_cast<float>(n1->location.width);
+            float y2 = static_cast<float>(n2->location.height);
+            float x2 = static_cast<float>(n2->location.width);
+            return std::atan2(y2 - y1, x2 - x1) * (180.0 / std::numbers::pi);
         }
 
         bool diagonal(double angle)
         {
-            return angle == 45 || angle == 135 || angle == 225 || angle == 315;
+            return std::abs(angle) == 45 || angle == std::abs(135);
         }
     }
 
@@ -135,12 +107,6 @@ namespace Pathfinding::Core
         reset();
     }
 
-    /**
-     * @brief
-     * !fix path!
-     * @param fontName
-     * @return sf::Font
-     */
     void Renderer::loadFont(std::string fontName)
     {
         if (!font.loadFromFile(pathToFont() + fontName))
@@ -191,15 +157,15 @@ namespace Pathfinding::Core
     void Renderer::render(const std::shared_ptr<ALatticeGraphWrapper> latticeGraphWrapperSPtr)
     {
         ALatGrWrHelpers::iterateOverALatticeGraphWrapperConst(latticeGraphWrapperSPtr,
-                                                              [this](const Node *node, int32_t h, int32_t w)
-                                                              {
-                                                                  auto coords = getNodePosition(node, dimensionPtr->currentNodeSideLength());
-                                                                  drawNode(*node, coords);
-                                                                  if (appStateSPtr->showNodeInfo)
-                                                                  {
-                                                                      renderNodeInfo(*node, coords);
-                                                                  }
-                                                              });
+        [this](const Node *node, int32_t h, int32_t w)
+        {
+            auto coords = getNodePosition(node, dimensionPtr->currentNodeSideLength());
+            drawNode(*node, coords);
+            if (appStateSPtr->showNodeInfo)
+            {
+                renderNodeInfo(*node, coords);
+            }
+        });
     }
 
     void Renderer::renderNodeInfo(const Node &node, sf::Vector2f coords)

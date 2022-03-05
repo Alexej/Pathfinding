@@ -14,6 +14,7 @@ set(SOURCES_PATHFINDING
   Core/GraphDimension.cpp
   Core/AlgorithmStepSpeed.cpp
   Helpers/ResourcePaths.cpp
+  Helpers/GuiHelpers.cpp
   Helpers/SFMLHelpers.cpp
   Helpers/GraphOperations.cpp
   Helpers/ALatGrWrHelpers.cpp
