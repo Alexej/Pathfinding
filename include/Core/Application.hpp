@@ -62,9 +62,8 @@ namespace Pathfinding::Core
         std::unique_ptr<PAIGraphOperations> graphOpsUPtr;
         std::shared_ptr<PAALatticeGraphWrapper> latGraphWrapUPtr;
 
-        int32_t accumulator;
-        // For easier access
         PCApplicationState appState;
+        int32_t accumulator;
         sf::RenderWindow window;
         GraphDimension *dimensionPtr;
         AlgorithmStepSpeed *algoStepSpeedPtr;

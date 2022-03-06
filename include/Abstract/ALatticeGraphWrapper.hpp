@@ -33,7 +33,6 @@ namespace Pathfinding::Abstract
         virtual PDNode *node(PDVec2i location) = 0;
         virtual const PDNode *node(PDVec2i location) const = 0;
         virtual bool inBounds(PDVec2i location) const = 0;
-        virtual void resetEndpoints() = 0;
         virtual ~ALatticeGraphWrapper() = default;
     protected:
         std::unique_ptr<ILatticeGraph> latGraphUPtr = nullptr;

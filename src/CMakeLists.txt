@@ -7,7 +7,6 @@ set(SOURCES_PATHFINDING
   Datastructures/LatticeGraph.cpp
   Datastructures/Node.cpp
   Datastructures/LatticeGraphWrapper.cpp
-  Datastructures/Key.cpp
   Core/Application.cpp
   Core/ApplicationState.cpp
   Core/Renderer.cpp

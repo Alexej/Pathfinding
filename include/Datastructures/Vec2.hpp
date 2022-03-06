@@ -9,7 +9,7 @@ namespace Pathfinding::Datastructures
 {
     /**
      * @brief
-     * !didn't want to use sf::Vector<T> from sfml because my code uses the first coordinate to store the height,
+     * !didn't want to use sf::Vector<T> from sfml because my code uses first coordinate to store the height,
      * !x for height would be misleading.
      * @tparam T
      */

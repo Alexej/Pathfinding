@@ -69,7 +69,7 @@ namespace Pathfinding::Core
 
         bool diagonal(double angle)
         {
-            return std::abs(angle) == 45 || angle == std::abs(135);
+            return std::abs(angle) == 45 || std::abs(angle) == 135;
         }
     }
 
@@ -150,8 +150,35 @@ namespace Pathfinding::Core
 
     void Renderer::resize()
     {
-        float sideLength = static_cast<float>(dimensionPtr->currentNodeSideLength());
-        nodeRect.setSize(sf::Vector2f(sideLength, sideLength));
+        float straightLineLength = static_cast<float>(dimensionPtr->currentNodeSideLength());
+        float halfNodeSize = straightLineLength / 2;
+
+        float nodePointRadius;
+
+        if (dimensionPtr->canShowNodeInfo())
+        {
+            nodePointRadius = halfNodeSize / 5;
+        }
+        else
+        {
+            nodePointRadius = halfNodeSize / 2.5f;
+        }
+
+        nodePoint.setRadius(nodePointRadius);
+        nodePoint.setOrigin(nodePointRadius, nodePointRadius);
+
+        float halfNodeSizeSquared = static_cast<float>(pow(straightLineLength / 2, 2));
+
+        float lineThickness = nodePointRadius / 2;
+        float diagonalLineLength = 2 * sqrt(halfNodeSizeSquared + halfNodeSizeSquared);
+
+        straightLine.setSize(sf::Vector2f(straightLineLength, lineThickness));
+        diagonalLine.setSize(sf::Vector2f(diagonalLineLength, lineThickness));
+
+        straightLine.setOrigin(sf::Vector2f(0, lineThickness / 2));
+        diagonalLine.setOrigin(sf::Vector2f(0, lineThickness / 2));
+
+        nodeRect.setSize(sf::Vector2f(straightLineLength, straightLineLength));
     }
 
     void Renderer::render(const std::shared_ptr<ALatticeGraphWrapper> latticeGraphWrapperSPtr)
@@ -204,37 +231,9 @@ namespace Pathfinding::Core
         windowPtr->draw(nodeRect);
     }
 
-    void Renderer::renderPath(std::vector<Node *> path)
+    void Renderer::renderPath(const std::vector<Node *> & path)
     {
-        float straightLineLength = static_cast<float>(dimensionPtr->currentNodeSideLength());
-        float halfNodeSize = straightLineLength / 2;
-
-        float nodePointRadius;
-
-        if (dimensionPtr->canShowNodeInfo())
-        {
-            nodePointRadius = halfNodeSize / 5;
-        }
-        else
-        {
-            nodePointRadius = halfNodeSize / 2.5f;
-        }
-
-        nodePoint.setRadius(nodePointRadius);
-        nodePoint.setOrigin(nodePointRadius, nodePointRadius);
-
-        float halfNodeSizeSquared = static_cast<float>(pow(straightLineLength / 2, 2));
-
-        float lineThickness = nodePointRadius / 2;
-        float diagonalLineLength = 2 * sqrt(halfNodeSizeSquared + halfNodeSizeSquared);
-
-        straightLine.setSize(sf::Vector2f(straightLineLength, lineThickness));
-        diagonalLine.setSize(sf::Vector2f(diagonalLineLength, lineThickness));
-
-        straightLine.setOrigin(sf::Vector2f(0, lineThickness / 2));
-        diagonalLine.setOrigin(sf::Vector2f(0, lineThickness / 2));
-
-        sf::Vector2f pointPositionOffset(halfNodeSize, halfNodeSize);
+        sf::Vector2f pointPositionOffset(dimensionPtr->currentNodeSideLength() / 2.f, dimensionPtr->currentNodeSideLength() / 2.f);
 
         if (appStateSPtr->showPathLines && appStateSPtr->showPath)
         {
@@ -246,7 +245,7 @@ namespace Pathfinding::Core
         }
     }
 
-    void Renderer::renderPathLineEndPoints(std::vector<Node *> path, sf::Vector2f pointPositionOffset)
+    void Renderer::renderPathLineEndPoints(const std::vector<Node *> & path, sf::Vector2f pointPositionOffset)
     {
         for (auto &node : path)
         {
@@ -266,7 +265,7 @@ namespace Pathfinding::Core
         }
     }
 
-    void Renderer::renderPathLines(std::vector<Node *> path, sf::Vector2f pointPositionOffset)
+    void Renderer::renderPathLines(const std::vector<Node *> & path, sf::Vector2f pointPositionOffset)
     {
         for (auto currentNodeItr = path.begin(); currentNodeItr != path.end(); ++currentNodeItr)
         {

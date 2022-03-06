@@ -71,14 +71,14 @@ namespace Pathfinding::Helpers
         void clearNodeAndNotifyAlgorithm(PDVec2i mappedCoordinates);
 
     private:
-        MouseAction currentMouseAction = MouseAction::IDLE;
         std::function<void(PDNode * node)> edgeChangeCallBack;
+        int32_t nodeSideLength;
+        MouseAction currentMouseAction = MouseAction::IDLE;
         std::shared_ptr<PAALatticeGraphWrapper> latGraphWrapperUPtr;
         PADStarLite *dstarPtr;
         PCApplicationState * appStateSPtr;
         bool endPointsEvents_ = true;
         bool obsticlesEvents_ = true;
-        int32_t nodeSideLength;
     };
 }
 

@@ -6,7 +6,7 @@
 
 namespace Pathfinding::Core
 {
-    using Pathfinding::Exceptions::WrongNodeNumberForDImensionException;
+    using Pathfinding::Exceptions::WrongNodeNumberForDimensionException;
 
     GraphDimension::GraphDimension(int32_t sideLength, std::initializer_list<int32_t> numberOfNodesInRow_)
         : numberOfNodesInRow(numberOfNodesInRow_)
@@ -15,7 +15,7 @@ namespace Pathfinding::Core
         {
             if (sideLength % numOfNodes != 0)
             {
-                throw WrongNodeNumberForDImensionException("Wrong dimensions entered",
+                throw WrongNodeNumberForDimensionException("Wrong dimensions entered",
                                                            "GraphDimension.cpp",
                                                            14,
                                                            "GraphDimension::GraphDimension(int32_t sideLength, std::initializer_list<int32_t> numberOfNodesInRow_)");

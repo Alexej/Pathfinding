@@ -23,57 +23,43 @@ namespace Pathfinding::Datastructures
     class PriorityQueue final : public std::priority_queue<Node *, std::vector<Node *>, NodeComperator>
     {
     public:
-        void remove(Node *node)
+        void remove(const Node *node)
         {
-            auto it = std::find_if(this->c.begin(), this->c.end(), 
-            
-                [&node](const Node * element)
-                { 
-                    return *element == *node; 
-                });
-
-            this->c.erase(it);
-            std::make_heap(this->c.begin(), this->c.end(), this->comp);
+            auto it = std::find(c.begin(), c.end(), node);
+            c.erase(it);
+            std::make_heap(c.begin(), c.end(), comp);
         }
 
         void insert(Node *node)
         {
-            this->push(node);
+            push(node);
         }
 
         void reset()
         {
             c.clear();
-            std::make_heap(this->c.begin(), this->c.end(), this->comp);
         }
 
         Key topKey() const
         {
-            if (this->empty())
+            if (empty())
             {
                 return Key();
             }
-            return this->top()->key;
+            return top()->key;
         }
 
         Node *popD()
         {
-            auto topNode = this->top();
+            auto topNode = top();
             pop();
             return topNode;
         }
 
-        bool contains(const Node *node)
+        bool contains(const Node *node) const
         {
-            return std::find_if(this->c.begin(), this->c.end(), 
-            [&node](const Node* input)
-            { 
-                return *input == *node; 
-            }) != this->c.end();
+            return std::find(c.begin(), c.end(), node) != c.end();
         }
-
-    private:
-        using std::priority_queue<Node *, std::vector<Node *>, NodeComperator>::pop;
     };
 }
 

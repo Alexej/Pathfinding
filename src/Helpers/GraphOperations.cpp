@@ -11,6 +11,7 @@
 
 namespace Pathfinding::Helpers
 {
+    using Pathfinding::Abstract::ALatticeGraphWrapper;
     using Pathfinding::Algorithms::DStarLite;
     using Pathfinding::Core::ApplicationState;
     using Pathfinding::Core::State;
@@ -18,14 +19,13 @@ namespace Pathfinding::Helpers
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
-    using Pathfinding::Abstract::ALatticeGraphWrapper;
     using Pathfinding::Helpers::ALatGrWrHelpers;
 
-    GraphOperations::GraphOperations(ApplicationState * appStateSPtr_, 
+    GraphOperations::GraphOperations(ApplicationState *appStateSPtr_,
                                      std::shared_ptr<ALatticeGraphWrapper> latGraphWrapperUPtr_)
-        : appStateSPtr(appStateSPtr_), 
-        latGraphWrapperUPtr(latGraphWrapperUPtr_), 
-        nodeSideLength(appStateSPtr_->dimension.currentNodeSideLength()) {}
+        : latGraphWrapperUPtr(latGraphWrapperUPtr_), 
+          appStateSPtr(appStateSPtr_),
+          nodeSideLength(appStateSPtr_->dimension.currentNodeSideLength()) {}
 
     void GraphOperations::leftMouseButtonPressed(sf::Vector2i pos)
     {
@@ -65,6 +65,8 @@ namespace Pathfinding::Helpers
         {
             switch (currentMouseAction)
             {
+            case MouseAction::IDLE:
+                break;
             case MouseAction::SETTING_START:
                 latGraphWrapperUPtr->setStart(mappedCoordinates);
                 break;

@@ -34,7 +34,6 @@ namespace Pathfinding::Core
                 handleInput(event);
             }
             update(deltaClock);
-            menuUPtr->show();
             draw();
         }
         ImGui::SFML::Shutdown();
@@ -73,6 +72,7 @@ namespace Pathfinding::Core
 
     void Application::draw()
     {
+        menuUPtr->show();
         window.clear();
         ImGui::SFML::Render(window);
         rendererUPtr->render(latGraphWrapUPtr);

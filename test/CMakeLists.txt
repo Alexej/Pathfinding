@@ -13,7 +13,6 @@ FetchContent_MakeAvailable(Catch2)
 set(SOURCES_TESTS
     ../src/Datastructures/Node.cpp
     ../src/Datastructures/LatticeGraph.cpp
-    ../src/Datastructures/Key.cpp
     TestLocation.cpp
     TestVector2.cpp
     TestLatticeGraph.cpp

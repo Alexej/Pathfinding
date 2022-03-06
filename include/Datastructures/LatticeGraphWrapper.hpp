@@ -26,9 +26,10 @@ namespace Pathfinding::Datastructures
             bool inBounds(Vec2i location) const override;
             std::size_t width() const override;
             std::size_t height() const override;
-            void resetEndpoints() override;
             void setGoal(Vec2i location) override;
             void setStart(Vec2i location) override;
+        private:
+            void resetEndpoints();
         private:
             Node *goalNodePtr;
             Node *startNodePtr;

@@ -1,5 +1,5 @@
 #include <catch2/catch_test_macros.hpp>
-#include "Vector2.hpp"
+#include "Vec2.hpp"
 
 using namespace Pathfinding::Datastructures;
 

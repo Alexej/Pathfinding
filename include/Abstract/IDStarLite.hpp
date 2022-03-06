@@ -4,6 +4,7 @@
 #include <functional>
 #include <memory>
 #include <vector>
+#include "IInformedSearchAlgorithm.hpp"
 
 namespace Pathfinding::Datastructures
 {
@@ -12,9 +13,7 @@ namespace Pathfinding::Datastructures
 
 namespace Pathfinding::Abstract
 {
-    class IHeuristic;
-    class ICostFunction;
-    class IDStarLite
+    class IDStarLite : public IInformedSearchAlgorithm
     {
         private:
             using PDNode = Pathfinding::Datastructures::Node;
@@ -22,8 +21,6 @@ namespace Pathfinding::Abstract
             virtual void addDoneCallBack(std::function<void(void)> callBack) = 0;
             virtual void addNoPathCallBack(std::function<void(void)> callBack) = 0;
             virtual void initialize() = 0;
-            virtual void setHeuristic(std::unique_ptr<IHeuristic> cost) = 0;
-            virtual void setCostFunction(std::unique_ptr<ICostFunction> cost) = 0;
             virtual void computePath() = 0;
             virtual void reset() = 0;
             virtual void moveStart() = 0;
