@@ -132,7 +132,7 @@ namespace Pathfinding::Algorithms
 
     Node *DStarLite::popFromQueueAndUpdateState()
     {
-        Node *u = U.popD();
+        Node *u = U.pop();
         if (DStarLiteHelpers::blocked(u))
         {
             return u;

@@ -11,7 +11,7 @@
 #include "LatticeGraph.hpp"
 #include "Constants.hpp"
 #include "GraphDimension.hpp"
-#include "ResourcePaths.hpp"
+#include "RootPath.hpp"
 #include "ALatticeGraphWrapper.hpp"
 #include "ALatGrWrHelpers.hpp"
 #include "CouldNotLoadFontException.hpp"
@@ -27,7 +27,7 @@ namespace Pathfinding::Core
     using Pathfinding::Datastructures::Vec2i;
     using Pathfinding::Exceptions::CouldNotLoadFontException;
     using Pathfinding::Helpers::ALatGrWrHelpers;
-    using Pathfinding::Helpers::pathToFont;
+    using Pathfinding::Helpers::getRootPath;
 
     namespace
     {
@@ -73,7 +73,7 @@ namespace Pathfinding::Core
         }
     }
 
-    Renderer::Renderer(sf::RenderWindow *window, ApplicationState * appStateSPtr_)
+    Renderer::Renderer(sf::RenderWindow *window, ApplicationState *appStateSPtr_)
         : windowPtr(window), appStateSPtr(appStateSPtr_), dimensionPtr(&appStateSPtr->dimension)
     {
         init();
@@ -109,7 +109,7 @@ namespace Pathfinding::Core
 
     void Renderer::loadFont(std::string fontName)
     {
-        if (!font.loadFromFile(pathToFont() + fontName))
+        if (!font.loadFromFile(getRootPath() + "\\dependencies\\fonts\\" + fontName))
         {
             throw CouldNotLoadFontException("Could not load font",
                                             "Renderer.cpp",
@@ -184,15 +184,15 @@ namespace Pathfinding::Core
     void Renderer::render(const std::shared_ptr<ALatticeGraphWrapper> latticeGraphWrapperSPtr)
     {
         ALatGrWrHelpers::iterateOverALatticeGraphWrapperConst(latticeGraphWrapperSPtr,
-        [this](const Node *node, int32_t h, int32_t w)
-        {
-            auto coords = getNodePosition(node, dimensionPtr->currentNodeSideLength());
-            drawNode(*node, coords);
-            if (appStateSPtr->showNodeInfo)
-            {
-                renderNodeInfo(*node, coords);
-            }
-        });
+                                                              [this](const Node *node, int32_t h, int32_t w)
+                                                              {
+                                                                  auto coords = getNodePosition(node, dimensionPtr->currentNodeSideLength());
+                                                                  drawNode(*node, coords);
+                                                                  if (appStateSPtr->showNodeInfo)
+                                                                  {
+                                                                      renderNodeInfo(*node, coords);
+                                                                  }
+                                                              });
     }
 
     void Renderer::renderNodeInfo(const Node &node, sf::Vector2f coords)
@@ -231,7 +231,7 @@ namespace Pathfinding::Core
         windowPtr->draw(nodeRect);
     }
 
-    void Renderer::renderPath(const std::vector<Node *> & path)
+    void Renderer::renderPath(const std::vector<Node *> &path)
     {
         sf::Vector2f pointPositionOffset(dimensionPtr->currentNodeSideLength() / 2.f, dimensionPtr->currentNodeSideLength() / 2.f);
 
@@ -245,7 +245,7 @@ namespace Pathfinding::Core
         }
     }
 
-    void Renderer::renderPathLineEndPoints(const std::vector<Node *> & path, sf::Vector2f pointPositionOffset)
+    void Renderer::renderPathLineEndPoints(const std::vector<Node *> &path, sf::Vector2f pointPositionOffset)
     {
         for (auto &node : path)
         {
@@ -265,7 +265,7 @@ namespace Pathfinding::Core
         }
     }
 
-    void Renderer::renderPathLines(const std::vector<Node *> & path, sf::Vector2f pointPositionOffset)
+    void Renderer::renderPathLines(const std::vector<Node *> &path, sf::Vector2f pointPositionOffset)
     {
         for (auto currentNodeItr = path.begin(); currentNodeItr != path.end(); ++currentNodeItr)
         {
@@ -291,56 +291,37 @@ namespace Pathfinding::Core
 
     void Renderer::updateColor()
     {
-        switch (appStateSPtr->currentState)
+
+        sf::Color *color = nullptr;
+        if (appStateSPtr->currentState == State::DONE)
         {
-        case State::DONE:
-            if (colorUp)
+            color = &goalColor;
+        }
+        else if (appStateSPtr->currentState == State::NO_PATH)
+        {
+            color = &visitedColor;
+        }
+        if (colorUp)
+        {
+            if (color->r == 255)
             {
-                if (goalColor.r == 255)
-                {
-                    colorUp = false;
-                }
-                else
-                {
-                    goalColor.r += COLOR_CHANGE_DIFF;
-                }
+                colorUp = false;
             }
-            else if (!colorUp)
+            else
             {
-                if (goalColor.r == 0)
-                {
-                    colorUp = true;
-                }
-                else
-                {
-                    goalColor.r -= COLOR_CHANGE_DIFF;
-                }
+                color->r += COLOR_CHANGE_DIFF;
             }
-            break;
-        case State::NO_PATH:
-            if (colorUp)
+        }
+        else if (!colorUp)
+        {
+            if (color->r == 0)
             {
-                if (visitedColor.g == 255)
-                {
-                    colorUp = false;
-                }
-                else
-                {
-                    visitedColor.g += COLOR_CHANGE_DIFF;
-                }
+                colorUp = true;
             }
-            else if (!colorUp)
+            else
             {
-                if (visitedColor.g == 0)
-                {
-                    colorUp = true;
-                }
-                else
-                {
-                    visitedColor.g -= COLOR_CHANGE_DIFF;
-                }
+                color->r -= COLOR_CHANGE_DIFF;
             }
-            break;
         }
     }
 

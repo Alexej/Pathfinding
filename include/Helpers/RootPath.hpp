@@ -5,7 +5,7 @@
 
 namespace Pathfinding::Helpers
 {
-    std::string pathToFont();
+    std::string getRootPath();
 }
 
 #endif /* CB440879_5AB4_4EAC_AB10_3317E105C265 */

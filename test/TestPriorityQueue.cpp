@@ -144,7 +144,7 @@ TEST_CASE( "pop should return the node with the smallest key and delete in from 
     queue.insert(n4);
 
     REQUIRE(queue.size() == 4);
-    REQUIRE(queue.popD() == n4);
+    REQUIRE(queue.pop() == n4);
     REQUIRE(queue.size() == 3);
     REQUIRE(!queue.contains(n4));
 

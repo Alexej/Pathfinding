@@ -48,7 +48,10 @@ namespace Pathfinding::Core
     void Application::update(sf::Clock &deltaClock)
     {
         int32_t dt = deltaClock.getElapsedTime().asMilliseconds();
-        rendererUPtr->update();
+        if(appState.currentState == State::DONE || appState.currentState == State::NO_PATH)
+        {
+            rendererUPtr->update();
+        }
         if (appState.currentState == State::SEARCHING && appState.autoStep)
         {
             accumulator += dt;

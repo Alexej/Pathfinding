@@ -1,4 +1,4 @@
-#include "ResourcePaths.hpp"
+#include "RootPath.hpp"
 #include <exception>
 #include <filesystem>
 
@@ -9,7 +9,7 @@ using namespace Pathfinding::Constants;
 namespace Pathfinding::Helpers
 {
     using Pathfinding::Exceptions::CouldNotFindPathToFontException;
-    std::string pathToFont()
+    std::string getRootPath()
     {
         std::string rootDirAsString = std::string(ROOT_DIR_NAME);
         std::string absolutePath = std::filesystem::current_path().string();
@@ -19,6 +19,6 @@ namespace Pathfinding::Helpers
             throw CouldNotFindPathToFontException("File path unknown", "ResourcePaths.cpp", 17, "std::string pathToFont()");
         }
         std::string rootDir = absolutePath.substr(0, firstOccurence + rootDirAsString.size());
-        return rootDir + "\\dependencies\\fonts\\";
+        return rootDir;
     }
 }

@@ -4,6 +4,7 @@
 #include <cstdint>
 #include "Vec2.hpp"
 #include "Key.hpp"
+#include <limits>
 
 namespace Pathfinding::Datastructures
 {
@@ -19,8 +20,10 @@ namespace Pathfinding::Datastructures
     };
     struct Node
     {
+        Node() = default;
+        Node(int32_t h, int32_t w) : location(Vec2i(h,w)) {}
         Vec2i location;
-        NodeState state;
+        NodeState state = NodeState::Free;
         double rhs = std::numeric_limits<double>::infinity();
         double g = std::numeric_limits<double>::infinity();
         Key key;

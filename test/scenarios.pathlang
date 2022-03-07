@@ -1,0 +1,30 @@
+# First coordinate in VEC2 is the height.
+SCENARIO 1           ;
+SIZE     VEC2(4:4)   ;
+START    VEC2(0:0)   ;
+GOAL     VEC2(3:3)   ;
+STEP     VEC2(1:1)   ;
+BLOCK    VEC2(2:2)   ;
+STEP     VEC2(1:2)   ;
+STEP     VEC2(2:3)   ;
+STEP     VEC2(2:3)   ;
+RESULT   DONE        ;
+
+SCENARIO 2           ;
+SIZE     VEC2(4:4)   ;
+START    VEC2(0:0)   ;
+GOAL     VEC2(3:3)   ;
+STEP     VEC2(1:1)   ;
+STEP     VEC2(2:2)   ;
+STEP     VEC2(2:2)   ;
+RESULT   DONE        ;
+
+SCENARIO 3           ;
+SIZE     VEC2(4:4)   ;
+START    VEC2(0:0)   ;
+GOAL     VEC2(3:3)   ;
+BLOCK    VEC2(0:1)   ;
+BLOCK    VEC2(1:1)   ;
+BLOCK    VEC2(1:0)   ;
+STEP     VEC2(0:0)   ;
+RESULT   NO_PATH     ;

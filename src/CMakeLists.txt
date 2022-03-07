@@ -12,12 +12,14 @@ set(SOURCES_PATHFINDING
   Core/Renderer.cpp
   Core/GraphDimension.cpp
   Core/AlgorithmStepSpeed.cpp
-  Helpers/ResourcePaths.cpp
+  Helpers/RootPath.cpp
   Helpers/GuiHelpers.cpp
   Helpers/SFMLHelpers.cpp
   Helpers/GraphOperations.cpp
   Helpers/ALatGrWrHelpers.cpp
   Helpers/ApplicationBuilder.cpp
+  Helpers/AlgorithmFunctionHelpers.cpp
+  ../test/PathLangParser.cpp
   Gui/Menu.cpp
   main.cpp
 )

@@ -29,8 +29,8 @@ int main()
     try
     {
         appBuilder.setStepSpeed({100, 200, 400, 800, 1600, 0});
-        appBuilder.setDimension({8, 10, 20, 25, 40, 80});
-        appBuilder.setCosts(static_cast<int32_t>(sqrt(2) * 10), 10 * 1);
+        appBuilder.setDimension({4,8, 10, 20, 25, 40, 80});
+        appBuilder.setCosts(static_cast<int32_t>(std::sqrt(2) * 10), 10 * 1);
         app = appBuilder.make();
     }
     catch (CouldNotFindPathToFontException &exception)

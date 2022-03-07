@@ -13,7 +13,18 @@ FetchContent_MakeAvailable(Catch2)
 set(SOURCES_TESTS
     ../src/Datastructures/Node.cpp
     ../src/Datastructures/LatticeGraph.cpp
+    ../src/Datastructures/LatticeGraphWrapper.cpp
+    ../src/Datastructures/Node.cpp
+    ../src/Algorithms/DefaultCostFunction.cpp
+    ../src/Algorithms/DStarLite.cpp
+    ../src/Algorithms/DiagonalHeuristic.cpp
+    ../src/Helpers/AlgorithmFunctionHelpers.cpp
+    ../src/Helpers/ALatGrWrHelpers.cpp
+    ../src/Helpers/RootPath.cpp
+    PathLangParser.cpp
     TestLocation.cpp
+    TestDStarLite.cpp
+    TestDefaultCost.cpp
     TestVector2.cpp
     TestLatticeGraph.cpp
     TestNode.cpp

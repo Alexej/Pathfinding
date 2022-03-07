@@ -16,6 +16,7 @@
 #include "DefaultCostFunction.hpp"
 #include "IGraphOperations.hpp"
 #include "ApplicationState.hpp"
+#include <SFML/Window/Event.hpp>
 
 namespace Pathfinding::Helpers
 {
@@ -96,13 +97,14 @@ namespace Pathfinding::Helpers
         initDStarLite();
 
         applicationUPtr->graphOpsUPtr->addEdgeChangeCallBack(std::bind(&IDStarLite::addChangedNode, applicationUPtr->dstarLiteUPtr.get(), _1));
-        applicationUPtr->window.setFramerateLimit(60);
+        applicationUPtr->window.setFramerateLimit(APP_FPS);
         applicationUPtr->dimensionPtr = &applicationUPtr->appState.dimension;
         applicationUPtr->algoStepSpeedPtr = &applicationUPtr->appState.stepSpeed;
     }
 
     void ApplicationBuilder::createEventManagerBindings()
     {
+        constexpr sf::Mouse::Button NO_MOUSE_BUTTON = sf::Mouse::Left;
         applicationUPtr->eventManagerUPtr->addBinding({EVENT_AND_KEY, MouseButtonPressed, sf::Mouse::Left},
         std::bind(&IGraphOperations::leftMouseButtonPressed, applicationUPtr->graphOpsUPtr.get(), _1));
 

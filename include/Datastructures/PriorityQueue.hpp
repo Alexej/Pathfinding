@@ -49,10 +49,10 @@ namespace Pathfinding::Datastructures
             return top()->key;
         }
 
-        Node *popD()
+        Node *pop()
         {
             auto topNode = top();
-            pop();
+            base::pop();
             return topNode;
         }
 
@@ -60,6 +60,8 @@ namespace Pathfinding::Datastructures
         {
             return std::find(c.begin(), c.end(), node) != c.end();
         }
+        private:
+            using base = std::priority_queue<Node *, std::vector<Node *>, NodeComperator>;
     };
 }
 

@@ -1,13 +1,14 @@
 #include "DefaultCostFunction.hpp"
 #include "Node.hpp"
 #include "DStarLiteHelpers.hpp"
-
+#include "AlgorithmFunctionHelpers.hpp"
 
 namespace Pathfinding::Algorithms
 {
     using Pathfinding::Helpers::DStarLiteHelpers;
     using Pathfinding::Datastructures::Node;
-    
+    using Pathfinding::Helpers::twoNodesDiagonal;
+ 
     DefaultCostFunction::DefaultCostFunction(int32_t diagonalMovementCost_, int32_t straightMovementCost_)
     : diagonalMovementCost(diagonalMovementCost_), straightMovementCost(straightMovementCost_) {}
 
@@ -18,8 +19,6 @@ namespace Pathfinding::Algorithms
             return DStarLiteHelpers::infinity();
         }
 
-        int32_t dx = abs(from->location.width - to->location.width);
-        int32_t dy = abs(from->location.height - to->location.height);
-        return dx - dy == 0 ? diagonalMovementCost : straightMovementCost;
+        return twoNodesDiagonal(from, to) ? diagonalMovementCost : straightMovementCost;
     }
 }
