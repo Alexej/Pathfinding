@@ -16,7 +16,6 @@ namespace Pathfinding::Datastructures
             using PAILatticeGraph = Pathfinding::Abstract::ILatticeGraph;
         public:
             LatticeGraphWrapper(std::unique_ptr<PAILatticeGraph> latticeGraphUPtr);
-            void resize(int32_t height, int32_t width) override;
             const Node *startNode() const override;
             const Node *goalNode() const override;
             Node *startNode() override;
@@ -26,6 +25,7 @@ namespace Pathfinding::Datastructures
             bool inBounds(Vec2i location) const override;
             std::size_t width() const override;
             std::size_t height() const override;
+            void resize(int32_t height, int32_t width) override;
             void setGoal(Vec2i location) override;
             void setStart(Vec2i location) override;
         private:

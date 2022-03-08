@@ -89,6 +89,9 @@ namespace Pathfinding::Core
         nodeRect.setOutlineThickness(NODE_OUTLINE_THICKNESS);
         nodeRect.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
 
+        factorRect.setOutlineThickness(NODE_OUTLINE_THICKNESS);
+        factorRect.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
+
         text.setCharacterSize(NODE_INFO_TEXT_SIZE);
         text.setFillColor(convertToSfmlColor(NODE_INFO_COLOR));
 
@@ -167,6 +170,8 @@ namespace Pathfinding::Core
         nodePoint.setRadius(nodePointRadius);
         nodePoint.setOrigin(nodePointRadius, nodePointRadius);
 
+        factorRect.setSize(sf::Vector2f(nodePointRadius * 1.5f ,nodePointRadius * 1.5f));
+
         float halfNodeSizeSquared = static_cast<float>(pow(straightLineLength / 2, 2));
 
         float lineThickness = nodePointRadius / 2;
@@ -184,22 +189,21 @@ namespace Pathfinding::Core
     void Renderer::render(const std::shared_ptr<ALatticeGraphWrapper> latticeGraphWrapperSPtr)
     {
         ALatGrWrHelpers::iterateOverALatticeGraphWrapperConst(latticeGraphWrapperSPtr,
-                                                              [this](const Node *node, int32_t h, int32_t w)
-                                                              {
-                                                                  auto coords = getNodePosition(node, dimensionPtr->currentNodeSideLength());
-                                                                  drawNode(*node, coords);
-                                                                  if (appStateSPtr->showNodeInfo)
-                                                                  {
-                                                                      renderNodeInfo(*node, coords);
-                                                                  }
-                                                              });
+        [this](const Node *node, int32_t h, int32_t w)
+        {
+            auto coords = getNodePosition(node, dimensionPtr->currentNodeSideLength());
+            drawNode(*node, coords);
+            if (appStateSPtr->showNodeInfo)
+            {
+                renderNodeInfo(*node, coords);
+            }
+        });
     }
 
     void Renderer::renderNodeInfo(const Node &node, sf::Vector2f coords)
     {
 
         using std::to_string;
-
         text.setString(dToStr(node.g));
         text.setPosition(sf::Vector2f(coords.x + NODE_INFO_OFFSET, coords.y + NODE_INFO_OFFSET));
         windowPtr->draw(text);
@@ -222,6 +226,10 @@ namespace Pathfinding::Core
         float diff = halfOfNode - halfOfText;
         text.setPosition(sf::Vector2f(coords.x + diff, coords.y + NODE_INFO_OFFSET + heightKeyOffset));
         windowPtr->draw(text);
+
+        factorRect.setPosition(sf::Vector2f(coords.x, coords.y + (halfOfNode - factorRect.getSize().y/2)));
+        factorRect.setFillColor(sf::Color(100 + 2 * node.factor,0,140 - 2 * node.factor));
+        windowPtr->draw(factorRect);
     }
 
     void Renderer::drawNode(const Node &node, sf::Vector2f coords)

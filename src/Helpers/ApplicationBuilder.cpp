@@ -42,6 +42,8 @@ namespace Pathfinding::Helpers
     using sf::Event::EventType::MouseButtonPressed;
     using sf::Event::EventType::MouseButtonReleased;
     using sf::Event::EventType::MouseMoved;
+    using sf::Event::EventType::MouseWheelMoved;
+
 
     ApplicationBuilder::ApplicationBuilder()
     {
@@ -119,6 +121,9 @@ namespace Pathfinding::Helpers
 
         applicationUPtr->eventManagerUPtr->addBinding({EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON},
         std::bind(&IGraphOperations::nodeUnderCursor, applicationUPtr->graphOpsUPtr.get(), _1));
+
+        applicationUPtr->eventManagerUPtr->addBinding({EVENT_ONLY, MouseWheelMoved, NO_MOUSE_BUTTON},
+        std::bind(&IGraphOperations::mouseWheelMoved, applicationUPtr->graphOpsUPtr.get(), _1));
     }
 
     void ApplicationBuilder::setMenuCallBacks()

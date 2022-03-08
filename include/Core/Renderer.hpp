@@ -60,6 +60,7 @@ namespace Pathfinding::Core
         sf::CircleShape nodePoint;
         sf::RectangleShape diagonalLine;
         sf::RectangleShape straightLine;
+        sf::RectangleShape factorRect;
         sf::Color goalNodeDiff = sf::Color::Black;
         sf::RenderWindow *windowPtr = nullptr;
         PCApplicationState * appStateSPtr = nullptr;

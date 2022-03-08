@@ -18,7 +18,7 @@ namespace Pathfinding::Algorithms
         {
             return DStarLiteHelpers::infinity();
         }
-
-        return twoNodesDiagonal(from, to) ? diagonalMovementCost : straightMovementCost;
+        
+        return twoNodesDiagonal(from, to) ? diagonalMovementCost * to->factor : straightMovementCost * to->factor; 
     }
 }

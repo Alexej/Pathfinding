@@ -130,6 +130,13 @@ TEST_CASE( "Testing scenarios" ) {
                         mockObject.changedNode(mockObject.getLatGraphWrapperSPtr()->node(command.second));
                         }
                         break;
+                    case CommandsKeyWords::ERASE:
+                        {
+                        auto node = mockObject.getLatGraphWrapperSPtr()->node(command.second);
+                        node->state = NodeState::Free;
+                        mockObject.changedNode(mockObject.getLatGraphWrapperSPtr()->node(command.second));
+                        }
+                        break;
                     case CommandsKeyWords::STEP:
                         mockObject.step();
                         REQUIRE(mockObject.getLatGraphWrapperSPtr()->startNode()->location == command.second);

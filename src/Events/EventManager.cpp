@@ -1,5 +1,6 @@
 #include "EventManager.hpp"
 #include <SFML/Window/Event.hpp>
+#include "MouseData.hpp"
 
 namespace Pathfinding::Events
 {
@@ -8,7 +9,7 @@ namespace Pathfinding::Events
     {
     }
 
-    void EventManager::addBinding(MouseEvent event, std::function<void(sf::Vector2i)> callback)
+    void EventManager::addBinding(MouseEvent event, std::function<void(MouseData)> callback)
     {
         callBacks.push_back({event, callback});
     }
@@ -34,7 +35,7 @@ namespace Pathfinding::Events
                 {
                     if (callBack.first.eventOnly || currentEvent.key.code == callBack.first.button)
                     {
-                        callBack.second(mousePos);
+                        callBack.second(MouseData(mousePos, currentEvent.mouseWheel.delta));
                     }
                 }
             }

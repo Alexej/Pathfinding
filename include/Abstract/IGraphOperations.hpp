@@ -9,18 +9,25 @@ namespace Pathfinding::Datastructures
     struct Node;
 }
 
+namespace Pathfinding::Events
+{
+    struct MouseData;
+}
+
 namespace Pathfinding::Abstract
 {
     class IGraphOperations
     {
         private:
             using PDNode = Pathfinding::Datastructures::Node;
+            using PEMouseData = Pathfinding::Events::MouseData;
         public:
-            virtual void rightMouseButtonPressed(sf::Vector2i pos) = 0;
-            virtual void leftMouseButtonPressed(sf::Vector2i pos) = 0;
-            virtual void mouseButtonReleased(sf::Vector2i pos) = 0;
-            virtual void nodeUnderCursor(sf::Vector2i pos) = 0;
-            virtual void mouseMoved(sf::Vector2i pos) = 0;
+            virtual void rightMouseButtonPressed(PEMouseData mouseData) = 0;
+            virtual void leftMouseButtonPressed(PEMouseData mouseData) = 0;
+            virtual void mouseButtonReleased(PEMouseData mouseData) = 0;
+            virtual void nodeUnderCursor(PEMouseData mouseData) = 0;
+            virtual void mouseMoved(PEMouseData mouseData) = 0;
+            virtual void mouseWheelMoved(PEMouseData mouseData) = 0;
             virtual void resize(int32_t nodeSideLength) = 0;
             virtual void disableEndpointsEvent() = 0;
             virtual void enableEndPointsEvent() = 0;

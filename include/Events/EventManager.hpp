@@ -8,6 +8,7 @@
 #include <vector>
 #include "MouseEvent.hpp"
 #include "IEventManager.hpp"
+#include "MouseData.hpp"
 
 namespace Pathfinding::Events
 {
@@ -16,14 +17,14 @@ namespace Pathfinding::Events
     public:
         EventManager() = default;
         explicit EventManager(sf::RenderWindow *window);
-        void addBinding(MouseEvent event, std::function<void(sf::Vector2i)> callbackFunc) override;
+        void addBinding(MouseEvent event, std::function<void(MouseData)> callbackFunc) override;
         void pushEvent(sf::Event event) override;
         void processEvents() override;
 
     private:
         sf::RenderWindow *windowPtr;
         std::deque<sf::Event> eventQueue;
-        std::vector<std::pair<MouseEvent, std::function<void(sf::Vector2i)>>> callBacks;
+        std::vector<std::pair<MouseEvent, std::function<void(MouseData)>>> callBacks;
     };
 }
 

@@ -8,13 +8,12 @@
 #include "Node.hpp"
 #include "Key.hpp"
 
-
 namespace Pathfinding::Datastructures
 {
     class NodeComperator
     {
     public:
-        bool operator() (const Node * lhs, const Node * rhs)
+        bool operator()(const Node *lhs, const Node *rhs)
         {
             return lhs->key > rhs->key;
         }
@@ -60,8 +59,9 @@ namespace Pathfinding::Datastructures
         {
             return std::find(c.begin(), c.end(), node) != c.end();
         }
-        private:
-            using base = std::priority_queue<Node *, std::vector<Node *>, NodeComperator>;
+
+    private:
+        using base = std::priority_queue<Node *, std::vector<Node *>, NodeComperator>;
     };
 }
 

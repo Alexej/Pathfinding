@@ -8,7 +8,7 @@
 
 namespace Pathfinding::Test
 {
-    enum class CommandsKeyWords {BLOCK, STEP};
+    enum class CommandsKeyWords {BLOCK, STEP, ERASE};
     struct Scenario
     {
         private:
