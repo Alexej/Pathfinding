@@ -43,7 +43,7 @@ namespace Pathfinding::Rendering
         Renderer() = default;
         Renderer(sf::RenderWindow *window, PCApplicationState *appStateSPtr);
         void render(const std::shared_ptr<PAALatticeGraphWrapper> latticeGraphWrapperSPtr) override;
-        void renderPath(const std::vector<PDNode *> &path) override;
+        void renderPath(const std::vector<PDNode *> &path, sf::Color color) override;
         void update() override;
         void reset() override;
         void resize() override;
@@ -53,10 +53,11 @@ namespace Pathfinding::Rendering
         void loadFont(std::string font);
         void drawNode(const PDNode &node, sf::Vector2f coords);
         void renderNodeInfo(const PDNode &node, sf::Vector2f coords);
-        void renderPathLineEndPoints(const std::vector<PDNode *> &path, sf::Vector2f pointPositionOffset);
+        void renderPathLineEndPoints(const std::vector<PDNode *> &path, sf::Vector2f pointPositionOffset, sf::Color color);
         void renderPathLines(const std::vector<PDNode *> &path, sf::Vector2f pointPositionOffset);
         sf::Color stateColor(PDNodeState state);
         void updateColor();
+        void setPathColor(sf::Color color);
 
     private:
         sf::RectangleShape nodeRect;

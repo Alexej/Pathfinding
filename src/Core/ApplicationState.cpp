@@ -12,6 +12,7 @@ namespace Pathfinding::Core
         autoStep = false;
         showPath = true;
         showPathLines = true;
+        runAStar = false;
         currentState = State::READY;
     }
 }

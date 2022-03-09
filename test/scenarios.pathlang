@@ -7,7 +7,7 @@ STEP     VEC2(1:1)   ;
 BLOCK    VEC2(2:2)   ;
 STEP     VEC2(1:2)   ;
 STEP     VEC2(2:3)   ;
-STEP     VEC2(2:3)   ;
+STEP     VEC2(3:3)   ;
 RESULT   DONE        ;
 
 SCENARIO 2           ;
@@ -16,7 +16,7 @@ START    VEC2(0:0)   ;
 GOAL     VEC2(3:3)   ;
 STEP     VEC2(1:1)   ;
 STEP     VEC2(2:2)   ;
-STEP     VEC2(2:2)   ;
+STEP     VEC2(3:3)   ;
 RESULT   DONE        ;
 
 SCENARIO 3           ;

@@ -27,7 +27,7 @@ namespace Pathfinding::Datastructures
             std::size_t height() const override;
             void resize(int32_t height, int32_t width) override;
             void setGoal(Vec2i location) override;
-            void setStart(Vec2i location) override;
+            void setStart(Vec2i location, bool dontSetStarState = false) override;
         private:
             void resetEndpoints();
         private:

@@ -16,6 +16,7 @@
 #include "ALatGrWrHelpers.hpp"
 #include "CouldNotLoadFontException.hpp"
 #include "ApplicationState.hpp"
+#include "RenderingHelpers.hpp"
 
 namespace Pathfinding::Rendering
 {
@@ -31,6 +32,7 @@ namespace Pathfinding::Rendering
     using Pathfinding::Core::ApplicationState;
     using Pathfinding::Core::State;
     using Pathfinding::Helpers::getRootPath;
+    using Pathfinding::Helpers::convertToSfmlColor;
 
     namespace
     {
@@ -44,10 +46,6 @@ namespace Pathfinding::Rendering
             return {positionHor, positionVer};
         }
 
-        sf::Color convertToSfmlColor(std::array<uint8_t, 3> color)
-        {
-            return {color[RED], color[GREEN], color[BLUE]};
-        }
 
         /**
          * @brief converts double to string and removes zeros and dot.
@@ -101,16 +99,20 @@ namespace Pathfinding::Rendering
         nodePoint.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
         nodePoint.setOutlineThickness(NODE_OUTLINE_THICKNESS);
 
-        diagonalLine.setFillColor(convertToSfmlColor(PATH_NODE_COLOR));
         diagonalLine.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
         diagonalLine.setOutlineThickness(NODE_OUTLINE_THICKNESS);
 
-        straightLine.setFillColor(convertToSfmlColor(PATH_NODE_COLOR));
         straightLine.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
         straightLine.setOutlineThickness(NODE_OUTLINE_THICKNESS);
 
         resize();
         reset();
+    }
+
+    void Renderer::setPathColor(sf::Color color)
+    {
+        diagonalLine.setFillColor(color);
+        straightLine.setFillColor(color);
     }
 
     void Renderer::loadFont(std::string fontName)
@@ -241,8 +243,10 @@ namespace Pathfinding::Rendering
         windowPtr->draw(nodeRect);
     }
 
-    void Renderer::renderPath(const std::vector<Node *> &path)
+    void Renderer::renderPath(const std::vector<Node *> &path, sf::Color color)
     {
+        setPathColor(color);
+
         sf::Vector2f pointPositionOffset(dimensionPtr->currentNodeSideLength() / 2.f, dimensionPtr->currentNodeSideLength() / 2.f);
 
         if (appStateSPtr->showPathLines && appStateSPtr->showPath)
@@ -251,17 +255,17 @@ namespace Pathfinding::Rendering
         }
         if (appStateSPtr->showPath)
         {
-            renderPathLineEndPoints(path, pointPositionOffset);
+            renderPathLineEndPoints(path, pointPositionOffset, color);
         }
     }
 
-    void Renderer::renderPathLineEndPoints(const std::vector<Node *> &path, sf::Vector2f pointPositionOffset)
+    void Renderer::renderPathLineEndPoints(const std::vector<Node *> &path, sf::Vector2f pointPositionOffset, sf::Color color)
     {
         for (auto &node : path)
         {
             sf::Vector2f leftCornerOfNodePosition = getNodePosition(node, dimensionPtr->currentNodeSideLength());
             sf::Vector2f nodePointPosition = leftCornerOfNodePosition + pointPositionOffset;
-            nodePoint.setFillColor(convertToSfmlColor(PATH_NODE_COLOR));
+            nodePoint.setFillColor(color);
             nodePoint.setPosition(nodePointPosition);
             if (node->state != NodeState::Blocked)
             {

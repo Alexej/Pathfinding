@@ -4,14 +4,19 @@
 #include <imgui.h>
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/Event.hpp>
-
 #include "ALatGrWrHelpers.hpp"
 #include "LatticeGraphWrapper.hpp"
+#include "AStarReturnType.hpp"
+#include "Constants.hpp"
+#include "RenderingHelpers.hpp"
 
 namespace Pathfinding::Core
 {
+    using namespace Constants;
     using Pathfinding::Helpers::ALatGrWrHelpers;
     using Pathfinding::Datastructures::LatticeGraphWrapper;
+    using Pathfinding::Datastructures::AStarReturnType;
+    using Pathfinding::Helpers::convertToSfmlColor;
 
     void Application::startAlgorithm()
     {
@@ -20,6 +25,10 @@ namespace Pathfinding::Core
 
         dstarLiteUPtr->initialize();
         dstarLiteUPtr->initialRun();
+        if(appState.runAStar)
+        {
+            aStarCache.cache(aStarUPtr->calculatePath(latGraphWrapUPtr));
+        }
     }
 
     void Application::run()
@@ -60,6 +69,11 @@ namespace Pathfinding::Core
                 dstarLiteUPtr->moveStart();
                 accumulator = 0;
             }
+
+            if(appState.runAStar)
+            {
+                aStarCache.cache(aStarUPtr->calculatePath(latGraphWrapUPtr));
+            }
         }
         ImGui::SFML::Update(window, deltaClock.restart());
         eventManagerUPtr->processEvents();
@@ -82,7 +96,8 @@ namespace Pathfinding::Core
 
         if (appState.currentState == State::DONE || appState.currentState == State::SEARCHING)
         {
-            rendererUPtr->renderPath(dstarLiteUPtr->path());
+            rendererUPtr->renderPath(aStarCache.currentPath, convertToSfmlColor(PATH_NODE_COLOR_2));
+            rendererUPtr->renderPath(dstarLiteUPtr->path(), convertToSfmlColor(PATH_NODE_COLOR));
         }
 
         window.display();
@@ -97,6 +112,7 @@ namespace Pathfinding::Core
         graphOpsUPtr->enableObsticlesEvents();
         appState.nodeUnderCursor = nullptr;
         rendererUPtr->reset();
+        aStarCache.reset();
     }
 
     void Application::done()
@@ -120,5 +136,9 @@ namespace Pathfinding::Core
     void Application::step()
     {
         dstarLiteUPtr->moveStart();
+        if(appState.runAStar)
+        {
+            aStarCache.cache(aStarUPtr->calculatePath(latGraphWrapUPtr));
+        }
     }
 }

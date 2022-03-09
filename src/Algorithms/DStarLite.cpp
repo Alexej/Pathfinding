@@ -11,9 +11,12 @@
 #include "LatticeGraphWrapper.hpp"
 #include "ALatGrWrHelpers.hpp"
 #include "ICostFunction.hpp"
+#include "Constants.hpp"
+
 
 namespace Pathfinding::Algorithms
 {
+    using Pathfinding::Constants::DONT_SET_START_STATE;
     using Pathfinding::Abstract::IHeuristic;
     using Pathfinding::Abstract::ICostFunction;
     using Pathfinding::Abstract::ALatticeGraphWrapper;
@@ -223,7 +226,7 @@ namespace Pathfinding::Algorithms
     {
         Node *prevStart = sStart;
         sStart = getMinCG(sStart).second;
-        latticeGraphWrapperSPtr->setStart(sStart->location);
+        latticeGraphWrapperSPtr->setStart(sStart->location, DONT_SET_START_STATE);
         prevStart->state = NodeState::Visited;
     }
 

@@ -2,6 +2,7 @@
 #define E0993BE7_1552_4FDD_B2ED_36A6D9591A37
 
 #include <vector>
+#include <SFML/Graphics/Color.hpp>
 
 namespace Pathfinding::Datastructures
 {
@@ -24,7 +25,7 @@ namespace Pathfinding::Abstract
             using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
         public:
             virtual void render(const std::shared_ptr<PAALatticeGraphWrapper> latticeGraphWrapperSPtr) = 0;
-            virtual void renderPath(const std::vector<PDNode *> & path) = 0;
+            virtual void renderPath(const std::vector<PDNode *> & path, sf::Color color) = 0;
             virtual void update() = 0;
             virtual void reset() = 0;
             virtual void resize() = 0;

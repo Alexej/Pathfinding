@@ -3,7 +3,6 @@
 #include <queue>
 #include <vector>
 #include <unordered_map>
-
 #include "ALatticeGraphWrapper.hpp"
 #include "AStarReturnType.hpp"
 #include "IHeuristic.hpp"
@@ -34,6 +33,7 @@ namespace Pathfinding::Algorithms
         std::vector<Node*> reconstructPath(std::unordered_map<Node *, Node *> cameFrom, Node * current)
         {
             std::vector<Node*> path;
+            path.push_back(current);
             while(cameFrom.find(current) != cameFrom.end())
             {
                 current = cameFrom[current];

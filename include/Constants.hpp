@@ -31,6 +31,8 @@ namespace Pathfinding::Constants
     constexpr std::array<uint8_t, 3> START_NODE_COLOR{255, 0, 0};
     constexpr std::array<uint8_t, 3> GOAL_NODE_COLOR{255, 255, 0};
     constexpr std::array<uint8_t, 3> PATH_NODE_COLOR{0, 255, 0};
+    constexpr std::array<uint8_t, 3> PATH_NODE_COLOR_2{0, 0, 255};
+    constexpr std::array<uint8_t, 3> SECOND_PATH_NODE_COLOR{255,0,0};
     constexpr std::array<uint8_t, 3> RECALCULATED_NODE_COLOR{255, 54, 124};
 
     constexpr std::array<uint8_t, 3> NODE_OUTLINE_COLOR{255, 255, 255};
@@ -52,6 +54,9 @@ namespace Pathfinding::Constants
     // ! change to enums and move to Events class
     constexpr auto EVENT_ONLY = true;
     constexpr auto EVENT_AND_KEY = false;
+
+    // DStar flags
+    constexpr auto DONT_SET_START_STATE = true;
 }
 
 #endif /* A2338B5A_9164_4556_99CB_AA1F92239E7A */

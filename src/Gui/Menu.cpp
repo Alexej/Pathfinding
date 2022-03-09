@@ -168,6 +168,9 @@ namespace Pathfinding::Gui
         {
             randomGraphCallBack();
         }
+
+        ImGui::Checkbox("Run A*", &appStatePtr->runAStar);
+
     }
 
     void Menu::addNumberOfNodesChangedCallBack(fPtrVI callBack)
