@@ -4,7 +4,7 @@
 #include <vector>
 #include <unordered_map>
 #include "ALatticeGraphWrapper.hpp"
-#include "AStarReturnType.hpp"
+#include "PathfinderReturnType.hpp"
 #include "IHeuristic.hpp"
 #include "ICostFunction.hpp"
 #include "Node.hpp"
@@ -17,7 +17,7 @@ namespace Pathfinding::Algorithms
     using Pathfinding::Abstract::IHeuristic;
     using Pathfinding::Abstract::ILatticeGraph;
     using Pathfinding::Abstract::ALatticeGraphWrapper;
-    using Pathfinding::Datastructures::AStarReturnType;
+    using Pathfinding::Datastructures::PathfinderReturnType;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Helpers::ALatGrWrHelpers;
 
@@ -43,7 +43,7 @@ namespace Pathfinding::Algorithms
         }
     }
 
-    AStarReturnType AStar::calculatePath(std::shared_ptr<ALatticeGraphWrapper> graphWrapper)
+    PathfinderReturnType AStar::calculatePath(std::shared_ptr<ALatticeGraphWrapper> graphWrapper)
     {
         int32_t nodesExpanded = 0;
         std::priority_queue<QueueElement, std::vector<QueueElement>, AStarQueueComperator> openSet;
@@ -63,7 +63,9 @@ namespace Pathfinding::Algorithms
                 return {true, reconstructPath(cameFrom, current), nodesExpanded};
             }
             openSet.pop();
-            for(auto neighbor : ALatGrWrHelpers::neighbors(graphWrapper, current))
+            auto neighbors = ALatGrWrHelpers::neighbors(graphWrapper, current);
+            nodesExpanded+=neighbors.size();
+            for(auto neighbor : neighbors)
             {
                 auto tentativeGscore = getMapDefaultInf(gScore, current) + costUPtr->calculate(current, neighbor);
                 if(tentativeGscore < getMapDefaultInf(gScore, neighbor))

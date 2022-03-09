@@ -7,7 +7,7 @@
 
 namespace Pathfinding::Datastructures
 {
-    struct AStarReturnType;
+    struct PathfinderReturnType;
 }
 
 namespace Pathfinding::Abstract
@@ -16,9 +16,9 @@ namespace Pathfinding::Abstract
     class IAStar : public AInformedSearchAlgorithm
     {
     private:
-        using PDAStarReturnType = Pathfinding::Datastructures::AStarReturnType;
+        using PDPathfinderReturnType = Pathfinding::Datastructures::PathfinderReturnType;
     public:
-        virtual PDAStarReturnType calculatePath(std::shared_ptr<ALatticeGraphWrapper> graphWrapper) = 0;
+        virtual PDPathfinderReturnType calculatePath(std::shared_ptr<ALatticeGraphWrapper> graphWrapper) = 0;
         virtual ~IAStar() = default;
     };
 }

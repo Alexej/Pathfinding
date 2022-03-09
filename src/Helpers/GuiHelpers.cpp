@@ -3,9 +3,12 @@
 
 #include <vector>
 #include <string>
+#include <numeric>
+#include <algorithm>
 #include "imgui.h"
 #include "ApplicationState.hpp"
 #include "Node.hpp"
+#include "PathfinderCache.hpp"
 
 namespace ImGui
 {
@@ -22,6 +25,7 @@ namespace ImGui
 
 namespace Pathfinding::Helpers
 {
+    using Pathfinding::Datastructures::PathfinderCache;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Core::State;
     
@@ -73,10 +77,42 @@ namespace Pathfinding::Helpers
         return str;
     }
 
+    std::array<uint32_t, 3> getStateColor(Pathfinding::Core::State state)
+    {
+        std::array<uint32_t, 3> color;
+        switch (state)
+        {
+        case State::READY:
+            color = {255,255,255};
+            break;
+        case State::SEARCHING:
+            color = {90,60,160};
+            break;
+        case State::DONE:
+            color = {0,255,0};
+            break;
+        case State::NO_PATH:
+            color = {255,0,0};
+            break;
+        }
+        return color;
+    }
+
+
     void printLargeText(std::string text, double factor)
     {
         ImGui::SetWindowFontScale(static_cast<float>(factor));
         ImGui::Text(text.c_str());
         ImGui::SetWindowFontScale(1);
+    }
+
+    void showStatistic(Pathfinding::Datastructures::PathfinderCache * cache)
+    {
+        auto nodesExpandedTotal = std::accumulate(cache->nodesExpandedAll.begin(), cache->nodesExpandedAll.end(), 0);
+        auto average = nodesExpandedTotal / cache->nodesExpandedAll.size();
+        auto maxNodesExpanded = std::max_element(cache->nodesExpandedAll.begin(), cache->nodesExpandedAll.end());
+        ImGui::Text(std::format("Nodes expaneded total: {}", std::to_string(nodesExpandedTotal)).c_str());
+        ImGui::Text(std::format("Nodex expanded on each step(avg) {}", std::to_string(average)).c_str());
+        ImGui::Text(std::format("Max number of nodes expanded: {}", std::to_string(*maxNodesExpanded)).c_str());
     }
 }

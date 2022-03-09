@@ -18,7 +18,7 @@
 #include "ApplicationState.hpp"
 #include "AStar.hpp"
 #include <SFML/Window/Event.hpp>
-#include "AStarReturnType.hpp"
+#include "PathfinderReturnType.hpp"
 
 namespace Pathfinding::Helpers
 {
@@ -37,7 +37,7 @@ namespace Pathfinding::Helpers
     using Pathfinding::Core::GraphDimension;
     using Pathfinding::Rendering::Renderer;
     using Pathfinding::Datastructures::LatticeGraph;
-    using Pathfinding::Datastructures::AStarReturnType;
+    using Pathfinding::Datastructures::PathfinderReturnType;
     using Pathfinding::Datastructures::LatticeGraphWrapper;
     using Pathfinding::Events::EventManager;
     using Pathfinding::Core::ApplicationState;
@@ -89,7 +89,13 @@ namespace Pathfinding::Helpers
         applicationUPtr->window.create(sf::VideoMode(APPLICATION_WINDOW_WIDTH, GRID_FIELD_HEIGHT), APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close);
         applicationUPtr->appState = ApplicationState(dimension, stepSpeed);
         applicationUPtr->eventManagerUPtr = std::make_unique<EventManager>(&applicationUPtr->window);
-        applicationUPtr->menuUPtr = std::make_unique<Menu>(&applicationUPtr->appState, GRID_FIELD_WIDTH, GRID_FIELD_HEIGHT, MENU_WIDTH);
+        applicationUPtr->menuUPtr = std::make_unique<Menu>(&applicationUPtr->appState, 
+                                                            GRID_FIELD_WIDTH, 
+                                                            GRID_FIELD_HEIGHT, 
+                                                            MENU_WIDTH, 
+                                                            &applicationUPtr->aStarCache,
+                                                            &applicationUPtr->dStarCache);
+
         applicationUPtr->dstarLiteUPtr = std::make_unique<DStarLite>(applicationUPtr->latGraphWrapUPtr);
         applicationUPtr->graphOpsUPtr = std::make_unique<GraphOperations>(&applicationUPtr->appState, applicationUPtr->latGraphWrapUPtr);
         applicationUPtr->rendererUPtr = std::make_unique<Renderer>(&applicationUPtr->window, &applicationUPtr->appState);

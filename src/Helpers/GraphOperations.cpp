@@ -165,25 +165,28 @@ namespace Pathfinding::Helpers
 
     void GraphOperations::mouseWheelMoved(MouseData mouseData)
     {
-        Vec2i mappedCoordinates = mapMouseToGraphCoordinates(mouseData.cursorPosition, nodeSideLength);
-        if(!latGraphWrapperUPtr->inBounds(mappedCoordinates))
+        if(obsticlesEvents())
         {
-            return;
-        }
-        if(mouseData.wheelDelta > 0)
-        {
-            if(latGraphWrapperUPtr->node(mappedCoordinates)->factor < MAX_COST_FACTOR)
-            {   
-                latGraphWrapperUPtr->node(mappedCoordinates)->factor += 1;
-                edgeChangeCallBack(latGraphWrapperUPtr->node(mappedCoordinates));
-            }
-        }
-        else
-        {
-            if(latGraphWrapperUPtr->node(mappedCoordinates)->factor > MIN_COST_FACTOR)
+            Vec2i mappedCoordinates = mapMouseToGraphCoordinates(mouseData.cursorPosition, nodeSideLength);
+            if(!latGraphWrapperUPtr->inBounds(mappedCoordinates))
             {
-                latGraphWrapperUPtr->node(mappedCoordinates)->factor -= 1;
-                edgeChangeCallBack(latGraphWrapperUPtr->node(mappedCoordinates));
+                return;
+            }
+            if(mouseData.wheelDelta > 0)
+            {
+                if(latGraphWrapperUPtr->node(mappedCoordinates)->factor < MAX_COST_FACTOR)
+                {   
+                    latGraphWrapperUPtr->node(mappedCoordinates)->factor += 1;
+                    edgeChangeCallBack(latGraphWrapperUPtr->node(mappedCoordinates));
+                }
+            }
+            else
+            {
+                if(latGraphWrapperUPtr->node(mappedCoordinates)->factor > MIN_COST_FACTOR)
+                {
+                    latGraphWrapperUPtr->node(mappedCoordinates)->factor -= 1;
+                    edgeChangeCallBack(latGraphWrapperUPtr->node(mappedCoordinates));
+                }
             }
         }
     }

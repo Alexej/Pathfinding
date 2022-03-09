@@ -14,5 +14,6 @@ namespace Pathfinding::Core
         showPathLines = true;
         runAStar = false;
         currentState = State::READY;
+        showAStarPath = true;
     }
 }

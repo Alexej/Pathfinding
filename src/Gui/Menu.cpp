@@ -9,24 +9,34 @@
 #include "AlgorithmStepSpeed.hpp"
 #include "Node.hpp"
 #include "GuiHelpers.hpp"
-
+#include "PathfinderCache.hpp"
 
 namespace Pathfinding::Gui
 {
     using namespace Pathfinding::Constants;
+    using Pathfinding::Core::AlgorithmStepSpeed;
     using Pathfinding::Core::ApplicationState;
     using Pathfinding::Core::State;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
-    using Pathfinding::Core::AlgorithmStepSpeed;
+    using Pathfinding::Datastructures::PathfinderCache;
+    using Pathfinding::Helpers::getStateColor;
     using Pathfinding::Helpers::mapNodeStateToText;
     using Pathfinding::Helpers::mapStateToText;
     using Pathfinding::Helpers::printLargeText;
+    using Pathfinding::Helpers::showStatistic;
 
-    Menu::Menu(ApplicationState * appStatePtr_, int32_t offset_, int32_t height_, int32_t width_)
-    : appStatePtr(appStatePtr_), offset(static_cast<float>(offset_)),
-        height(static_cast<float>(height_)),
-        width(static_cast<float>(width_))
+    Menu::Menu(ApplicationState *appStatePtr_,
+               int32_t offset_,
+               int32_t height_,
+               int32_t width_,
+               PathfinderCache *aCache_,
+               PDPathfinderCache *dCache_)
+        : appStatePtr(appStatePtr_), offset(static_cast<float>(offset_)),
+          height(static_cast<float>(height_)),
+          width(static_cast<float>(width_)),
+          aCache(aCache_),
+          dCache(dCache_)
     {
         dimensionPtr = &appStatePtr->dimension;
         algoStepSpeedPtr = &appStatePtr->stepSpeed;
@@ -53,14 +63,17 @@ namespace Pathfinding::Gui
         case State::SEARCHING:
             showSearchingElements();
             break;
-        case State::DONE:
-            break;
         }
 
-        ImGui::Separator();
         ImGui::Spacing();
+        ImGui::Separator();
         showCommonElements();
         ImGui::Separator();
+
+        if (appStatePtr->currentState == State::DONE)
+        {
+            showDoneState();
+        }
         ImGui::End();
     }
 
@@ -76,42 +89,81 @@ namespace Pathfinding::Gui
     void Menu::showNodeInfoFlag()
     {
         ImGui::Checkbox("Render Node Info", &appStatePtr->showNodeInfo);
+        ImGui::SameLine();
+        ImGui::HelpMarker("Upper left corner: G\nUpper right corner: RHS\nLower left corner: K1\nLower right corner: K2\nSmall rectangle: Factor");
     }
 
     void Menu::showAutoStepFlag()
     {
         ImGui::Checkbox("Auto step", &appStatePtr->autoStep);
+        ImGui::SameLine();
+        ImGui::HelpMarker("Automates step button");
+    }
+
+    void Menu::showAStarPath()
+    {
+        ImGui::Checkbox("Show A* path", &appStatePtr->showAStarPath);
+        ImGui::SameLine();
+        ImGui::HelpMarker("A* (for now) can take different\npath(same distance)");
+    }
+
+    void Menu::showGraph(std::vector<int32_t> values, std::string name)
+    {
+        std::vector<float> valuesFloat(values.begin(), values.end());
+        ImGui::Text(name.c_str());
+        ImGui::PlotLines(std::format("last : {}.", std::to_string(values.back())).c_str(),
+                         &valuesFloat[0],
+                         static_cast<int32_t>(values.size()));
     }
 
     void Menu::showCommonElements()
     {
-        static float arr[] = { 0.6f, 0.1f, 1.0f, 0.5f, 0.92f, 0.1f, 0.2f };
-        ImGui::PlotLines("Nodes expanded", arr, IM_ARRAYSIZE(arr));
-
-
-
-        ImGui::Spacing();
-        showAlgorithmStepSpeedComboBox();
-        showAutoStepFlag();
-        ImGui::Spacing();
-        showPathFlags();
-        ImGui::Spacing();
-        if (dimensionPtr->canShowNodeInfo())
+        if (ImGui::CollapsingHeader("Runtime Options"))
         {
-            showNodeInfoFlag();
+            showAlgorithmStepSpeedComboBox();
+            ImGui::Spacing();
+            showAutoStepFlag();
+            ImGui::Spacing();
+            showPathFlags();
+            ImGui::Spacing();
+            if (dimensionPtr->canShowNodeInfo())
+            {
+                showNodeInfoFlag();
+            }
+            if (appStatePtr->runAStar)
+            {
+                showAStarPath();
+            }
         }
-        ImGui::Spacing();
-        if (appStatePtr->nodeUnderCursor != nullptr)
+        if (ImGui::CollapsingHeader("Node info"))
         {
-            ImGui::Separator();
-            showNodeInfoInMenu();
-            ImGui::Separator();
+            ImGui::Spacing();
+            if (appStatePtr->nodeUnderCursor != nullptr)
+            {
+                ImGui::Separator();
+                showNodeInfoInMenu();
+                ImGui::Separator();
+            }
         }
+
+        auto color = getStateColor(appStatePtr->currentState);
+        ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(color[RED], color[GREEN], color[BLUE], 255));
         printLargeText(std::format("State: {}", mapStateToText(appStatePtr->currentState)), 2);
+        ImGui::PopStyleColor();
+
         ImGui::Spacing();
         if (ImGui::Button("RESET", ImVec2(width - 20, 20)))
         {
             resetCallback();
+        }
+
+        if (appStatePtr->currentState != State::READY)
+        {
+            if (appStatePtr->runAStar)
+            {
+                showGraph(aCache->nodesExpandedAll, "A* nodes Expanded");
+            }
+            showGraph(dCache->nodesExpandedAll, "D* nodes Expanded");
         }
     }
 
@@ -119,18 +171,17 @@ namespace Pathfinding::Gui
     {
         static int32_t itemCurrentSpeed = algoStepSpeedPtr->getCurrentStepSpeedIndex();
         auto speeds = algoStepSpeedPtr->getStepSpeedVecString();
-        if(ImGui::custom_combo("StepSpeed", &itemCurrentSpeed, speeds))
+        if (ImGui::custom_combo("StepSpeed", &itemCurrentSpeed, speeds))
         {
             algoStepSpeedPtr->setCurrentAlgorithmStepSpeedIndex(itemCurrentSpeed);
         }
     }
 
-
     void Menu::showNumberOfNodesComboBox()
     {
         static int32_t itemCurrentNumberOfNodes = dimensionPtr->currentNumberOfNodesIndex();
         auto numberOfNodesInRow = dimensionPtr->getNumberOfNodesInRowString();
-        if(ImGui::custom_combo("NumberOfNodes", &itemCurrentNumberOfNodes, numberOfNodesInRow))
+        if (ImGui::custom_combo("NumberOfNodes", &itemCurrentNumberOfNodes, numberOfNodesInRow))
         {
             numberOfNodesChangedCallBack(itemCurrentNumberOfNodes);
             if (!dimensionPtr->canShowNodeInfo())
@@ -143,20 +194,28 @@ namespace Pathfinding::Gui
     void Menu::showNodeInfoInMenu()
     {
         ImGui::Text(std::format("Height: {} Width: {}", appStatePtr->nodeUnderCursor->location.height,
-                                                        appStatePtr->nodeUnderCursor->location.width)
+                                appStatePtr->nodeUnderCursor->location.width)
                         .c_str());
         ImGui::Text(std::format("G: {}", appStatePtr->nodeUnderCursor->g).c_str());
         ImGui::Text(std::format("RHS: {}", appStatePtr->nodeUnderCursor->rhs).c_str());
         ImGui::Text(std::format("K1: {}", appStatePtr->nodeUnderCursor->key.k1).c_str());
         ImGui::Text(std::format("K2: {}", appStatePtr->nodeUnderCursor->key.k2).c_str());
         ImGui::Text(std::format("Cost factor: {}", appStatePtr->nodeUnderCursor->factor).c_str());
+        ImGui::SameLine();
+        ImGui::HelpMarker("Cost is multiplied by this value");
         ImGui::Text(std::format("State: {}", mapNodeStateToText(appStatePtr->nodeUnderCursor->state)).c_str());
     }
 
     void Menu::showReadyStateElements()
     {
-        ImGui::Spacing();
-        showNumberOfNodesComboBox();
+        if (ImGui::CollapsingHeader("Start Options"))
+        {
+            ImGui::Spacing();
+            showNumberOfNodesComboBox();
+            ImGui::Checkbox("Run A*", &appStatePtr->runAStar);
+            ImGui::SameLine();
+            ImGui::HelpMarker("A* is run at every step of D* lite,\nat the end statistic is provided");
+        }
 
         ImGui::Spacing();
         if (ImGui::Button("Start", ImVec2(width - 20, 20)))
@@ -168,9 +227,6 @@ namespace Pathfinding::Gui
         {
             randomGraphCallBack();
         }
-
-        ImGui::Checkbox("Run A*", &appStatePtr->runAStar);
-
     }
 
     void Menu::addNumberOfNodesChangedCallBack(fPtrVI callBack)
@@ -209,6 +265,53 @@ namespace Pathfinding::Gui
         if (appStatePtr->showPath)
         {
             ImGui::Checkbox("Render path lines", &appStatePtr->showPathLines);
+        }
+    }
+
+    void Menu::showDoneState()
+    {
+        if (appStatePtr->runAStar)
+        {
+            showSearchResults();
+            ImGui::Separator();
+            ImGui::Text("A* statistic");
+            showStatistic(aCache);
+        }
+        ImGui::Separator();
+        ImGui::Text("D* lite statistic");
+        showStatistic(dCache);
+    }
+
+    void Menu::showSearchResults()
+    {
+        const float TEXT_BASE_HEIGHT = ImGui::GetTextLineHeightWithSpacing();
+        if (ImGui::CollapsingHeader("Step results"))
+        {
+            static ImGuiTableFlags flags = ImGuiTableFlags_ScrollY | ImGuiTableFlags_RowBg | ImGuiTableFlags_BordersOuter | ImGuiTableFlags_BordersV | ImGuiTableFlags_Resizable | ImGuiTableFlags_Reorderable | ImGuiTableFlags_Hideable;
+            ImVec2 outer_size = ImVec2(0.0f, TEXT_BASE_HEIGHT * 14);
+            if (ImGui::BeginTable("table_scrolly", 4, flags, outer_size))
+            {
+                ImGui::TableSetupScrollFreeze(0, 1); // Make top row always visible
+                ImGui::TableSetupColumn("Step #", ImGuiTableColumnFlags_None);
+                ImGui::TableSetupColumn("D* lite", ImGuiTableColumnFlags_None);
+                ImGui::TableSetupColumn("A*", ImGuiTableColumnFlags_None);
+                ImGui::TableSetupColumn("Diff", ImGuiTableColumnFlags_None);
+                ImGui::TableHeadersRow();
+                for (std::size_t i = 0; i < aCache->nodesExpandedAll.size(); ++i)
+                {
+                    ImGui::TableNextRow();
+                    ImGui::TableSetColumnIndex(0);
+                    ImGui::Text(std::to_string(i).c_str());
+                    ImGui::TableSetColumnIndex(1);
+                    ImGui::Text(std::to_string(dCache->nodesExpandedAll[i]).c_str());
+                    ImGui::TableSetColumnIndex(2);
+                    ImGui::Text(std::to_string(aCache->nodesExpandedAll[i]).c_str());
+                    ImGui::TableSetColumnIndex(3);
+                    int32_t diff = aCache->nodesExpandedAll[i] - dCache->nodesExpandedAll[i];
+                    ImGui::Text(std::to_string(diff).c_str());
+                }
+                ImGui::EndTable();
+            }
         }
     }
 }

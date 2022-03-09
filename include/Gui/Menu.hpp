@@ -13,6 +13,11 @@ namespace Pathfinding::Core
     class AlgorithmStepSpeed;
 }
 
+namespace Pathfinding::Datastructures
+{
+    struct PathfinderCache;
+}
+
 namespace Pathfinding::Gui
 {
     class Menu final : public Pathfinding::Abstract::IMenu
@@ -21,11 +26,19 @@ namespace Pathfinding::Gui
             using PCApplicationState = Pathfinding::Core::ApplicationState;
             using PCGraphDimension = Pathfinding::Core::GraphDimension;
             using PCAlgorithmStepSpeed = Pathfinding::Core::AlgorithmStepSpeed;
+            using PDPathfinderCache = Pathfinding::Datastructures::PathfinderCache;
             using fPtrVI = std::function<void(int32_t)>;
             using fPtrVV = std::function<void(void)>;
         public:
             Menu() = default;
-            Menu(PCApplicationState * appStatePtr, int32_t offset, int32_t height, int32_t width);
+            Menu(
+                PCApplicationState * appStatePtr, 
+                int32_t offset, 
+                int32_t height, 
+                int32_t width, 
+                PDPathfinderCache * aCache,
+                PDPathfinderCache * dCache);
+
             void show() override;
             void addNumberOfNodesChangedCallBack(fPtrVI callBack) override;
             void addStepCallBack(fPtrVV callBack) override;
@@ -33,6 +46,7 @@ namespace Pathfinding::Gui
             void addResetCallBack(fPtrVV callBack) override;
             void addRandomGraphCallBack(fPtrVV callBack) override;
             bool initialized() const override;
+            void showGraph(std::vector<int32_t> values, std::string name) override;
         private:
             void showCommonElements();
             void showReadyStateElements();
@@ -43,19 +57,25 @@ namespace Pathfinding::Gui
             void showPathFlags();
             void showAlgorithmStepSpeedComboBox();
             void showNumberOfNodesComboBox();
+            void showSearchResults();
+            void showDoneState();
+            void showAStarPath();
+
         private:
             float offset; 
             float height; 
             float width;
             PCApplicationState * appStatePtr;
+            PCGraphDimension * dimensionPtr;
+            PCAlgorithmStepSpeed * algoStepSpeedPtr;
+            PDPathfinderCache * aCache;
+            PDPathfinderCache * dCache;
         private:
             fPtrVI numberOfNodesChangedCallBack = nullptr;
             fPtrVV startCallBack = nullptr;
             fPtrVV resetCallback = nullptr;
             fPtrVV stepCallBack = nullptr;
             fPtrVV randomGraphCallBack = nullptr;
-            PCGraphDimension * dimensionPtr;
-            PCAlgorithmStepSpeed * algoStepSpeedPtr;
     };
 }
 

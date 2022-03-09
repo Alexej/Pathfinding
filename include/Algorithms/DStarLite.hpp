@@ -13,6 +13,7 @@ namespace Pathfinding::Datastructures
     struct Node;
     struct Key;
     enum class NodeState;
+    struct PathfinderReturnType;
 }
 
 namespace Pathfinding::Abstract
@@ -34,19 +35,19 @@ namespace Pathfinding::Algorithms
         using PDNodeState = Pathfinding::Datastructures::NodeState;
         using PAIHeuristic = Pathfinding::Abstract::IHeuristic;
         using PAICostFunction = Pathfinding::Abstract::ICostFunction;
+        using PDPathfinderReturnType = Pathfinding::Datastructures::PathfinderReturnType;
     public:
         DStarLite() = default;
         explicit DStarLite(std::shared_ptr<PAALatticeGraphWrapper> latticeGraphWrapperSPtr);
         void addDoneCallBack(std::function<void(void)> callBack) override;
         void addNoPathCallBack(std::function<void(void)> callBack) override;
         void initialize() override;
-        void computePath() override;
+        PDPathfinderReturnType initialRun() override;
+        PDPathfinderReturnType moveStart() override;
         void reset() override;
-        void moveStart() override;
         void addChangedNode(PDNode *node) override;
-        std::vector<PDNode *> path() const override;
-        void initialRun() override;
     private:
+        PDPathfinderReturnType computePath();
         void computeShortestPath();
         void UpdateVertex(PDNode *node);
         PDKey calculateKey(PDNode *node);
@@ -65,10 +66,10 @@ namespace Pathfinding::Algorithms
         PDNode *sStart = nullptr;
         PDNode *sLast = nullptr;
         PDPriorityQueue U;
-        std::vector<PDNode *> currentPath;
         std::unordered_set<PDNode *> nodesChanged;
         std::function<void(void)> doneCallBack_;
         std::function<void(void)> noPathCallBack_;
+        int32_t nodexExpanded;
         double kM = 0;
     };
 }

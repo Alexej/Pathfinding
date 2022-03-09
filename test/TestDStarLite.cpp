@@ -16,6 +16,7 @@
 #include "DiagonalHeuristic.hpp"
 
 #include "RootPath.hpp"
+#include "PathfinderReturnType.hpp"
 #include "PathLangParser.hpp"
 
 using namespace Pathfinding::Abstract;
@@ -59,16 +60,17 @@ class DStarLiteTester
         {
             return state != State::NO_PATH || state != State::DONE;
         }
-
+        
+        
         void reset(int32_t height, int32_t width)
         {
             dStarLiteUPtr->reset();
             latGraphWrapSPtr->resize(height,width);
         }
 
-        void initialRun()
+        PathfinderReturnType initialRun()
         {
-            dStarLiteUPtr->initialRun();
+            return dStarLiteUPtr->initialRun();
         }
 
         void initialize()
@@ -81,9 +83,9 @@ class DStarLiteTester
             dStarLiteUPtr->addChangedNode(node);
         }
 
-        void step()
+        PathfinderReturnType step()
         {
-            dStarLiteUPtr->moveStart();
+            return dStarLiteUPtr->moveStart();
         }
 
     private:

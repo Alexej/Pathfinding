@@ -12,6 +12,7 @@
 #include "ALatGrWrHelpers.hpp"
 #include "ICostFunction.hpp"
 #include "Constants.hpp"
+#include "PathfinderReturnType.hpp"
 
 
 namespace Pathfinding::Algorithms
@@ -20,6 +21,7 @@ namespace Pathfinding::Algorithms
     using Pathfinding::Abstract::IHeuristic;
     using Pathfinding::Abstract::ICostFunction;
     using Pathfinding::Abstract::ALatticeGraphWrapper;
+    using Pathfinding::Datastructures::PathfinderReturnType;
     using Pathfinding::Datastructures::Key;
     using Pathfinding::Datastructures::LatticeGraph;
     using Pathfinding::Datastructures::Node;
@@ -28,6 +30,16 @@ namespace Pathfinding::Algorithms
     using Pathfinding::Helpers::DStarLiteHelpers;
     using Pathfinding::Helpers::ALatGrWrHelpers;
     using Pathfinding::Abstract::ICostFunction;
+
+    namespace
+    {
+        int32_t flush(int32_t & num)
+        {
+            int32_t tmp = num;
+            num = 0;
+            return tmp;
+        }
+    }
 
     DStarLite::DStarLite(std::shared_ptr<ALatticeGraphWrapper> latticeGraphWrapperSPtr_)
         : latticeGraphWrapperSPtr(latticeGraphWrapperSPtr_) {}
@@ -57,19 +69,20 @@ namespace Pathfinding::Algorithms
         }
     }
 
-    void DStarLite::initialRun()
+    PathfinderReturnType DStarLite::initialRun()
     {
         computeShortestPath();
         if (sStart->g == DStarLiteHelpers::infinity())
         {
             noPathCallBack_();
-            return;
+            return {false, {}, 0};
         }
-        computePath();
+        return computePath();
     }
 
     void DStarLite::computeShortestPath()
     {
+        nodexExpanded = 0;
         while (U.topKey() < calculateKey(sStart) || !DStarLiteHelpers::locallyConsistent(sStart))
         {
             Key kOld = U.topKey();
@@ -119,8 +132,8 @@ namespace Pathfinding::Algorithms
         sLast = nullptr;
         U.reset();
         kM = 0;
-        currentPath.clear();
         nodesChanged.clear();
+        nodexExpanded = 0;
     }
 
     Node *DStarLite::popFromQueueAndUpdateState()
@@ -168,6 +181,7 @@ namespace Pathfinding::Algorithms
     {
         for (auto &pred : ALatGrWrHelpers::neighbors(latticeGraphWrapperSPtr, node))
         {
+            nodexExpanded += 1;
             UpdateVertex(pred);
         }
     }
@@ -180,19 +194,20 @@ namespace Pathfinding::Algorithms
         }
     }
 
-    void DStarLite::computePath()
+    PathfinderReturnType DStarLite::computePath()
     {
-        currentPath.clear();
+        std::vector<Node *> path;
         Node *currentNode = sStart;
-        currentPath.push_back(currentNode);
+        path.push_back(currentNode);
         while (*currentNode != *latticeGraphWrapperSPtr->goalNode())
         {
             currentNode = getMinCG(currentNode).second;
-            currentPath.push_back(currentNode);
+            path.push_back(currentNode);
         }
+        return {true, path, flush(nodexExpanded)};
     }
 
-    void DStarLite::moveStart()
+    PathfinderReturnType DStarLite::moveStart()
     {
         if (!nodesChanged.empty())
         {
@@ -209,17 +224,17 @@ namespace Pathfinding::Algorithms
         if (sStart->g == DStarLiteHelpers::infinity())
         {
             noPathCallBack_();
-            return;
+            return {false, {}, 0};
         }
 
         moveStartToNextInPath();
-        computePath();
+        auto result = computePath();
 
         if (*sStart == *latticeGraphWrapperSPtr->goalNode())
         {
-            doneCallBack_();
-            return;
+            doneCallBack_();    
         }
+        return result;
     }
 
     void DStarLite::moveStartToNextInPath()
@@ -247,11 +262,6 @@ namespace Pathfinding::Algorithms
     void DStarLite::addNoPathCallBack(std::function<void(void)> callBack)
     {
         noPathCallBack_ = callBack;
-    }
-
-    std::vector<Node *> DStarLite::path() const
-    {
-        return currentPath;
     }
 
     double DStarLite::costThisFar(const Node * u, const Node * neighbor)

@@ -14,7 +14,7 @@ namespace Pathfinding::Algorithms
 
     double DefaultCostFunction::calculate(const Node *from, const Node *to)
     {
-        if (DStarLiteHelpers::blocked(to) || DStarLiteHelpers::blocked(from))
+        if (DStarLiteHelpers::blocked(to))
         {
             return DStarLiteHelpers::infinity();
         }

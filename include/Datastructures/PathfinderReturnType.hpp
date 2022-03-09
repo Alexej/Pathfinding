@@ -6,9 +6,9 @@
 
 namespace Pathfinding::Datastructures
 {
-    struct AStarReturnType
+    struct PathfinderReturnType
     {
-        AStarReturnType(bool pathFound_, std::vector<Pathfinding::Datastructures::Node *> path_, int32_t nodesExpanded_)
+        PathfinderReturnType(bool pathFound_, std::vector<Pathfinding::Datastructures::Node *> path_, int32_t nodesExpanded_)
             : pathFound(pathFound_),
               path(path_),
               nodesExpanded(nodesExpanded_)

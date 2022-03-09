@@ -37,6 +37,7 @@ namespace Pathfinding::Core
             bool showPath;
             bool showPathLines;
             bool runAStar;
+            bool showAStarPath;
     };
 }
 

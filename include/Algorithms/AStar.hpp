@@ -11,7 +11,7 @@ namespace Pathfinding::Abstract
 
 namespace Pathfinding::Datastructures
 {
-    struct AStarReturnType;
+    struct PathfinderReturnType;
     struct Node;
 }
 
@@ -37,10 +37,10 @@ namespace Pathfinding::Algorithms
     class AStar final : public Pathfinding::Abstract::IAStar
     {
         private:
-            using PDAStarReturnType = Pathfinding::Datastructures::AStarReturnType;
+            using PDPathfinderReturnType = Pathfinding::Datastructures::PathfinderReturnType;
             using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
         public:
-            PDAStarReturnType calculatePath(std::shared_ptr<PAALatticeGraphWrapper> graphWrapper) override;
+            PDPathfinderReturnType calculatePath(std::shared_ptr<PAALatticeGraphWrapper> graphWrapper) override;
     };
 }
 

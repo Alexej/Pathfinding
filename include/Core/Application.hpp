@@ -16,7 +16,7 @@
 #include "GraphOperations.hpp"
 #include "IApplication.hpp"
 #include "IAStar.hpp"
-#include "AStarCache.hpp"
+#include "PathfinderCache.hpp"
 
 namespace Pathfinding::Abstract
 {
@@ -43,7 +43,7 @@ namespace Pathfinding::Core
         using PCApplicationState = Pathfinding::Core::ApplicationState;
         using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
         using PAIAStar = Pathfinding::Abstract::IAStar;
-        using PDAStarCache = Pathfinding::Datastructures::AStarCache;
+        using PDPathfinderCachee = Pathfinding::Datastructures::PathfinderCache;
     public:
         Application() = default;
         void run();
@@ -72,7 +72,8 @@ namespace Pathfinding::Core
         sf::RenderWindow window;
         GraphDimension *dimensionPtr;
         AlgorithmStepSpeed *algoStepSpeedPtr;
-        PDAStarCache aStarCache;
+        PDPathfinderCachee aStarCache;
+        PDPathfinderCachee dStarCache;
     };
 }
 

@@ -6,7 +6,7 @@
 #include <SFML/Window/Event.hpp>
 #include "ALatGrWrHelpers.hpp"
 #include "LatticeGraphWrapper.hpp"
-#include "AStarReturnType.hpp"
+#include "PathfinderReturnType.hpp"
 #include "Constants.hpp"
 #include "RenderingHelpers.hpp"
 
@@ -15,7 +15,7 @@ namespace Pathfinding::Core
     using namespace Constants;
     using Pathfinding::Helpers::ALatGrWrHelpers;
     using Pathfinding::Datastructures::LatticeGraphWrapper;
-    using Pathfinding::Datastructures::AStarReturnType;
+    using Pathfinding::Datastructures::PathfinderReturnType;
     using Pathfinding::Helpers::convertToSfmlColor;
 
     void Application::startAlgorithm()
@@ -24,7 +24,7 @@ namespace Pathfinding::Core
         appState.currentState = State::SEARCHING;
 
         dstarLiteUPtr->initialize();
-        dstarLiteUPtr->initialRun();
+        dStarCache.cache(dstarLiteUPtr->initialRun());
         if(appState.runAStar)
         {
             aStarCache.cache(aStarUPtr->calculatePath(latGraphWrapUPtr));
@@ -66,13 +66,8 @@ namespace Pathfinding::Core
             accumulator += dt;
             if (accumulator > algoStepSpeedPtr->getCurrentStepSpeed())
             {
-                dstarLiteUPtr->moveStart();
+                step();
                 accumulator = 0;
-            }
-
-            if(appState.runAStar)
-            {
-                aStarCache.cache(aStarUPtr->calculatePath(latGraphWrapUPtr));
             }
         }
         ImGui::SFML::Update(window, deltaClock.restart());
@@ -96,8 +91,11 @@ namespace Pathfinding::Core
 
         if (appState.currentState == State::DONE || appState.currentState == State::SEARCHING)
         {
-            rendererUPtr->renderPath(aStarCache.currentPath, convertToSfmlColor(PATH_NODE_COLOR_2));
-            rendererUPtr->renderPath(dstarLiteUPtr->path(), convertToSfmlColor(PATH_NODE_COLOR));
+            if(appState.showAStarPath)
+            {
+                rendererUPtr->renderPath(aStarCache.currentPath, convertToSfmlColor(PATH_NODE_COLOR_2));
+            }
+            rendererUPtr->renderPath(dStarCache.currentPath, convertToSfmlColor(PATH_NODE_COLOR));
         }
 
         window.display();
@@ -113,6 +111,7 @@ namespace Pathfinding::Core
         appState.nodeUnderCursor = nullptr;
         rendererUPtr->reset();
         aStarCache.reset();
+        dStarCache.reset();
     }
 
     void Application::done()
@@ -135,7 +134,7 @@ namespace Pathfinding::Core
 
     void Application::step()
     {
-        dstarLiteUPtr->moveStart();
+        dStarCache.cache(dstarLiteUPtr->moveStart());
         if(appState.runAStar)
         {
             aStarCache.cache(aStarUPtr->calculatePath(latGraphWrapUPtr));

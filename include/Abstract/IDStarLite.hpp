@@ -9,6 +9,7 @@
 namespace Pathfinding::Datastructures
 {
     struct Node;
+    struct PathfinderReturnType;
 }
 
 namespace Pathfinding::Abstract
@@ -17,16 +18,15 @@ namespace Pathfinding::Abstract
     {
         private:
             using PDNode = Pathfinding::Datastructures::Node;
+            using PDPathfinderReturnType = Pathfinding::Datastructures::PathfinderReturnType;
         public:
             virtual void addDoneCallBack(std::function<void(void)> callBack) = 0;
             virtual void addNoPathCallBack(std::function<void(void)> callBack) = 0;
             virtual void initialize() = 0;
-            virtual void computePath() = 0;
             virtual void reset() = 0;
-            virtual void moveStart() = 0;
+            virtual PDPathfinderReturnType initialRun() = 0;
+            virtual PDPathfinderReturnType moveStart() = 0;
             virtual void addChangedNode(PDNode *node) = 0;
-            virtual std::vector<PDNode *> path() const = 0;
-            virtual void initialRun() = 0;
             virtual ~IDStarLite() = default;
     };
 }
