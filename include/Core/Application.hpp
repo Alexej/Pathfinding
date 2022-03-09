@@ -15,6 +15,7 @@
 #include "DStarLite.hpp"
 #include "GraphOperations.hpp"
 #include "IApplication.hpp"
+#include "IAStar.hpp"
 
 namespace Pathfinding::Abstract
 {
@@ -40,6 +41,7 @@ namespace Pathfinding::Core
         using PAIRenderer = Pathfinding::Abstract::IRenderer;
         using PCApplicationState = Pathfinding::Core::ApplicationState;
         using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
+        using PAIAStar = Pathfinding::Abstract::IAStar;
     public:
         Application() = default;
         void run();
@@ -59,6 +61,7 @@ namespace Pathfinding::Core
         std::unique_ptr<PAIMenu> menuUPtr;
         std::unique_ptr<PAIEventManager> eventManagerUPtr;
         std::unique_ptr<PAIDStarLite> dstarLiteUPtr;
+        std::unique_ptr<PAIAStar> aStarUPtr;
         std::unique_ptr<PAIGraphOperations> graphOpsUPtr;
         std::shared_ptr<PAALatticeGraphWrapper> latGraphWrapUPtr;
 

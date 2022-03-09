@@ -1,6 +1,7 @@
 
 set(SOURCES_PATHFINDING
   Algorithms/DStarLite.cpp
+  Algorithms/AStar.cpp
   Algorithms/DiagonalHeuristic.cpp
   Algorithms/DefaultCostFunction.cpp
   Events/EventManager.cpp
@@ -9,7 +10,7 @@ set(SOURCES_PATHFINDING
   Datastructures/LatticeGraphWrapper.cpp
   Core/Application.cpp
   Core/ApplicationState.cpp
-  Core/Renderer.cpp
+  Rendering/Renderer.cpp
   Core/GraphDimension.cpp
   Core/AlgorithmStepSpeed.cpp
   Helpers/RootPath.cpp
@@ -19,7 +20,6 @@ set(SOURCES_PATHFINDING
   Helpers/ALatGrWrHelpers.cpp
   Helpers/ApplicationBuilder.cpp
   Helpers/AlgorithmFunctionHelpers.cpp
-  ../test/PathLangParser.cpp
   Gui/Menu.cpp
   main.cpp
 )

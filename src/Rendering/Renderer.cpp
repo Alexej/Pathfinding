@@ -15,8 +15,9 @@
 #include "ALatticeGraphWrapper.hpp"
 #include "ALatGrWrHelpers.hpp"
 #include "CouldNotLoadFontException.hpp"
+#include "ApplicationState.hpp"
 
-namespace Pathfinding::Core
+namespace Pathfinding::Rendering
 {
     using namespace Pathfinding::Constants;
     using Pathfinding::Abstract::ALatticeGraphWrapper;
@@ -27,6 +28,8 @@ namespace Pathfinding::Core
     using Pathfinding::Datastructures::Vec2i;
     using Pathfinding::Exceptions::CouldNotLoadFontException;
     using Pathfinding::Helpers::ALatGrWrHelpers;
+    using Pathfinding::Core::ApplicationState;
+    using Pathfinding::Core::State;
     using Pathfinding::Helpers::getRootPath;
 
     namespace
@@ -170,8 +173,6 @@ namespace Pathfinding::Core
         nodePoint.setRadius(nodePointRadius);
         nodePoint.setOrigin(nodePointRadius, nodePointRadius);
 
-        factorRect.setSize(sf::Vector2f(nodePointRadius * 1.5f ,nodePointRadius * 1.5f));
-
         float halfNodeSizeSquared = static_cast<float>(pow(straightLineLength / 2, 2));
 
         float lineThickness = nodePointRadius / 2;
@@ -183,6 +184,7 @@ namespace Pathfinding::Core
         straightLine.setOrigin(sf::Vector2f(0, lineThickness / 2));
         diagonalLine.setOrigin(sf::Vector2f(0, lineThickness / 2));
 
+        factorRect.setSize(sf::Vector2f(nodePointRadius * 1.5f ,nodePointRadius * 1.5f));
         nodeRect.setSize(sf::Vector2f(straightLineLength, straightLineLength));
     }
 

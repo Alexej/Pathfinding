@@ -4,7 +4,7 @@
 #include <functional>
 #include <memory>
 #include <vector>
-#include "IInformedSearchAlgorithm.hpp"
+#include "AInformedSearchAlgorithm.hpp"
 
 namespace Pathfinding::Datastructures
 {
@@ -13,7 +13,7 @@ namespace Pathfinding::Datastructures
 
 namespace Pathfinding::Abstract
 {
-    class IDStarLite : public IInformedSearchAlgorithm
+    class IDStarLite : public AInformedSearchAlgorithm
     {
         private:
             using PDNode = Pathfinding::Datastructures::Node;

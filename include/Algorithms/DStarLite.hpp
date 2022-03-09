@@ -40,8 +40,6 @@ namespace Pathfinding::Algorithms
         void addDoneCallBack(std::function<void(void)> callBack) override;
         void addNoPathCallBack(std::function<void(void)> callBack) override;
         void initialize() override;
-        void setHeuristic(std::unique_ptr<PAIHeuristic> cost) override;
-        void setCostFunction(std::unique_ptr<PAICostFunction> cost) override;
         void computePath() override;
         void reset() override;
         void moveStart() override;
@@ -67,8 +65,6 @@ namespace Pathfinding::Algorithms
         PDNode *sStart = nullptr;
         PDNode *sLast = nullptr;
         PDPriorityQueue U;
-        std::unique_ptr<PAIHeuristic> heuristicUPtr = nullptr;
-        std::unique_ptr<PAICostFunction> costUPtr = nullptr;
         std::vector<PDNode *> currentPath;
         std::unordered_set<PDNode *> nodesChanged;
         std::function<void(void)> doneCallBack_;

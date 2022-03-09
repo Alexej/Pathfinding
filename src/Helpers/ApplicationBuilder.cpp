@@ -16,7 +16,9 @@
 #include "DefaultCostFunction.hpp"
 #include "IGraphOperations.hpp"
 #include "ApplicationState.hpp"
+#include "AStar.hpp"
 #include <SFML/Window/Event.hpp>
+#include "AStarReturnType.hpp"
 
 namespace Pathfinding::Helpers
 {
@@ -28,12 +30,14 @@ namespace Pathfinding::Helpers
     using Pathfinding::Algorithms::DefaultCostFunction;
     using Pathfinding::Algorithms::DiagonalHeuristic;
     using Pathfinding::Algorithms::DStarLite;
+    using Pathfinding::Algorithms::AStar;
     using Pathfinding::Core::AlgorithmStepSpeed;
     using Pathfinding::Core::Application;
     using Pathfinding::Core::ApplicationState;
     using Pathfinding::Core::GraphDimension;
-    using Pathfinding::Core::Renderer;
+    using Pathfinding::Rendering::Renderer;
     using Pathfinding::Datastructures::LatticeGraph;
+    using Pathfinding::Datastructures::AStarReturnType;
     using Pathfinding::Datastructures::LatticeGraphWrapper;
     using Pathfinding::Events::EventManager;
     using Pathfinding::Core::ApplicationState;
@@ -89,6 +93,7 @@ namespace Pathfinding::Helpers
         applicationUPtr->dstarLiteUPtr = std::make_unique<DStarLite>(applicationUPtr->latGraphWrapUPtr);
         applicationUPtr->graphOpsUPtr = std::make_unique<GraphOperations>(&applicationUPtr->appState, applicationUPtr->latGraphWrapUPtr);
         applicationUPtr->rendererUPtr = std::make_unique<Renderer>(&applicationUPtr->window, &applicationUPtr->appState);
+        applicationUPtr->aStarUPtr = std::make_unique<AStar>();
     }
 
 
@@ -97,6 +102,7 @@ namespace Pathfinding::Helpers
         createEventManagerBindings();
         setMenuCallBacks();
         initDStarLite();
+        initAStar();
 
         applicationUPtr->graphOpsUPtr->addEdgeChangeCallBack(std::bind(&IDStarLite::addChangedNode, applicationUPtr->dstarLiteUPtr.get(), _1));
         applicationUPtr->window.setFramerateLimit(APP_FPS);
@@ -133,6 +139,12 @@ namespace Pathfinding::Helpers
         applicationUPtr->menuUPtr->addRandomGraphCallBack(std::bind(&Application::randomGraph, applicationUPtr.get()));
         applicationUPtr->menuUPtr->addResetCallBack(std::bind(&Application::reset, applicationUPtr.get()));
         applicationUPtr->menuUPtr->addStepCallBack(std::bind(&Application::step, applicationUPtr.get()));
+    }
+
+    void ApplicationBuilder::initAStar()
+    {
+        applicationUPtr->aStarUPtr->setHeuristic(std::make_unique<DiagonalHeuristic>(diagonalCost, straightCost));
+        applicationUPtr->aStarUPtr->setCostFunction(std::make_unique<DefaultCostFunction>(diagonalCost, straightCost));
     }
 
     void ApplicationBuilder::initDStarLite()

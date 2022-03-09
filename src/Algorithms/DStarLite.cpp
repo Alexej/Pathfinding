@@ -29,16 +29,6 @@ namespace Pathfinding::Algorithms
     DStarLite::DStarLite(std::shared_ptr<ALatticeGraphWrapper> latticeGraphWrapperSPtr_)
         : latticeGraphWrapperSPtr(latticeGraphWrapperSPtr_) {}
 
-    void DStarLite::setHeuristic(std::unique_ptr<IHeuristic> heuristicUPtr_)
-    {
-        heuristicUPtr = std::move(heuristicUPtr_);
-    }
-
-    void DStarLite::setCostFunction(std::unique_ptr<ICostFunction> costUPtr_)
-    {
-        costUPtr = std::move(costUPtr_);
-    }
-
     void DStarLite::initialize()
     {
         kM = 0;

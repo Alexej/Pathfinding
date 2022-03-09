@@ -37,6 +37,7 @@ namespace Pathfinding::Helpers
             void createEventManagerBindings();
             void setMenuCallBacks();
             void initDStarLite();
+            void initAStar();
         private:
             std::unique_ptr<PCApplication> applicationUPtr = nullptr;
             PDAlgorithmStepSpeed stepSpeed;

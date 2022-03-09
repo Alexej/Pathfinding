@@ -10,7 +10,7 @@
 
 namespace Pathfinding::Datastructures
 {
-    class NodeComperator
+    class DStarLiteQueueComperator
     {
     public:
         bool operator()(const Node *lhs, const Node *rhs)
@@ -19,7 +19,7 @@ namespace Pathfinding::Datastructures
         }
     };
 
-    class PriorityQueue final : public std::priority_queue<Node *, std::vector<Node *>, NodeComperator>
+    class PriorityQueue final : public std::priority_queue<Node *, std::vector<Node *>, DStarLiteQueueComperator>
     {
     public:
         void remove(const Node *node)
@@ -61,7 +61,7 @@ namespace Pathfinding::Datastructures
         }
 
     private:
-        using base = std::priority_queue<Node *, std::vector<Node *>, NodeComperator>;
+        using base = std::priority_queue<Node *, std::vector<Node *>, DStarLiteQueueComperator>;
     };
 }
 

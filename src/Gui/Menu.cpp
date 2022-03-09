@@ -85,6 +85,11 @@ namespace Pathfinding::Gui
 
     void Menu::showCommonElements()
     {
+        static float arr[] = { 0.6f, 0.1f, 1.0f, 0.5f, 0.92f, 0.1f, 0.2f };
+        ImGui::PlotLines("Nodes expanded", arr, IM_ARRAYSIZE(arr));
+
+
+
         ImGui::Spacing();
         showAlgorithmStepSpeedComboBox();
         showAutoStepFlag();

@@ -25,6 +25,10 @@ namespace Pathfinding::Core
 {
     struct ApplicationState;
     class GraphDimension;
+}
+
+namespace Pathfinding::Rendering
+{
     class Renderer final : public Pathfinding::Abstract::IRenderer
     {
     private:
@@ -32,13 +36,14 @@ namespace Pathfinding::Core
         using PDNode = Pathfinding::Datastructures::Node;
         using PDNodeState = Pathfinding::Datastructures::NodeState;
         using PCApplicationState = Pathfinding::Core::ApplicationState;
+        using PCGraphDimension = Pathfinding::Core::GraphDimension;
         using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
 
     public:
         Renderer() = default;
-        Renderer(sf::RenderWindow *window, ApplicationState * appStateSPtr);
+        Renderer(sf::RenderWindow *window, PCApplicationState *appStateSPtr);
         void render(const std::shared_ptr<PAALatticeGraphWrapper> latticeGraphWrapperSPtr) override;
-        void renderPath(const std::vector<PDNode *> & path) override;
+        void renderPath(const std::vector<PDNode *> &path) override;
         void update() override;
         void reset() override;
         void resize() override;
@@ -48,8 +53,8 @@ namespace Pathfinding::Core
         void loadFont(std::string font);
         void drawNode(const PDNode &node, sf::Vector2f coords);
         void renderNodeInfo(const PDNode &node, sf::Vector2f coords);
-        void renderPathLineEndPoints(const std::vector<PDNode *> & path, sf::Vector2f pointPositionOffset);
-        void renderPathLines(const std::vector<PDNode *> & path, sf::Vector2f pointPositionOffset);
+        void renderPathLineEndPoints(const std::vector<PDNode *> &path, sf::Vector2f pointPositionOffset);
+        void renderPathLines(const std::vector<PDNode *> &path, sf::Vector2f pointPositionOffset);
         sf::Color stateColor(PDNodeState state);
         void updateColor();
 
@@ -63,8 +68,8 @@ namespace Pathfinding::Core
         sf::RectangleShape factorRect;
         sf::Color goalNodeDiff = sf::Color::Black;
         sf::RenderWindow *windowPtr = nullptr;
-        PCApplicationState * appStateSPtr = nullptr;
-        GraphDimension *dimensionPtr = nullptr;
+        PCApplicationState *appStateSPtr = nullptr;
+        PCGraphDimension *dimensionPtr = nullptr;
         sf::Color visitedNodeDiff = sf::Color::Black;
         sf::Color goalColor;
         sf::Color visitedColor;
