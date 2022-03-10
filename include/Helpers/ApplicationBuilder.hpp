@@ -6,15 +6,8 @@
 #include "AlgorithmStepSpeed.hpp"
 #include "GraphDimension.hpp"
 
-namespace Pathfinding::Core
-{
-    class Application;
-}
-
-namespace Pathfinding::Abstract
-{
-    class IApplication;
-}
+namespace Pathfinding::Core { class Application; }
+namespace Pathfinding::Abstract { class IApplication; }
 
 namespace Pathfinding::Helpers
 {
@@ -27,17 +20,28 @@ namespace Pathfinding::Helpers
             using PAIApplication = Pathfinding::Abstract::IApplication;
         public:
             ApplicationBuilder();
+            
             void setStepSpeed(std::initializer_list<int32_t> speeds);
+            
             void setDimension(std::initializer_list<int32_t> numberOfNodesInRow);
+            
             void setCosts(int32_t diagonalCost, int32_t straightCost);
+            
             std::unique_ptr<PAIApplication> make();
+            
         private:
             void instantiateObjects();
+            
             void initializeObjects();
+            
             void createEventManagerBindings();
+            
             void setMenuCallBacks();
+            
             void initDStarLite();
+            
             void initAStar();
+            
         private:
             std::unique_ptr<PCApplication> applicationUPtr = nullptr;
             PDAlgorithmStepSpeed stepSpeed;

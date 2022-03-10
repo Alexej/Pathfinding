@@ -12,14 +12,23 @@ namespace Pathfinding::Abstract
             using fPtrVV = std::function<void(void)>;
         public: 
             virtual void show() = 0;
+            
             virtual void addNumberOfNodesChangedCallBack(fPtrVI callBack) = 0;
+            
             virtual void addStepCallBack(fPtrVV callBack) = 0;
+            
             virtual void addStartCallBack(fPtrVV callBack) = 0;
+            
             virtual void addResetCallBack(fPtrVV callBack) = 0;
+            
             virtual void addRandomGraphCallBack(fPtrVV callBack) = 0;
+            
             virtual bool initialized() const = 0;
+            
             virtual void showGraph(std::vector<int32_t> values, std::string name) = 0;
+            
             virtual ~IMenu() = default;
+            
     };
 }
 

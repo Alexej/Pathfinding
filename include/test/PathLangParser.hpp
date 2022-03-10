@@ -13,15 +13,24 @@ namespace Pathfinding::Test
     {
         public:
             explicit PathLangParser(std::string pathToScenarios);
+            
             auto begin() const { return scenarios.cbegin(); }
+            
             auto end() const { return scenarios.cend(); }
+            
         private:
             void parse();
+            
             void readLines();
+            
             void parseLines();
+            
             void parseFooter(Scenario & scenario, const std::vector<std::string> & sectionStrings);
+            
             void parseHeader(Scenario & scenario, const std::vector<std::string> & sectionStrings);
+            
             void parseCommands(Scenario & scenario, const std::vector<std::string> & sectionStrings);
+            
         public:
             std::vector<Scenario> scenarios;
             std::ifstream input;

@@ -8,43 +8,17 @@
 #include "Vec2.hpp"
 #include "IGraphOperations.hpp"
 
-namespace Pathfinding::Datastructures
-{
-    class LatticeGraph;
-    struct Node;
-}
-
-namespace Pathfinding::Core
-{
-    struct ApplicationState;
-}
-
-namespace Pathfinding::Algorithms
-{
-    class DStarLite;
-}
-
-namespace Pathfinding::Abstract
-{
-    class ALatticeGraphWrapper;
-}
-
-namespace Pathfinding::Events
-{
-    struct MouseData;
-}
+namespace Pathfinding::Datastructures { class LatticeGraph; }
+namespace Pathfinding::Datastructures { struct Node; }
+namespace Pathfinding::Core { struct ApplicationState; }
+namespace Pathfinding::Algorithms { class DStarLite; }
+namespace Pathfinding::Abstract { class ALatticeGraphWrapper; }
+namespace Pathfinding::Events { struct MouseData; }
 
 namespace Pathfinding::Helpers
 {
 
-    enum class MouseAction
-    {
-        SETTING_START,
-        SETTING_GOAL,
-        BLOCKING_NODE,
-        CLEARING_NODE,
-        IDLE
-    };
+    enum class MouseAction { SETTING_START, SETTING_GOAL, BLOCKING_NODE, CLEARING_NODE, IDLE };
 
     class GraphOperations final : public Pathfinding::Abstract::IGraphOperations
     {
@@ -57,25 +31,43 @@ namespace Pathfinding::Helpers
         using PEMouseData = Pathfinding::Events::MouseData;
     public:
         GraphOperations() = default;
+        
         GraphOperations(PCApplicationState * appStateSPtr, 
                         std::shared_ptr<PAALatticeGraphWrapper> latGraphWrapperUPtr);
+                        
         void rightMouseButtonPressed(PEMouseData mouseData) override;
+        
         void leftMouseButtonPressed(PEMouseData mouseData) override;
+        
         void mouseButtonReleased(PEMouseData mouseData) override;
+        
         void nodeUnderCursor(PEMouseData mouseData) override;
+        
         void mouseMoved(PEMouseData mouseData) override;
+        
         void mouseWheelMoved(PEMouseData mouseData) override;
+        
         void resize(int32_t nodeSideLength) override;
+        
         void disableEndpointsEvent() override;
+        
         void enableEndPointsEvent() override;
+        
         void disableObsticlesEvents() override;
+        
         void enableObsticlesEvents() override;
+        
         bool endpointsEvents() const override;
+        
         bool obsticlesEvents() const override;
+        
         void addEdgeChangeCallBack(std::function<void(PDNode * node)> callBack) override;
+        
     private:
         void blockNodeAndNotifyAlgorithm(PDVec2i mappedCoordinates);
+        
         void clearNodeAndNotifyAlgorithm(PDVec2i mappedCoordinates);
+        
 
     private:
         std::function<void(PDNode * node)> edgeChangeCallBack;

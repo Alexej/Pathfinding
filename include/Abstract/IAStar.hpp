@@ -5,10 +5,7 @@
 #include <memory>
 #include "AInformedSearchAlgorithm.hpp"
 
-namespace Pathfinding::Datastructures
-{
-    struct PathfinderReturnType;
-}
+namespace Pathfinding::Datastructures { struct PathfinderReturnType; }
 
 namespace Pathfinding::Abstract
 {
@@ -18,8 +15,10 @@ namespace Pathfinding::Abstract
     private:
         using PDPathfinderReturnType = Pathfinding::Datastructures::PathfinderReturnType;
     public:
-        virtual PDPathfinderReturnType calculatePath(std::shared_ptr<ALatticeGraphWrapper> graphWrapper) = 0;
+        virtual PDPathfinderReturnType calculatePath(const std::shared_ptr<ALatticeGraphWrapper> graphWrapper) = 0;
+
         virtual ~IAStar() = default;
+
     };
 }
 

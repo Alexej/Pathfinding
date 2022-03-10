@@ -26,15 +26,13 @@ namespace Pathfinding::Gui
     using Pathfinding::Helpers::printLargeText;
     using Pathfinding::Helpers::showStatistic;
 
+
     Menu::Menu(ApplicationState *appStatePtr_,
-               int32_t offset_,
-               int32_t height_,
-               int32_t width_,
                PathfinderCache *aCache_,
                PDPathfinderCache *dCache_)
-        : appStatePtr(appStatePtr_), offset(static_cast<float>(offset_)),
-          height(static_cast<float>(height_)),
-          width(static_cast<float>(width_)),
+        : appStatePtr(appStatePtr_), offset(static_cast<float>(GRID_FIELD_WIDTH)),
+          height(static_cast<float>(GRID_FIELD_HEIGHT)),
+          width(static_cast<float>(MENU_WIDTH)),
           aCache(aCache_),
           dCache(dCache_)
     {

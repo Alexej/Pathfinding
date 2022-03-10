@@ -5,20 +5,11 @@
 #include "GraphDimension.hpp"
 #include "AlgorithmStepSpeed.hpp"
 
-namespace Pathfinding::Datastructures
-{
-    struct Node;
-}
+namespace Pathfinding::Datastructures { struct Node; }
 
 namespace Pathfinding::Core
 {
-    enum class State
-    {
-        READY,
-        SEARCHING,
-        DONE,
-        NO_PATH
-    };
+    enum class State { READY, SEARCHING, DONE, NO_PATH };
 
     struct ApplicationState
     {
@@ -26,7 +17,9 @@ namespace Pathfinding::Core
             using PDNode = Pathfinding::Datastructures::Node;
         public:
             ApplicationState() = default;
+
             ApplicationState(GraphDimension dim, AlgorithmStepSpeed speed);
+
             GraphDimension dimension;
             AlgorithmStepSpeed stepSpeed;
             State currentState;
@@ -38,6 +31,7 @@ namespace Pathfinding::Core
             bool showPathLines;
             bool runAStar;
             bool showAStarPath;
+
     };
 }
 

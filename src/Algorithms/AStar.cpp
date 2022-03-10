@@ -13,28 +13,28 @@
 
 namespace Pathfinding::Algorithms
 {
+    using Pathfinding::Abstract::ALatticeGraphWrapper;
     using Pathfinding::Abstract::ICostFunction;
     using Pathfinding::Abstract::IHeuristic;
     using Pathfinding::Abstract::ILatticeGraph;
-    using Pathfinding::Abstract::ALatticeGraphWrapper;
-    using Pathfinding::Datastructures::PathfinderReturnType;
     using Pathfinding::Datastructures::Node;
+    using Pathfinding::Datastructures::PathfinderReturnType;
     using Pathfinding::Helpers::ALatGrWrHelpers;
 
     namespace
     {
-        template<typename KeyType, typename ValueType>
-        ValueType getMapDefaultInf(const std::unordered_map<KeyType, ValueType> & map, const KeyType & key)
+        template <typename KeyType, typename ValueType>
+        ValueType getMapDefaultInf(const std::unordered_map<KeyType, ValueType> &map, const KeyType &key)
         {
             const auto it = map.find(key);
-            return it != map.end() ?  it->second : std::numeric_limits<ValueType>::infinity();
+            return it != map.end() ? it->second : std::numeric_limits<ValueType>::infinity();
         }
 
-        std::vector<Node*> reconstructPath(std::unordered_map<Node *, Node *> cameFrom, Node * current)
+        std::vector<Node *> reconstructPath(std::unordered_map<Node *, Node *> cameFrom, Node *current)
         {
-            std::vector<Node*> path;
+            std::vector<Node *> path;
             path.push_back(current);
-            while(cameFrom.find(current) != cameFrom.end())
+            while (cameFrom.find(current) != cameFrom.end())
             {
                 current = cameFrom[current];
                 path.push_back(current);
@@ -43,7 +43,7 @@ namespace Pathfinding::Algorithms
         }
     }
 
-    PathfinderReturnType AStar::calculatePath(std::shared_ptr<ALatticeGraphWrapper> graphWrapper)
+    PathfinderReturnType AStar::calculatePath(const std::shared_ptr<ALatticeGraphWrapper> graphWrapper)
     {
         int32_t nodesExpanded = 0;
         std::priority_queue<QueueElement, std::vector<QueueElement>, AStarQueueComperator> openSet;
@@ -53,27 +53,27 @@ namespace Pathfinding::Algorithms
 
         gScore[graphWrapper->startNode()] = 0;
         fScore[graphWrapper->startNode()] = heuristicUPtr->calculate(graphWrapper->startNode(), graphWrapper->goalNode());
-        openSet.push({{fScore[graphWrapper->startNode()],gScore[graphWrapper->startNode()]}, graphWrapper->startNode()});
+        openSet.push({{fScore[graphWrapper->startNode()], gScore[graphWrapper->startNode()]}, graphWrapper->startNode()});
 
-        while(!openSet.empty())
+        while (!openSet.empty())
         {
             auto current = openSet.top().node;
-            if(current == graphWrapper->goalNode())
+            if (current == graphWrapper->goalNode())
             {
                 return {true, reconstructPath(cameFrom, current), nodesExpanded};
             }
             openSet.pop();
             auto neighbors = ALatGrWrHelpers::neighbors(graphWrapper, current);
-            nodesExpanded+=neighbors.size();
-            for(auto neighbor : neighbors)
+            for (auto neighbor : neighbors)
             {
+                nodesExpanded += 1;
                 auto tentativeGscore = getMapDefaultInf(gScore, current) + costUPtr->calculate(current, neighbor);
-                if(tentativeGscore < getMapDefaultInf(gScore, neighbor))
+                if (tentativeGscore < getMapDefaultInf(gScore, neighbor))
                 {
                     cameFrom[neighbor] = current;
                     gScore[neighbor] = tentativeGscore;
                     fScore[neighbor] = tentativeGscore + heuristicUPtr->calculate(neighbor, graphWrapper->goalNode());
-                    openSet.push({{fScore[neighbor],gScore[neighbor]}, neighbor});
+                    openSet.push({{fScore[neighbor], gScore[neighbor]}, neighbor});
                 }
             }
         }

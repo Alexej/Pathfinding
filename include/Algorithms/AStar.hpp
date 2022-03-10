@@ -4,16 +4,9 @@
 #include "IAStar.hpp"
 #include <utility>
 
-namespace Pathfinding::Abstract
-{
-    class ALatticeGraphWrapper;
-}
-
-namespace Pathfinding::Datastructures
-{
-    struct PathfinderReturnType;
-    struct Node;
-}
+namespace Pathfinding::Abstract { class ALatticeGraphWrapper; }
+namespace Pathfinding::Datastructures { struct Node; }
+namespace Pathfinding::Datastructures { struct PathfinderReturnType; }
 
 namespace Pathfinding::Algorithms
 {
@@ -21,8 +14,11 @@ namespace Pathfinding::Algorithms
     {
         QueueElement(std::pair<double, double> key_, Pathfinding::Datastructures::Node * node_)
         : key(key_), node(node_) {}
+        
         std::pair<double, double> key;
+        
         Pathfinding::Datastructures::Node * node;
+        
     };
 
     class AStarQueueComperator
@@ -40,7 +36,7 @@ namespace Pathfinding::Algorithms
             using PDPathfinderReturnType = Pathfinding::Datastructures::PathfinderReturnType;
             using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
         public:
-            PDPathfinderReturnType calculatePath(std::shared_ptr<PAALatticeGraphWrapper> graphWrapper) override;
+            PDPathfinderReturnType calculatePath(const std::shared_ptr<PAALatticeGraphWrapper> graphWrapper) override;
     };
 }
 

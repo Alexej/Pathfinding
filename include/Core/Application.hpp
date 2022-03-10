@@ -18,15 +18,8 @@
 #include "IAStar.hpp"
 #include "PathfinderCache.hpp"
 
-namespace Pathfinding::Abstract
-{
-    class ALatticeGraphWrapper;
-}
-
-namespace Pathfinding::Helpers
-{
-    class ApplicationBuilder;
-}
+namespace Pathfinding::Abstract { class ALatticeGraphWrapper; }
+namespace Pathfinding::Helpers { class ApplicationBuilder; }
 
 namespace Pathfinding::Core
 {
@@ -46,18 +39,30 @@ namespace Pathfinding::Core
         using PDPathfinderCachee = Pathfinding::Datastructures::PathfinderCache;
     public:
         Application() = default;
+        
         void run();
+        
     private:
         void draw();
+        
         void update(sf::Clock &deltaClock);
+        
         void handleInput(sf::Event event);
+        
         void handleNumberOfNodesChange(int32_t index);
+        
         void startAlgorithm();
+        
         void reset();
+        
         void done();
+        
         void noPath();
+        
         void randomGraph();
+        
         void step();
+        
     private:
         std::unique_ptr<PAIRenderer> rendererUPtr;
         std::unique_ptr<PAIMenu> menuUPtr;
@@ -70,10 +75,11 @@ namespace Pathfinding::Core
         PCApplicationState appState;
         int32_t accumulator;
         sf::RenderWindow window;
-        GraphDimension *dimensionPtr;
-        AlgorithmStepSpeed *algoStepSpeedPtr;
         PDPathfinderCachee aStarCache;
         PDPathfinderCachee dStarCache;
+        
+        GraphDimension *dimensionPtr;
+        AlgorithmStepSpeed *algoStepSpeedPtr;
     };
 }
 

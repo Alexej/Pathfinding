@@ -209,6 +209,7 @@ namespace Pathfinding::Algorithms
 
     PathfinderReturnType DStarLite::moveStart()
     {
+        
         if (!nodesChanged.empty())
         {
             kM = kM + heuristicUPtr->calculate(sLast, sStart);
@@ -226,8 +227,8 @@ namespace Pathfinding::Algorithms
             noPathCallBack_();
             return {false, {}, 0};
         }
-
         moveStartToNextInPath();
+
         auto result = computePath();
 
         if (*sStart == *latticeGraphWrapperSPtr->goalNode())

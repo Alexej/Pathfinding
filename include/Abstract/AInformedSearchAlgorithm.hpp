@@ -14,11 +14,14 @@ namespace Pathfinding::Abstract
             {
                 heuristicUPtr = std::move(heuristic_);
             };
+            
             void setCostFunction(std::unique_ptr<ICostFunction> cost_)
             {
                 costUPtr = std::move(cost_);
             };
+            
             virtual ~AInformedSearchAlgorithm() = default;
+            
         protected:
             std::unique_ptr<IHeuristic> heuristicUPtr;
             std::unique_ptr<ICostFunction> costUPtr;

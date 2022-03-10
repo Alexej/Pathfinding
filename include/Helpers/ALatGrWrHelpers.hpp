@@ -6,33 +6,34 @@
 #include <functional>
 #include "Vec2.hpp"
 
-namespace Pathfinding::Abstract
-{
-    class ALatticeGraphWrapper;
-}
-
-namespace Pathfinding::Datastructures
-{
-    struct Node;
-}
+namespace Pathfinding::Abstract { class ALatticeGraphWrapper; }
+namespace Pathfinding::Datastructures { struct Node; }
 
 namespace Pathfinding::Helpers
 {
     class ALatGrWrHelpers
     {
     private:
-        using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
+        using PAALatGraphWr = Pathfinding::Abstract::ALatticeGraphWrapper;
         using PDNode = Pathfinding::Datastructures::Node;
         using PDVec2i = Pathfinding::Datastructures::Vec2i;
+        template<typename T>
+        using shptr = std::shared_ptr<T>;
     public:
-        static std::vector<PDNode *> neighbors(std::shared_ptr<PAALatticeGraphWrapper> latGraphWrapperSPtr, PDNode *node);
-        static void initRandomGraph(std::shared_ptr<PAALatticeGraphWrapper> latGraphWrapperSPtr);
-        static void blockNode(std::shared_ptr<PAALatticeGraphWrapper> latGraphWrapperSPtr, PDVec2i location);
-        static void clearNode(std::shared_ptr<PAALatticeGraphWrapper> latGraphWrapperSPtr, PDVec2i location);
-        static void  iterateOverALatticeGraphWrapperConst(const std::shared_ptr<PAALatticeGraphWrapper> latticeGraphWrapperSPtr,
+        static std::vector<PDNode *> neighbors(shptr<PAALatGraphWr> latGraphWrapperSPtr, PDNode *node);
+        
+        static void initRandomGraph(shptr<PAALatGraphWr> latGraphWrapperSPtr);
+        
+        static void blockNode(shptr<PAALatGraphWr> latGraphWrapperSPtr, PDVec2i location);
+        
+        static void clearNode(shptr<PAALatGraphWr> latGraphWrapperSPtr, PDVec2i location);
+        
+        static void  iterateOverALatticeGraphWrapperConst(const shptr<PAALatGraphWr> latticeGraphWrapperSPtr,
                                                      std::function<void(const PDNode * node, int32_t h, int32_t w)>);
-        static void  iterateOverALatticeGraphWrapper(std::shared_ptr<PAALatticeGraphWrapper> latticeGraphWrapperSPtr,
+                                                     
+        static void  iterateOverALatticeGraphWrapper(shptr<PAALatGraphWr> latticeGraphWrapperSPtr,
                                                      std::function<void(PDNode * node, int32_t h, int32_t w)>);
+                                                     
     };
 }
 

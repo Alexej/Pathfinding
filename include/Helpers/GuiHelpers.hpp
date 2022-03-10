@@ -40,16 +40,9 @@ namespace ImGui
 }
 
 
-namespace Pathfinding::Core
-{
-    enum class State;
-}
-
-namespace Pathfinding::Datastructures
-{
-    enum class NodeState;
-    struct PathfinderCache;
-}
+namespace Pathfinding::Core { enum class State; }
+namespace Pathfinding::Datastructures { struct PathfinderCache; }
+namespace Pathfinding::Datastructures { enum class NodeState; }
 
 
 namespace Pathfinding::Helpers

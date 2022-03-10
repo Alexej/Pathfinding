@@ -12,8 +12,8 @@ namespace Pathfinding::Datastructures
             : pathFound(pathFound_),
               path(path_),
               nodesExpanded(nodesExpanded_)
-        {
-        }
+        {}
+
         bool pathFound = false; 
         std::vector<Pathfinding::Datastructures::Node *> path;
         int32_t nodesExpanded = 0;

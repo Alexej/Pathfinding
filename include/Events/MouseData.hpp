@@ -8,8 +8,11 @@ namespace Pathfinding::Events
     struct MouseData
     {
         MouseData(sf::Vector2i cursorPosition_) : cursorPosition(cursorPosition_) {}
+        
         MouseData(sf::Vector2i cursorPosition_, int32_t wheelDelta_) 
+        
         : cursorPosition(cursorPosition_), wheelDelta(wheelDelta_) {}
+        
         sf::Vector2i cursorPosition;
         int32_t wheelDelta;
     };

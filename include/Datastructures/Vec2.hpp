@@ -17,9 +17,9 @@ namespace Pathfinding::Datastructures
     struct Vec2
     {
         Vec2() = default;
+
         Vec2(T height_, T width_) : height(height_), width(width_) {}
-        T height = 0;
-        T width = 0;
+
         auto operator<=>(const Vec2<T> &) const = default;
 
         Vec2 &operator+=(const Vec2 &rhs)
@@ -28,6 +28,9 @@ namespace Pathfinding::Datastructures
             this->width += rhs.width;
             return *this;
         }
+        
+        T height = 0;
+        T width = 0;
     };
 
     template <typename T>

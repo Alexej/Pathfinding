@@ -4,16 +4,9 @@
 #include <vector>
 #include <SFML/Graphics/Color.hpp>
 
-namespace Pathfinding::Datastructures
-{
-    struct Node;
-    class LatticeGraph;
-}
-
-namespace Pathfinding::Abstract
-{
-    class ALatticeGraphWrapper;
-}
+namespace Pathfinding::Datastructures { class LatticeGraph; }
+namespace Pathfinding::Datastructures { struct Node; }
+namespace Pathfinding::Abstract { class ALatticeGraphWrapper; }
 
 namespace Pathfinding::Abstract
 {
@@ -25,11 +18,17 @@ namespace Pathfinding::Abstract
             using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
         public:
             virtual void render(const std::shared_ptr<PAALatticeGraphWrapper> latticeGraphWrapperSPtr) = 0;
+            
             virtual void renderPath(const std::vector<PDNode *> & path, sf::Color color) = 0;
+            
             virtual void update() = 0;
+            
             virtual void reset() = 0;
+            
             virtual void resize() = 0;
+            
             virtual ~IRenderer() = default;
+            
     };
 }
 

@@ -8,24 +8,13 @@
 #include <SFML/Graphics/Font.hpp>
 #include "IRenderer.hpp"
 
-namespace Pathfinding::Datastructures
-{
-    class LatticeGraph;
-    struct Node;
-    enum class NodeState;
-}
-
-namespace Pathfinding::Abstract
-{
-    class IApplicationState;
-    class ALatticeGraphWrapper;
-}
-
-namespace Pathfinding::Core
-{
-    struct ApplicationState;
-    class GraphDimension;
-}
+namespace Pathfinding::Datastructures { class LatticeGraph; }
+namespace Pathfinding::Datastructures { struct Node; }
+namespace Pathfinding::Datastructures { enum class NodeState; }
+namespace Pathfinding::Abstract { class ALatticeGraphWrapper; }
+namespace Pathfinding::Abstract { class IApplicationState; }
+namespace Pathfinding::Core { class GraphDimension; }
+namespace Pathfinding::Core { struct ApplicationState; }
 
 namespace Pathfinding::Rendering
 {
@@ -41,23 +30,39 @@ namespace Pathfinding::Rendering
 
     public:
         Renderer() = default;
+        
         Renderer(sf::RenderWindow *window, PCApplicationState *appStateSPtr);
+        
         void render(const std::shared_ptr<PAALatticeGraphWrapper> latticeGraphWrapperSPtr) override;
+        
         void renderPath(const std::vector<PDNode *> &path, sf::Color color) override;
+        
         void update() override;
+        
         void reset() override;
+        
         void resize() override;
+        
 
     private:
         void init();
+        
         void loadFont(std::string font);
+        
         void drawNode(const PDNode &node, sf::Vector2f coords);
+        
         void renderNodeInfo(const PDNode &node, sf::Vector2f coords);
+        
         void renderPathLineEndPoints(const std::vector<PDNode *> &path, sf::Vector2f pointPositionOffset, sf::Color color);
+        
         void renderPathLines(const std::vector<PDNode *> &path, sf::Vector2f pointPositionOffset);
+        
         sf::Color stateColor(PDNodeState state);
+        
         void updateColor();
+        
         void setPathColor(sf::Color color);
+        
 
     private:
         sf::RectangleShape nodeRect;

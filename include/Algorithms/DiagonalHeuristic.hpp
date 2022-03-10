@@ -11,7 +11,9 @@ namespace Pathfinding::Algorithms
     {
     public:
         DiagonalHeuristic(int32_t diagonalMovementCost, int32_t straightMovementCost);
+        
         double calculate(const PDNode *from, const PDNode *to) override;
+        
     private:
         int32_t diagonalMovementCost;
         int32_t straightMovementCost;

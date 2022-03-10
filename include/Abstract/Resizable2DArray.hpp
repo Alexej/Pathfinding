@@ -13,9 +13,13 @@ namespace Pathfinding::Abstract
             using PDVec2i = Pathfinding::Datastructures::Vec2i;
         public:
             virtual void resize(int32_t height, int32_t width) = 0;
+            
             virtual std::size_t width() const = 0;
+            
             virtual std::size_t height() const = 0;
+            
             virtual ~Resizable2DArray() = default;
+            
     };
 }
 

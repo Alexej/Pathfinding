@@ -12,14 +12,23 @@ namespace Pathfinding::Datastructures
 
     public:
         LatticeGraph() = default;
+
         LatticeGraph(int32_t height, int32_t width);
+
         explicit LatticeGraph(Vec2i dimension);
+
         void resize(int32_t height, int32_t width) override;
+
         std::vector<Node> & operator[](std::size_t height)  override { return graph[height]; }
+
         const std::vector<Node> & operator[](std::size_t height) const override { return graph[height]; }
+
         bool inBounds(int32_t height, int32_t width) const override;
+
         std::size_t width() const override { return graph[0].size(); }
+
         std::size_t height() const override { return graph.size(); }
+        
     private:
         template <typename Type>
         using Vector2D = std::vector<std::vector<Type>>;

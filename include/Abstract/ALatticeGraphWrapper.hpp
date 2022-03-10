@@ -6,10 +6,7 @@
 #include "Vec2.hpp"
 #include "Resizable2DArray.hpp"
 
-namespace Pathfinding::Datastructures
-{
-    struct Node;
-}
+namespace Pathfinding::Datastructures { struct Node; }
 
 namespace Pathfinding::Abstract
 {
@@ -21,19 +18,28 @@ namespace Pathfinding::Abstract
         using PDNode = Pathfinding::Datastructures::Node;
     public:
         explicit ALatticeGraphWrapper(std::unique_ptr<ILatticeGraph> latGraphUPtr_)
-            : latGraphUPtr(std::move(latGraphUPtr_))
-        {
-        }
+            : latGraphUPtr(std::move(latGraphUPtr_)) {}
+
         virtual void setGoal(PDVec2i location) = 0;
+
         virtual void setStart(PDVec2i location, bool dontSetStarState = false) = 0;
+
         virtual const PDNode *startNode() const = 0;
+
         virtual const PDNode *goalNode() const = 0;
+
         virtual PDNode *startNode() = 0;
+
         virtual PDNode *goalNode() = 0;
+
         virtual PDNode *node(PDVec2i location) = 0;
+
         virtual const PDNode *node(PDVec2i location) const = 0;
+
         virtual bool inBounds(PDVec2i location) const = 0;
+
         virtual ~ALatticeGraphWrapper() = default;
+
     protected:
         std::unique_ptr<ILatticeGraph> latGraphUPtr = nullptr;
     };

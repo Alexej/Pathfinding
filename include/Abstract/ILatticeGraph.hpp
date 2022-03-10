@@ -4,10 +4,7 @@
 #include <vector>
 #include "Resizable2DArray.hpp"
 
-namespace Pathfinding::Datastructures
-{
-    struct Node;
-}
+namespace Pathfinding::Datastructures { struct Node; }
 
 namespace Pathfinding::Abstract
 {
@@ -17,9 +14,13 @@ namespace Pathfinding::Abstract
             using PDNode = Pathfinding::Datastructures::Node;
         public:
             virtual std::vector<PDNode> &operator[](std::size_t height) = 0;
+            
             virtual const std::vector<PDNode> &operator[](std::size_t height) const = 0;
+            
             virtual bool inBounds(int32_t height, int32_t width) const = 0;
+            
             virtual ~ILatticeGraph() = default;
+            
     };
 }
 
