@@ -3,6 +3,7 @@
 
 #include <cstddef>
 #include <cstdint>
+
 #include "Vec2.hpp"
 
 namespace Pathfinding::Abstract

@@ -2,6 +2,7 @@
 #define BDFBF26D_BD08_4957_A301_B1BF962441A7
 
 #include <vector>
+
 #include "PathfinderReturnType.hpp"
 #include "Node.hpp"
 

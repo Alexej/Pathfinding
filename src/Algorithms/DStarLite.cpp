@@ -1,6 +1,8 @@
 #include "DStarLite.hpp"
+
 #include <algorithm>
 #include <limits>
+
 #include "Node.hpp"
 #include "LatticeGraph.hpp"
 #include "Vec2.hpp"
@@ -86,6 +88,7 @@ namespace Pathfinding::Algorithms
         while (U.topKey() < calculateKey(sStart) || !DStarLiteHelpers::locallyConsistent(sStart))
         {
             Key kOld = U.topKey();
+            nodexExpanded += 1;
             Node *u = popFromQueueAndUpdateState();
             if (kOld < calculateKey(u))
             {
@@ -181,7 +184,6 @@ namespace Pathfinding::Algorithms
     {
         for (auto &pred : ALatGrWrHelpers::neighbors(latticeGraphWrapperSPtr, node))
         {
-            nodexExpanded += 1;
             UpdateVertex(pred);
         }
     }

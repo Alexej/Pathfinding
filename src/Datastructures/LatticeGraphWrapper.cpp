@@ -1,4 +1,5 @@
 #include "LatticeGraphWrapper.hpp"
+
 #include "ALatticeGraphWrapper.hpp"
 #include "ILatticeGraph.hpp"
 #include "Node.hpp"

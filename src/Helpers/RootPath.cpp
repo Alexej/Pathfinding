@@ -16,7 +16,7 @@ namespace Pathfinding::Helpers
         std::string::size_type firstOccurence = absolutePath.find(rootDirAsString);
         if (firstOccurence == std::string::npos)
         {
-            throw CouldNotFindPathToFontException("File path unknown", "ResourcePaths.cpp", 17, "std::string pathToFont()");
+            throw CouldNotFindPathToFontException("File path unknown");
         }
         std::string rootDir = absolutePath.substr(0, firstOccurence + rootDirAsString.size());
         return rootDir;

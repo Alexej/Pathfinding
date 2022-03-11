@@ -4,6 +4,7 @@
 #include <functional>
 #include <memory>
 #include <vector>
+
 #include "AInformedSearchAlgorithm.hpp"
 
 namespace Pathfinding::Datastructures { struct PathfinderReturnType; }

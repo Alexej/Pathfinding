@@ -1,5 +1,7 @@
 #include "EventManager.hpp"
+
 #include <SFML/Window/Event.hpp>
+
 #include "MouseData.hpp"
 
 namespace Pathfinding::Events

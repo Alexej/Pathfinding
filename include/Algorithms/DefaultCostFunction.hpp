@@ -2,6 +2,7 @@
 #define BA5C9269_941E_4EEA_9444_1C27FCEAE694
 
 #include "ICostFunction.hpp"
+
 #include <cstdint>
 
 namespace Pathfinding::Algorithms

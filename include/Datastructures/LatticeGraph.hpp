@@ -1,9 +1,10 @@
 #ifndef FD0247C3_67EB_48FC_909F_6614B9CC4CBC
 #define FD0247C3_67EB_48FC_909F_6614B9CC4CBC
 
-#include "Node.hpp"
 #include <vector>
-#include <ILatticeGraph.hpp>
+
+#include "Node.hpp"
+#include "ILatticeGraph.hpp"
 
 namespace Pathfinding::Datastructures
 {

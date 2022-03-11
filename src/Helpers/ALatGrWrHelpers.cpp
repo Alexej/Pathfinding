@@ -2,6 +2,7 @@
 #define B15A85B1_6958_4A28_833B_2236EE9D4AE5
 
 #include "ALatGrWrHelpers.hpp"
+
 #include "ALatticeGraphWrapper.hpp"
 #include "ILatticeGraph.hpp"
 #include "Node.hpp"

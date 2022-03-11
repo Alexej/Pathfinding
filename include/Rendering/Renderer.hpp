@@ -6,6 +6,7 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Font.hpp>
+
 #include "IRenderer.hpp"
 
 namespace Pathfinding::Datastructures { class LatticeGraph; }

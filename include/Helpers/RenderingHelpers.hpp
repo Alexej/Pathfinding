@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics/Color.hpp>
 #include <array>
+
 #include "Constants.hpp"
 
 namespace Pathfinding::Helpers

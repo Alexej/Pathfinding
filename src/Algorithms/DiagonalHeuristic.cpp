@@ -1,4 +1,5 @@
 #include "DiagonalHeuristic.hpp"
+
 #include "Node.hpp"
 
 namespace Pathfinding::Algorithms

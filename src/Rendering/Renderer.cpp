@@ -119,10 +119,7 @@ namespace Pathfinding::Rendering
     {
         if (!font.loadFromFile(getRootPath() + "\\dependencies\\fonts\\" + fontName))
         {
-            throw CouldNotLoadFontException("Could not load font",
-                                            "Renderer.cpp",
-                                            152,
-                                            "void Renderer::loadFont(std::string fontName)");
+            throw CouldNotLoadFontException("Could not load font");
         }
     }
 
@@ -232,7 +229,7 @@ namespace Pathfinding::Rendering
         windowPtr->draw(text);
 
         factorRect.setPosition(sf::Vector2f(coords.x, coords.y + (halfOfNode - factorRect.getSize().y/2)));
-        factorRect.setFillColor(sf::Color(100 + 2 * node.factor,0,140 - 2 * node.factor));
+        factorRect.setFillColor(sf::Color(100 + 14 * node.factor,0,140 - 14 * node.factor));
         windowPtr->draw(factorRect);
     }
 

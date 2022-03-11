@@ -1,4 +1,5 @@
 #include "AlgorithmFunctionHelpers.hpp"
+
 #include "Node.hpp"
 
 

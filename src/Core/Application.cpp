@@ -4,6 +4,7 @@
 #include <imgui.h>
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/Event.hpp>
+
 #include "ALatGrWrHelpers.hpp"
 #include "LatticeGraphWrapper.hpp"
 #include "PathfinderReturnType.hpp"
@@ -88,7 +89,6 @@ namespace Pathfinding::Core
         window.clear();
         ImGui::SFML::Render(window);
         rendererUPtr->render(latGraphWrapUPtr);
-
         if (appState.currentState == State::DONE || appState.currentState == State::SEARCHING)
         {
             if(appState.showAStarPath)
@@ -97,7 +97,6 @@ namespace Pathfinding::Core
             }
             rendererUPtr->renderPath(dStarCache.currentPath, convertToSfmlColor(PATH_NODE_COLOR));
         }
-
         window.display();
     }
 

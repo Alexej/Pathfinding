@@ -3,6 +3,7 @@
 #include <queue>
 #include <vector>
 #include <unordered_map>
+
 #include "ALatticeGraphWrapper.hpp"
 #include "PathfinderReturnType.hpp"
 #include "IHeuristic.hpp"
@@ -64,9 +65,9 @@ namespace Pathfinding::Algorithms
             }
             openSet.pop();
             auto neighbors = ALatGrWrHelpers::neighbors(graphWrapper, current);
+            nodesExpanded += 1;
             for (auto neighbor : neighbors)
             {
-                nodesExpanded += 1;
                 auto tentativeGscore = getMapDefaultInf(gScore, current) + costUPtr->calculate(current, neighbor);
                 if (tentativeGscore < getMapDefaultInf(gScore, neighbor))
                 {

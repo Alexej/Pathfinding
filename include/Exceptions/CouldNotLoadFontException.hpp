@@ -8,8 +8,8 @@ namespace Pathfinding::Exceptions
     class CouldNotLoadFontException final : public Pathfinding::Abstract::AException
     {
     public:
-        CouldNotLoadFontException(const char *msg, const char *file_, int line_, const char *func_, const char *info_ = "")
-            : AException(msg, file_, line_, func_, info_) {}
+        CouldNotLoadFontException(const char *msg)
+            : AException(msg) {}
     };
 }
 

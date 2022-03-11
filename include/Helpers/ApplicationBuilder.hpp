@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <initializer_list>
+
 #include "AlgorithmStepSpeed.hpp"
 #include "GraphDimension.hpp"
 

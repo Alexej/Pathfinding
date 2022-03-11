@@ -1,8 +1,8 @@
 #include "GraphDimension.hpp"
-#include <cmath>
-#include "WrongNodeNumberForDImensionException.hpp"
 
-#include <iostream>
+#include <cmath>
+
+#include "WrongNodeNumberForDImensionException.hpp"
 
 namespace Pathfinding::Core
 {
@@ -15,11 +15,9 @@ namespace Pathfinding::Core
         {
             if (sideLength % numOfNodes != 0)
             {
-                throw WrongNodeNumberForDimensionException("Wrong dimensions entered",
-                                                           "GraphDimension.cpp",
-                                                           14,
-                                                           "GraphDimension::GraphDimension(int32_t sideLength, std::initializer_list<int32_t> numberOfNodesInRow_)");
+                throw WrongNodeNumberForDimensionException("Wrong dimensions entered");
             }
+            
             int32_t numberOfNodes = static_cast<int32_t>(std::pow(numOfNodes, 2));
             numberOfNodesInt.push_back(numberOfNodes);
             numberOfNodesString.push_back(std::to_string(numberOfNodes));

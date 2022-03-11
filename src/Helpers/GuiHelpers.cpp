@@ -1,10 +1,10 @@
 #include "GuiHelpers.hpp"
 
-
 #include <vector>
 #include <string>
 #include <numeric>
 #include <algorithm>
+
 #include "imgui.h"
 #include "ApplicationState.hpp"
 #include "Node.hpp"

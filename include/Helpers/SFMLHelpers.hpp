@@ -2,6 +2,7 @@
 #define EC2C5678_AF5E_406F_AA9A_2BDDCA1C64FA
 
 #include <SFML/System/Vector2.hpp>
+
 #include "Vec2.hpp"
 
 namespace Pathfinding::Helpers

@@ -2,6 +2,7 @@
 #define B392E8BB_7FF6_4DDD_AF6E_9FFBCEC424F0
 
 #include "IHeuristic.hpp"
+
 #include <cstdint>
 
 

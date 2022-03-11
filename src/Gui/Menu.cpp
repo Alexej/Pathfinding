@@ -1,9 +1,10 @@
+#include "Menu.hpp"
+
 #include <imgui-SFML.h>
 #include <imgui.h>
 #include <format>
 
 #include "Constants.hpp"
-#include "Menu.hpp"
 #include "ApplicationState.hpp"
 #include "GraphDimension.hpp"
 #include "AlgorithmStepSpeed.hpp"
@@ -25,7 +26,6 @@ namespace Pathfinding::Gui
     using Pathfinding::Helpers::mapStateToText;
     using Pathfinding::Helpers::printLargeText;
     using Pathfinding::Helpers::showStatistic;
-
 
     Menu::Menu(ApplicationState *appStatePtr_,
                PathfinderCache *aCache_,
@@ -63,10 +63,7 @@ namespace Pathfinding::Gui
             break;
         }
 
-        ImGui::Spacing();
-        ImGui::Separator();
         showCommonElements();
-        ImGui::Separator();
 
         if (appStatePtr->currentState == State::DONE)
         {
@@ -77,7 +74,6 @@ namespace Pathfinding::Gui
 
     void Menu::showSearchingElements()
     {
-        ImGui::Spacing();
         if (ImGui::Button("STEP", ImVec2(width - 20, 20)))
         {
             stepCallBack();
@@ -118,12 +114,11 @@ namespace Pathfinding::Gui
     {
         if (ImGui::CollapsingHeader("Runtime Options"))
         {
+            ImGui::Separator();
+
             showAlgorithmStepSpeedComboBox();
-            ImGui::Spacing();
             showAutoStepFlag();
-            ImGui::Spacing();
             showPathFlags();
-            ImGui::Spacing();
             if (dimensionPtr->canShowNodeInfo())
             {
                 showNodeInfoFlag();
@@ -132,10 +127,10 @@ namespace Pathfinding::Gui
             {
                 showAStarPath();
             }
+            ImGui::Separator();
         }
         if (ImGui::CollapsingHeader("Node info"))
         {
-            ImGui::Spacing();
             if (appStatePtr->nodeUnderCursor != nullptr)
             {
                 ImGui::Separator();
@@ -149,7 +144,6 @@ namespace Pathfinding::Gui
         printLargeText(std::format("State: {}", mapStateToText(appStatePtr->currentState)), 2);
         ImGui::PopStyleColor();
 
-        ImGui::Spacing();
         if (ImGui::Button("RESET", ImVec2(width - 20, 20)))
         {
             resetCallback();
@@ -208,14 +202,14 @@ namespace Pathfinding::Gui
     {
         if (ImGui::CollapsingHeader("Start Options"))
         {
-            ImGui::Spacing();
+            ImGui::Separator();
             showNumberOfNodesComboBox();
             ImGui::Checkbox("Run A*", &appStatePtr->runAStar);
             ImGui::SameLine();
             ImGui::HelpMarker("A* is run at every step of D* lite,\nat the end statistic is provided");
+            ImGui::Separator();
         }
 
-        ImGui::Spacing();
         if (ImGui::Button("Start", ImVec2(width - 20, 20)))
         {
             startCallBack();

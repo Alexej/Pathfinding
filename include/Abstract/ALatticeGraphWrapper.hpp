@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <vector>
+
 #include "Vec2.hpp"
 #include "Resizable2DArray.hpp"
 

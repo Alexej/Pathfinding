@@ -2,9 +2,10 @@
 #define EA7DED5B_A2DD_40EB_9E16_BAB60E8C98E4
 
 #include <cstdint>
+#include <limits>
+
 #include "Vec2.hpp"
 #include "Key.hpp"
-#include <limits>
 
 namespace Pathfinding::Datastructures
 {

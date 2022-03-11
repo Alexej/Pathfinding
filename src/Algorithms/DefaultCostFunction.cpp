@@ -1,4 +1,5 @@
 #include "DefaultCostFunction.hpp"
+
 #include "Node.hpp"
 #include "DStarLiteHelpers.hpp"
 #include "AlgorithmFunctionHelpers.hpp"

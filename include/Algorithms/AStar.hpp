@@ -2,6 +2,7 @@
 #define D789F663_4F72_4879_B70B_FE12085348E0
 
 #include "IAStar.hpp"
+
 #include <utility>
 
 namespace Pathfinding::Abstract { class ALatticeGraphWrapper; }

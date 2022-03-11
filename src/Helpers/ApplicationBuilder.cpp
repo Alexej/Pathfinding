@@ -1,5 +1,7 @@
 #include "ApplicationBuilder.hpp"
 
+#include <SFML/Window/Event.hpp>
+
 #include "IApplication.hpp"
 #include "Constants.hpp"
 #include "Application.hpp"
@@ -17,7 +19,6 @@
 #include "IGraphOperations.hpp"
 #include "ApplicationState.hpp"
 #include "AStar.hpp"
-#include <SFML/Window/Event.hpp>
 #include "PathfinderReturnType.hpp"
 
 namespace Pathfinding::Helpers

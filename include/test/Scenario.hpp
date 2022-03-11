@@ -3,6 +3,7 @@
 
 #include <string>
 #include <vector>
+
 #include "Vec2.hpp"
 #include "ApplicationState.hpp"
 

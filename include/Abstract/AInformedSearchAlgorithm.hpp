@@ -1,9 +1,10 @@
 #ifndef BA7E9D7D_1EA8_4941_95D3_964B40B50B1F
 #define BA7E9D7D_1EA8_4941_95D3_964B40B50B1F
 
+#include <memory>
+
 #include "IHeuristic.hpp"
 #include "ICostFunction.hpp"
-#include <memory>
 
 namespace Pathfinding::Abstract
 {

@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include <functional>
+
 #include "Vec2.hpp"
 
 namespace Pathfinding::Abstract { class ALatticeGraphWrapper; }

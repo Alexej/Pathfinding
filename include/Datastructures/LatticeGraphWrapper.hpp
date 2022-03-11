@@ -2,6 +2,7 @@
 #define CA4EA78A_B93E_4F56_B8F5_589374FB83C4
 
 #include <memory>
+
 #include "ALatticeGraphWrapper.hpp"
 #include "ILatticeGraph.hpp"
 #include "Vec2.hpp"

@@ -5,6 +5,7 @@
 #include <vector>
 #include <fstream>
 #include <regex>
+
 #include "Scenario.hpp"
 
 namespace Pathfinding::Test

@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <functional>
+
 #include "ApplicationState.hpp"
 #include "IMenu.hpp"
 

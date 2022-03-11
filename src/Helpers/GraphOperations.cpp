@@ -1,4 +1,5 @@
 #include "GraphOperations.hpp"
+
 #include "Vec2.hpp"
 #include "LatticeGraph.hpp"
 #include "Node.hpp"

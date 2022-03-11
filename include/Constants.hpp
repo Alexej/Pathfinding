@@ -13,7 +13,7 @@ namespace Pathfinding::Constants
     constexpr auto APPLICATION_TITLE = "Pathfinding";
 
     //Gui
-    constexpr int32_t MAX_COST_FACTOR = 50;
+    constexpr int32_t MAX_COST_FACTOR = 10;
     constexpr int32_t MIN_COST_FACTOR = 1;
 
     // Dimension

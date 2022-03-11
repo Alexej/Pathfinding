@@ -6,6 +6,7 @@
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
 #include <vector>
+
 #include "MouseEvent.hpp"
 #include "IEventManager.hpp"
 #include "MouseData.hpp"

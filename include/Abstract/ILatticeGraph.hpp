@@ -2,6 +2,7 @@
 #define A7E4056A_9F95_44D2_A6A6_79885E3D6223
 
 #include <vector>
+
 #include "Resizable2DArray.hpp"
 
 namespace Pathfinding::Datastructures { struct Node; }

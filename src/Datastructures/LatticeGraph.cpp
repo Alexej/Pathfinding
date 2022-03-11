@@ -1,4 +1,5 @@
 #include "LatticeGraph.hpp"
+
 #include "DStarLiteHelpers.hpp"
 
 namespace Pathfinding::Datastructures
