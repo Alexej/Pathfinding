@@ -5,7 +5,7 @@
 
 #include <utility>
 
-namespace Pathfinding::Abstract { class ALatticeGraphWrapper; }
+namespace Pathfinding::Abstract { class ALatGraphWr; }
 namespace Pathfinding::Datastructures { struct Node; }
 namespace Pathfinding::Datastructures { struct PathfinderReturnType; }
 
@@ -35,9 +35,9 @@ namespace Pathfinding::Algorithms
     {
         private:
             using PDPathfinderReturnType = Pathfinding::Datastructures::PathfinderReturnType;
-            using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
+            using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
         public:
-            PDPathfinderReturnType calculatePath(const std::shared_ptr<PAALatticeGraphWrapper> graphWrapper) override;
+            PDPathfinderReturnType calculatePath(const std::shared_ptr<PAALatGraphWr> graphWrapper) override;
     };
 }
 

@@ -10,13 +10,13 @@ namespace Pathfinding::Datastructures { struct PathfinderReturnType; }
 
 namespace Pathfinding::Abstract
 {
-    class ALatticeGraphWrapper;
+    class ALatGraphWr;
     class IAStar : public AInformedSearchAlgorithm
     {
     private:
         using PDPathfinderReturnType = Pathfinding::Datastructures::PathfinderReturnType;
     public:
-        virtual PDPathfinderReturnType calculatePath(const std::shared_ptr<ALatticeGraphWrapper> graphWrapper) = 0;
+        virtual PDPathfinderReturnType calculatePath(const std::shared_ptr<ALatGraphWr> graphWrapper) = 0;
 
         virtual ~IAStar() = default;
 

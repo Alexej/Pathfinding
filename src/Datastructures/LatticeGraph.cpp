@@ -4,15 +4,15 @@
 
 namespace Pathfinding::Datastructures
 {
-    using Pathfinding::Helpers::DStarLiteHelpers;
-
+    using Pathfinding::Helpers::infinity;
+    
     namespace
     {
         void initNode(Node &node, int32_t h, int32_t w)
         {
             node.location = Vec2i(h, w);
-            node.g = std::numeric_limits<double>::infinity();
-            node.rhs = std::numeric_limits<double>::infinity();
+            node.g = infinity();
+            node.rhs = infinity();
             node.key = Key();
             node.state = NodeState::Free;
         }

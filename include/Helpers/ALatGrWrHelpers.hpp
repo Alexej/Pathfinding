@@ -7,7 +7,7 @@
 
 #include "Vec2.hpp"
 
-namespace Pathfinding::Abstract { class ALatticeGraphWrapper; }
+namespace Pathfinding::Abstract { class ALatGraphWr; }
 namespace Pathfinding::Datastructures { struct Node; }
 
 namespace Pathfinding::Helpers
@@ -15,7 +15,7 @@ namespace Pathfinding::Helpers
     class ALatGrWrHelpers
     {
     private:
-        using PAALatGraphWr = Pathfinding::Abstract::ALatticeGraphWrapper;
+        using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
         using PDNode = Pathfinding::Datastructures::Node;
         using PDVec2i = Pathfinding::Datastructures::Vec2i;
         template<typename T>

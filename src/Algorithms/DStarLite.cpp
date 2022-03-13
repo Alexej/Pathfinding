@@ -9,7 +9,7 @@
 #include "DiagonalHeuristic.hpp"
 #include "ApplicationState.hpp"
 #include "DStarLiteHelpers.hpp"
-#include "ALatticeGraphWrapper.hpp"
+#include "ALatGraphWr.hpp"
 #include "LatticeGraphWrapper.hpp"
 #include "ALatGrWrHelpers.hpp"
 #include "ICostFunction.hpp"
@@ -19,17 +19,17 @@
 
 namespace Pathfinding::Algorithms
 {
+    using namespace Pathfinding::Helpers;
     using Pathfinding::Constants::DONT_SET_START_STATE;
     using Pathfinding::Abstract::IHeuristic;
     using Pathfinding::Abstract::ICostFunction;
-    using Pathfinding::Abstract::ALatticeGraphWrapper;
+    using Pathfinding::Abstract::ALatGraphWr;
     using Pathfinding::Datastructures::PathfinderReturnType;
     using Pathfinding::Datastructures::Key;
     using Pathfinding::Datastructures::LatticeGraph;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
-    using Pathfinding::Helpers::DStarLiteHelpers;
     using Pathfinding::Helpers::ALatGrWrHelpers;
     using Pathfinding::Abstract::ICostFunction;
 
@@ -43,7 +43,7 @@ namespace Pathfinding::Algorithms
         }
     }
 
-    DStarLite::DStarLite(std::shared_ptr<ALatticeGraphWrapper> latticeGraphWrapperSPtr_)
+    DStarLite::DStarLite(std::shared_ptr<ALatGraphWr> latticeGraphWrapperSPtr_)
         : latticeGraphWrapperSPtr(latticeGraphWrapperSPtr_) {}
 
     void DStarLite::initialize()
@@ -52,7 +52,7 @@ namespace Pathfinding::Algorithms
         sStart = latticeGraphWrapperSPtr->startNode();
         sLast = sStart;
         latticeGraphWrapperSPtr->goalNode()->rhs = 0;
-        insertIntoQueueAndUpdateState(latticeGraphWrapperSPtr->goalNode());
+        insertIntoQueueAndUpdateStateAndKey(latticeGraphWrapperSPtr->goalNode());
     }
 
     void DStarLite::UpdateVertex(Node *u)
@@ -65,16 +65,16 @@ namespace Pathfinding::Algorithms
         {
             removeFromQUeueAndUpdateState(u);
         }
-        if (!DStarLiteHelpers::locallyConsistent(u))
+        if (!locallyConsistent(u))
         {
-            insertIntoQueueAndUpdateState(u);
+            insertIntoQueueAndUpdateStateAndKey(u);
         }
     }
 
     PathfinderReturnType DStarLite::initialRun()
     {
         computeShortestPath();
-        if (sStart->g == DStarLiteHelpers::infinity())
+        if (sStart->g == infinity())
         {
             noPathCallBack_();
             return {false, {}, 0};
@@ -85,23 +85,23 @@ namespace Pathfinding::Algorithms
     void DStarLite::computeShortestPath()
     {
         nodexExpanded = 0;
-        while (U.topKey() < calculateKey(sStart) || !DStarLiteHelpers::locallyConsistent(sStart))
+        while (U.topKey() < calculateKey(sStart) || !locallyConsistent(sStart))
         {
             Key kOld = U.topKey();
             nodexExpanded += 1;
             Node *u = popFromQueueAndUpdateState();
             if (kOld < calculateKey(u))
             {
-                insertIntoQueueAndUpdateState(u);
+                insertIntoQueueAndUpdateStateAndKey(u);
             }
-            else if (DStarLiteHelpers::locallyOverconsistent(u))
+            else if (locallyOverconsistent(u))
             {
                 u->g = u->rhs;
                 updateNeighbors(u);
             }
             else
             {
-                u->g = DStarLiteHelpers::infinity();
+                u->g = infinity();
                 updateNeighbors(u);
                 UpdateVertex(u);
             }
@@ -110,8 +110,9 @@ namespace Pathfinding::Algorithms
 
     Key DStarLite::calculateKey(Node *s)
     {
-        auto k1New = std::min(s->g, s->rhs) + heuristicUPtr->calculate(sStart, s) + kM;
-        auto k2New = std::min(s->g, s->rhs);
+        auto pseudoG = std::min(s->g, s->rhs);
+        auto k1New = pseudoG + heuristicUPtr->calculate(sStart, s) + kM;
+        auto k2New = pseudoG;
         s->key.k1 = k1New;
         s->key.k2 = k2New;
         return {k1New, k2New};
@@ -142,7 +143,7 @@ namespace Pathfinding::Algorithms
     Node *DStarLite::popFromQueueAndUpdateState()
     {
         Node *u = U.pop();
-        if (DStarLiteHelpers::blocked(u))
+        if (blocked(u))
         {
             return u;
         }
@@ -153,7 +154,7 @@ namespace Pathfinding::Algorithms
     void DStarLite::removeFromQUeueAndUpdateState(Node *node)
     {
         U.remove(node);
-        if (DStarLiteHelpers::blocked(node))
+        if (blocked(node))
         {
             return;
         }
@@ -166,14 +167,14 @@ namespace Pathfinding::Algorithms
         U.insert(node);
     }
 
-    void DStarLite::insertIntoQueueAndUpdateState(Node *node)
+    void DStarLite::insertIntoQueueAndUpdateStateAndKey(Node *node)
     {
         insertIntoQueueAndUpdateKey(node);
         if (!node->visitedOnce)
         {
             node->visitedOnce = true;
         }
-        if (DStarLiteHelpers::blocked(node))
+        if (blocked(node))
         {
             return;
         }
@@ -224,7 +225,7 @@ namespace Pathfinding::Algorithms
             computeShortestPath();
         }
 
-        if (sStart->g == DStarLiteHelpers::infinity())
+        if (sStart->g == infinity())
         {
             noPathCallBack_();
             return {false, {}, 0};

@@ -6,7 +6,8 @@
 
 namespace Pathfinding::Algorithms
 {
-    using Pathfinding::Helpers::DStarLiteHelpers;
+    using Pathfinding::Helpers::infinity;
+    using Pathfinding::Helpers::blocked;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Helpers::twoNodesDiagonal;
  
@@ -15,9 +16,9 @@ namespace Pathfinding::Algorithms
 
     double DefaultCostFunction::calculate(const Node *from, const Node *to)
     {
-        if (DStarLiteHelpers::blocked(to))
+        if (blocked(to))
         {
-            return DStarLiteHelpers::infinity();
+            return infinity();
         }
         
         return twoNodesDiagonal(from, to) ? diagonalMovementCost * to->factor : straightMovementCost * to->factor; 

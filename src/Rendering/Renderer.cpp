@@ -12,7 +12,7 @@
 #include "Constants.hpp"
 #include "GraphDimension.hpp"
 #include "RootPath.hpp"
-#include "ALatticeGraphWrapper.hpp"
+#include "ALatGraphWr.hpp"
 #include "ALatGrWrHelpers.hpp"
 #include "CouldNotLoadFontException.hpp"
 #include "ApplicationState.hpp"
@@ -21,7 +21,7 @@
 namespace Pathfinding::Rendering
 {
     using namespace Pathfinding::Constants;
-    using Pathfinding::Abstract::ALatticeGraphWrapper;
+    using Pathfinding::Abstract::ALatGraphWr;
     using Pathfinding::Abstract::IApplicationState;
     using Pathfinding::Datastructures::LatticeGraph;
     using Pathfinding::Datastructures::Node;
@@ -146,9 +146,6 @@ namespace Pathfinding::Rendering
         case NodeState::Goal:
             color = goalColor;
             break;
-        case NodeState::Recalculated:
-            color = convertToSfmlColor(RECALCULATED_NODE_COLOR);
-            break;
         }
         return color;
     }
@@ -184,10 +181,12 @@ namespace Pathfinding::Rendering
         diagonalLine.setOrigin(sf::Vector2f(0, lineThickness / 2));
 
         factorRect.setSize(sf::Vector2f(nodePointRadius * 1.5f ,nodePointRadius * 1.5f));
+
+        
         nodeRect.setSize(sf::Vector2f(straightLineLength, straightLineLength));
     }
 
-    void Renderer::render(const std::shared_ptr<ALatticeGraphWrapper> latticeGraphWrapperSPtr)
+    void Renderer::render(const std::shared_ptr<ALatGraphWr> latticeGraphWrapperSPtr)
     {
         ALatGrWrHelpers::iterateOverALatticeGraphWrapperConst(latticeGraphWrapperSPtr,
         [this](const Node *node, int32_t h, int32_t w)

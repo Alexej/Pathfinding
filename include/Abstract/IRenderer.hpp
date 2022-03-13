@@ -6,7 +6,7 @@
 
 namespace Pathfinding::Datastructures { class LatticeGraph; }
 namespace Pathfinding::Datastructures { struct Node; }
-namespace Pathfinding::Abstract { class ALatticeGraphWrapper; }
+namespace Pathfinding::Abstract { class ALatGraphWr; }
 
 namespace Pathfinding::Abstract
 {
@@ -15,9 +15,9 @@ namespace Pathfinding::Abstract
         private:
             using PDNode = Pathfinding::Datastructures::Node;
             using PDLatticeGraph = Pathfinding::Datastructures::LatticeGraph;
-            using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
+            using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
         public:
-            virtual void render(const std::shared_ptr<PAALatticeGraphWrapper> latticeGraphWrapperSPtr) = 0;
+            virtual void render(const std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr) = 0;
             
             virtual void renderPath(const std::vector<PDNode *> & path, sf::Color color) = 0;
             

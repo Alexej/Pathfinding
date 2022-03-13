@@ -12,7 +12,7 @@ namespace Pathfinding::Datastructures { class LatticeGraph; }
 namespace Pathfinding::Datastructures { struct Node; }
 namespace Pathfinding::Core { struct ApplicationState; }
 namespace Pathfinding::Algorithms { class DStarLite; }
-namespace Pathfinding::Abstract { class ALatticeGraphWrapper; }
+namespace Pathfinding::Abstract { class ALatGraphWr; }
 namespace Pathfinding::Events { struct MouseData; }
 
 namespace Pathfinding::Helpers
@@ -23,7 +23,7 @@ namespace Pathfinding::Helpers
     class GraphOperations final : public Pathfinding::Abstract::IGraphOperations
     {
     private:
-        using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
+        using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
         using PCApplicationState = Pathfinding::Core::ApplicationState;
         using PADStarLite = Pathfinding::Algorithms::DStarLite;
         using PDVec2i = Pathfinding::Datastructures::Vec2i;
@@ -33,7 +33,7 @@ namespace Pathfinding::Helpers
         GraphOperations() = default;
         
         GraphOperations(PCApplicationState * appStateSPtr, 
-                        std::shared_ptr<PAALatticeGraphWrapper> latGraphWrapperUPtr);
+                        std::shared_ptr<PAALatGraphWr> latGraphWrapperUPtr);
                         
         void rightMouseButtonPressed(PEMouseData mouseData) override;
         
@@ -73,7 +73,7 @@ namespace Pathfinding::Helpers
         std::function<void(PDNode * node)> edgeChangeCallBack;
         int32_t nodeSideLength;
         MouseAction currentMouseAction = MouseAction::IDLE;
-        std::shared_ptr<PAALatticeGraphWrapper> latGraphWrapperUPtr;
+        std::shared_ptr<PAALatGraphWr> latGraphWrapperUPtr;
         PADStarLite *dstarPtr;
         PCApplicationState * appStateSPtr;
         bool endPointsEvents_ = true;

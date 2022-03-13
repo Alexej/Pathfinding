@@ -12,14 +12,14 @@ namespace Pathfinding::Datastructures { struct Node; }
 namespace Pathfinding::Abstract
 {
     class ILatticeGraph;
-    class ALatticeGraphWrapper : public Resizable2DArray
+    class ALatGraphWr : public Resizable2DArray
     {
     private:
         using PDVec2i = Pathfinding::Datastructures::Vec2i;
         using PDNode = Pathfinding::Datastructures::Node;
     public:
-        explicit ALatticeGraphWrapper(std::unique_ptr<ILatticeGraph> latGraphUPtr_)
-            : latGraphUPtr(std::move(latGraphUPtr_)) {}
+        explicit ALatGraphWr(std::unique_ptr<ILatticeGraph> latGraphUPtr_)
+        : latGraphUPtr(std::move(latGraphUPtr_)) {}
 
         virtual void setGoal(PDVec2i location) = 0;
 
@@ -39,7 +39,7 @@ namespace Pathfinding::Abstract
 
         virtual bool inBounds(PDVec2i location) const = 0;
 
-        virtual ~ALatticeGraphWrapper() = default;
+        virtual ~ALatGraphWr() = default;
 
     protected:
         std::unique_ptr<ILatticeGraph> latGraphUPtr = nullptr;

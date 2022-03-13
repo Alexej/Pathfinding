@@ -4,7 +4,7 @@
 #include <vector>
 
 #include "ApplicationState.hpp"
-#include "ALatticeGraphWrapper.hpp"
+#include "ALatGraphWr.hpp"
 #include "ILatticeGraph.hpp"
 #include "IDStarLite.hpp"
 
@@ -51,7 +51,7 @@ class DStarLiteTester
             return state;    
         }
 
-        std::shared_ptr<ALatticeGraphWrapper> getLatGraphWrapperSPtr()
+        std::shared_ptr<ALatGraphWr> getLatGraphWrapperSPtr()
         {
             return latGraphWrapSPtr;
         }
@@ -102,7 +102,7 @@ class DStarLiteTester
     private:
         int32_t heightStart = 5;
         int32_t widthStart = 5;
-        std::shared_ptr<ALatticeGraphWrapper> latGraphWrapSPtr = nullptr;
+        std::shared_ptr<ALatGraphWr> latGraphWrapSPtr = nullptr;
         std::unique_ptr<IDStarLite> dStarLiteUPtr = nullptr;
         State state = State::READY;
 };

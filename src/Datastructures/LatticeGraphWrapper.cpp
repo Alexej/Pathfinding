@@ -1,16 +1,15 @@
 #include "LatticeGraphWrapper.hpp"
-
-#include "ALatticeGraphWrapper.hpp"
+#include "ALatGraphWr.hpp"
 #include "ILatticeGraph.hpp"
 #include "Node.hpp"
 
 namespace Pathfinding::Datastructures
 {
-    using Pathfinding::Abstract::ALatticeGraphWrapper;
+    using Pathfinding::Abstract::ALatGraphWr;
     using Pathfinding::Abstract::ILatticeGraph;
 
     LatticeGraphWrapper::LatticeGraphWrapper(std::unique_ptr<ILatticeGraph> latticeGraphUPtr)
-        : ALatticeGraphWrapper(std::move(latticeGraphUPtr))
+        : ALatGraphWr(std::move(latticeGraphUPtr))
     {
         resetEndpoints();
     }

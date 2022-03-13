@@ -12,7 +12,7 @@
 namespace Pathfinding::Datastructures { class LatticeGraph; }
 namespace Pathfinding::Datastructures { struct Node; }
 namespace Pathfinding::Datastructures { enum class NodeState; }
-namespace Pathfinding::Abstract { class ALatticeGraphWrapper; }
+namespace Pathfinding::Abstract { class ALatGraphWr; }
 namespace Pathfinding::Abstract { class IApplicationState; }
 namespace Pathfinding::Core { class GraphDimension; }
 namespace Pathfinding::Core { struct ApplicationState; }
@@ -27,14 +27,14 @@ namespace Pathfinding::Rendering
         using PDNodeState = Pathfinding::Datastructures::NodeState;
         using PCApplicationState = Pathfinding::Core::ApplicationState;
         using PCGraphDimension = Pathfinding::Core::GraphDimension;
-        using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
+        using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
 
     public:
         Renderer() = default;
         
         Renderer(sf::RenderWindow *window, PCApplicationState *appStateSPtr);
         
-        void render(const std::shared_ptr<PAALatticeGraphWrapper> latticeGraphWrapperSPtr) override;
+        void render(const std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr) override;
         
         void renderPath(const std::vector<PDNode *> &path, sf::Color color) override;
         

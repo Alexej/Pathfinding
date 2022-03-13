@@ -4,7 +4,7 @@
 #include <vector>
 #include <unordered_map>
 
-#include "ALatticeGraphWrapper.hpp"
+#include "ALatGraphWr.hpp"
 #include "PathfinderReturnType.hpp"
 #include "IHeuristic.hpp"
 #include "ICostFunction.hpp"
@@ -14,7 +14,7 @@
 
 namespace Pathfinding::Algorithms
 {
-    using Pathfinding::Abstract::ALatticeGraphWrapper;
+    using Pathfinding::Abstract::ALatGraphWr;
     using Pathfinding::Abstract::ICostFunction;
     using Pathfinding::Abstract::IHeuristic;
     using Pathfinding::Abstract::ILatticeGraph;
@@ -44,7 +44,7 @@ namespace Pathfinding::Algorithms
         }
     }
 
-    PathfinderReturnType AStar::calculatePath(const std::shared_ptr<ALatticeGraphWrapper> graphWrapper)
+    PathfinderReturnType AStar::calculatePath(const std::shared_ptr<ALatGraphWr> graphWrapper)
     {
         int32_t nodesExpanded = 0;
         std::priority_queue<QueueElement, std::vector<QueueElement>, AStarQueueComperator> openSet;

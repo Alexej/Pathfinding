@@ -6,7 +6,7 @@
 #include "ApplicationState.hpp"
 #include "SFMLHelpers.hpp"
 #include "DStarLite.hpp"
-#include "ALatticeGraphWrapper.hpp"
+#include "ALatGraphWr.hpp"
 #include "LatticeGraphWrapper.hpp"
 #include "ALatGrWrHelpers.hpp"
 #include "MouseData.hpp"
@@ -15,7 +15,7 @@
 namespace Pathfinding::Helpers
 {
     using namespace Pathfinding::Constants;
-    using Pathfinding::Abstract::ALatticeGraphWrapper;
+    using Pathfinding::Abstract::ALatGraphWr;
     using Pathfinding::Algorithms::DStarLite;
     using Pathfinding::Core::ApplicationState;
     using Pathfinding::Core::State;
@@ -27,7 +27,7 @@ namespace Pathfinding::Helpers
     using Pathfinding::Events::MouseData;
 
     GraphOperations::GraphOperations(ApplicationState *appStateSPtr_,
-                                     std::shared_ptr<ALatticeGraphWrapper> latGraphWrapperUPtr_)
+                                     std::shared_ptr<ALatGraphWr> latGraphWrapperUPtr_)
         : latGraphWrapperUPtr(latGraphWrapperUPtr_), 
           appStateSPtr(appStateSPtr_),
           nodeSideLength(appStateSPtr_->dimension.currentNodeSideLength()) {}

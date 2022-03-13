@@ -3,19 +3,19 @@
 
 #include "ALatGrWrHelpers.hpp"
 
-#include "ALatticeGraphWrapper.hpp"
+#include "ALatGraphWr.hpp"
 #include "ILatticeGraph.hpp"
 #include "Node.hpp"
 #include "Vec2.hpp"
 
 namespace Pathfinding::Helpers
 {
-    using Pathfinding::Abstract::ALatticeGraphWrapper;
+    using Pathfinding::Abstract::ALatGraphWr;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
 
-    void ALatGrWrHelpers::initRandomGraph(std::shared_ptr<ALatticeGraphWrapper> latGraphWrapperSPtr)
+    void ALatGrWrHelpers::initRandomGraph(std::shared_ptr<ALatGraphWr> latGraphWrapperSPtr)
     {
         iterateOverALatticeGraphWrapper(latGraphWrapperSPtr, [](PDNode * node, int32_t h, int32_t w)
         {
@@ -27,7 +27,7 @@ namespace Pathfinding::Helpers
     }
 
     std::vector<Node *> 
-    ALatGrWrHelpers::neighbors(std::shared_ptr<ALatticeGraphWrapper> latGraphWrapperSPtr, Node *node_)
+    ALatGrWrHelpers::neighbors(std::shared_ptr<ALatGraphWr> latGraphWrapperSPtr, Node *node_)
     {
         std::vector<Node *> nbors;
         int32_t hFrom = node_->location.height - 1;
@@ -49,7 +49,7 @@ namespace Pathfinding::Helpers
         return nbors;
     }
 
-    void ALatGrWrHelpers::blockNode(std::shared_ptr<ALatticeGraphWrapper> latGraphWrapper, Vec2i location)
+    void ALatGrWrHelpers::blockNode(std::shared_ptr<ALatGraphWr> latGraphWrapper, Vec2i location)
     {
         if (latGraphWrapper->node(location)->state != NodeState::Start && 
             latGraphWrapper->node(location)->state != NodeState::Goal)
@@ -58,7 +58,7 @@ namespace Pathfinding::Helpers
         }
     }
 
-    void ALatGrWrHelpers::clearNode(std::shared_ptr<ALatticeGraphWrapper> latGraphWrapper, Vec2i location)
+    void ALatGrWrHelpers::clearNode(std::shared_ptr<ALatGraphWr> latGraphWrapper, Vec2i location)
     {
         if (latGraphWrapper->node(location)->state == NodeState::Blocked)
         {
@@ -73,7 +73,7 @@ namespace Pathfinding::Helpers
         }
     }
 
-    void  ALatGrWrHelpers::iterateOverALatticeGraphWrapperConst(const std::shared_ptr<ALatticeGraphWrapper> latticeGraphWrapperSPtr,
+    void  ALatGrWrHelpers::iterateOverALatticeGraphWrapperConst(const std::shared_ptr<ALatGraphWr> latticeGraphWrapperSPtr,
                                                                  std::function<void(const Node * node, int32_t h, int32_t w)> func)
     {
         for (int32_t h = 0; h < latticeGraphWrapperSPtr->height(); ++h)
@@ -85,7 +85,7 @@ namespace Pathfinding::Helpers
         }
     }
 
-    void  ALatGrWrHelpers::iterateOverALatticeGraphWrapper(std::shared_ptr<ALatticeGraphWrapper> latticeGraphWrapperSPtr,
+    void  ALatGrWrHelpers::iterateOverALatticeGraphWrapper(std::shared_ptr<ALatGraphWr> latticeGraphWrapperSPtr,
                                                                  std::function<void(Node * node, int32_t h, int32_t w)> func)
     {
         for (int32_t h = 0; h < latticeGraphWrapperSPtr->height(); ++h)

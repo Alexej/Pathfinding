@@ -15,7 +15,7 @@ namespace Pathfinding::Datastructures{ enum class NodeState; }
 namespace Pathfinding::Datastructures{ struct PathfinderReturnType; }
 
 namespace Pathfinding::Abstract { class IHeuristic; }
-namespace Pathfinding::Abstract { class ALatticeGraphWrapper; }
+namespace Pathfinding::Abstract { class ALatGraphWr; }
 namespace Pathfinding::Abstract { class ICostFunction; }
 
 namespace Pathfinding::Algorithms
@@ -23,7 +23,7 @@ namespace Pathfinding::Algorithms
     class DStarLite final : public Pathfinding::Abstract::IDStarLite
     {
     private:
-        using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
+        using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
         using PDPriorityQueue = Pathfinding::Datastructures::PriorityQueue;
         using PDNode = Pathfinding::Datastructures::Node;
         using PDKey = Pathfinding::Datastructures::Key;
@@ -34,7 +34,7 @@ namespace Pathfinding::Algorithms
     public:
         DStarLite() = default;
         
-        explicit DStarLite(std::shared_ptr<PAALatticeGraphWrapper> latticeGraphWrapperSPtr);
+        explicit DStarLite(std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr);
         
         void addDoneCallBack(std::function<void(void)> callBack) override;
         
@@ -63,7 +63,7 @@ namespace Pathfinding::Algorithms
         
         PDNode *popFromQueueAndUpdateState();
         
-        void insertIntoQueueAndUpdateState(PDNode *node);
+        void insertIntoQueueAndUpdateStateAndKey(PDNode *node);
         
         void removeFromQUeueAndUpdateState(PDNode *node);
         
@@ -80,7 +80,7 @@ namespace Pathfinding::Algorithms
         double costThisFar(const PDNode * u, const PDNode * neighbor);
         
     private:
-        std::shared_ptr<PAALatticeGraphWrapper> latticeGraphWrapperSPtr = nullptr;
+        std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr = nullptr;
         PDNode *sStart = nullptr;
         PDNode *sLast = nullptr;
         PDPriorityQueue U;

@@ -18,7 +18,7 @@
 #include "IAStar.hpp"
 #include "PathfinderCache.hpp"
 
-namespace Pathfinding::Abstract { class ALatticeGraphWrapper; }
+namespace Pathfinding::Abstract { class ALatGraphWr; }
 namespace Pathfinding::Helpers { class ApplicationBuilder; }
 
 namespace Pathfinding::Core
@@ -34,7 +34,7 @@ namespace Pathfinding::Core
         using PAIGraphOperations = Pathfinding::Abstract::IGraphOperations;
         using PAIRenderer = Pathfinding::Abstract::IRenderer;
         using PCApplicationState = Pathfinding::Core::ApplicationState;
-        using PAALatticeGraphWrapper = Pathfinding::Abstract::ALatticeGraphWrapper;
+        using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
         using PAIAStar = Pathfinding::Abstract::IAStar;
         using PDPathfinderCachee = Pathfinding::Datastructures::PathfinderCache;
     public:
@@ -70,7 +70,7 @@ namespace Pathfinding::Core
         std::unique_ptr<PAIDStarLite> dstarLiteUPtr;
         std::unique_ptr<PAIAStar> aStarUPtr;
         std::unique_ptr<PAIGraphOperations> graphOpsUPtr;
-        std::shared_ptr<PAALatticeGraphWrapper> latGraphWrapUPtr;
+        std::shared_ptr<PAALatGraphWr> latGraphWrapUPtr;
 
         PCApplicationState appState;
         int32_t accumulator;

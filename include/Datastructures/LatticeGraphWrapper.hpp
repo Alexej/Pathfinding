@@ -3,7 +3,7 @@
 
 #include <memory>
 
-#include "ALatticeGraphWrapper.hpp"
+#include "ALatGraphWr.hpp"
 #include "ILatticeGraph.hpp"
 #include "Vec2.hpp"
 
@@ -11,7 +11,7 @@
 namespace Pathfinding::Datastructures
 {
     struct Node;
-    class LatticeGraphWrapper final : public Pathfinding::Abstract::ALatticeGraphWrapper
+    class LatticeGraphWrapper final : public Pathfinding::Abstract::ALatGraphWr
     {
         private:
             using PAILatticeGraph = Pathfinding::Abstract::ILatticeGraph;
