@@ -51,11 +51,6 @@ class DStarLiteTester
             return state;    
         }
 
-        std::shared_ptr<ALatGraphWr> getLatGraphWrapperSPtr()
-        {
-            return latGraphWrapSPtr;
-        }
-
         bool done() const
         {
             return state != State::NO_PATH || state != State::DONE;
@@ -65,7 +60,7 @@ class DStarLiteTester
         void reset(int32_t height, int32_t width)
         {
             dStarLiteUPtr->reset();
-            latGraphWrapSPtr->resize(height,width);
+            latGraphWrapSPtr->latGraphSPtr->resize(height,width);
         }
 
         PathfinderReturnType initialRun()
@@ -99,10 +94,11 @@ class DStarLiteTester
             state = State::NO_PATH;
         }
 
+    public:
+        std::shared_ptr<ALatGraphWr> latGraphWrapSPtr = nullptr;
     private:
         int32_t heightStart = 5;
         int32_t widthStart = 5;
-        std::shared_ptr<ALatGraphWr> latGraphWrapSPtr = nullptr;
         std::unique_ptr<IDStarLite> dStarLiteUPtr = nullptr;
         State state = State::READY;
 };
@@ -116,32 +112,32 @@ TEST_CASE( "Testing scenarios" ) {
         for(const auto & scenario : PathLangParser(pathToScenarios))
         {
             mockObject.reset(scenario.size.height, scenario.size.width); 
-            mockObject.getLatGraphWrapperSPtr()->setGoal(scenario.goal);
-            mockObject.getLatGraphWrapperSPtr()->setStart(scenario.start);
+            mockObject.latGraphWrapSPtr->setGoal(scenario.goal);
+            mockObject.latGraphWrapSPtr->setStart(scenario.start);
             mockObject.initialize();
             mockObject.initialRun();
             for(const auto & command : scenario.commands)
             {
-                auto start = mockObject.getLatGraphWrapperSPtr()->startNode();
+                auto start = mockObject.latGraphWrapSPtr->startNode();
                 switch(command.first)
                 {
                     case CommandsKeyWords::BLOCK:
                         {
-                        auto node = mockObject.getLatGraphWrapperSPtr()->node(command.second);
+                        auto node = mockObject.latGraphWrapSPtr->latGraphSPtr->node(command.second);
                         node->state = NodeState::Blocked;
-                        mockObject.changedNode(mockObject.getLatGraphWrapperSPtr()->node(command.second));
+                        mockObject.changedNode(mockObject.latGraphWrapSPtr->latGraphSPtr->node(command.second));
                         }
                         break;
                     case CommandsKeyWords::ERASE:
                         {
-                        auto node = mockObject.getLatGraphWrapperSPtr()->node(command.second);
+                        auto node = mockObject.latGraphWrapSPtr->latGraphSPtr->node(command.second);
                         node->state = NodeState::Free;
-                        mockObject.changedNode(mockObject.getLatGraphWrapperSPtr()->node(command.second));
+                        mockObject.changedNode(mockObject.latGraphWrapSPtr->latGraphSPtr->node(command.second));
                         }
                         break;
                     case CommandsKeyWords::STEP:
                         mockObject.step();
-                        REQUIRE(mockObject.getLatGraphWrapperSPtr()->startNode()->location == command.second);
+                        REQUIRE(mockObject.latGraphWrapSPtr->startNode()->location == command.second);
                         break;
                 }
             }

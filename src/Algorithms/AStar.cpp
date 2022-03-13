@@ -9,7 +9,7 @@
 #include "IHeuristic.hpp"
 #include "ICostFunction.hpp"
 #include "Node.hpp"
-#include "ALatGrWrHelpers.hpp"
+#include "LatticeGraphHelpers.hpp"
 #include "ILatticeGraph.hpp"
 
 namespace Pathfinding::Algorithms
@@ -20,7 +20,7 @@ namespace Pathfinding::Algorithms
     using Pathfinding::Abstract::ILatticeGraph;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::PathfinderReturnType;
-    using Pathfinding::Helpers::ALatGrWrHelpers;
+    using Pathfinding::Helpers::LatticeGraphHelpers;
 
     namespace
     {
@@ -64,7 +64,7 @@ namespace Pathfinding::Algorithms
                 return {true, reconstructPath(cameFrom, current), nodesExpanded};
             }
             openSet.pop();
-            auto neighbors = ALatGrWrHelpers::neighbors(graphWrapper, current);
+            auto neighbors = LatticeGraphHelpers::neighbors(graphWrapper->latGraphSPtr, current);
             nodesExpanded += 1;
             for (auto neighbor : neighbors)
             {

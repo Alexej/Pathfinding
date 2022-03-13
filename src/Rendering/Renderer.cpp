@@ -13,7 +13,7 @@
 #include "GraphDimension.hpp"
 #include "RootPath.hpp"
 #include "ALatGraphWr.hpp"
-#include "ALatGrWrHelpers.hpp"
+#include "LatticeGraphHelpers.hpp"
 #include "CouldNotLoadFontException.hpp"
 #include "ApplicationState.hpp"
 #include "RenderingHelpers.hpp"
@@ -21,58 +21,14 @@
 namespace Pathfinding::Rendering
 {
     using namespace Pathfinding::Constants;
+    using namespace Pathfinding::Helpers;
+    using namespace Pathfinding::Datastructures;
     using Pathfinding::Abstract::ALatGraphWr;
     using Pathfinding::Abstract::IApplicationState;
-    using Pathfinding::Datastructures::LatticeGraph;
-    using Pathfinding::Datastructures::Node;
-    using Pathfinding::Datastructures::NodeState;
-    using Pathfinding::Datastructures::Vec2i;
     using Pathfinding::Exceptions::CouldNotLoadFontException;
-    using Pathfinding::Helpers::ALatGrWrHelpers;
+    using Pathfinding::Helpers::LatticeGraphHelpers;
     using Pathfinding::Core::ApplicationState;
     using Pathfinding::Core::State;
-    using Pathfinding::Helpers::getRootPath;
-    using Pathfinding::Helpers::convertToSfmlColor;
-
-    namespace
-    {
-        sf::Vector2f getNodePosition(const Node *node, int32_t sideLength)
-        {
-            float nodesHorF = static_cast<float>(node->location.width);
-            float nodesVertF = static_cast<float>(node->location.height);
-            float sideLengthF = static_cast<float>(sideLength);
-            float positionHor = nodesHorF * sideLengthF;
-            float positionVer = nodesVertF * sideLengthF;
-            return {positionHor, positionVer};
-        }
-
-
-        /**
-         * @brief converts double to string and removes zeros and dot.
-         * under the assumption  rhs, g and key values are always integers.
-         * @param d
-         * @return std::string
-         */
-        std::string dToStr(double d)
-        {
-            std::string dStr = std::to_string(d);
-            return dStr.substr(0, dStr.find("."));
-        }
-
-        double getAngleBetweenTwoNodes(Node *n1, Node *n2)
-        {
-            float y1 = static_cast<float>(n1->location.height);
-            float x1 = static_cast<float>(n1->location.width);
-            float y2 = static_cast<float>(n2->location.height);
-            float x2 = static_cast<float>(n2->location.width);
-            return std::atan2(y2 - y1, x2 - x1) * (180.0 / std::numbers::pi);
-        }
-
-        bool diagonal(double angle)
-        {
-            return std::abs(angle) == 45 || std::abs(angle) == 135;
-        }
-    }
 
     Renderer::Renderer(sf::RenderWindow *window, ApplicationState *appStateSPtr_)
         : windowPtr(window), appStateSPtr(appStateSPtr_), dimensionPtr(&appStateSPtr->dimension)
@@ -188,7 +144,7 @@ namespace Pathfinding::Rendering
 
     void Renderer::render(const std::shared_ptr<ALatGraphWr> latticeGraphWrapperSPtr)
     {
-        ALatGrWrHelpers::iterateOverALatticeGraphWrapperConst(latticeGraphWrapperSPtr,
+        LatticeGraphHelpers::iterateOverALatticeGraphConst(latticeGraphWrapperSPtr->latGraphSPtr,
         [this](const Node *node, int32_t h, int32_t w)
         {
             auto coords = getNodePosition(node, dimensionPtr->currentNodeSideLength());

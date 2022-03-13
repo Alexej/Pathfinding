@@ -19,7 +19,7 @@ set(SOURCES_TESTS
     ../src/Algorithms/DStarLite.cpp
     ../src/Algorithms/DiagonalHeuristic.cpp
     ../src/Helpers/AlgorithmFunctionHelpers.cpp
-    ../src/Helpers/ALatGrWrHelpers.cpp
+    ../src/Helpers/LatticeGraphHelpers.cpp
     ../src/Helpers/RootPath.cpp
     PathLangParser.cpp
     TestLocation.cpp

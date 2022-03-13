@@ -4,14 +4,10 @@
 #include <cstddef>
 #include <cstdint>
 
-#include "Vec2.hpp"
-
 namespace Pathfinding::Abstract
 {
     class Resizable2DArray
     {
-        private:
-            using PDVec2i = Pathfinding::Datastructures::Vec2i;
         public:
             virtual void resize(int32_t height, int32_t width) = 0;
             

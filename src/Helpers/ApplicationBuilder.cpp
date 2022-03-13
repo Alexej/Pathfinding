@@ -85,8 +85,8 @@ namespace Pathfinding::Helpers
 
     void ApplicationBuilder::instantiateObjects()
     {
-        std::unique_ptr<ILatticeGraph> latticeGraph = std::make_unique<LatticeGraph>(dimension.width(), dimension.height());
-        applicationUPtr->latGraphWrapUPtr = std::make_shared<LatticeGraphWrapper>(std::move(latticeGraph));
+        std::shared_ptr<ILatticeGraph> latticeGraph = std::make_shared<LatticeGraph>(dimension.width(), dimension.height());
+        applicationUPtr->latGraphWrapUPtr = std::make_shared<LatticeGraphWrapper>(latticeGraph);
         applicationUPtr->window.create(sf::VideoMode(APPLICATION_WINDOW_WIDTH, GRID_FIELD_HEIGHT), APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close);
         applicationUPtr->appState = ApplicationState(dimension, stepSpeed);
         applicationUPtr->eventManagerUPtr = std::make_unique<EventManager>(&applicationUPtr->window);

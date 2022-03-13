@@ -67,7 +67,10 @@ namespace Pathfinding::Helpers
         void blockNodeAndNotifyAlgorithm(PDVec2i mappedCoordinates);
         
         void clearNodeAndNotifyAlgorithm(PDVec2i mappedCoordinates);
-        
+
+        void incrementNodeFactor(PDVec2i mappedCoordinates);
+
+        void decrementNodeFactor(PDVec2i mappedCoordinates);
 
     private:
         std::function<void(PDNode * node)> edgeChangeCallBack;

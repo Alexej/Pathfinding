@@ -5,21 +5,20 @@
 #include <vector>
 
 #include "Vec2.hpp"
-#include "Resizable2DArray.hpp"
 
 namespace Pathfinding::Datastructures { struct Node; }
 
 namespace Pathfinding::Abstract
 {
     class ILatticeGraph;
-    class ALatGraphWr : public Resizable2DArray
+    class ALatGraphWr
     {
     private:
         using PDVec2i = Pathfinding::Datastructures::Vec2i;
         using PDNode = Pathfinding::Datastructures::Node;
     public:
-        explicit ALatGraphWr(std::unique_ptr<ILatticeGraph> latGraphUPtr_)
-        : latGraphUPtr(std::move(latGraphUPtr_)) {}
+        explicit ALatGraphWr(std::shared_ptr<ILatticeGraph> latGraphSPtr_)
+        : latGraphSPtr(latGraphSPtr_) {}
 
         virtual void setGoal(PDVec2i location) = 0;
 
@@ -33,16 +32,12 @@ namespace Pathfinding::Abstract
 
         virtual PDNode *goalNode() = 0;
 
-        virtual PDNode *node(PDVec2i location) = 0;
-
-        virtual const PDNode *node(PDVec2i location) const = 0;
-
-        virtual bool inBounds(PDVec2i location) const = 0;
+        virtual void resize(int32_t height, int32_t width) = 0;
 
         virtual ~ALatGraphWr() = default;
 
-    protected:
-        std::unique_ptr<ILatticeGraph> latGraphUPtr = nullptr;
+    public:
+        std::shared_ptr<ILatticeGraph> latGraphSPtr = nullptr;
     };
 }
 

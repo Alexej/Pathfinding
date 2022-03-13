@@ -5,7 +5,7 @@
 #include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/Event.hpp>
 
-#include "ALatGrWrHelpers.hpp"
+#include "LatticeGraphHelpers.hpp"
 #include "LatticeGraphWrapper.hpp"
 #include "PathfinderReturnType.hpp"
 #include "Constants.hpp"
@@ -14,7 +14,7 @@
 namespace Pathfinding::Core
 {
     using namespace Constants;
-    using Pathfinding::Helpers::ALatGrWrHelpers;
+    using Pathfinding::Helpers::LatticeGraphHelpers;
     using Pathfinding::Datastructures::LatticeGraphWrapper;
     using Pathfinding::Datastructures::PathfinderReturnType;
     using Pathfinding::Helpers::convertToSfmlColor;
@@ -128,7 +128,7 @@ namespace Pathfinding::Core
     void Application::randomGraph()
     {
         reset();
-        ALatGrWrHelpers::initRandomGraph(latGraphWrapUPtr);
+        LatticeGraphHelpers::initRandomGraph(latGraphWrapUPtr->latGraphSPtr);
     }
 
     void Application::step()

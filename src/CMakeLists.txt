@@ -17,7 +17,7 @@ set(SOURCES_PATHFINDING
   Helpers/GuiHelpers.cpp
   Helpers/SFMLHelpers.cpp
   Helpers/GraphOperations.cpp
-  Helpers/ALatGrWrHelpers.cpp
+  Helpers/LatticeGraphHelpers.cpp
   Helpers/ApplicationBuilder.cpp
   Helpers/AlgorithmFunctionHelpers.cpp
   Gui/Menu.cpp

@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "Resizable2DArray.hpp"
+#include "Vec2.hpp"
 
 namespace Pathfinding::Datastructures { struct Node; }
 
@@ -13,12 +14,14 @@ namespace Pathfinding::Abstract
     {
         private:
             using PDNode = Pathfinding::Datastructures::Node;
+            using PDVec2i = Pathfinding::Datastructures::Vec2i;
+
         public:
-            virtual std::vector<PDNode> &operator[](std::size_t height) = 0;
-            
-            virtual const std::vector<PDNode> &operator[](std::size_t height) const = 0;
-            
-            virtual bool inBounds(int32_t height, int32_t width) const = 0;
+            virtual bool inBounds(PDVec2i location) const = 0;
+
+            virtual PDNode *node(PDVec2i location) = 0;
+
+            virtual const PDNode *node(PDVec2i location) const = 0;
             
             virtual ~ILatticeGraph() = default;
             

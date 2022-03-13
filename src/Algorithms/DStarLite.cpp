@@ -11,7 +11,7 @@
 #include "DStarLiteHelpers.hpp"
 #include "ALatGraphWr.hpp"
 #include "LatticeGraphWrapper.hpp"
-#include "ALatGrWrHelpers.hpp"
+#include "LatticeGraphHelpers.hpp"
 #include "ICostFunction.hpp"
 #include "Constants.hpp"
 #include "PathfinderReturnType.hpp"
@@ -30,7 +30,7 @@ namespace Pathfinding::Algorithms
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
-    using Pathfinding::Helpers::ALatGrWrHelpers;
+    using Pathfinding::Helpers::LatticeGraphHelpers;
     using Pathfinding::Abstract::ICostFunction;
 
     namespace
@@ -121,7 +121,7 @@ namespace Pathfinding::Algorithms
 
     std::pair<double, Node *> DStarLite::getMinCG(Node *u)
     {
-        auto succs = ALatGrWrHelpers::neighbors(latticeGraphWrapperSPtr, u);
+        auto succs = LatticeGraphHelpers::neighbors(latticeGraphWrapperSPtr->latGraphSPtr, u);
         auto itr = std::min_element(succs.begin(), succs.end(),
         [this, &u](const Node *lhs, const Node *rhs)
         {
@@ -183,7 +183,7 @@ namespace Pathfinding::Algorithms
 
     void DStarLite::updateNeighbors(Node *node)
     {
-        for (auto &pred : ALatGrWrHelpers::neighbors(latticeGraphWrapperSPtr, node))
+        for (auto &pred : LatticeGraphHelpers::neighbors(latticeGraphWrapperSPtr->latGraphSPtr, node))
         {
             UpdateVertex(pred);
         }
@@ -251,7 +251,7 @@ namespace Pathfinding::Algorithms
 
     void DStarLite::addChangedNode(Node *node)
     {
-        for (auto &succ : ALatGrWrHelpers::neighbors(latticeGraphWrapperSPtr, node))
+        for (auto &succ : LatticeGraphHelpers::neighbors(latticeGraphWrapperSPtr->latGraphSPtr, node))
         {
             nodesChanged.insert(succ);
         }

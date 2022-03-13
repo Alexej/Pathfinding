@@ -5,7 +5,7 @@
 namespace Pathfinding::Datastructures
 {
     using Pathfinding::Helpers::infinity;
-    
+
     namespace
     {
         void initNode(Node &node, int32_t h, int32_t w)
@@ -28,13 +28,22 @@ namespace Pathfinding::Datastructures
         resize(dimension.height, dimension.width);
     }
 
-    bool LatticeGraph::inBounds(int32_t height_, int32_t width_) const
+    Node *LatticeGraph::node(Vec2i location)
+    {
+        return &graph[location.height][location.width];
+    }
+
+    const Node *LatticeGraph::node(Vec2i location) const
+    {
+        return &graph[location.height][location.width];
+    }
+
+    bool LatticeGraph::inBounds(Vec2i dimension) const
     {
         int32_t widthI = static_cast<int32_t>(width());
         int32_t heightI = static_cast<int32_t>(height());
-        return 0 <= height_ && height_ < heightI && 0 <= width_ && width_ < widthI;
+        return 0 <= dimension.height && dimension.height < heightI && 0 <= dimension.width && dimension.width < widthI;
     }
-    
 
     void LatticeGraph::resize(int32_t height, int32_t width)
     {

@@ -5,6 +5,7 @@
 
 #include "Node.hpp"
 #include "ILatticeGraph.hpp"
+#include "Vec2.hpp"
 
 namespace Pathfinding::Datastructures
 {
@@ -20,11 +21,11 @@ namespace Pathfinding::Datastructures
 
         void resize(int32_t height, int32_t width) override;
 
-        std::vector<Node> & operator[](std::size_t height)  override { return graph[height]; }
+        Node *node(Vec2i location) override;
 
-        const std::vector<Node> & operator[](std::size_t height) const override { return graph[height]; }
+        const Node *node(Vec2i location) const override;
 
-        bool inBounds(int32_t height, int32_t width) const override;
+        bool inBounds(Vec2i location) const override;
 
         std::size_t width() const override { return graph[0].size(); }
 

@@ -8,7 +8,7 @@
 #include "DStarLite.hpp"
 #include "ALatGraphWr.hpp"
 #include "LatticeGraphWrapper.hpp"
-#include "ALatGrWrHelpers.hpp"
+#include "LatticeGraphHelpers.hpp"
 #include "MouseData.hpp"
 #include "Constants.hpp"
 
@@ -23,14 +23,15 @@ namespace Pathfinding::Helpers
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
-    using Pathfinding::Helpers::ALatGrWrHelpers;
+    using Pathfinding::Helpers::LatticeGraphHelpers;
     using Pathfinding::Events::MouseData;
 
     GraphOperations::GraphOperations(ApplicationState *appStateSPtr_,
                                      std::shared_ptr<ALatGraphWr> latGraphWrapperUPtr_)
         : latGraphWrapperUPtr(latGraphWrapperUPtr_), 
           appStateSPtr(appStateSPtr_),
-          nodeSideLength(appStateSPtr_->dimension.currentNodeSideLength()) {}
+          nodeSideLength(appStateSPtr_->dimension.currentNodeSideLength()) 
+          {}
 
     void GraphOperations::leftMouseButtonPressed(MouseData mouseData)
     {
@@ -46,7 +47,7 @@ namespace Pathfinding::Helpers
         else
         {
             currentMouseAction = MouseAction::BLOCKING_NODE;
-            if (latGraphWrapperUPtr->inBounds(mappedCoordinates))
+            if (latGraphWrapperUPtr->latGraphSPtr->inBounds(mappedCoordinates))
             {
                 blockNodeAndNotifyAlgorithm(mappedCoordinates);
             }
@@ -57,7 +58,7 @@ namespace Pathfinding::Helpers
     {
         currentMouseAction = MouseAction::CLEARING_NODE;
         Vec2i mappedCoordinates = mapMouseToGraphCoordinates(mouseData.cursorPosition, nodeSideLength);
-        if (latGraphWrapperUPtr->inBounds(mappedCoordinates))
+        if (latGraphWrapperUPtr->latGraphSPtr->inBounds(mappedCoordinates))
         {
             clearNodeAndNotifyAlgorithm(mappedCoordinates);
         }
@@ -66,7 +67,7 @@ namespace Pathfinding::Helpers
     void GraphOperations::mouseMoved(MouseData mouseData)
     {
         Vec2i mappedCoordinates = mapMouseToGraphCoordinates(mouseData.cursorPosition, nodeSideLength);
-        if (latGraphWrapperUPtr->inBounds(mappedCoordinates))
+        if (latGraphWrapperUPtr->latGraphSPtr->inBounds(mappedCoordinates))
         {
             switch (currentMouseAction)
             {
@@ -127,34 +128,37 @@ namespace Pathfinding::Helpers
 
     void GraphOperations::nodeUnderCursor(MouseData mouseData)
     {
+        auto graph = latGraphWrapperUPtr->latGraphSPtr;
         Vec2i mappedCoordinates = mapMouseToGraphCoordinates(mouseData.cursorPosition, nodeSideLength);
-        if (latGraphWrapperUPtr->inBounds(mappedCoordinates))
+        if (graph->inBounds(mappedCoordinates))
         {
-            appStateSPtr->nodeUnderCursor = latGraphWrapperUPtr->node(mappedCoordinates);
+            appStateSPtr->nodeUnderCursor = graph->node(mappedCoordinates);
         }
     }
 
     void GraphOperations::blockNodeAndNotifyAlgorithm(Vec2i mappedCoordinates)
     {
         // Ignore operations without node state change or when events deactivated
-        if (latGraphWrapperUPtr->node(mappedCoordinates)->state != NodeState::Blocked && obsticlesEvents())
+        auto graph = latGraphWrapperUPtr->latGraphSPtr;
+        if (graph->node(mappedCoordinates)->state != NodeState::Blocked && obsticlesEvents())
         {
-            ALatGrWrHelpers::blockNode(latGraphWrapperUPtr, mappedCoordinates);
+            LatticeGraphHelpers::blockNode(graph, mappedCoordinates);
             if (appStateSPtr->currentState == State::SEARCHING)
             {
-                edgeChangeCallBack(latGraphWrapperUPtr->node(mappedCoordinates));
+                edgeChangeCallBack(graph->node(mappedCoordinates));
             }
         }
     }
 
     void GraphOperations::clearNodeAndNotifyAlgorithm(Vec2i mappedCoordinates)
     {
-        if (latGraphWrapperUPtr->node(mappedCoordinates)->state != NodeState::Free && obsticlesEvents())
+        auto graph = latGraphWrapperUPtr->latGraphSPtr;
+        if (graph->node(mappedCoordinates)->state != NodeState::Free && obsticlesEvents())
         {
-            ALatGrWrHelpers::clearNode(latGraphWrapperUPtr, mappedCoordinates);
+            LatticeGraphHelpers::clearNode(graph, mappedCoordinates);
             if (appStateSPtr->currentState == State::SEARCHING)
             {
-                edgeChangeCallBack(latGraphWrapperUPtr->node(mappedCoordinates));
+                edgeChangeCallBack(graph->node(mappedCoordinates));
             }
         }
     }
@@ -164,30 +168,43 @@ namespace Pathfinding::Helpers
         edgeChangeCallBack = callBack;
     }
 
+    void GraphOperations::incrementNodeFactor(Vec2i mappedCoordinates)
+    {
+        auto graph = latGraphWrapperUPtr->latGraphSPtr;
+        if(graph->node(mappedCoordinates)->factor < MAX_COST_FACTOR)
+        {   
+            graph->node(mappedCoordinates)->factor += 1;
+            edgeChangeCallBack(graph->node(mappedCoordinates));
+        }
+    }
+
+    void GraphOperations::decrementNodeFactor(Vec2i mappedCoordinates)
+    {
+        auto graph = latGraphWrapperUPtr->latGraphSPtr;
+        if(graph->node(mappedCoordinates)->factor > MIN_COST_FACTOR)
+        {
+            graph->node(mappedCoordinates)->factor -= 1;
+            edgeChangeCallBack(graph->node(mappedCoordinates));
+        }
+    }
+
     void GraphOperations::mouseWheelMoved(MouseData mouseData)
     {
+        auto graph = latGraphWrapperUPtr->latGraphSPtr;
         if(obsticlesEvents())
         {
             Vec2i mappedCoordinates = mapMouseToGraphCoordinates(mouseData.cursorPosition, nodeSideLength);
-            if(!latGraphWrapperUPtr->inBounds(mappedCoordinates))
+            if(!latGraphWrapperUPtr->latGraphSPtr->inBounds(mappedCoordinates))
             {
                 return;
             }
             if(mouseData.wheelDelta > 0)
             {
-                if(latGraphWrapperUPtr->node(mappedCoordinates)->factor < MAX_COST_FACTOR)
-                {   
-                    latGraphWrapperUPtr->node(mappedCoordinates)->factor += 1;
-                    edgeChangeCallBack(latGraphWrapperUPtr->node(mappedCoordinates));
-                }
+                incrementNodeFactor(mappedCoordinates);
             }
             else
             {
-                if(latGraphWrapperUPtr->node(mappedCoordinates)->factor > MIN_COST_FACTOR)
-                {
-                    latGraphWrapperUPtr->node(mappedCoordinates)->factor -= 1;
-                    edgeChangeCallBack(latGraphWrapperUPtr->node(mappedCoordinates));
-                }
+                decrementNodeFactor(mappedCoordinates);
             }
         }
     }
