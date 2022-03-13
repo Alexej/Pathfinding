@@ -12,6 +12,7 @@ namespace Pathfinding::Datastructures { struct Node; }
 
 namespace Pathfinding::Helpers
 {
+    class RandomIntegers;
     class LatticeGraphHelpers
     {
     private:
@@ -23,16 +24,16 @@ namespace Pathfinding::Helpers
     public:
         static std::vector<PDNode *> neighbors(shptr<PAILatticeGraph> latticeGraphSPtr, PDNode *node);
         
-        static void initRandomGraph(shptr<PAILatticeGraph> latticeGraphSPtr);
+        static void initRandomGraph(shptr<PAILatticeGraph> latticeGraphSPtr, RandomIntegers & ri);
         
         static void blockNode(shptr<PAILatticeGraph> latticeGraphSPtr, PDVec2i location);
         
         static void clearNode(shptr<PAILatticeGraph> latticeGraphSPtr, PDVec2i location);
         
-        static void  iterateOverALatticeGraphConst(const shptr<PAILatticeGraph> latticeGraphSPtr,
+        static void  iterateOverLatticeGraphConst(const shptr<PAILatticeGraph> latticeGraphSPtr,
                                                      std::function<void(const PDNode * node, int32_t h, int32_t w)>);
                                                      
-        static void  iterateOverALatticeGraph(shptr<PAILatticeGraph> latticeGraphSPtr,
+        static void  iterateOverLatticeGraph(shptr<PAILatticeGraph> latticeGraphSPtr,
                                                      std::function<void(PDNode * node, int32_t h, int32_t w)>);                              
     };
 }

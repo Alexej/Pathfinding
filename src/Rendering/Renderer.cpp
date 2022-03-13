@@ -17,6 +17,7 @@
 #include "CouldNotLoadFontException.hpp"
 #include "ApplicationState.hpp"
 #include "RenderingHelpers.hpp"
+#include "IFontLoader.hpp"
 
 namespace Pathfinding::Rendering
 {
@@ -29,19 +30,23 @@ namespace Pathfinding::Rendering
     using Pathfinding::Helpers::LatticeGraphHelpers;
     using Pathfinding::Core::ApplicationState;
     using Pathfinding::Core::State;
+    using Pathfinding::Abstract::IFontLoader;
 
-    Renderer::Renderer(sf::RenderWindow *window, ApplicationState *appStateSPtr_)
-        : windowPtr(window), appStateSPtr(appStateSPtr_), dimensionPtr(&appStateSPtr->dimension)
+    Renderer::Renderer(sf::RenderWindow *window, 
+                       ApplicationState *appStateSPtr_, 
+                       std::shared_ptr<IFontLoader> fontLoaderSPtr_)
+        : windowPtr(window), 
+        appStateSPtr(appStateSPtr_), 
+        dimensionPtr(&appStateSPtr->dimension), 
+        fontLoaderSPtr(fontLoaderSPtr_)
     {
         init();
     }
 
     void Renderer::init()
     {
-        loadFont("NugoSansLight.ttf");
-
-        text.setFont(font);
         text.setStyle(sf::Text::Bold);
+        text.setFont(fontLoaderSPtr->getFont("NugoSansLight"));
 
         nodeRect.setOutlineThickness(NODE_OUTLINE_THICKNESS);
         nodeRect.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
@@ -71,13 +76,6 @@ namespace Pathfinding::Rendering
         straightLine.setFillColor(color);
     }
 
-    void Renderer::loadFont(std::string fontName)
-    {
-        if (!font.loadFromFile(getRootPath() + "\\dependencies\\fonts\\" + fontName))
-        {
-            throw CouldNotLoadFontException("Could not load font");
-        }
-    }
 
     sf::Color Renderer::stateColor(NodeState state)
     {
@@ -138,17 +136,16 @@ namespace Pathfinding::Rendering
 
         factorRect.setSize(sf::Vector2f(nodePointRadius * 1.5f ,nodePointRadius * 1.5f));
 
-        
         nodeRect.setSize(sf::Vector2f(straightLineLength, straightLineLength));
     }
 
     void Renderer::render(const std::shared_ptr<ALatGraphWr> latticeGraphWrapperSPtr)
     {
-        LatticeGraphHelpers::iterateOverALatticeGraphConst(latticeGraphWrapperSPtr->latGraphSPtr,
+        LatticeGraphHelpers::iterateOverLatticeGraphConst(latticeGraphWrapperSPtr->latGraphSPtr,
         [this](const Node *node, int32_t h, int32_t w)
         {
             auto coords = getNodePosition(node, dimensionPtr->currentNodeSideLength());
-            drawNode(*node, coords);
+            renderNode(*node, coords);
             if (appStateSPtr->showNodeInfo)
             {
                 renderNodeInfo(*node, coords);
@@ -188,7 +185,7 @@ namespace Pathfinding::Rendering
         windowPtr->draw(factorRect);
     }
 
-    void Renderer::drawNode(const Node &node, sf::Vector2f coords)
+    void Renderer::renderNode(const Node &node, sf::Vector2f coords)
     {
         nodeRect.setPosition(sf::Vector2f(coords.x, coords.y));
         nodeRect.setFillColor(stateColor(node.state));

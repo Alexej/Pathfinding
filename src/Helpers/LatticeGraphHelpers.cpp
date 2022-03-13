@@ -7,6 +7,7 @@
 #include "ILatticeGraph.hpp"
 #include "Node.hpp"
 #include "Vec2.hpp"
+#include "RandomIntegers.hpp"
 
 namespace Pathfinding::Helpers
 {
@@ -15,11 +16,11 @@ namespace Pathfinding::Helpers
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
 
-    void LatticeGraphHelpers::initRandomGraph(std::shared_ptr<ILatticeGraph> latticeGraphSPtr)
+    void LatticeGraphHelpers::initRandomGraph(std::shared_ptr<ILatticeGraph> latticeGraphSPtr, RandomIntegers & ri)
     {
-        iterateOverALatticeGraph(latticeGraphSPtr, [](PDNode *node, int32_t h, int32_t w)
+        iterateOverLatticeGraph(latticeGraphSPtr, [&](PDNode *node, int32_t h, int32_t w)
                                         {
-            if (node->state == NodeState::Free && rand() % 3 == 0)
+            if (node->state == NodeState::Free && ri.getRandomInteger() % 3 == 0)
             {
                 node->state = NodeState::Blocked;
             } });
@@ -72,7 +73,7 @@ namespace Pathfinding::Helpers
         }
     }
 
-    void LatticeGraphHelpers::iterateOverALatticeGraphConst(const std::shared_ptr<ILatticeGraph> latticeGraphSPtr,
+    void LatticeGraphHelpers::iterateOverLatticeGraphConst(const std::shared_ptr<ILatticeGraph> latticeGraphSPtr,
                                                    std::function<void(const Node *node, int32_t h, int32_t w)> func)
     {
         for (int32_t h = 0; h < latticeGraphSPtr->height(); ++h)
@@ -84,7 +85,7 @@ namespace Pathfinding::Helpers
         }
     }
 
-    void LatticeGraphHelpers::iterateOverALatticeGraph(std::shared_ptr<ILatticeGraph> latticeGraphSPtr,
+    void LatticeGraphHelpers::iterateOverLatticeGraph(std::shared_ptr<ILatticeGraph> latticeGraphSPtr,
                                            std::function<void(Node *node, int32_t h, int32_t w)> func)
     {
         for (int32_t h = 0; h < latticeGraphSPtr->height(); ++h)

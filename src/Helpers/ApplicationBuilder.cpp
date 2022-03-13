@@ -71,6 +71,11 @@ namespace Pathfinding::Helpers
         straightCost = straightCost_;
     }
 
+    void ApplicationBuilder::setFontLoader(std::shared_ptr<PAIFontLoader> fontLoaderSPtr_)
+    {
+        fontLoaderSPtr = fontLoaderSPtr_;
+    }
+
     std::unique_ptr<IApplication> ApplicationBuilder::make()
     {
         applicationUPtr->accumulator = 0;
@@ -93,7 +98,7 @@ namespace Pathfinding::Helpers
         applicationUPtr->menuUPtr = std::make_unique<Menu>(&applicationUPtr->appState, &applicationUPtr->aStarCache, &applicationUPtr->dStarCache);
         applicationUPtr->dstarLiteUPtr = std::make_unique<DStarLite>(applicationUPtr->latGraphWrapUPtr);
         applicationUPtr->graphOpsUPtr = std::make_unique<GraphOperations>(&applicationUPtr->appState, applicationUPtr->latGraphWrapUPtr);
-        applicationUPtr->rendererUPtr = std::make_unique<Renderer>(&applicationUPtr->window, &applicationUPtr->appState);
+        applicationUPtr->rendererUPtr = std::make_unique<Renderer>(&applicationUPtr->window, &applicationUPtr->appState, fontLoaderSPtr);
         applicationUPtr->aStarUPtr = std::make_unique<AStar>();
     }
 

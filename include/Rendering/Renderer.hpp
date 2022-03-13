@@ -6,6 +6,7 @@
 #include <SFML/Graphics/CircleShape.hpp>
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Font.hpp>
+#include <memory>
 
 #include "IRenderer.hpp"
 
@@ -14,6 +15,7 @@ namespace Pathfinding::Datastructures { struct Node; }
 namespace Pathfinding::Datastructures { enum class NodeState; }
 namespace Pathfinding::Abstract { class ALatGraphWr; }
 namespace Pathfinding::Abstract { class IApplicationState; }
+namespace Pathfinding::Abstract { class IFontLoader; }
 namespace Pathfinding::Core { class GraphDimension; }
 namespace Pathfinding::Core { struct ApplicationState; }
 
@@ -28,11 +30,12 @@ namespace Pathfinding::Rendering
         using PCApplicationState = Pathfinding::Core::ApplicationState;
         using PCGraphDimension = Pathfinding::Core::GraphDimension;
         using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
+        using PAIFontLoader = Pathfinding::Abstract::IFontLoader;
 
     public:
         Renderer() = default;
         
-        Renderer(sf::RenderWindow *window, PCApplicationState *appStateSPtr);
+        Renderer(sf::RenderWindow *window, PCApplicationState *appStateSPtr, std::shared_ptr<PAIFontLoader> fontLoaderSPtr);
         
         void render(const std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr) override;
         
@@ -47,10 +50,8 @@ namespace Pathfinding::Rendering
 
     private:
         void init();
-        
-        void loadFont(std::string font);
-        
-        void drawNode(const PDNode &node, sf::Vector2f coords);
+                
+        void renderNode(const PDNode &node, sf::Vector2f coords);
         
         void renderNodeInfo(const PDNode &node, sf::Vector2f coords);
         
@@ -81,6 +82,7 @@ namespace Pathfinding::Rendering
         sf::Color goalColor;
         sf::Color visitedColor;
         bool colorUp = false;
+        std::shared_ptr<PAIFontLoader> fontLoaderSPtr;
     };
 }
 

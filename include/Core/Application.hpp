@@ -17,6 +17,7 @@
 #include "IApplication.hpp"
 #include "IAStar.hpp"
 #include "PathfinderCache.hpp"
+#include "RandomIntegers.hpp"
 
 namespace Pathfinding::Abstract { class ALatGraphWr; }
 namespace Pathfinding::Helpers { class ApplicationBuilder; }
@@ -37,6 +38,7 @@ namespace Pathfinding::Core
         using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
         using PAIAStar = Pathfinding::Abstract::IAStar;
         using PDPathfinderCachee = Pathfinding::Datastructures::PathfinderCache;
+        using PHRandomIntegers = Pathfinding::Helpers::RandomIntegers;
     public:
         Application() = default;
         
@@ -77,6 +79,7 @@ namespace Pathfinding::Core
         sf::RenderWindow window;
         PDPathfinderCachee aStarCache;
         PDPathfinderCachee dStarCache;
+        PHRandomIntegers ri;
         
         GraphDimension *dimensionPtr;
         AlgorithmStepSpeed *algoStepSpeedPtr;

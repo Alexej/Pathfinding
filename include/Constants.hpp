@@ -54,6 +54,10 @@ namespace Pathfinding::Constants
 
     // DStar flags
     constexpr auto DONT_SET_START_STATE = true;
+
+    // Random
+    constexpr int32_t LOWER_DEFAULT_RANDOM_NUMBER = 0;
+    constexpr int32_t UPPER_DEFAULT_RANDOM_NUMBER = 100;
 }
 
 #endif /* A2338B5A_9164_4556_99CB_AA1F92239E7A */

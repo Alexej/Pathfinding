@@ -7,6 +7,7 @@
 
 #include "Node.hpp"
 #include "Constants.hpp"
+#include "OtherHelpers.hpp"
 
 namespace Pathfinding::Helpers
 {
@@ -36,7 +37,7 @@ namespace Pathfinding::Helpers
     inline std::string dToStr(double d)
     {
         std::string dStr = std::to_string(d);
-        return dStr.substr(0, dStr.find("."));
+        return getSubstrBeforeChar(dStr, '.');
     }
 
     inline double getAngleBetweenTwoNodes(Pathfinding::Datastructures::Node *n1, Pathfinding::Datastructures::Node *n2)

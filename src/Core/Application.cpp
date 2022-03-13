@@ -128,7 +128,7 @@ namespace Pathfinding::Core
     void Application::randomGraph()
     {
         reset();
-        LatticeGraphHelpers::initRandomGraph(latGraphWrapUPtr->latGraphSPtr);
+        LatticeGraphHelpers::initRandomGraph(latGraphWrapUPtr->latGraphSPtr, ri);
     }
 
     void Application::step()
