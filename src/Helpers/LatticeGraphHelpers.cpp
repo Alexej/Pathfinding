@@ -11,10 +11,8 @@
 
 namespace Pathfinding::Helpers
 {
+    using namespace Pathfinding::Datastructures;
     using Pathfinding::Abstract::ILatticeGraph;
-    using Pathfinding::Datastructures::Node;
-    using Pathfinding::Datastructures::NodeState;
-    using Pathfinding::Datastructures::Vec2i;
 
     void LatticeGraphHelpers::initRandomGraph(std::shared_ptr<ILatticeGraph> latticeGraphSPtr, RandomIntegers & ri)
     {

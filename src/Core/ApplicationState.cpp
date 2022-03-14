@@ -7,13 +7,10 @@ namespace Pathfinding::Core
     ApplicationState::ApplicationState(GraphDimension dim, AlgorithmStepSpeed speed)
     : dimension(dim), stepSpeed(speed)
     {
-        showNodeInfo = false;
-        stateChanged = false;
-        autoStep = false;
-        showPath = true;
-        showPathLines = true;
-        runAStar = false;
-        currentState = State::READY;
-        showAStarPath = true;
+    }
+
+    bool ApplicationState::algorithmFinished() const
+    {
+        return currentState == State::FOUND_PATH || currentState == State::NO_PATH;
     }
 }

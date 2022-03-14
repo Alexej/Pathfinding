@@ -20,9 +20,7 @@ namespace Pathfinding::Abstract
             virtual void render(const std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr) = 0;
             
             virtual void renderPath(const std::vector<PDNode *> & path, sf::Color color) = 0;
-            
-            virtual void update() = 0;
-            
+                        
             virtual void reset() = 0;
             
             virtual void resize() = 0;

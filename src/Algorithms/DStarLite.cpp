@@ -15,6 +15,7 @@
 #include "ICostFunction.hpp"
 #include "Constants.hpp"
 #include "PathfinderReturnType.hpp"
+#include "OtherHelpers.hpp"
 
 
 namespace Pathfinding::Algorithms
@@ -30,17 +31,13 @@ namespace Pathfinding::Algorithms
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
+    using Pathfinding::Helpers::flush;
     using Pathfinding::Helpers::LatticeGraphHelpers;
     using Pathfinding::Abstract::ICostFunction;
 
     namespace
     {
-        int32_t flush(int32_t & num)
-        {
-            int32_t tmp = num;
-            num = 0;
-            return tmp;
-        }
+
     }
 
     DStarLite::DStarLite(std::shared_ptr<ALatGraphWr> latticeGraphWrapperSPtr_)
@@ -88,7 +85,7 @@ namespace Pathfinding::Algorithms
         while (U.topKey() < calculateKey(sStart) || !locallyConsistent(sStart))
         {
             Key kOld = U.topKey();
-            nodexExpanded += 1;
+            ++nodexExpanded;
             Node *u = popFromQueueAndUpdateState();
             if (kOld < calculateKey(u))
             {

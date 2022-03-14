@@ -26,10 +26,7 @@ namespace Pathfinding::Core
 
         dstarLiteUPtr->initialize();
         dStarCache.cache(dstarLiteUPtr->initialRun());
-        if(appState.runAStar)
-        {
-            aStarCache.cache(aStarUPtr->calculatePath(latGraphWrapUPtr));
-        }
+        runAStar();
     }
 
     void Application::run()
@@ -58,10 +55,6 @@ namespace Pathfinding::Core
     void Application::update(sf::Clock &deltaClock)
     {
         int32_t dt = deltaClock.getElapsedTime().asMilliseconds();
-        if(appState.currentState == State::DONE || appState.currentState == State::NO_PATH)
-        {
-            rendererUPtr->update();
-        }
         if (appState.currentState == State::SEARCHING && appState.autoStep)
         {
             accumulator += dt;
@@ -89,7 +82,7 @@ namespace Pathfinding::Core
         window.clear();
         ImGui::SFML::Render(window);
         rendererUPtr->render(latGraphWrapUPtr);
-        if (appState.currentState == State::DONE || appState.currentState == State::SEARCHING)
+        if (appState.currentState == State::FOUND_PATH || appState.currentState == State::SEARCHING)
         {
             if(appState.showAStarPath)
             {
@@ -116,7 +109,7 @@ namespace Pathfinding::Core
     void Application::done()
     {
         graphOpsUPtr->disableObsticlesEvents();
-        appState.currentState = State::DONE;
+        appState.currentState = State::FOUND_PATH;
     }
 
     void Application::noPath()
@@ -124,16 +117,31 @@ namespace Pathfinding::Core
         graphOpsUPtr->disableObsticlesEvents();
         appState.currentState = State::NO_PATH;
     }
-
+ 
     void Application::randomGraph()
     {
-        reset();
-        LatticeGraphHelpers::initRandomGraph(latGraphWrapUPtr->latGraphSPtr, ri);
+        do
+        {
+            reset();
+            LatticeGraphHelpers::initRandomGraph(latGraphWrapUPtr->latGraphSPtr, ri);
+        } while(!aStarUPtr->calculatePath(latGraphWrapUPtr).pathFound);
     }
 
     void Application::step()
     {
         dStarCache.cache(dstarLiteUPtr->moveStart());
+        if(dStarCache.nodesExpandedAll.back() != 0)
+        {
+            runAStar();
+        }
+        else
+        {
+            aStarCache.cache({true, aStarCache.currentPath, 0});
+        }
+    }
+
+    void Application::runAStar()
+    {
         if(appState.runAStar)
         {
             aStarCache.cache(aStarUPtr->calculatePath(latGraphWrapUPtr));

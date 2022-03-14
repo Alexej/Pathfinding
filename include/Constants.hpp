@@ -39,6 +39,9 @@ namespace Pathfinding::Constants
     constexpr std::size_t GREEN = 1;
     constexpr std::size_t BLUE = 2;
 
+    constexpr uint8_t MAX_COLOR_CHANNEL = 255;
+    constexpr uint8_t MIN_COLOR_CHANNEL = 0;
+
     constexpr uint8_t COLOR_CHANGE_DIFF = 5;
 
     // Rendering

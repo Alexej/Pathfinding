@@ -44,7 +44,7 @@ namespace Pathfinding::Algorithms
         }
     }
 
-    PathfinderReturnType AStar::calculatePath(const std::shared_ptr<ALatGraphWr> graphWrapper)
+    PathfinderReturnType AStar::calculatePath(const std::shared_ptr<ALatGraphWr> graphWrapper) const
     {
         int32_t nodesExpanded = 0;
         std::priority_queue<QueueElement, std::vector<QueueElement>, AStarQueueComperator> openSet;
@@ -65,7 +65,7 @@ namespace Pathfinding::Algorithms
             }
             openSet.pop();
             auto neighbors = LatticeGraphHelpers::neighbors(graphWrapper->latGraphSPtr, current);
-            nodesExpanded += 1;
+            ++nodesExpanded;
             for (auto neighbor : neighbors)
             {
                 auto tentativeGscore = getMapDefaultInf(gScore, current) + costUPtr->calculate(current, neighbor);

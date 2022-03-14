@@ -2,6 +2,7 @@
 #define AF527768_19D6_4F99_A25F_EEF58472AEC7
 
 #include <SFML/Graphics/Color.hpp>
+#include <SFML/Graphics/Font.hpp>
 #include <array>
 #include <numbers>
 
@@ -11,6 +12,26 @@
 
 namespace Pathfinding::Helpers
 {
+    class ColorGradient
+    {
+        public:
+            void operator()(uint8_t & color, uint8_t incrementStep)
+            {
+                if(increment)
+                {
+                    if(color < Pathfinding::Constants::MAX_COLOR_CHANNEL) { color += incrementStep; }
+                    else { increment = false; }
+                }
+                if(!increment)
+                {
+                    if(color > Pathfinding::Constants::MIN_COLOR_CHANNEL) { color -= incrementStep; }
+                    else { increment = true; }
+                }
+            }
+        private:
+            bool increment = true;
+    };
+
     inline sf::Color convertToSfmlColor(std::array<uint8_t, 3> color)
     {
         return {color[Pathfinding::Constants::RED],
@@ -52,6 +73,34 @@ namespace Pathfinding::Helpers
     inline bool diagonal(double angle)
     {
         return std::abs(angle) == 45 || std::abs(angle) == 135;
+    }
+
+    
+    inline sf::Color stateColor(Pathfinding::Datastructures::NodeState state)
+    {
+        sf::Color color;
+        switch (state)
+        {
+        case Pathfinding::Datastructures::NodeState::Free:
+            color = convertToSfmlColor(Pathfinding::Constants::FREE_NODE_COLOR);
+            break;
+        case Pathfinding::Datastructures::NodeState::Blocked:
+            color = convertToSfmlColor(Pathfinding::Constants::BLOCKED_NODE_COLOR);
+            break;
+        case Pathfinding::Datastructures::NodeState::Frontier:
+            color = convertToSfmlColor(Pathfinding::Constants::FRONTIER_NODE_COLOR);
+            break;
+        case Pathfinding::Datastructures::NodeState::Visited:
+            color = convertToSfmlColor(Pathfinding::Constants::VISITED_NODE_COLOR);
+            break;
+        case Pathfinding::Datastructures::NodeState::Start:
+            color = convertToSfmlColor(Pathfinding::Constants::START_NODE_COLOR);
+            break;
+        case Pathfinding::Datastructures::NodeState::Goal:
+            color = convertToSfmlColor(Pathfinding::Constants::GOAL_NODE_COLOR);
+            break;
+        }
+        return color;
     }
 }
 

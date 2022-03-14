@@ -65,7 +65,7 @@ namespace Pathfinding::Gui
 
         showCommonElements();
 
-        if (appStatePtr->currentState == State::DONE)
+        if (appStatePtr->currentState == State::FOUND_PATH)
         {
             showDoneState();
         }

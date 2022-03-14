@@ -41,6 +41,8 @@ namespace Pathfinding::Rendering
         fontLoaderSPtr(fontLoaderSPtr_)
     {
         init();
+        resize();
+        reset();
     }
 
     void Renderer::init()
@@ -65,43 +67,12 @@ namespace Pathfinding::Rendering
 
         straightLine.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
         straightLine.setOutlineThickness(NODE_OUTLINE_THICKNESS);
-
-        resize();
-        reset();
     }
 
     void Renderer::setPathColor(sf::Color color)
     {
         diagonalLine.setFillColor(color);
         straightLine.setFillColor(color);
-    }
-
-
-    sf::Color Renderer::stateColor(NodeState state)
-    {
-        sf::Color color;
-        switch (state)
-        {
-        case NodeState::Free:
-            color = convertToSfmlColor(FREE_NODE_COLOR);
-            break;
-        case NodeState::Blocked:
-            color = convertToSfmlColor(BLOCKED_NODE_COLOR);
-            break;
-        case NodeState::Frontier:
-            color = convertToSfmlColor(FRONTIER_NODE_COLOR);
-            break;
-        case NodeState::Visited:
-            color = visitedColor;
-            break;
-        case NodeState::Start:
-            color = convertToSfmlColor(START_NODE_COLOR);
-            break;
-        case NodeState::Goal:
-            color = goalColor;
-            break;
-        }
-        return color;
     }
 
     void Renderer::resize()
@@ -141,6 +112,7 @@ namespace Pathfinding::Rendering
 
     void Renderer::render(const std::shared_ptr<ALatGraphWr> latticeGraphWrapperSPtr)
     {
+        if(appStateSPtr->algorithmFinished()) { updateColors(); }
         LatticeGraphHelpers::iterateOverLatticeGraphConst(latticeGraphWrapperSPtr->latGraphSPtr,
         [this](const Node *node, int32_t h, int32_t w)
         {
@@ -155,7 +127,6 @@ namespace Pathfinding::Rendering
 
     void Renderer::renderNodeInfo(const Node &node, sf::Vector2f coords)
     {
-
         using std::to_string;
         text.setString(dToStr(node.g));
         text.setPosition(sf::Vector2f(coords.x + NODE_INFO_OFFSET, coords.y + NODE_INFO_OFFSET));
@@ -185,10 +156,35 @@ namespace Pathfinding::Rendering
         windowPtr->draw(factorRect);
     }
 
+
+    void Renderer::reset()
+    {
+        goalNodeColorDiff = convertToSfmlColor(GOAL_NODE_COLOR);
+        blockedNodeColorDiff = convertToSfmlColor(BLOCKED_NODE_COLOR);
+    }
+
+    void Renderer::updateColors()
+    {
+        if(appStateSPtr->currentState == State::NO_PATH)
+        {
+            gradients.gradientBlockedRed(blockedNodeColorDiff.r, 5);
+            gradients.gradientBlockedBlue(blockedNodeColorDiff.b, 1);
+        }
+        else if(appStateSPtr->currentState == State::FOUND_PATH)
+        {
+            gradients.gradientGoalRed(goalNodeColorDiff.r, 5);   
+            gradients.gradientGoalGreen(goalNodeColorDiff.g, 1);
+        }
+    }
+
+
     void Renderer::renderNode(const Node &node, sf::Vector2f coords)
     {
         nodeRect.setPosition(sf::Vector2f(coords.x, coords.y));
-        nodeRect.setFillColor(stateColor(node.state));
+        auto color = stateColor(node.state);
+        if(node.state == NodeState::Blocked) { color = blockedNodeColorDiff; }
+        else if(node.state == NodeState::Goal) { color = goalNodeColorDiff; }
+        nodeRect.setFillColor(color);
         windowPtr->draw(nodeRect);
     }
 
@@ -250,52 +246,5 @@ namespace Pathfinding::Rendering
                 }
             }
         }
-    }
-
-    void Renderer::updateColor()
-    {
-
-        sf::Color *color = nullptr;
-        if (appStateSPtr->currentState == State::DONE)
-        {
-            color = &goalColor;
-        }
-        else if (appStateSPtr->currentState == State::NO_PATH)
-        {
-            color = &visitedColor;
-        }
-        if (colorUp)
-        {
-            if (color->r == 255)
-            {
-                colorUp = false;
-            }
-            else
-            {
-                color->r += COLOR_CHANGE_DIFF;
-            }
-        }
-        else if (!colorUp)
-        {
-            if (color->r == 0)
-            {
-                colorUp = true;
-            }
-            else
-            {
-                color->r -= COLOR_CHANGE_DIFF;
-            }
-        }
-    }
-
-    void Renderer::update()
-    {
-        updateColor();
-    }
-
-    void Renderer::reset()
-    {
-        goalColor = convertToSfmlColor(GOAL_NODE_COLOR);
-        visitedColor = convertToSfmlColor(VISITED_NODE_COLOR);
     }
 }

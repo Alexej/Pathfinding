@@ -39,7 +39,7 @@ namespace Pathfinding::Test
             }
             else if(stateStr == std::string("DONE"))
             {
-                state = State::DONE;
+                state = State::FOUND_PATH;
             }
             else
             {

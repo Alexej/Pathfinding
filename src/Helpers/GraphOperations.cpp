@@ -15,14 +15,11 @@
 namespace Pathfinding::Helpers
 {
     using namespace Pathfinding::Constants;
+    using namespace Pathfinding::Datastructures;
+    using namespace Pathfinding::Core;
+
     using Pathfinding::Abstract::ALatGraphWr;
     using Pathfinding::Algorithms::DStarLite;
-    using Pathfinding::Core::ApplicationState;
-    using Pathfinding::Core::State;
-    using Pathfinding::Datastructures::LatticeGraph;
-    using Pathfinding::Datastructures::Node;
-    using Pathfinding::Datastructures::NodeState;
-    using Pathfinding::Datastructures::Vec2i;
     using Pathfinding::Helpers::LatticeGraphHelpers;
     using Pathfinding::Events::MouseData;
 

@@ -53,7 +53,7 @@ class DStarLiteTester
 
         bool done() const
         {
-            return state != State::NO_PATH || state != State::DONE;
+            return state != State::NO_PATH || state != State::FOUND_PATH;
         }
         
         
@@ -86,7 +86,7 @@ class DStarLiteTester
     private:
         void pathFound()
         {
-            state = State::DONE;
+            state = State::FOUND_PATH;
         }
 
         void noPath()

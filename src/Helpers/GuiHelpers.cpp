@@ -67,7 +67,7 @@ namespace Pathfinding::Helpers
         case State::SEARCHING:
             str = "SEARCHING";
             break;
-        case State::DONE:
+        case State::FOUND_PATH:
             str = "DONE";
             break;
         case State::NO_PATH:
@@ -88,7 +88,7 @@ namespace Pathfinding::Helpers
         case State::SEARCHING:
             color = {90,60,160};
             break;
-        case State::DONE:
+        case State::FOUND_PATH:
             color = {0,255,0};
             break;
         case State::NO_PATH:

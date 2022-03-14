@@ -9,7 +9,7 @@ namespace Pathfinding::Datastructures { struct Node; }
 
 namespace Pathfinding::Core
 {
-    enum class State { READY, SEARCHING, DONE, NO_PATH };
+    enum class State { READY, SEARCHING, FOUND_PATH, NO_PATH };
 
     struct ApplicationState
     {
@@ -20,18 +20,19 @@ namespace Pathfinding::Core
 
             ApplicationState(GraphDimension dim, AlgorithmStepSpeed speed);
 
+            bool algorithmFinished() const;
+
             GraphDimension dimension;
             AlgorithmStepSpeed stepSpeed;
-            State currentState;
-            bool showNodeInfo;
-            bool stateChanged;
+            State currentState = State::READY;
+            bool showNodeInfo = false;
+            bool stateChanged = false;
             const PDNode *nodeUnderCursor = nullptr;
-            bool autoStep;
-            bool showPath;
-            bool showPathLines;
-            bool runAStar;
-            bool showAStarPath;
-
+            bool autoStep = false;
+            bool showPath = true;
+            bool showPathLines = true;
+            bool runAStar = false;
+            bool showAStarPath = false;
     };
 }
 

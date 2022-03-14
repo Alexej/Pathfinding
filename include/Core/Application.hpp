@@ -64,7 +64,10 @@ namespace Pathfinding::Core
         void randomGraph();
         
         void step();
-        
+    
+    private:
+        void runAStar();
+
     private:
         std::unique_ptr<PAIRenderer> rendererUPtr;
         std::unique_ptr<PAIMenu> menuUPtr;
