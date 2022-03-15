@@ -61,6 +61,15 @@ namespace Pathfinding::Helpers
         }
     }
 
+
+    void GraphOperations::setStart(Vec2i  mappedCoordinates)
+    {
+        if(latGraphWrapperUPtr->latGraphSPtr->node(mappedCoordinates)->state == NodeState::Free)
+        {
+            latGraphWrapperUPtr->setStart(mappedCoordinates);
+        }
+    }   
+
     void GraphOperations::mouseMoved(MouseData mouseData)
     {
         Vec2i mappedCoordinates = mapMouseToGraphCoordinates(mouseData.cursorPosition, nodeSideLength);
@@ -71,7 +80,7 @@ namespace Pathfinding::Helpers
             case MouseAction::IDLE:
                 break;
             case MouseAction::SETTING_START:
-                latGraphWrapperUPtr->setStart(mappedCoordinates);
+                setStart(mappedCoordinates);
                 break;
             case MouseAction::SETTING_GOAL:
                 latGraphWrapperUPtr->setGoal(mappedCoordinates);

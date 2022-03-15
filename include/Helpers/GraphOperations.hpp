@@ -72,6 +72,8 @@ namespace Pathfinding::Helpers
 
         void decrementNodeFactor(PDVec2i mappedCoordinates);
 
+        void setStart(PDVec2i mappedCoordinates);
+
     private:
         std::function<void(PDNode * node)> edgeChangeCallBack;
         int32_t nodeSideLength;

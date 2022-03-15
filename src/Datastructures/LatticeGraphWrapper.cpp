@@ -55,27 +55,19 @@ namespace Pathfinding::Datastructures
     {
         if (latGraphSPtr->node(location)->state == NodeState::Free)
         {
-            goalNodePtr->state = NodeState::Free;
+            goalNodePtr->state = NodeState::Free;   
             goalNodePtr = latGraphSPtr->node(location);
             goalNodePtr->state = NodeState::Goal;
         }
     }
 
-    void LatticeGraphWrapper::setStart(Vec2i location, bool dontSetStarState)
+    void LatticeGraphWrapper::setStart(Vec2i location)
     {
-        if(latGraphSPtr->node(location)->state != NodeState::Blocked)
+        if (latGraphSPtr->node(location)->state != NodeState::Blocked)
         {
-            if (latGraphSPtr->node(location)->state != NodeState::Goal)
-            {
-                startNodePtr->state = NodeState::Free;
-                startNodePtr = latGraphSPtr->node(location);
-                startNodePtr->state = NodeState::Start;
-            }
-            else if(latGraphSPtr->node(location)->state == NodeState::Goal && dontSetStarState)
-            {
-                startNodePtr->state = NodeState::Free;
-                startNodePtr = latGraphSPtr->node(location);
-            }
+            startNodePtr->state = NodeState::Free;
+            startNodePtr = latGraphSPtr->node(location);
+            startNodePtr->state = NodeState::Start;
         }
     }
 }

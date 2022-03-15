@@ -30,7 +30,7 @@ namespace Pathfinding::Datastructures
 
             void setGoal(Vec2i location) override;
 
-            void setStart(Vec2i location, bool dontSetStarState = false) override;
+            void setStart(Vec2i location) override;
 
         private:
             void resetEndpoints();

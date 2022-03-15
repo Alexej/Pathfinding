@@ -242,7 +242,7 @@ namespace Pathfinding::Algorithms
     {
         Node *prevStart = sStart;
         sStart = getMinCG(sStart).second;
-        latticeGraphWrapperSPtr->setStart(sStart->location, DONT_SET_START_STATE);
+        latticeGraphWrapperSPtr->setStart(sStart->location);
         prevStart->state = NodeState::Visited;
     }
 
