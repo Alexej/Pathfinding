@@ -9,17 +9,17 @@
 
 namespace Pathfinding::Rendering
 {
+    using namespace Pathfinding::Constants;
     using Pathfinding::Core::ApplicationState;
     using Pathfinding::Core::State;
     using Pathfinding::Abstract::IFontLoader;
     using Pathfinding::Abstract::ALatGraphWr;
     using Pathfinding::Helpers::LatticeGraphHelpers;
+    using Pathfinding::Datastructures::Node;
+    using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Helpers::getNodePosition;
     using Pathfinding::Helpers::stateColor;
     using Pathfinding::Helpers::convertToSfmlColor;
-    using Pathfinding::Datastructures::Node;
-    using Pathfinding::Datastructures::NodeState;
-    using namespace Pathfinding::Constants;
 
    Renderer::Renderer(sf::RenderWindow *window, 
                        ApplicationState *appStateSPtr_, 

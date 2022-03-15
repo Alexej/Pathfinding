@@ -21,6 +21,8 @@ set(SOURCES_TESTS
     ../src/Helpers/AlgorithmFunctionHelpers.cpp
     ../src/Helpers/LatticeGraphHelpers.cpp
     ../src/Helpers/RootPath.cpp
+    ../src/Datastructures/PriorityQueue.cpp
+    
     PathLangParser.cpp
     TestLocation.cpp
     TestDStarLite.cpp

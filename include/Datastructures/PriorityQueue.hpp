@@ -6,60 +6,32 @@
 #include <list>
 #include <functional>
 
-#include "Node.hpp"
-#include "Key.hpp"
 
 namespace Pathfinding::Datastructures
 {
+    struct Node;
+    struct Key;
     class DStarLiteQueueComperator
     {
     public:
-        bool operator()(const Node *lhs, const Node *rhs)
-        {
-            return lhs->key > rhs->key;
-        }
+        bool operator()(const Node *lhs, const Node *rhs);
+
     };
 
     class PriorityQueue final : public std::priority_queue<Node *, std::vector<Node *>, DStarLiteQueueComperator>
     {
     public:
-        void remove(const Node *node)
-        {
-            auto it = std::find(c.begin(), c.end(), node);
-            c.erase(it);
-            std::make_heap(c.begin(), c.end(), comp);
-        }
+        void remove(const Node *node);
 
-        void insert(Node *node)
-        {
-            push(node);
-        }
+        void insert(Node *node);
 
-        void reset()
-        {
-            c.clear();
-        }
+        void reset();
 
-        Key topKey() const
-        {
-            if (empty())
-            {
-                return Key();
-            }
-            return top()->key;
-        }
+        Key topKey() const;
 
-        Node *pop()
-        {
-            auto topNode = top();
-            base::pop();
-            return topNode;
-        }
+        Node *pop();
 
-        bool contains(const Node *node) const
-        {
-            return std::find(c.begin(), c.end(), node) != c.end();
-        }
+        bool contains(const Node *node) const;
 
     private:
         using base = std::priority_queue<Node *, std::vector<Node *>, DStarLiteQueueComperator>;

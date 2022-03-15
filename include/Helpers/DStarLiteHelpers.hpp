@@ -7,22 +7,22 @@
 namespace Pathfinding::Helpers
 {
 
-    static double infinity()
+    inline double infinity()
     {
         return std::numeric_limits<double>::infinity();
     }
 
-    static bool locallyConsistent(const Pathfinding::Datastructures::Node *node)
+    inline bool locallyConsistent(const Pathfinding::Datastructures::Node *node)
     {
         return node->g == node->rhs;
     }
 
-    static bool locallyOverconsistent(const Pathfinding::Datastructures::Node *node)
+    inline bool locallyOverconsistent(const Pathfinding::Datastructures::Node *node)
     {
         return node->g > node->rhs;
     }
 
-    static bool blocked(const Pathfinding::Datastructures::Node *node)
+    inline bool blocked(const Pathfinding::Datastructures::Node *node)
     {
         return node->state == Pathfinding::Datastructures::NodeState::Blocked;
     }

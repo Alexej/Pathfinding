@@ -7,7 +7,9 @@ set(SOURCES_PATHFINDING
   Events/EventManager.cpp
   Datastructures/LatticeGraph.cpp
   Datastructures/Node.cpp
+  Datastructures/PathfinderCache.cpp
   Datastructures/LatticeGraphWrapper.cpp
+  Datastructures/PriorityQueue.cpp
   Core/Application.cpp
   Core/ApplicationState.cpp
   Rendering/Renderer.cpp
@@ -18,8 +20,10 @@ set(SOURCES_PATHFINDING
   Helpers/RootPath.cpp
   Helpers/GuiHelpers.cpp
   Helpers/SFMLHelpers.cpp
+  Helpers/RenderingHelpers.cpp
   Helpers/GraphOperations.cpp
   Helpers/LatticeGraphHelpers.cpp
+  Helpers/FontLoader.cpp
   Helpers/ApplicationBuilder.cpp
   Helpers/AlgorithmFunctionHelpers.cpp
   Gui/Menu.cpp

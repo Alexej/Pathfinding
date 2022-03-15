@@ -13,29 +13,9 @@ https://eliasdaler.github.io/using-imgui-with-sfml-pt2/#combobox-listbox
 namespace ImGui
 {
 
-    static void HelpMarker(const char* desc)
-    {
-        ImGui::TextDisabled("(?)");
-        if (ImGui::IsItemHovered())
-        {
-            ImGui::BeginTooltip();
-            ImGui::PushTextWrapPos(ImGui::GetFontSize() * 35.0f);
-            ImGui::TextUnformatted(desc);
-            ImGui::PopTextWrapPos();
-            ImGui::EndTooltip();
-        }
-    }
+    void HelpMarker(const char* desc);
 
-    static auto vector_getter(void *vec, int idx, const char **out_text)
-    {
-        auto &vector = *static_cast<std::vector<std::string> *>(vec);
-        if (idx < 0 || idx >= static_cast<int>(vector.size()))
-        {
-            return false;
-        }
-        *out_text = vector.at(idx).c_str();
-        return true;
-    };
+    auto vector_getter(void *vec, int idx, const char **out_text);
 
     bool custom_combo(const char *label, int *currIndex, std::vector<std::string> &values);
 }
