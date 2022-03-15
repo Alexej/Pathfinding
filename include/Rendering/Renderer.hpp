@@ -2,14 +2,13 @@
 #define EE121C46_77A1_42C0_82FD_AA5B2F176C40
 
 #include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
-#include <SFML/Graphics/Text.hpp>
-#include <SFML/Graphics/Font.hpp>
+#include <SFML/Graphics/RectangleShape.hpp>
 #include <memory>
 
 #include "RenderingHelpers.hpp"
 #include "IRenderer.hpp"
+#include "DrawableNode.hpp"
 
 namespace Pathfinding::Datastructures { class LatticeGraph; }
 namespace Pathfinding::Datastructures { struct Node; }
@@ -75,13 +74,6 @@ namespace Pathfinding::Rendering
         void updateColors();
 
     private:
-        sf::RectangleShape nodeRect;
-        sf::Text text;
-        sf::Font font;
-        sf::CircleShape nodePoint;
-        sf::RectangleShape diagonalLine;
-        sf::RectangleShape straightLine;
-        sf::RectangleShape factorRect;
         sf::RenderWindow *windowPtr = nullptr;
         PCApplicationState *appStateSPtr = nullptr;
         PCGraphDimension *dimensionPtr = nullptr;
@@ -90,6 +82,10 @@ namespace Pathfinding::Rendering
         bool colorUp = true;
         std::shared_ptr<PAIFontLoader> fontLoaderSPtr;
         Gradients gradients;
+        DrawableNode drawableNode;
+        sf::CircleShape nodePoint;
+        sf::RectangleShape diagonalLine;
+        sf::RectangleShape straightLine;
     };
 }
 

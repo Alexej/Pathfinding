@@ -47,17 +47,7 @@ namespace Pathfinding::Rendering
 
     void Renderer::init()
     {
-        text.setStyle(sf::Text::Bold);
-        text.setFont(fontLoaderSPtr->getFont("NugoSansLight"));
-
-        nodeRect.setOutlineThickness(NODE_OUTLINE_THICKNESS);
-        nodeRect.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
-
-        factorRect.setOutlineThickness(NODE_OUTLINE_THICKNESS);
-        factorRect.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
-
-        text.setCharacterSize(NODE_INFO_TEXT_SIZE);
-        text.setFillColor(convertToSfmlColor(NODE_INFO_COLOR));
+        drawableNode.init(fontLoaderSPtr->getFont("NugoSansLight"));
 
         nodePoint.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
         nodePoint.setOutlineThickness(NODE_OUTLINE_THICKNESS);
@@ -105,9 +95,10 @@ namespace Pathfinding::Rendering
         straightLine.setOrigin(sf::Vector2f(0, lineThickness / 2));
         diagonalLine.setOrigin(sf::Vector2f(0, lineThickness / 2));
 
-        factorRect.setSize(sf::Vector2f(nodePointRadius * 1.5f ,nodePointRadius * 1.5f));
+        auto factorRectSize = sf::Vector2f(nodePointRadius * 1.5f ,nodePointRadius * 1.5f);
+        auto nodeRectSize = sf::Vector2f(straightLineLength, straightLineLength);
 
-        nodeRect.setSize(sf::Vector2f(straightLineLength, straightLineLength));
+        drawableNode.resize(nodeRectSize, factorRectSize);
     }
 
     void Renderer::render(const std::shared_ptr<ALatGraphWr> latticeGraphWrapperSPtr)
@@ -117,43 +108,12 @@ namespace Pathfinding::Rendering
         [this](const Node *node, int32_t h, int32_t w)
         {
             auto coords = getNodePosition(node, dimensionPtr->currentNodeSideLength());
-            renderNode(*node, coords);
-            if (appStateSPtr->showNodeInfo)
-            {
-                renderNodeInfo(*node, coords);
-            }
+            auto color = stateColor(node->state);
+            if(node->state == NodeState::Blocked) { color = blockedNodeColorDiff; }
+            else if(node->state == NodeState::Goal) { color = goalNodeColorDiff; }
+            drawableNode.prepare(*node, coords, color, appStateSPtr->showNodeInfo);
+            windowPtr->draw(drawableNode);
         });
-    }
-
-    void Renderer::renderNodeInfo(const Node &node, sf::Vector2f coords)
-    {
-        using std::to_string;
-        text.setString(dToStr(node.g));
-        text.setPosition(sf::Vector2f(coords.x + NODE_INFO_OFFSET, coords.y + NODE_INFO_OFFSET));
-        windowPtr->draw(text);
-        float widthOfGText = text.getLocalBounds().width;
-
-        text.setString(dToStr(node.rhs));
-        float widthOfRHSText = text.getLocalBounds().width;
-        float freeSpaceHor = dimensionPtr->currentNodeSideLength() - widthOfGText - widthOfRHSText;
-        text.setPosition(sf::Vector2f(coords.x + freeSpaceHor + widthOfGText - NODE_INFO_OFFSET, coords.y + NODE_INFO_OFFSET));
-        windowPtr->draw(text);
-
-        std::string keyString = "[" + dToStr(node.key.k1) + ":" + dToStr(node.key.k2) + "]";
-        text.setString(keyString);
-        float halfOfText = text.getLocalBounds().width / 2;
-
-        float buttomOfTopRow = text.getLocalBounds().height + NODE_INFO_OFFSET;
-        float heightKeyOffset = dimensionPtr->currentNodeSideLength() - buttomOfTopRow - NODE_INFO_OFFSET;
-
-        float halfOfNode = static_cast<float>(dimensionPtr->currentNodeSideLength()) / 2;
-        float diff = halfOfNode - halfOfText;
-        text.setPosition(sf::Vector2f(coords.x + diff, coords.y + NODE_INFO_OFFSET + heightKeyOffset));
-        windowPtr->draw(text);
-
-        factorRect.setPosition(sf::Vector2f(coords.x, coords.y + (halfOfNode - factorRect.getSize().y/2)));
-        factorRect.setFillColor(sf::Color(100 + 14 * node.factor,0,140 - 14 * node.factor));
-        windowPtr->draw(factorRect);
     }
 
 
@@ -177,16 +137,6 @@ namespace Pathfinding::Rendering
         }
     }
 
-
-    void Renderer::renderNode(const Node &node, sf::Vector2f coords)
-    {
-        nodeRect.setPosition(sf::Vector2f(coords.x, coords.y));
-        auto color = stateColor(node.state);
-        if(node.state == NodeState::Blocked) { color = blockedNodeColorDiff; }
-        else if(node.state == NodeState::Goal) { color = goalNodeColorDiff; }
-        nodeRect.setFillColor(color);
-        windowPtr->draw(nodeRect);
-    }
 
     void Renderer::renderPath(const std::vector<Node *> &path, sf::Color color)
     {

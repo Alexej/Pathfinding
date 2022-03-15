@@ -16,7 +16,7 @@ namespace Pathfinding::Algorithms
 
     double DefaultCostFunction::calculate(const Node *from, const Node *to)
     {
-        if (blocked(to))
+        if (blocked(to) || blocked(from))
         {
             return infinity();
         }
