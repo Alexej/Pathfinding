@@ -4,13 +4,13 @@ namespace Pathfinding::Core
 {
     using Pathfinding::Datastructures::Node;
 
-    ApplicationState::ApplicationState(GraphDimension dim, AlgorithmStepSpeed speed)
-    : dimension(dim), stepSpeed(speed)
+    ApplicationState::ApplicationState(GraphDimension dim)
+    : dimension(dim)
     {
     }
 
     bool ApplicationState::algorithmFinished() const
     {
-        return currentState == State::FOUND_PATH || currentState == State::NO_PATH;
+        return currentState == AlgorithmState::FOUND_PATH || currentState == AlgorithmState::NO_PATH;
     }
 }

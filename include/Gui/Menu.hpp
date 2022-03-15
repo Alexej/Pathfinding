@@ -62,8 +62,6 @@ namespace Pathfinding::Gui
 
             void showPathFlags();
 
-            void showAlgorithmStepSpeedComboBox();
-
             void showNumberOfNodesComboBox();
 
             void showSearchResults();
@@ -71,6 +69,8 @@ namespace Pathfinding::Gui
             void showDoneState();
 
             void showAStarPath();
+
+            void showStepSpeed();
             
         private:
             float offset; 

@@ -149,7 +149,7 @@ namespace Pathfinding::Helpers
         if (graph->node(mappedCoordinates)->state != NodeState::Blocked && obsticlesEvents())
         {
             LatticeGraphHelpers::blockNode(graph, mappedCoordinates);
-            if (appStateSPtr->currentState == State::SEARCHING)
+            if (appStateSPtr->currentState == AlgorithmState::SEARCHING)
             {
                 edgeChangeCallBack(graph->node(mappedCoordinates));
             }
@@ -162,7 +162,7 @@ namespace Pathfinding::Helpers
         if (graph->node(mappedCoordinates)->state != NodeState::Free && obsticlesEvents())
         {
             LatticeGraphHelpers::clearNode(graph, mappedCoordinates);
-            if (appStateSPtr->currentState == State::SEARCHING)
+            if (appStateSPtr->currentState == AlgorithmState::SEARCHING)
             {
                 edgeChangeCallBack(graph->node(mappedCoordinates));
             }

@@ -3,11 +3,11 @@
 
 #include <cstdint>
 
-#include "IDStarLiteFunction.hpp"
+#include "IInformedSearchAlgorithmFunctions.hpp"
 
 namespace Pathfinding::Abstract
 {
-    class IHeuristic : public IDStarLiteFunction
+    class IHeuristic : public IInformedSearchAlgorithmFunctions
     {
     };
 }

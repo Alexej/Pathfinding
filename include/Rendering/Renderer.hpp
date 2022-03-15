@@ -66,8 +66,8 @@ namespace Pathfinding::Rendering
         PCGraphDimension *dimensionPtr = nullptr;
         std::shared_ptr<PAIFontLoader> fontLoaderSPtr;
 
-        sf::Color goalNodeColorDiff;
-        sf::Color blockedNodeColorDiff;
+        sf::Color startNodeGradient;
+        sf::Color blockedNodeGradient;
         Gradients gradients;
 
         DrawableNode drawableNode;

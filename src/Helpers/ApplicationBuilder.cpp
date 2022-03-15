@@ -55,11 +55,6 @@ namespace Pathfinding::Helpers
         applicationUPtr = std::make_unique<Application>();
     }
 
-    void ApplicationBuilder::setStepSpeed(std::initializer_list<int32_t> speeds)
-    {
-        stepSpeed = AlgorithmStepSpeed(speeds);
-    }
-
     void ApplicationBuilder::setDimension(std::initializer_list<int32_t> numberOfNodesInRow)
     {
         dimension = GraphDimension(GRID_FIELD_WIDTH, numberOfNodesInRow);
@@ -93,7 +88,7 @@ namespace Pathfinding::Helpers
         std::shared_ptr<ILatticeGraph> latticeGraph = std::make_shared<LatticeGraph>(dimension.width(), dimension.height());
         applicationUPtr->latGraphWrapUPtr = std::make_shared<LatticeGraphWrapper>(latticeGraph);
         applicationUPtr->window.create(sf::VideoMode(APPLICATION_WINDOW_WIDTH, GRID_FIELD_HEIGHT), APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close);
-        applicationUPtr->appState = ApplicationState(dimension, stepSpeed);
+        applicationUPtr->appState = ApplicationState(dimension);
         applicationUPtr->eventManagerUPtr = std::make_unique<EventManager>(&applicationUPtr->window);
         applicationUPtr->menuUPtr = std::make_unique<Menu>(&applicationUPtr->appState, &applicationUPtr->aStarCache, &applicationUPtr->dStarCache);
         applicationUPtr->dstarLiteUPtr = std::make_unique<DStarLite>(applicationUPtr->latGraphWrapUPtr);
@@ -113,7 +108,6 @@ namespace Pathfinding::Helpers
         applicationUPtr->graphOpsUPtr->addEdgeChangeCallBack(std::bind(&IDStarLite::addChangedNode, applicationUPtr->dstarLiteUPtr.get(), _1));
         applicationUPtr->window.setFramerateLimit(APP_FPS);
         applicationUPtr->dimensionPtr = &applicationUPtr->appState.dimension;
-        applicationUPtr->algoStepSpeedPtr = &applicationUPtr->appState.stepSpeed;
     }
 
     void ApplicationBuilder::createEventManagerBindings()

@@ -35,10 +35,6 @@ namespace Pathfinding::Algorithms
     using Pathfinding::Helpers::LatticeGraphHelpers;
     using Pathfinding::Abstract::ICostFunction;
 
-    namespace
-    {
-
-    }
 
     DStarLite::DStarLite(std::shared_ptr<ALatGraphWr> latticeGraphWrapperSPtr_)
         : latticeGraphWrapperSPtr(latticeGraphWrapperSPtr_) {}

@@ -21,7 +21,7 @@ namespace ImGui
 }
 
 
-namespace Pathfinding::Core { enum class State; }
+namespace Pathfinding::Core { enum class AlgorithmState; }
 namespace Pathfinding::Datastructures { struct PathfinderCache; }
 namespace Pathfinding::Datastructures { enum class NodeState; }
 
@@ -30,13 +30,13 @@ namespace Pathfinding::Helpers
 {
     std::string mapNodeStateToText(Pathfinding::Datastructures::NodeState state);
 
-    std::string mapStateToText(Pathfinding::Core::State state);
+    std::string mapStateToText(Pathfinding::Core::AlgorithmState state);
 
     void printLargeText(std::string text, double factor);
 
     void showStatistic(Pathfinding::Datastructures::PathfinderCache * cache);
 
-    std::array<uint32_t, 3> getStateColor(Pathfinding::Core::State state);
+    std::array<uint32_t, 3> getStateColor(Pathfinding::Core::AlgorithmState state);
 }
 
 #endif /* F5A37FC3_5BE4_4424_83EB_BB7A269732B3 */

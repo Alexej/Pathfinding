@@ -46,14 +46,14 @@ class DStarLiteTester
             dStarLiteUPtr->setCostFunction(std::make_unique<DefaultCostFunction>(diagonalCost, straightCost));
         }
 
-        State getState() const
+        AlgorithmState getState() const
         {
             return state;    
         }
 
         bool done() const
         {
-            return state != State::NO_PATH || state != State::FOUND_PATH;
+            return state != AlgorithmState::NO_PATH || state != AlgorithmState::FOUND_PATH;
         }
         
         
@@ -86,12 +86,12 @@ class DStarLiteTester
     private:
         void pathFound()
         {
-            state = State::FOUND_PATH;
+            state = AlgorithmState::FOUND_PATH;
         }
 
         void noPath()
         {
-            state = State::NO_PATH;
+            state = AlgorithmState::NO_PATH;
         }
 
     public:
@@ -100,7 +100,7 @@ class DStarLiteTester
         int32_t heightStart = 5;
         int32_t widthStart = 5;
         std::unique_ptr<IDStarLite> dStarLiteUPtr = nullptr;
-        State state = State::READY;
+        AlgorithmState state = AlgorithmState::READY;
 };
 
 

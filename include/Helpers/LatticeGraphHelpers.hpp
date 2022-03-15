@@ -34,7 +34,7 @@ namespace Pathfinding::Helpers
                                                      std::function<void(const PDNode * node, int32_t h, int32_t w)>);
                                                      
         static void  iterateOverLatticeGraph(shptr<PAILatticeGraph> latticeGraphSPtr,
-                                                     std::function<void(PDNode * node, int32_t h, int32_t w)>);                              
+                                                std::function<void(PDNode * node, int32_t h, int32_t w)>);                              
     };
 }
 

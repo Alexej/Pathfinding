@@ -14,15 +14,14 @@ namespace Pathfinding::Test
     {
         private:
             using PDVec2i = Pathfinding::Datastructures::Vec2i;
-            using PCState = Pathfinding::Core::State;
-            using PCApplicationState = Pathfinding::Core::State;
+            using PCAlgorithmState = Pathfinding::Core::AlgorithmState;
         public:
             std::string name;
             PDVec2i size;
             PDVec2i start;
             PDVec2i goal;
             std::vector<std::pair<CommandsKeyWords, PDVec2i>> commands;
-            PCApplicationState result;
+            PCAlgorithmState result;
     };
 }
 

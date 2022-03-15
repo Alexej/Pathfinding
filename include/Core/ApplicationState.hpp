@@ -3,13 +3,12 @@
 
 #include "Constants.hpp"
 #include "GraphDimension.hpp"
-#include "AlgorithmStepSpeed.hpp"
 
 namespace Pathfinding::Datastructures { struct Node; }
 
 namespace Pathfinding::Core
 {
-    enum class State { READY, SEARCHING, FOUND_PATH, NO_PATH };
+    enum class AlgorithmState { READY, SEARCHING, FOUND_PATH, NO_PATH };
 
     struct ApplicationState
     {
@@ -18,15 +17,14 @@ namespace Pathfinding::Core
         public:
             ApplicationState() = default;
 
-            ApplicationState(GraphDimension dim, AlgorithmStepSpeed speed);
+            ApplicationState(GraphDimension dim);
 
             bool algorithmFinished() const;
 
             GraphDimension dimension;
-            AlgorithmStepSpeed stepSpeed;
-            State currentState = State::READY;
+            int32_t stepSpeed = Pathfinding::Constants::DEFAULT_STEP_SPEED;
+            AlgorithmState currentState = AlgorithmState::READY;
             bool showNodeInfo = false;
-            bool stateChanged = false;
             const PDNode *nodeUnderCursor = nullptr;
             bool autoStep = false;
             bool showPathPoints = true;

@@ -7,7 +7,6 @@
 #include "Constants.hpp"
 #include "ApplicationState.hpp"
 #include "GraphDimension.hpp"
-#include "AlgorithmStepSpeed.hpp"
 #include "Node.hpp"
 #include "GuiHelpers.hpp"
 #include "PathfinderCache.hpp"
@@ -15,9 +14,8 @@
 namespace Pathfinding::Gui
 {
     using namespace Pathfinding::Constants;
-    using Pathfinding::Core::AlgorithmStepSpeed;
     using Pathfinding::Core::ApplicationState;
-    using Pathfinding::Core::State;
+    using Pathfinding::Core::AlgorithmState;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::PathfinderCache;
@@ -37,7 +35,6 @@ namespace Pathfinding::Gui
           dCache(dCache_)
     {
         dimensionPtr = &appStatePtr->dimension;
-        algoStepSpeedPtr = &appStatePtr->stepSpeed;
     }
 
     void Menu::show()
@@ -55,17 +52,17 @@ namespace Pathfinding::Gui
 
         switch (appStatePtr->currentState)
         {
-        case State::READY:
+        case AlgorithmState::READY:
             showReadyStateElements();
             break;
-        case State::SEARCHING:
+        case AlgorithmState::SEARCHING:
             showSearchingElements();
             break;
         }
 
         showCommonElements();
 
-        if (appStatePtr->currentState == State::FOUND_PATH)
+        if (appStatePtr->currentState == AlgorithmState::FOUND_PATH)
         {
             showDoneState();
         }
@@ -110,13 +107,19 @@ namespace Pathfinding::Gui
                          static_cast<int32_t>(values.size()));
     }
 
+    void Menu::showStepSpeed()
+    {
+        ImGui::SliderInt("Speed[MS]", &appStatePtr->stepSpeed, 0, 10000);
+        ImGui::SameLine();
+        ImGui::HelpMarker("Step Speed for\nAutostep function");
+    }
+
     void Menu::showCommonElements()
     {
         if (ImGui::CollapsingHeader("Runtime Options"))
         {
             ImGui::Separator();
-
-            showAlgorithmStepSpeedComboBox();
+            showStepSpeed();
             showAutoStepFlag();
             showPathFlags();
             if (dimensionPtr->canShowNodeInfo())
@@ -149,7 +152,7 @@ namespace Pathfinding::Gui
             resetCallback();
         }
 
-        if (appStatePtr->currentState != State::READY)
+        if (appStatePtr->currentState != AlgorithmState::READY)
         {
             if (appStatePtr->runAStar)
             {
@@ -159,21 +162,11 @@ namespace Pathfinding::Gui
         }
     }
 
-    void Menu::showAlgorithmStepSpeedComboBox()
-    {
-        static int32_t itemCurrentSpeed = algoStepSpeedPtr->getCurrentStepSpeedIndex();
-        auto speeds = algoStepSpeedPtr->getStepSpeedVecString();
-        if (ImGui::custom_combo("StepSpeed", &itemCurrentSpeed, speeds))
-        {
-            algoStepSpeedPtr->setCurrentAlgorithmStepSpeedIndex(itemCurrentSpeed);
-        }
-    }
-
     void Menu::showNumberOfNodesComboBox()
     {
         static int32_t itemCurrentNumberOfNodes = dimensionPtr->currentNumberOfNodesIndex();
         auto numberOfNodesInRow = dimensionPtr->getNumberOfNodesInRowString();
-        if (ImGui::custom_combo("NumberOfNodes", &itemCurrentNumberOfNodes, numberOfNodesInRow))
+        if (ImGui::custom_combo("# Of Nodes", &itemCurrentNumberOfNodes, numberOfNodesInRow))
         {
             numberOfNodesChangedCallBack(itemCurrentNumberOfNodes);
             if (!dimensionPtr->canShowNodeInfo())

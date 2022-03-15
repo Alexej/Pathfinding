@@ -11,7 +11,7 @@ namespace Pathfinding::Rendering
 {
     using namespace Pathfinding::Constants;
     using Pathfinding::Core::ApplicationState;
-    using Pathfinding::Core::State;
+    using Pathfinding::Core::AlgorithmState;
     using Pathfinding::Abstract::IFontLoader;
     using Pathfinding::Abstract::ALatGraphWr;
     using Pathfinding::Helpers::LatticeGraphHelpers;
@@ -81,8 +81,8 @@ namespace Pathfinding::Rendering
         {
             auto coords = getNodePosition(node, dimensionPtr->currentNodeSideLength());
             auto color = stateColor(node->state);
-            if(node->state == NodeState::Blocked) { color = blockedNodeColorDiff; }
-            else if(node->state == NodeState::Goal) { color = goalNodeColorDiff; }
+            if(node->state == NodeState::Blocked) { color = blockedNodeGradient; }
+            else if(node->state == NodeState::Start) { color = startNodeGradient; }
             drawableNode.prepare(*node, coords, color, appStateSPtr->showNodeInfo);
             windowPtr->draw(drawableNode);
         });
@@ -91,21 +91,21 @@ namespace Pathfinding::Rendering
 
     void Renderer::reset()
     {
-        goalNodeColorDiff = convertToSfmlColor(GOAL_NODE_COLOR);
-        blockedNodeColorDiff = convertToSfmlColor(BLOCKED_NODE_COLOR);
+        startNodeGradient = convertToSfmlColor(START_NODE_COLOR);
+        blockedNodeGradient = convertToSfmlColor(BLOCKED_NODE_COLOR);
     }
 
     void Renderer::updateColors()
     {
-        if(appStateSPtr->currentState == State::NO_PATH)
+        if(appStateSPtr->currentState == AlgorithmState::NO_PATH)
         {
-            gradients.gradientBlockedRed(blockedNodeColorDiff.r, 5);
-            gradients.gradientBlockedBlue(blockedNodeColorDiff.b, 1);
+            gradients.gradientBlockedRed(blockedNodeGradient.r, 5);
+            gradients.gradientBlockedBlue(blockedNodeGradient.b, 1);
         }
-        else if(appStateSPtr->currentState == State::FOUND_PATH)
+        else if(appStateSPtr->currentState == AlgorithmState::FOUND_PATH)
         {
-            gradients.gradientGoalRed(goalNodeColorDiff.r, 5);   
-            gradients.gradientGoalGreen(goalNodeColorDiff.g, 1);
+            gradients.gradientGoalRed(startNodeGradient.r, 5);   
+            gradients.gradientGoalGreen(startNodeGradient.g, 1);
         }
     }
 

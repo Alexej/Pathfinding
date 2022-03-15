@@ -4,7 +4,6 @@
 #include <memory>
 #include <initializer_list>
 
-#include "AlgorithmStepSpeed.hpp"
 #include "GraphDimension.hpp"
 #include <memory>
 
@@ -18,7 +17,6 @@ namespace Pathfinding::Helpers
     class ApplicationBuilder
     {
     private:
-        using PDAlgorithmStepSpeed = Pathfinding::Core::AlgorithmStepSpeed;
         using PDGraphDimension = Pathfinding::Core::GraphDimension;
         using PCApplication = Pathfinding::Core::Application;
         using PAIApplication = Pathfinding::Abstract::IApplication;
@@ -26,8 +24,6 @@ namespace Pathfinding::Helpers
 
     public:
         ApplicationBuilder();
-
-        void setStepSpeed(std::initializer_list<int32_t> speeds);
 
         void setDimension(std::initializer_list<int32_t> numberOfNodesInRow);
 
@@ -53,7 +49,6 @@ namespace Pathfinding::Helpers
     private:
         std::unique_ptr<PCApplication> applicationUPtr = nullptr;
         std::shared_ptr<PAIFontLoader> fontLoaderSPtr;
-        PDAlgorithmStepSpeed stepSpeed;
         PDGraphDimension dimension;
         int32_t diagonalCost;
         int32_t straightCost;

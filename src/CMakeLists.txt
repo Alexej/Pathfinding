@@ -16,7 +16,6 @@ set(SOURCES_PATHFINDING
   Rendering/DrawableNode.cpp
   Rendering/DrawablePath.cpp
   Core/GraphDimension.cpp
-  Core/AlgorithmStepSpeed.cpp
   Helpers/RootPath.cpp
   Helpers/GuiHelpers.cpp
   Helpers/SFMLHelpers.cpp

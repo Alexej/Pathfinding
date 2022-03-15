@@ -12,7 +12,6 @@
 
 namespace ImGui
 {
-
     void HelpMarker(const char* desc)
     {
         ImGui::TextDisabled("(?)");
@@ -52,7 +51,7 @@ namespace Pathfinding::Helpers
 {
     using Pathfinding::Datastructures::PathfinderCache;
     using Pathfinding::Datastructures::NodeState;
-    using Pathfinding::Core::State;
+    using Pathfinding::Core::AlgorithmState;
     
     std::string mapNodeStateToText(NodeState state)
     {
@@ -81,42 +80,42 @@ namespace Pathfinding::Helpers
         return str;
     }
 
-    std::string mapStateToText(State state)
+    std::string mapStateToText(AlgorithmState state)
     {
         std::string str;
         switch (state)
         {
-        case State::READY:
+        case AlgorithmState::READY:
             str = "READY";
             break;
-        case State::SEARCHING:
+        case AlgorithmState::SEARCHING:
             str = "SEARCHING";
             break;
-        case State::FOUND_PATH:
+        case AlgorithmState::FOUND_PATH:
             str = "DONE";
             break;
-        case State::NO_PATH:
+        case AlgorithmState::NO_PATH:
             str = "NO_PATH";
             break;
         }
         return str;
     }
 
-    std::array<uint32_t, 3> getStateColor(Pathfinding::Core::State state)
+    std::array<uint32_t, 3> getStateColor(Pathfinding::Core::AlgorithmState state)
     {
         std::array<uint32_t, 3> color;
         switch (state)
         {
-        case State::READY:
+        case AlgorithmState::READY:
             color = {255,255,255};
             break;
-        case State::SEARCHING:
+        case AlgorithmState::SEARCHING:
             color = {90,60,160};
             break;
-        case State::FOUND_PATH:
+        case AlgorithmState::FOUND_PATH:
             color = {0,255,0};
             break;
-        case State::NO_PATH:
+        case AlgorithmState::NO_PATH:
             color = {255,0,0};
             break;
         }

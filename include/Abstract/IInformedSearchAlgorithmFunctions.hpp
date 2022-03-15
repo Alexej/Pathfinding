@@ -5,14 +5,14 @@ namespace Pathfinding::Datastructures { struct Node; }
 
 namespace Pathfinding::Abstract
 {
-    class IDStarLiteFunction
+    class IInformedSearchAlgorithmFunctions
     {
         protected:
             using PDNode = Pathfinding::Datastructures::Node;
         public:
             virtual double calculate(const PDNode *from, const PDNode *to) = 0;
             
-            virtual ~IDStarLiteFunction() = default;
+            virtual ~IInformedSearchAlgorithmFunctions() = default;
             
     };
 }

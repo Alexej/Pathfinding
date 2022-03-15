@@ -22,7 +22,7 @@ namespace Pathfinding::Core
     void Application::startAlgorithm()
     {
         graphOpsUPtr->disableEndpointsEvent();
-        appState.currentState = State::SEARCHING;
+        appState.currentState = AlgorithmState::SEARCHING;
 
         dstarLiteUPtr->initialize();
         dStarCache.cache(dstarLiteUPtr->initialRun());
@@ -55,10 +55,10 @@ namespace Pathfinding::Core
     void Application::update(sf::Clock &deltaClock)
     {
         int32_t dt = deltaClock.getElapsedTime().asMilliseconds();
-        if (appState.currentState == State::SEARCHING && appState.autoStep)
+        if (appState.currentState == AlgorithmState::SEARCHING && appState.autoStep)
         {
             accumulator += dt;
-            if (accumulator > algoStepSpeedPtr->getCurrentStepSpeed())
+            if (accumulator > appState.stepSpeed)
             {
                 step();
                 accumulator = 0;
@@ -82,7 +82,7 @@ namespace Pathfinding::Core
         window.clear();
         ImGui::SFML::Render(window);
         rendererUPtr->render(latGraphWrapUPtr);
-        if (appState.currentState == State::FOUND_PATH || appState.currentState == State::SEARCHING)
+        if (appState.currentState == AlgorithmState::FOUND_PATH || appState.currentState == AlgorithmState::SEARCHING)
         {
             if(appState.showAStarPath)
             {
@@ -97,7 +97,7 @@ namespace Pathfinding::Core
     {
         dstarLiteUPtr->reset();
         latGraphWrapUPtr->resize(dimensionPtr->height(), dimensionPtr->width());
-        appState.currentState = State::READY;
+        appState.currentState = AlgorithmState::READY;
         graphOpsUPtr->enableEndPointsEvent();
         graphOpsUPtr->enableObsticlesEvents();
         appState.nodeUnderCursor = nullptr;
@@ -109,20 +109,20 @@ namespace Pathfinding::Core
     void Application::done()
     {
         graphOpsUPtr->disableObsticlesEvents();
-        appState.currentState = State::FOUND_PATH;
+        appState.currentState = AlgorithmState::FOUND_PATH;
     }
 
     void Application::noPath()
     {
         graphOpsUPtr->disableObsticlesEvents();
-        appState.currentState = State::NO_PATH;
+        appState.currentState = AlgorithmState::NO_PATH;
     }
  
     void Application::randomGraph()
     {
         do
         {
-            reset();
+            latGraphWrapUPtr->resize(dimensionPtr->height(), dimensionPtr->width());
             LatticeGraphHelpers::initRandomGraph(latGraphWrapUPtr->latGraphSPtr, ri);
         } while(!aStarUPtr->calculatePath(latGraphWrapUPtr).pathFound);
     }

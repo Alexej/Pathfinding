@@ -57,6 +57,7 @@ namespace Pathfinding::Constants
 
     // DStar flags
     constexpr auto DONT_SET_START_STATE = true;
+    constexpr int32_t DEFAULT_STEP_SPEED = 1000;
 
     // Random
     constexpr int32_t LOWER_DEFAULT_RANDOM_NUMBER = 0;

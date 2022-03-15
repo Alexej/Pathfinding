@@ -8,7 +8,7 @@
 namespace Pathfinding::Test
 {
     using Pathfinding::Datastructures::Vec2i;
-    using Pathfinding::Core::State;
+    using Pathfinding::Core::AlgorithmState;
     namespace
     {
         CommandsKeyWords mapStringToCommandKeyWord(std::string commandString)
@@ -30,16 +30,16 @@ namespace Pathfinding::Test
         }
 
 
-        State convertStringToState(std::string stateStr)
+        AlgorithmState convertStringToState(std::string stateStr)
         {
-            State state;
+            AlgorithmState state;
             if(stateStr == std::string("NO_PATH"))
             {
-                state = State::NO_PATH;
+                state = AlgorithmState::NO_PATH;
             }
             else if(stateStr == std::string("DONE"))
             {
-                state = State::FOUND_PATH;
+                state = AlgorithmState::FOUND_PATH;
             }
             else
             {
