@@ -29,7 +29,7 @@ namespace Pathfinding::Core
             bool stateChanged = false;
             const PDNode *nodeUnderCursor = nullptr;
             bool autoStep = false;
-            bool showPath = true;
+            bool showPathPoints = true;
             bool showPathLines = true;
             bool runAStar = false;
             bool showAStarPath = false;

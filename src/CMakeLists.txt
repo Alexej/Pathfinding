@@ -12,6 +12,7 @@ set(SOURCES_PATHFINDING
   Core/ApplicationState.cpp
   Rendering/Renderer.cpp
   Rendering/DrawableNode.cpp
+  Rendering/DrawablePath.cpp
   Core/GraphDimension.cpp
   Core/AlgorithmStepSpeed.cpp
   Helpers/RootPath.cpp

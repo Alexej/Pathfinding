@@ -9,15 +9,14 @@
 #include "RenderingHelpers.hpp"
 #include "IRenderer.hpp"
 #include "DrawableNode.hpp"
+#include "DrawablePath.hpp"
 
-namespace Pathfinding::Datastructures { class LatticeGraph; }
 namespace Pathfinding::Datastructures { struct Node; }
-namespace Pathfinding::Datastructures { enum class NodeState; }
-namespace Pathfinding::Abstract { class ALatGraphWr; }
-namespace Pathfinding::Abstract { class IApplicationState; }
-namespace Pathfinding::Abstract { class IFontLoader; }
-namespace Pathfinding::Core { class GraphDimension; }
 namespace Pathfinding::Core { struct ApplicationState; }
+namespace Pathfinding::Core { class GraphDimension; }
+namespace Pathfinding::Abstract { class ALatGraphWr; }
+namespace Pathfinding::Abstract { class IFontLoader; }
+namespace Pathfinding::Helpers { class ColorGradient; }
 
 namespace Pathfinding::Rendering
 {
@@ -35,9 +34,7 @@ namespace Pathfinding::Rendering
     class Renderer final : public Pathfinding::Abstract::IRenderer
     {
     private:
-        using PDLatticeGraph = Pathfinding::Datastructures::LatticeGraph;
         using PDNode = Pathfinding::Datastructures::Node;
-        using PDNodeState = Pathfinding::Datastructures::NodeState;
         using PCApplicationState = Pathfinding::Core::ApplicationState;
         using PCGraphDimension = Pathfinding::Core::GraphDimension;
         using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
@@ -59,33 +56,22 @@ namespace Pathfinding::Rendering
     private:
         void init();
                 
-        void renderNode(const PDNode &node, sf::Vector2f coords);
-        
-        void renderNodeInfo(const PDNode &node, sf::Vector2f coords);
-        
-        void renderPathLineEndPoints(const std::vector<PDNode *> &path, sf::Vector2f pointPositionOffset, sf::Color color);
-        
-        void renderPathLines(const std::vector<PDNode *> &path, sf::Vector2f pointPositionOffset);
-                
         void updateColorDiff();
         
-        void setPathColor(sf::Color color);
-
         void updateColors();
 
     private:
         sf::RenderWindow *windowPtr = nullptr;
         PCApplicationState *appStateSPtr = nullptr;
         PCGraphDimension *dimensionPtr = nullptr;
+        std::shared_ptr<PAIFontLoader> fontLoaderSPtr;
+
         sf::Color goalNodeColorDiff;
         sf::Color blockedNodeColorDiff;
-        bool colorUp = true;
-        std::shared_ptr<PAIFontLoader> fontLoaderSPtr;
         Gradients gradients;
+
         DrawableNode drawableNode;
-        sf::CircleShape nodePoint;
-        sf::RectangleShape diagonalLine;
-        sf::RectangleShape straightLine;
+        DrawablePath drawablePath;
     };
 }
 

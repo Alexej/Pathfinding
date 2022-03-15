@@ -16,10 +16,14 @@ namespace Pathfinding::Rendering
             using PDNode = Pathfinding::Datastructures::Node;
         public:
             void init(const sf::Font & font);
+
             void prepare(const PDNode & node ,sf::Vector2f coords, sf::Color color, bool renderInfo);
+
             void resize(sf::Vector2f nodeSize, sf::Vector2f factorSize);
+
         private:
             void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+            
         private:
             sf::Text rhs;
             sf::Text g;

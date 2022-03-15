@@ -253,8 +253,8 @@ namespace Pathfinding::Gui
 
     void Menu::showPathFlags()
     {
-        ImGui::Checkbox("Render path", &appStatePtr->showPath);
-        if (appStatePtr->showPath)
+        ImGui::Checkbox("Render path", &appStatePtr->showPathPoints);
+        if (appStatePtr->showPathPoints)
         {
             ImGui::Checkbox("Render path lines", &appStatePtr->showPathLines);
         }

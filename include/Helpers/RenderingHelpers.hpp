@@ -32,6 +32,7 @@ namespace Pathfinding::Helpers
             bool increment = true;
     };
 
+
     inline sf::Color convertToSfmlColor(std::array<uint8_t, 3> color)
     {
         return {color[Pathfinding::Constants::RED],
