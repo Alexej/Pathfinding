@@ -9,11 +9,18 @@
 * Node info is rendered(if nodes are large enough) and also shown in the Menu.  <br/>
 * A* can be run in parallel with D* lite at each step.  <br/>
 * No major bugs as far sa I know.  <br/>
+* Easy language for testcases.  <br/>
 
 ## Demos:
 ---
 ![alt text](https://github.com/Alexej/Pathfinding/blob/main/images/demo1.gif "Demo 1")
-![alt text](https://github.com/Alexej/Pathfinding/blob/main/images/demo2.gif "Demo 2")  
+
+## TODO:
+---
+* More tests.  <br/>
+* Documentation.  <br/>
+* Overall design improvements  <br/>
+* Better naming  <br/>
 
 ## References:
 ---
