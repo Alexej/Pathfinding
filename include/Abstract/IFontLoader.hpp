@@ -10,6 +10,7 @@ namespace Pathfinding::Abstract
         public:
             virtual void loadFont(std::string fontName) = 0;
             virtual const sf::Font & getFont(std::string fontName) const = 0;
+            virtual ~IFontLoader() = default;
 
     };
 }

@@ -78,12 +78,12 @@ namespace Pathfinding::Algorithms
     void DStarLite::computeShortestPath()
     {
         nodexExpanded = 0;
-        while (U.topKey() < calculateKey(sStart) || !locallyConsistent(sStart))
+        while (U.topKey() < calculateAndUpdateKey(sStart) || !locallyConsistent(sStart))
         {
             Key kOld = U.topKey();
             ++nodexExpanded;
             Node *u = popFromQueueAndUpdateState();
-            if (kOld < calculateKey(u))
+            if (kOld < calculateAndUpdateKey(u))
             {
                 insertIntoQueueAndUpdateStateAndKey(u);
             }
@@ -94,6 +94,7 @@ namespace Pathfinding::Algorithms
             }
             else
             {
+                printf("underconsistent  %i %i \n", u->location.height, u->location.height);
                 u->g = infinity();
                 updateNeighbors(u);
                 UpdateVertex(u);
@@ -101,7 +102,7 @@ namespace Pathfinding::Algorithms
         }
     }
 
-    Key DStarLite::calculateKey(Node *s)
+    Key DStarLite::calculateAndUpdateKey(Node *s)
     {
         auto pseudoG = std::min(s->g, s->rhs);
         auto k1New = pseudoG + heuristicUPtr->calculate(sStart, s) + kM;
@@ -156,7 +157,7 @@ namespace Pathfinding::Algorithms
 
     void DStarLite::insertIntoQueueAndUpdateKey(Node *node)
     {
-        calculateKey(node);
+        calculateAndUpdateKey(node);
         U.insert(node);
     }
 

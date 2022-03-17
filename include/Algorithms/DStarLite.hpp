@@ -57,7 +57,7 @@ namespace Pathfinding::Algorithms
         
         void UpdateVertex(PDNode *node);
         
-        PDKey calculateKey(PDNode *node);
+        PDKey calculateAndUpdateKey(PDNode *node);
         
         std::pair<double, PDNode *> getMinCG(PDNode *u);
         

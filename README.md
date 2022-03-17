@@ -1,6 +1,10 @@
 # Visualization of D* lite pathfinding algorithm. Not done yet.
 ## Libraries used: SFML, IMGUI, Catch2
 
+## Goal of this project:
+---
+Learning LPA* and D* lite.
+
 ## Functionality:
 ---
 * Start and Goal positions can be changed.  <br/>
@@ -18,6 +22,7 @@
 ## TODO:
 ---
 * More tests.  <br/>
+* Code Comments  <br/>
 * Documentation.  <br/>
 * Overall design improvements  <br/>
 * Better naming  <br/>
