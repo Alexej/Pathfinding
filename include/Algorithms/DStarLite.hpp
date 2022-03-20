@@ -57,7 +57,7 @@ namespace Pathfinding::Algorithms
         
         void UpdateVertex(PDNode *node);
         
-        PDKey calculateAndUpdateKey(PDNode *node);
+        void updateKey(PDNode *node);
         
         std::pair<double, PDNode *> getMinCG(PDNode *u);
         
@@ -78,6 +78,8 @@ namespace Pathfinding::Algorithms
         void insertIntoQueueAndUpdateKey(PDNode * node);
         
         double costThisFar(const PDNode * u, const PDNode * neighbor);
+
+        PDKey calculateKey(const PDNode *s) const;
         
     private:
         std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr = nullptr;

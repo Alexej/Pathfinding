@@ -59,13 +59,13 @@ namespace Pathfinding::Algorithms
         while (!openSet.empty())
         {
             auto current = openSet.top().node;
+            nodesExpanded.push_back(current);
             if (current == graphWrapper->goalNode())
             {
                 return {true, reconstructPath(cameFrom, current), nodesExpanded};
             }
             openSet.pop();
             auto neighbors = LatticeGraphHelpers::neighbors(graphWrapper->latGraphSPtr, current);
-            nodesExpanded.push_back(current);
             for (auto neighbor : neighbors)
             {
                 auto tentativeGscore = getMapDefaultInf(gScore, current) + costUPtr->calculate(current, neighbor);
