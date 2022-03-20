@@ -128,7 +128,7 @@ TEST_CASE( "Testing scenarios" ) {
                         mockObject.changedNode(mockObject.latGraphWrapSPtr->latGraphSPtr->node(command.second));
                         }
                         break;
-                    case CommandsKeyWords::ERASE:
+                    case CommandsKeyWords::CLEAR:
                         {
                         auto node = mockObject.latGraphWrapSPtr->latGraphSPtr->node(command.second);
                         node->state = NodeState::Free;

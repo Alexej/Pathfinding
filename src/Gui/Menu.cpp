@@ -13,6 +13,8 @@
 
 namespace Pathfinding::Gui
 {
+
+
     using namespace Pathfinding::Constants;
     using Pathfinding::Core::ApplicationState;
     using Pathfinding::Core::AlgorithmState;
@@ -24,6 +26,19 @@ namespace Pathfinding::Gui
     using Pathfinding::Helpers::mapStateToText;
     using Pathfinding::Helpers::printLargeText;
     using Pathfinding::Helpers::showStatistic;
+
+    namespace 
+    {
+        std::vector<int32_t> getSizesOfSubVectors(const std::vector<std::vector<Node *>> & vecOfNodes)
+        {
+            std::vector<int32_t> sizes;
+            for(const auto & subVector : vecOfNodes)
+            {
+                sizes.push_back(static_cast<int32_t>(subVector.size()));
+            }
+            return sizes;
+        }
+    }
 
     Menu::Menu(ApplicationState *appStatePtr_,
                PathfinderCache *aCache_,
@@ -156,9 +171,9 @@ namespace Pathfinding::Gui
         {
             if (appStatePtr->runAStar)
             {
-                showGraph(aCache->nodesExpandedAll, "A* nodes Expanded");
+                showGraph(getSizesOfSubVectors(aCache->nodesExpandedAll), "A* nodes Expanded");
             }
-            showGraph(dCache->nodesExpandedAll, "D* nodes Expanded");
+            showGraph(getSizesOfSubVectors(dCache->nodesExpandedAll), "D* nodes Expanded");
         }
     }
 
@@ -288,11 +303,12 @@ namespace Pathfinding::Gui
                     ImGui::TableSetColumnIndex(0);
                     ImGui::Text(std::to_string(i).c_str());
                     ImGui::TableSetColumnIndex(1);
-                    ImGui::Text(std::to_string(dCache->nodesExpandedAll[i]).c_str());
+                    ImGui::Text(std::to_string(dCache->nodesExpandedAll[i].size()).c_str());
                     ImGui::TableSetColumnIndex(2);
-                    ImGui::Text(std::to_string(aCache->nodesExpandedAll[i]).c_str());
+                    ImGui::Text(std::to_string(aCache->nodesExpandedAll[i].size()).c_str());
                     ImGui::TableSetColumnIndex(3);
-                    int32_t diff = aCache->nodesExpandedAll[i] - dCache->nodesExpandedAll[i];
+                    int32_t diff = static_cast<int32_t>(aCache->nodesExpandedAll[i].size() - 
+                                                        dCache->nodesExpandedAll[i].size());
                     ImGui::Text(std::to_string(diff).c_str());
                 }
                 ImGui::EndTable();

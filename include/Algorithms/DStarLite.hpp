@@ -87,7 +87,7 @@ namespace Pathfinding::Algorithms
         std::unordered_set<PDNode *> nodesChanged;
         std::function<void(void)> doneCallBack_;
         std::function<void(void)> noPathCallBack_;
-        int32_t nodexExpanded;
+        std::vector<PDNode *> nodexExpanded;
         double kM = 0;
     };
 }

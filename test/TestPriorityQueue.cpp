@@ -155,7 +155,7 @@ TEST_CASE( "pop should return the node with the smallest key and delete in from 
 }
 
 
-TEST_CASE( "empty priority queue should return inf inf when topKey is called", "[pop]" ) 
+TEST_CASE( "empty priority queue should return [inf;inf] when topKey is called", "[pop]" ) 
 {
     PriorityQueue queue;
     auto topKey = queue.topKey();

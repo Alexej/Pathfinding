@@ -10,7 +10,7 @@ namespace Pathfinding::Datastructures
     struct PathfinderCache
     {
         std::vector<Node *> currentPath;
-        std::vector<int32_t> nodesExpandedAll;
+        std::vector<std::vector<Node *>> nodesExpandedAll;
 
         void cache(PathfinderReturnType aStarReturnType);
 

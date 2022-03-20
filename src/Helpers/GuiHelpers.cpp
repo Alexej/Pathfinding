@@ -52,6 +52,7 @@ namespace Pathfinding::Helpers
     using Pathfinding::Datastructures::PathfinderCache;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Core::AlgorithmState;
+    using Pathfinding::Datastructures::Node;
     
     std::string mapNodeStateToText(NodeState state)
     {
@@ -132,9 +133,13 @@ namespace Pathfinding::Helpers
 
     void showStatistic(Pathfinding::Datastructures::PathfinderCache * cache)
     {
-        auto nodesExpandedTotal = std::accumulate(cache->nodesExpandedAll.begin(), cache->nodesExpandedAll.end(), 0);
-        auto average = nodesExpandedTotal / cache->nodesExpandedAll.size();
-        auto maxNodesExpanded = std::max_element(cache->nodesExpandedAll.begin(), cache->nodesExpandedAll.end());
+        std::vector<int32_t> sizes;
+        for(const auto & subVec : cache->nodesExpandedAll)
+            sizes.push_back(static_cast<int32_t>(subVec.size()));
+
+        auto nodesExpandedTotal = std::accumulate(sizes.begin(), sizes.end(), 0);
+        auto average = nodesExpandedTotal / sizes.size();
+        auto maxNodesExpanded = std::max_element(sizes.begin(), sizes.end());
         ImGui::Text(std::format("Nodes expaneded total: {}", std::to_string(nodesExpandedTotal)).c_str());
         ImGui::Text(std::format("Nodex expanded on each step(avg) {}", std::to_string(average)).c_str());
         ImGui::Text(std::format("Max number of nodes expanded: {}", std::to_string(*maxNodesExpanded)).c_str());

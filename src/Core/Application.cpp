@@ -130,13 +130,13 @@ namespace Pathfinding::Core
     void Application::step()
     {
         dStarCache.cache(dstarLiteUPtr->moveStart());
-        if(dStarCache.nodesExpandedAll.back() != 0)
+        if(dStarCache.nodesExpandedAll.back().size() != 0)
         {
             runAStar();
         }
         else
         {
-            aStarCache.cache({true, aStarCache.currentPath, 0});
+            aStarCache.cache({true, aStarCache.currentPath, {}});
         }
     }
 

@@ -21,3 +21,9 @@ TEST_CASE( "two objects with the same location should be equal", "[constructor]"
     Vec2i n2(2,3);
     REQUIRE(n1 == n2);
 }
+
+TEST_CASE( "two objects with different locations should be equal", "[constructor]" ) {
+    Vec2i n1(2,3);
+    Vec2i n2(2,53);
+    REQUIRE(n1 != n2);
+}

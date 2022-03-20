@@ -39,8 +39,8 @@ namespace Pathfinding::Test
             const std::regex commentRegex{"^( *#.*)"};
             const std::regex scenarioRegex{"^(SCENARIO) ([a-zA-Z0-9]+) +;$"};
             const std::regex sizeRegex{"^(SIZE) +(VEC2\\(([0-9]):([0-9])\\)) +;$"};
-            const std::regex resultRegex{"^(RESULT) +(DONE|NO_PATH) +;$"};
-            const std::regex commandRegex{"^(STEP|BLOCK|ERASE) +(VEC2\\(([0-9]):([0-9])\\)) +;$"};
+            const std::regex resultRegex{"^(RESULT) +(FOUND_PATH|NO_PATH) +;$"};
+            const std::regex commandRegex{"^(STEP|BLOCK|CLEAR) +(VEC2\\(([0-9]):([0-9])\\)) +;$"};
             const std::regex startRegex{"^(START) +(VEC2\\(([0-9]):([0-9])\\)) +;$"};
             const std::regex goalRegex{"^(GOAL) +(VEC2\\(([0-9]):([0-9])\\)) +;$"};
             const std::regex emptyLineRegex{" *"};

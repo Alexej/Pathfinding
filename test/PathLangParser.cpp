@@ -22,6 +22,10 @@ namespace Pathfinding::Test
             {
                 CommandsKeyWordsReturn = CommandsKeyWords::STEP;
             }
+            else if(commandString == std::string("CLEAR"))
+            {
+                CommandsKeyWordsReturn = CommandsKeyWords::CLEAR;
+            }
             else
             {
                 throw std::exception("Unknown command keyword");
@@ -37,7 +41,7 @@ namespace Pathfinding::Test
             {
                 state = AlgorithmState::NO_PATH;
             }
-            else if(stateStr == std::string("DONE"))
+            else if(stateStr == std::string("FOUND_PATH"))
             {
                 state = AlgorithmState::FOUND_PATH;
             }

@@ -31,7 +31,7 @@ namespace Pathfinding::Algorithms
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
-    using Pathfinding::Helpers::flush;
+    using Pathfinding::Helpers::flushVector;
     using Pathfinding::Helpers::LatticeGraphHelpers;
     using Pathfinding::Abstract::ICostFunction;
 
@@ -70,19 +70,19 @@ namespace Pathfinding::Algorithms
         if (sStart->g == infinity())
         {
             noPathCallBack_();
-            return {false, {}, 0};
+            return {false, {}, {}};
         }
         return computePath();
     }
 
     void DStarLite::computeShortestPath()
     {
-        nodexExpanded = 0;
+        nodexExpanded.clear();
         while (U.topKey() < calculateAndUpdateKey(sStart) || !locallyConsistent(sStart))
         {
             Key kOld = U.topKey();
-            ++nodexExpanded;
             Node *u = popFromQueueAndUpdateState();
+            nodexExpanded.push_back(u);
             if (kOld < calculateAndUpdateKey(u))
             {
                 insertIntoQueueAndUpdateStateAndKey(u);
@@ -94,7 +94,6 @@ namespace Pathfinding::Algorithms
             }
             else
             {
-                printf("underconsistent  %i %i \n", u->location.height, u->location.height);
                 u->g = infinity();
                 updateNeighbors(u);
                 UpdateVertex(u);
@@ -131,7 +130,7 @@ namespace Pathfinding::Algorithms
         U.reset();
         kM = 0;
         nodesChanged.clear();
-        nodexExpanded = 0;
+        nodexExpanded.clear();
     }
 
     Node *DStarLite::popFromQueueAndUpdateState()
@@ -201,12 +200,11 @@ namespace Pathfinding::Algorithms
             currentNode = getMinCG(currentNode).second;
             path.push_back(currentNode);
         }
-        return {true, path, flush(nodexExpanded)};
+        return {true, path, flushVector(nodexExpanded)};
     }
 
     PathfinderReturnType DStarLite::moveStart()
     {
-        
         if (!nodesChanged.empty())
         {
             kM = kM + heuristicUPtr->calculate(sLast, sStart);
@@ -222,7 +220,7 @@ namespace Pathfinding::Algorithms
         if (sStart->g == infinity())
         {
             noPathCallBack_();
-            return {false, {}, 0};
+            return {false, {}, {}};
         }
         moveStartToNextInPath();
 

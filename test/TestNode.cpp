@@ -18,7 +18,7 @@ TEST_CASE( "Nodes with same location should be equal 1", "[constructor]" ) {
 }
 
 
-TEST_CASE( "Nodes with same location should not be equal", "[constructor]" ) {
+TEST_CASE( "Nodes with different locations should not be equal", "[constructor]" ) {
     Node n1;
     Node n2; 
 
