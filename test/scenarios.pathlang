@@ -15,7 +15,7 @@ SIZE     VEC2(4:4)   ;
 START    VEC2(0:0)   ;
 GOAL     VEC2(3:3)   ;
 STEP     VEC2(1:1)   ;
-STEP     VEC2(2:2)   ; 
+STEP     VEC2(2:2)   ;
 STEP     VEC2(3:3)   ;
 RESULT   FOUND_PATH  ;
 

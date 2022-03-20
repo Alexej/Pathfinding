@@ -93,7 +93,7 @@ namespace Pathfinding::Helpers
             str = "SEARCHING";
             break;
         case AlgorithmState::FOUND_PATH:
-            str = "DONE";
+            str = "FOUND_PATH";
             break;
         case AlgorithmState::NO_PATH:
             str = "NO_PATH";
