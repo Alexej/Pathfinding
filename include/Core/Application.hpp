@@ -7,38 +7,35 @@
 #include <cstdint>
 #include <memory>
 
-#include "Renderer.hpp"
-#include "LatticeGraph.hpp"
-#include "ApplicationState.hpp"
-#include "EventManager.hpp"
-#include "Menu.hpp"
-#include "DStarLite.hpp"
-#include "GraphOperations.hpp"
-#include "IApplication.hpp"
+#include "RandomIntegers.hpp"
 #include "IAStar.hpp"
 #include "PathfinderCache.hpp"
-#include "RandomIntegers.hpp"
+#include "ALatGraphWr.hpp"
+#include "ApplicationState.hpp"
+#include "IRenderer.hpp"
+#include "IGraphOperations.hpp"
+#include "AIncrementalInformedAlgorithm.hpp"
+#include "IEventManager.hpp"
+#include "IMenu.hpp"
+#include "IApplication.hpp"
 
-namespace Pathfinding::Abstract { class ALatGraphWr; }
-namespace Pathfinding::Helpers { class ApplicationBuilder; }
+namespace Pathfinding::Core { class ApplicationBuilder; }
 
 namespace Pathfinding::Core
 {
     class Application final : public Pathfinding::Abstract::IApplication
     {
-        friend Pathfinding::Helpers::ApplicationBuilder;
+        friend Pathfinding::Core::ApplicationBuilder;
     private:
         using PAIMenu = Pathfinding::Abstract::IMenu;
         using PAIEventManager = Pathfinding::Abstract::IEventManager;
-        using PAIDStarLite = Pathfinding::Abstract::IDStarLite;
-        using PALatticeGraph = Pathfinding::Datastructures::LatticeGraph;
+        using PAAIncrementalInformedAlgorithm = Pathfinding::Abstract::AIncrementalInformedAlgorithm;
         using PAIGraphOperations = Pathfinding::Abstract::IGraphOperations;
         using PAIRenderer = Pathfinding::Abstract::IRenderer;
         using PCApplicationState = Pathfinding::Core::ApplicationState;
         using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
         using PAIAStar = Pathfinding::Abstract::IAStar;
         using PDPathfinderCachee = Pathfinding::Datastructures::PathfinderCache;
-        using PHRandomIntegers = Pathfinding::Helpers::RandomIntegers;
     public:
         Application() = default;
         
@@ -72,7 +69,7 @@ namespace Pathfinding::Core
         std::unique_ptr<PAIRenderer> rendererUPtr;
         std::unique_ptr<PAIMenu> menuUPtr;
         std::unique_ptr<PAIEventManager> eventManagerUPtr;
-        std::unique_ptr<PAIDStarLite> dstarLiteUPtr;
+        std::unique_ptr<PAAIncrementalInformedAlgorithm> dstarLiteUPtr;
         std::unique_ptr<PAIAStar> aStarUPtr;
         std::unique_ptr<PAIGraphOperations> graphOpsUPtr;
         std::shared_ptr<PAALatGraphWr> latGraphWrapUPtr;
@@ -82,10 +79,9 @@ namespace Pathfinding::Core
         sf::RenderWindow window;
         PDPathfinderCachee aStarCache;
         PDPathfinderCachee dStarCache;
-        PHRandomIntegers ri;
+        RandomIntegers ri;
         
         GraphDimension *dimensionPtr;
-        AlgorithmStepSpeed *algoStepSpeedPtr;
     };
 }
 

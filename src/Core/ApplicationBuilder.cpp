@@ -12,7 +12,7 @@
 #include "EventManager.hpp"
 #include "Menu.hpp"
 #include "DStarLite.hpp"
-#include "IDStarLite.hpp"
+#include "AIncrementalInformedAlgorithm.hpp"
 #include "Renderer.hpp"
 #include "DiagonalHeuristic.hpp"
 #include "DefaultCostFunction.hpp"
@@ -20,23 +20,19 @@
 #include "ApplicationState.hpp"
 #include "AStar.hpp"
 #include "PathfinderReturnType.hpp"
+#include "GraphOperations.hpp"
 
-namespace Pathfinding::Helpers
+namespace Pathfinding::Core
 {
     using namespace Pathfinding::Constants;
     using Pathfinding::Abstract::IApplication;
-    using Pathfinding::Abstract::IDStarLite;
+    using Pathfinding::Abstract::AIncrementalInformedAlgorithm;
     using Pathfinding::Abstract::IGraphOperations;
     using Pathfinding::Abstract::ILatticeGraph;
     using Pathfinding::Algorithms::DefaultCostFunction;
     using Pathfinding::Algorithms::DiagonalHeuristic;
     using Pathfinding::Algorithms::DStarLite;
     using Pathfinding::Algorithms::AStar;
-    using Pathfinding::Core::AlgorithmStepSpeed;
-    using Pathfinding::Core::Application;
-    using Pathfinding::Core::ApplicationState;
-    using Pathfinding::Core::ApplicationState;
-    using Pathfinding::Core::GraphDimension;
     using Pathfinding::Rendering::Renderer;
     using Pathfinding::Datastructures::LatticeGraph;
     using Pathfinding::Datastructures::PathfinderReturnType;
@@ -105,7 +101,8 @@ namespace Pathfinding::Helpers
         initDStarLite();
         initAStar();
 
-        applicationUPtr->graphOpsUPtr->addEdgeChangeCallBack(std::bind(&IDStarLite::addChangedNode, applicationUPtr->dstarLiteUPtr.get(), _1));
+        applicationUPtr->graphOpsUPtr->addEdgeChangeCallBack(std::bind(&AIncrementalInformedAlgorithm::addChangedNode, 
+                                                            applicationUPtr->dstarLiteUPtr.get(), _1));
         applicationUPtr->window.setFramerateLimit(APP_FPS);
         applicationUPtr->dimensionPtr = &applicationUPtr->appState.dimension;
     }

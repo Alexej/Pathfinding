@@ -2,22 +2,17 @@
 
 #include <imgui-SFML.h>
 #include <imgui.h>
-#include <SFML/Window/VideoMode.hpp>
 #include <SFML/Window/Event.hpp>
-
-#include "LatticeGraphHelpers.hpp"
-#include "LatticeGraphWrapper.hpp"
 #include "PathfinderReturnType.hpp"
-#include "Constants.hpp"
 #include "RenderingHelpers.hpp"
+#include "LatticeGraphHelpers.hpp"
 
 namespace Pathfinding::Core
 {
     using namespace Constants;
-    using Pathfinding::Helpers::LatticeGraphHelpers;
-    using Pathfinding::Datastructures::LatticeGraphWrapper;
     using Pathfinding::Datastructures::PathfinderReturnType;
     using Pathfinding::Helpers::convertToSfmlColor;
+    using Pathfinding::Helpers::LatticeGraphHelpers;
 
     void Application::startAlgorithm()
     {
@@ -129,7 +124,7 @@ namespace Pathfinding::Core
 
     void Application::step()
     {
-        dStarCache.cache(dstarLiteUPtr->moveStart());
+        dStarCache.cache(dstarLiteUPtr->followingRun());
         if(dStarCache.nodesExpandedAll.back().size() != 0)
         {
             runAStar();

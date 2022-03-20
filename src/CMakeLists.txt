@@ -12,6 +12,8 @@ set(SOURCES_PATHFINDING
   Datastructures/PriorityQueue.cpp
   Core/Application.cpp
   Core/ApplicationState.cpp
+  Core/GraphOperations.cpp
+  Core/ApplicationBuilder.cpp
   Rendering/Renderer.cpp
   Rendering/DrawableNode.cpp
   Rendering/DrawablePath.cpp
@@ -20,10 +22,8 @@ set(SOURCES_PATHFINDING
   Helpers/GuiHelpers.cpp
   Helpers/SFMLHelpers.cpp
   Helpers/RenderingHelpers.cpp
-  Helpers/GraphOperations.cpp
   Helpers/LatticeGraphHelpers.cpp
   Helpers/FontLoader.cpp
-  Helpers/ApplicationBuilder.cpp
   Helpers/AlgorithmFunctionHelpers.cpp
   Gui/Menu.cpp
   main.cpp

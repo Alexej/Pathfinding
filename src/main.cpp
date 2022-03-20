@@ -25,7 +25,7 @@ int main()
     using Pathfinding::Exceptions::CouldNotLoadFontException;
     using Pathfinding::Exceptions::WrongNodeNumberForDimensionException;
     using Pathfinding::Exceptions::NoSuchFontException;
-    using Pathfinding::Helpers::ApplicationBuilder;
+    using Pathfinding::Core::ApplicationBuilder;
     using Pathfinding::Helpers::FontLoader;
 
     ApplicationBuilder appBuilder;

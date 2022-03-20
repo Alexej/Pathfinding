@@ -9,22 +9,23 @@
 
 namespace Pathfinding::Abstract { class ILatticeGraph; }
 namespace Pathfinding::Datastructures { struct Node; }
+namespace Pathfinding::Core { class RandomIntegers; }
 
 namespace Pathfinding::Helpers
 {
-    class RandomIntegers;
     class LatticeGraphHelpers
     {
     private:
         using PAILatticeGraph = Pathfinding::Abstract::ILatticeGraph;
         using PDNode = Pathfinding::Datastructures::Node;
         using PDVec2i = Pathfinding::Datastructures::Vec2i;
+        using PCRandomIntegers = Pathfinding::Core::RandomIntegers;
         template<typename T>
         using shptr = std::shared_ptr<T>;
     public:
         static std::vector<PDNode *> neighbors(shptr<PAILatticeGraph> latticeGraphSPtr, PDNode *node);
         
-        static void initRandomGraph(shptr<PAILatticeGraph> latticeGraphSPtr, RandomIntegers & ri);
+        static void initRandomGraph(shptr<PAILatticeGraph> latticeGraphSPtr, PCRandomIntegers & ri);
         
         static void blockNode(shptr<PAILatticeGraph> latticeGraphSPtr, PDVec2i location);
         

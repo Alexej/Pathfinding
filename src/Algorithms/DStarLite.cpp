@@ -37,7 +37,7 @@ namespace Pathfinding::Algorithms
 
 
     DStarLite::DStarLite(std::shared_ptr<ALatGraphWr> latticeGraphWrapperSPtr_)
-        : latticeGraphWrapperSPtr(latticeGraphWrapperSPtr_) {}
+    : AIncrementalInformedAlgorithm(latticeGraphWrapperSPtr_) {}
 
     void DStarLite::initialize()
     {
@@ -206,7 +206,7 @@ namespace Pathfinding::Algorithms
         return {true, path, flushVector(nodexExpanded)};
     }
 
-    PathfinderReturnType DStarLite::moveStart()
+    PathfinderReturnType DStarLite::followingRun()
     {
         if (!nodesChanged.empty())
         {

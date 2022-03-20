@@ -12,15 +12,15 @@
 #include "MouseData.hpp"
 #include "Constants.hpp"
 
-namespace Pathfinding::Helpers
+namespace Pathfinding::Core
 {
     using namespace Pathfinding::Constants;
     using namespace Pathfinding::Datastructures;
-    using namespace Pathfinding::Core;
 
     using Pathfinding::Abstract::ALatGraphWr;
     using Pathfinding::Algorithms::DStarLite;
     using Pathfinding::Helpers::LatticeGraphHelpers;
+    using Pathfinding::Helpers::mapMouseToGraphCoordinates;
     using Pathfinding::Events::MouseData;
 
     GraphOperations::GraphOperations(ApplicationState *appStateSPtr_,

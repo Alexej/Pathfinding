@@ -11,7 +11,7 @@ namespace Pathfinding::Core {class Application;}
 namespace Pathfinding::Abstract {class IApplication;}
 namespace Pathfinding::Abstract {class IFontLoader;}
 
-namespace Pathfinding::Helpers
+namespace Pathfinding::Core
 {
     class FontLoader;
     class ApplicationBuilder

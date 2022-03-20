@@ -15,7 +15,7 @@ namespace Pathfinding::Algorithms { class DStarLite; }
 namespace Pathfinding::Abstract { class ALatGraphWr; }
 namespace Pathfinding::Events { struct MouseData; }
 
-namespace Pathfinding::Helpers
+namespace Pathfinding::Core
 {
 
     enum class MouseAction { SETTING_START, SETTING_GOAL, BLOCKING_NODE, CLEARING_NODE, IDLE };
@@ -24,7 +24,6 @@ namespace Pathfinding::Helpers
     {
     private:
         using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
-        using PCApplicationState = Pathfinding::Core::ApplicationState;
         using PADStarLite = Pathfinding::Algorithms::DStarLite;
         using PDVec2i = Pathfinding::Datastructures::Vec2i;
         using PDNode = Pathfinding::Datastructures::Node;
@@ -32,7 +31,7 @@ namespace Pathfinding::Helpers
     public:
         GraphOperations() = default;
         
-        GraphOperations(PCApplicationState * appStateSPtr, 
+        GraphOperations(ApplicationState * appStateSPtr, 
                         std::shared_ptr<PAALatGraphWr> latGraphWrapperUPtr);
                         
         void rightMouseButtonPressed(PEMouseData mouseData) override;
@@ -80,7 +79,7 @@ namespace Pathfinding::Helpers
         MouseAction currentMouseAction = MouseAction::IDLE;
         std::shared_ptr<PAALatGraphWr> latGraphWrapperUPtr;
         PADStarLite *dstarPtr;
-        PCApplicationState * appStateSPtr;
+        ApplicationState * appStateSPtr;
         bool endPointsEvents_ = true;
         bool obsticlesEvents_ = true;
     };

@@ -4,7 +4,7 @@
 #include <random>
 #include "Constants.hpp"
 
-namespace Pathfinding::Helpers
+namespace Pathfinding::Core
 {
     class RandomIntegers
     {

@@ -13,6 +13,7 @@ namespace Pathfinding::Helpers
 {
     using namespace Pathfinding::Datastructures;
     using Pathfinding::Abstract::ILatticeGraph;
+    using Pathfinding::Core::RandomIntegers;
 
     void LatticeGraphHelpers::initRandomGraph(std::shared_ptr<ILatticeGraph> latticeGraphSPtr, RandomIntegers & ri)
     {

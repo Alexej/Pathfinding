@@ -6,21 +6,19 @@
 #include <functional>
 
 #include "PriorityQueue.hpp"
-#include "IDStarLite.hpp"
+#include "AIncrementalInformedAlgorithm.hpp"
 
-namespace Pathfinding::Datastructures{ class LatticeGraphWrapper; }
 namespace Pathfinding::Datastructures{ struct Node; }
 namespace Pathfinding::Datastructures{ struct Key; }
 namespace Pathfinding::Datastructures{ enum class NodeState; }
 namespace Pathfinding::Datastructures{ struct PathfinderReturnType; }
 
 namespace Pathfinding::Abstract { class IHeuristic; }
-namespace Pathfinding::Abstract { class ALatGraphWr; }
 namespace Pathfinding::Abstract { class ICostFunction; }
 
 namespace Pathfinding::Algorithms
 {
-    class DStarLite final : public Pathfinding::Abstract::IDStarLite
+    class DStarLite final : public Pathfinding::Abstract::AIncrementalInformedAlgorithm
     {
     private:
         using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
@@ -44,7 +42,7 @@ namespace Pathfinding::Algorithms
         
         PDPathfinderReturnType initialRun() override;
         
-        PDPathfinderReturnType moveStart() override;
+        PDPathfinderReturnType followingRun() override;
         
         void reset() override;
         
@@ -82,7 +80,6 @@ namespace Pathfinding::Algorithms
         PDKey calculateKey(const PDNode *s) const;
         
     private:
-        std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr = nullptr;
         PDNode *sStart = nullptr;
         PDNode *sLast = nullptr;
         PDPriorityQueue U;

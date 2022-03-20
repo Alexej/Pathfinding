@@ -6,7 +6,7 @@
 #include "ApplicationState.hpp"
 #include "ALatGraphWr.hpp"
 #include "ILatticeGraph.hpp"
-#include "IDStarLite.hpp"
+#include "AIncrementalInformedAlgorithm.hpp"
 
 #include "LatticeGraph.hpp"
 #include "LatticeGraphWrapper.hpp"
@@ -80,7 +80,7 @@ class DStarLiteTester
 
         PathfinderReturnType step()
         {
-            return dStarLiteUPtr->moveStart();
+            return dStarLiteUPtr->followingRun();
         }
 
     private:
@@ -99,7 +99,7 @@ class DStarLiteTester
     private:
         int32_t heightStart = 5;
         int32_t widthStart = 5;
-        std::unique_ptr<IDStarLite> dStarLiteUPtr = nullptr;
+        std::unique_ptr<AIncrementalInformedAlgorithm> dStarLiteUPtr = nullptr;
         AlgorithmState state = AlgorithmState::READY;
 };
 
