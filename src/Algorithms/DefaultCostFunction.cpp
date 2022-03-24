@@ -1,7 +1,7 @@
 #include "DefaultCostFunction.hpp"
 
 #include "Node.hpp"
-#include "DStarLiteHelpers.hpp"
+#include "InformedSearchAlgorithmHelpers.hpp"
 #include "AlgorithmFunctionHelpers.hpp"
 
 namespace Pathfinding::Algorithms

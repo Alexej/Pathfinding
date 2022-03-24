@@ -8,7 +8,7 @@
 #include "Vec2.hpp"
 #include "DiagonalHeuristic.hpp"
 #include "ApplicationState.hpp"
-#include "DStarLiteHelpers.hpp"
+#include "InformedSearchAlgorithmHelpers.hpp"
 #include "ALatGraphWr.hpp"
 #include "LatticeGraphWrapper.hpp"
 #include "LatticeGraphHelpers.hpp"
@@ -156,13 +156,7 @@ namespace Pathfinding::Algorithms
         }
         changeNodeState(node, NodeState::Visited);
     }
-
-    void DStarLite::insertIntoQueueAndUpdateKey(Node *node)
-    {
-        updateKey(node);
-        U.insert(node);
-    }
-
+    
     void DStarLite::insertIntoQueueAndUpdateStateAndKey(Node *node)
     {
         insertIntoQueueAndUpdateKey(node);
@@ -176,6 +170,13 @@ namespace Pathfinding::Algorithms
         }
         changeNodeState(node, NodeState::Frontier);
     }
+
+    void DStarLite::insertIntoQueueAndUpdateKey(Node *node)
+    {
+        updateKey(node);
+        U.insert(node);
+    }
+
 
     void DStarLite::updateNeighbors(Node *node)
     {

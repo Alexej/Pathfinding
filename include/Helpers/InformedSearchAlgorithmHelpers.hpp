@@ -6,7 +6,6 @@
 
 namespace Pathfinding::Helpers
 {
-
     inline double infinity()
     {
         return std::numeric_limits<double>::infinity();
