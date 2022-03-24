@@ -5,16 +5,6 @@ namespace Pathfinding::Algorithms
         LPAStar::LPAStar(std::shared_ptr<ALatGraphWr> latticeGraphWrapperSPtr_)
         : AIncrementalInformedAlgorithm(latticeGraphWrapperSPtr_) {}
         
-        void LPAStar::addDoneCallBack(std::function<void(void)> callBack)
-        {
-            doneCallBack_ = callBack;
-        }
-
-        void LPAStar::addNoPathCallBack(std::function<void(void)> callBack)
-        {
-            noPathCallBack_ = callBack;
-        }
-        
         void LPAStar::initialize()
         {
             latticeGraphWrapperSPtr->goalNode()->rhs = 0;

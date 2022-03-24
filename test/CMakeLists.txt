@@ -22,7 +22,7 @@ set(SOURCES_TESTS
     ../src/Helpers/LatticeGraphHelpers.cpp
     ../src/Helpers/RootPath.cpp
     ../src/Datastructures/PriorityQueue.cpp
-    
+
     PathLangParser.cpp
     TestLocation.cpp
     TestDStarLite.cpp

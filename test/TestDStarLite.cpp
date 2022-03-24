@@ -36,7 +36,7 @@ class DStarLiteTester
             latGraphWrapSPtr = std::make_shared<LatticeGraphWrapper>(std::move(latticeGraph));
             dStarLiteUPtr = std::make_unique<DStarLite>(latGraphWrapSPtr);
 
-            dStarLiteUPtr->addDoneCallBack(std::bind(&DStarLiteTester::pathFound, this));
+            dStarLiteUPtr->addFoundPathCallBack(std::bind(&DStarLiteTester::pathFound, this));
             dStarLiteUPtr->addNoPathCallBack(std::bind(&DStarLiteTester::noPath, this));
 
             int32_t diagonalCost = static_cast<int32_t>(std::sqrt(2) * 10);

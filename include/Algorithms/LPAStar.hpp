@@ -1,7 +1,6 @@
 #ifndef B1DF0005_3F12_457B_B336_BD85CCCF269E
 #define B1DF0005_3F12_457B_B336_BD85CCCF269E
 
-
 #include <vector>
 #include <functional>
 
@@ -28,10 +27,6 @@ namespace Pathfinding::Algorithms
         
             explicit LPAStar(std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr);
             
-            void addDoneCallBack(std::function<void(void)> callBack) override;
-            
-            void addNoPathCallBack(std::function<void(void)> callBack) override;
-            
             void initialize() override;
             
             PDPathfinderReturnType initialRun() override;
@@ -50,8 +45,6 @@ namespace Pathfinding::Algorithms
         private:
             PDPriorityQueue U;
             std::unordered_set<PDNode *> nodesChanged;
-            std::function<void(void)> doneCallBack_;
-            std::function<void(void)> noPathCallBack_;
             std::vector<PDNode *> nodexExpanded;
     };
 }

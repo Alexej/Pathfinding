@@ -32,6 +32,8 @@ namespace Pathfinding::Datastructures
 
             void setStart(Vec2i location) override;
 
+            void changeNodeState(Node *node, NodeState newState) override;
+
         private:
             void resetEndpoints();
             

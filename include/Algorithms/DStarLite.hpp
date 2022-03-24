@@ -34,10 +34,6 @@ namespace Pathfinding::Algorithms
         
         explicit DStarLite(std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr);
         
-        void addDoneCallBack(std::function<void(void)> callBack) override;
-        
-        void addNoPathCallBack(std::function<void(void)> callBack) override;
-        
         void initialize() override;
         
         PDPathfinderReturnType initialRun() override;
@@ -66,9 +62,7 @@ namespace Pathfinding::Algorithms
         void removeFromQUeueAndUpdateState(PDNode *node);
         
         void updateNeighbors(PDNode *node);
-        
-        void changeNodeState(PDNode *node, PDNodeState state);
-        
+                
         void moveStartToNextInPath();
         
         bool computeShortestPathExitCondition();
@@ -84,8 +78,6 @@ namespace Pathfinding::Algorithms
         PDNode *sLast = nullptr;
         PDPriorityQueue U;
         std::unordered_set<PDNode *> nodesChanged;
-        std::function<void(void)> doneCallBack_;
-        std::function<void(void)> noPathCallBack_;
         std::vector<PDNode *> nodexExpanded;
         double kM = 0;
     };

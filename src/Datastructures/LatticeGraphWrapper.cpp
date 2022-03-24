@@ -14,7 +14,6 @@ namespace Pathfinding::Datastructures
         resetEndpoints();
     }
 
-
     void LatticeGraphWrapper::resize(int32_t height, int32_t width)
     {
         latGraphSPtr->resize(height, width);
@@ -55,7 +54,7 @@ namespace Pathfinding::Datastructures
     {
         if (latGraphSPtr->node(location)->state == NodeState::Free)
         {
-            goalNodePtr->state = NodeState::Free;   
+            goalNodePtr->state = NodeState::Free;
             goalNodePtr = latGraphSPtr->node(location);
             goalNodePtr->state = NodeState::Goal;
         }
@@ -68,6 +67,18 @@ namespace Pathfinding::Datastructures
             startNodePtr->state = NodeState::Free;
             startNodePtr = latGraphSPtr->node(location);
             startNodePtr->state = NodeState::Start;
+        }
+    }
+
+    void LatticeGraphWrapper::changeNodeState(Node *node, NodeState newState)
+    {
+        if (!node->visitedOnce)
+        {
+            node->visitedOnce = true;
+        }
+        if (*node != *goalNode() && *node != *startNode() && node->state != NodeState::Blocked)
+        {
+            node->state = newState;
         }
     }
 }

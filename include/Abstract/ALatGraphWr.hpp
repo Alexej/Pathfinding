@@ -7,6 +7,7 @@
 #include "Vec2.hpp"
 
 namespace Pathfinding::Datastructures { struct Node; }
+namespace Pathfinding::Datastructures { enum class NodeState; }
 
 namespace Pathfinding::Abstract
 {
@@ -16,6 +17,7 @@ namespace Pathfinding::Abstract
     private:
         using PDVec2i = Pathfinding::Datastructures::Vec2i;
         using PDNode = Pathfinding::Datastructures::Node;
+        using PDNodeState = Pathfinding::Datastructures::NodeState;
     public:
         explicit ALatGraphWr(std::shared_ptr<ILatticeGraph> latGraphSPtr_)
         : latGraphSPtr(latGraphSPtr_) {}
@@ -33,6 +35,8 @@ namespace Pathfinding::Abstract
         virtual PDNode *goalNode() = 0;
 
         virtual void resize(int32_t height, int32_t width) = 0;
+
+        virtual void changeNodeState(PDNode *node, PDNodeState newState) = 0;
 
         virtual ~ALatGraphWr() = default;
 

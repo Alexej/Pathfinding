@@ -114,7 +114,6 @@ namespace Pathfinding::Algorithms
         s->key = calculateKey(s);
     }
 
-
     std::pair<double, Node *> DStarLite::getMinCG(Node *u)
     {
         auto succs = LatticeGraphHelpers::neighbors(latticeGraphWrapperSPtr->latGraphSPtr, u);
@@ -139,36 +138,20 @@ namespace Pathfinding::Algorithms
     Node *DStarLite::popFromQueueAndUpdateState()
     {
         Node *u = U.pop();
-        if (blocked(u))
-        {
-            return u;
-        }
-        changeNodeState(u, NodeState::Visited);
+        latticeGraphWrapperSPtr->changeNodeState(u, NodeState::Visited);
         return u;
     }
 
     void DStarLite::removeFromQUeueAndUpdateState(Node *node)
     {
         U.remove(node);
-        if (blocked(node))
-        {
-            return;
-        }
-        changeNodeState(node, NodeState::Visited);
+        latticeGraphWrapperSPtr->changeNodeState(node, NodeState::Visited);
     }
     
     void DStarLite::insertIntoQueueAndUpdateStateAndKey(Node *node)
     {
         insertIntoQueueAndUpdateKey(node);
-        if (!node->visitedOnce)
-        {
-            node->visitedOnce = true;
-        }
-        if (blocked(node))
-        {
-            return;
-        }
-        changeNodeState(node, NodeState::Frontier);
+        latticeGraphWrapperSPtr->changeNodeState(node, NodeState::Frontier);
     }
 
     void DStarLite::insertIntoQueueAndUpdateKey(Node *node)
@@ -186,13 +169,6 @@ namespace Pathfinding::Algorithms
         }
     }
 
-    void DStarLite::changeNodeState(Node *node, NodeState newState)
-    {
-        if (*node != *latticeGraphWrapperSPtr->goalNode() && *node != *latticeGraphWrapperSPtr->startNode())
-        {
-            node->state = newState;
-        }
-    }
 
     PathfinderReturnType DStarLite::computePath()
     {
@@ -242,7 +218,7 @@ namespace Pathfinding::Algorithms
         Node *prevStart = sStart;
         sStart = getMinCG(sStart).second;
         latticeGraphWrapperSPtr->setStart(sStart->location);
-        prevStart->state = NodeState::Visited;
+        latticeGraphWrapperSPtr->changeNodeState(prevStart, NodeState::Visited);
     }
 
     void DStarLite::addChangedNode(Node *node)
@@ -252,16 +228,6 @@ namespace Pathfinding::Algorithms
             nodesChanged.insert(succ);
         }
         nodesChanged.insert(node);
-    }
-
-    void DStarLite::addDoneCallBack(std::function<void(void)> callBack)
-    {
-        doneCallBack_ = callBack;
-    }
-
-    void DStarLite::addNoPathCallBack(std::function<void(void)> callBack)
-    {
-        noPathCallBack_ = callBack;
     }
 
     double DStarLite::costThisFar(const Node * u, const Node * neighbor)

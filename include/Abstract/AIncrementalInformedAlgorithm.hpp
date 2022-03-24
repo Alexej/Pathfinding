@@ -22,9 +22,15 @@ namespace Pathfinding::Abstract
             explicit AIncrementalInformedAlgorithm(std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr_)
             : latticeGraphWrapperSPtr(latticeGraphWrapperSPtr_) {}
 
-            virtual void addDoneCallBack(std::function<void(void)> callBack) = 0;
-            
-            virtual void addNoPathCallBack(std::function<void(void)> callBack) = 0;
+            void addFoundPathCallBack(std::function<void(void)> callBack)
+            {
+                doneCallBack_ = callBack;
+            }
+
+            void addNoPathCallBack(std::function<void(void)> callBack)
+            {
+                noPathCallBack_ = callBack;
+            }
             
             virtual void initialize() = 0;
             
@@ -37,8 +43,11 @@ namespace Pathfinding::Abstract
             virtual PDPathfinderReturnType followingRun() = 0;
 
             virtual ~AIncrementalInformedAlgorithm() = default;
+
         protected:
             std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr = nullptr;
+            std::function<void(void)> doneCallBack_;
+            std::function<void(void)> noPathCallBack_;
     };
 }
 

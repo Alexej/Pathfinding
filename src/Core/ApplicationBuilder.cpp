@@ -146,7 +146,7 @@ namespace Pathfinding::Core
 
     void ApplicationBuilder::initDStarLite()
     {
-        applicationUPtr->dstarLiteUPtr->addDoneCallBack(std::bind(&Application::done, applicationUPtr.get()));
+        applicationUPtr->dstarLiteUPtr->addFoundPathCallBack(std::bind(&Application::done, applicationUPtr.get()));
         applicationUPtr->dstarLiteUPtr->addNoPathCallBack(std::bind(&Application::noPath, applicationUPtr.get()));
         applicationUPtr->dstarLiteUPtr->setHeuristic(std::make_unique<DiagonalHeuristic>(diagonalCost, straightCost));
         applicationUPtr->dstarLiteUPtr->setCostFunction(std::make_unique<DefaultCostFunction>(diagonalCost, straightCost));
