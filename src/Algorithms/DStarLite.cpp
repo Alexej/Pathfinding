@@ -32,7 +32,7 @@ namespace Pathfinding::Algorithms
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
     using Pathfinding::Helpers::flushVector;
-    using Pathfinding::Helpers::LatticeGraphHelpers;
+    using Pathfinding::Helpers::ILatticeGraphHelpers;
     using Pathfinding::Abstract::ICostFunction;
 
 
@@ -69,7 +69,7 @@ namespace Pathfinding::Algorithms
         computeShortestPath();
         if (sStart->g == infinity())
         {
-            noPathCallBack_();
+            noPathCallBack();
             return {false, {}, {}};
         }
         return computePath();
@@ -116,7 +116,7 @@ namespace Pathfinding::Algorithms
 
     std::pair<double, Node *> DStarLite::getMinCG(Node *u)
     {
-        auto succs = LatticeGraphHelpers::neighbors(latticeGraphWrapperSPtr->latGraphSPtr, u);
+        auto succs = ILatticeGraphHelpers::neighbors(*latticeGraphWrapperSPtr->latGraphSPtr, u);
         auto itr = std::min_element(succs.begin(), succs.end(),
         [this, &u](const Node *lhs, const Node *rhs)
         {
@@ -163,7 +163,7 @@ namespace Pathfinding::Algorithms
 
     void DStarLite::updateNeighbors(Node *node)
     {
-        for (auto &pred : LatticeGraphHelpers::neighbors(latticeGraphWrapperSPtr->latGraphSPtr, node))
+        for (auto &pred : ILatticeGraphHelpers::neighbors(*latticeGraphWrapperSPtr->latGraphSPtr, node))
         {
             UpdateVertex(pred);
         }
@@ -199,7 +199,7 @@ namespace Pathfinding::Algorithms
 
         if (sStart->g == infinity())
         {
-            noPathCallBack_();
+            noPathCallBack();
             return {false, {}, {}};
         }
         moveStartToNextInPath();
@@ -208,7 +208,7 @@ namespace Pathfinding::Algorithms
 
         if (*sStart == *latticeGraphWrapperSPtr->goalNode())
         {
-            doneCallBack_();    
+            doneCallBack();    
         }
         return result;
     }
@@ -223,7 +223,7 @@ namespace Pathfinding::Algorithms
 
     void DStarLite::addChangedNode(Node *node)
     {
-        for (auto &succ : LatticeGraphHelpers::neighbors(latticeGraphWrapperSPtr->latGraphSPtr, node))
+        for (auto &succ : ILatticeGraphHelpers::neighbors(*latticeGraphWrapperSPtr->latGraphSPtr, node))
         {
             nodesChanged.insert(succ);
         }

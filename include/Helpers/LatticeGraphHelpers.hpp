@@ -13,28 +13,26 @@ namespace Pathfinding::Core { class RandomIntegers; }
 
 namespace Pathfinding::Helpers
 {
-    class LatticeGraphHelpers
+    class ILatticeGraphHelpers
     {
     private:
         using PAILatticeGraph = Pathfinding::Abstract::ILatticeGraph;
         using PDNode = Pathfinding::Datastructures::Node;
         using PDVec2i = Pathfinding::Datastructures::Vec2i;
         using PCRandomIntegers = Pathfinding::Core::RandomIntegers;
-        template<typename T>
-        using shptr = std::shared_ptr<T>;
     public:
-        static std::vector<PDNode *> neighbors(shptr<PAILatticeGraph> latticeGraphSPtr, PDNode *node);
+        static std::vector<PDNode *> neighbors(PAILatticeGraph & iLatticeGraph, PDNode *node);
         
-        static void initRandomGraph(shptr<PAILatticeGraph> latticeGraphSPtr, PCRandomIntegers & ri);
+        static void initRandomGraph(PAILatticeGraph & iLatticeGraph, PCRandomIntegers & ri);
         
-        static void blockNode(shptr<PAILatticeGraph> latticeGraphSPtr, PDVec2i location);
+        static void blockNode(PAILatticeGraph & iLatticeGraph, PDVec2i location);
         
-        static void clearNode(shptr<PAILatticeGraph> latticeGraphSPtr, PDVec2i location);
+        static void clearNode(PAILatticeGraph & iLatticeGraph, PDVec2i location);
         
-        static void  iterateOverLatticeGraphConst(const shptr<PAILatticeGraph> latticeGraphSPtr,
-                                                     std::function<void(const PDNode * node, int32_t h, int32_t w)>);
+        static void  iterateOverLatticeGraphConst(const PAILatticeGraph & iLatticeGraph,
+                                                std::function<void(const PDNode * node, int32_t h, int32_t w)>);
                                                      
-        static void  iterateOverLatticeGraph(shptr<PAILatticeGraph> latticeGraphSPtr,
+        static void  iterateOverLatticeGraph(PAILatticeGraph & iLatticeGraph,
                                                 std::function<void(PDNode * node, int32_t h, int32_t w)>);                              
     };
 }

@@ -15,7 +15,7 @@ namespace Pathfinding::Helpers
     using Pathfinding::Abstract::ILatticeGraph;
     using Pathfinding::Core::RandomIntegers;
 
-    void LatticeGraphHelpers::initRandomGraph(std::shared_ptr<ILatticeGraph> latticeGraphSPtr, RandomIntegers & ri)
+    void ILatticeGraphHelpers::initRandomGraph(ILatticeGraph & latticeGraphSPtr, RandomIntegers & ri)
     {
         iterateOverLatticeGraph(latticeGraphSPtr, [&](PDNode *node, int32_t h, int32_t w)
                                         {
@@ -26,7 +26,7 @@ namespace Pathfinding::Helpers
     }
 
     std::vector<Node *>
-    LatticeGraphHelpers::neighbors(std::shared_ptr<ILatticeGraph> latticeGraphSPtr, Node *node_)
+    ILatticeGraphHelpers::neighbors(ILatticeGraph & latticeGraphSPtr, Node *node_)
     {
         std::vector<Node *> nbors;
         int32_t hFrom = node_->location.height - 1;
@@ -39,59 +39,59 @@ namespace Pathfinding::Helpers
             for (int32_t w = wFrom; w <= wTo; ++w)
             {
                 auto coord = Vec2i(h, w);
-                if (latticeGraphSPtr->inBounds(coord) && node_->location != coord)
+                if (latticeGraphSPtr.inBounds(coord) && node_->location != coord)
                 {
-                    nbors.push_back(latticeGraphSPtr->node(coord));
+                    nbors.push_back(latticeGraphSPtr.node(coord));
                 }
             }
         }
         return nbors;
     }
 
-    void LatticeGraphHelpers::blockNode(std::shared_ptr<ILatticeGraph> latticeGraphSPtr, Vec2i location)
+    void ILatticeGraphHelpers::blockNode(ILatticeGraph & ilatticeGraph, Vec2i location)
     {
-        if (latticeGraphSPtr->node(location)->state != NodeState::Start &&
-            latticeGraphSPtr->node(location)->state != NodeState::Goal)
+        if (ilatticeGraph.node(location)->state != NodeState::Start &&
+            ilatticeGraph.node(location)->state != NodeState::Goal)
         {
-            latticeGraphSPtr->node(location)->state = NodeState::Blocked;
+            ilatticeGraph.node(location)->state = NodeState::Blocked;
         }
     }
 
-    void LatticeGraphHelpers::clearNode(std::shared_ptr<ILatticeGraph> latticeGraphSPtr, Vec2i location)
+    void ILatticeGraphHelpers::clearNode(ILatticeGraph & ilatticeGraph, Vec2i location)
     {
-        if (latticeGraphSPtr->node(location)->state == NodeState::Blocked)
+        if (ilatticeGraph.node(location)->state == NodeState::Blocked)
         {
-            if (latticeGraphSPtr->node(location)->visitedOnce)
+            if (ilatticeGraph.node(location)->visitedOnce)
             {
-                latticeGraphSPtr->node(location)->state = NodeState::Visited;
+                ilatticeGraph.node(location)->state = NodeState::Visited;
             }
             else
             {
-                latticeGraphSPtr->node(location)->state = NodeState::Free;
+                ilatticeGraph.node(location)->state = NodeState::Free;
             }
         }
     }
 
-    void LatticeGraphHelpers::iterateOverLatticeGraphConst(const std::shared_ptr<ILatticeGraph> latticeGraphSPtr,
+    void ILatticeGraphHelpers::iterateOverLatticeGraphConst(const ILatticeGraph & ilatticeGraph,
                                                    std::function<void(const Node *node, int32_t h, int32_t w)> func)
     {
-        for (int32_t h = 0; h < latticeGraphSPtr->height(); ++h)
+        for (int32_t h = 0; h < ilatticeGraph.height(); ++h)
         {
-            for (int32_t w = 0; w < latticeGraphSPtr->width(); ++w)
+            for (int32_t w = 0; w < ilatticeGraph.width(); ++w)
             {
-                func(latticeGraphSPtr->node(Vec2i(h, w)), h, w);
+                func(ilatticeGraph.node(Vec2i(h, w)), h, w);
             }
         }
     }
 
-    void LatticeGraphHelpers::iterateOverLatticeGraph(std::shared_ptr<ILatticeGraph> latticeGraphSPtr,
+    void ILatticeGraphHelpers::iterateOverLatticeGraph(ILatticeGraph & ilatticeGraph,
                                            std::function<void(Node *node, int32_t h, int32_t w)> func)
     {
-        for (int32_t h = 0; h < latticeGraphSPtr->height(); ++h)
+        for (int32_t h = 0; h < ilatticeGraph.height(); ++h)
         {
-            for (int32_t w = 0; w < latticeGraphSPtr->width(); ++w)
+            for (int32_t w = 0; w < ilatticeGraph.width(); ++w)
             {
-                func(latticeGraphSPtr->node(Vec2i(h, w)), h, w);
+                func(ilatticeGraph.node(Vec2i(h, w)), h, w);
             }
         }
     }

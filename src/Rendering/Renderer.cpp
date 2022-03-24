@@ -14,7 +14,7 @@ namespace Pathfinding::Rendering
     using Pathfinding::Core::AlgorithmState;
     using Pathfinding::Abstract::IFontLoader;
     using Pathfinding::Abstract::ALatGraphWr;
-    using Pathfinding::Helpers::LatticeGraphHelpers;
+    using Pathfinding::Helpers::ILatticeGraphHelpers;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Helpers::getNodePosition;
@@ -76,7 +76,7 @@ namespace Pathfinding::Rendering
     void Renderer::render(const std::shared_ptr<ALatGraphWr> latticeGraphWrapperSPtr)
     {
         if(appStateSPtr->algorithmFinished()) { updateColors(); }
-        LatticeGraphHelpers::iterateOverLatticeGraphConst(latticeGraphWrapperSPtr->latGraphSPtr,
+        ILatticeGraphHelpers::iterateOverLatticeGraphConst(*latticeGraphWrapperSPtr->latGraphSPtr,
         [this](const Node *node, int32_t h, int32_t w)
         {
             auto coords = getNodePosition(node, dimensionPtr->currentNodeSideLength());

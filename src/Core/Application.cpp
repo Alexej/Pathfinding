@@ -12,7 +12,7 @@ namespace Pathfinding::Core
     using namespace Constants;
     using Pathfinding::Datastructures::PathfinderReturnType;
     using Pathfinding::Helpers::convertToSfmlColor;
-    using Pathfinding::Helpers::LatticeGraphHelpers;
+    using Pathfinding::Helpers::ILatticeGraphHelpers;
 
     void Application::startAlgorithm()
     {
@@ -115,10 +115,11 @@ namespace Pathfinding::Core
  
     void Application::randomGraph()
     {
+        appState.nodeUnderCursor = nullptr;
         do
         {
             latGraphWrapUPtr->resize(dimensionPtr->height(), dimensionPtr->width());
-            LatticeGraphHelpers::initRandomGraph(latGraphWrapUPtr->latGraphSPtr, ri);
+            ILatticeGraphHelpers::initRandomGraph(*latGraphWrapUPtr->latGraphSPtr, ri);
         } while(!aStarUPtr->calculatePath(latGraphWrapUPtr).pathFound);
     }
 

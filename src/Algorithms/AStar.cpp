@@ -20,7 +20,7 @@ namespace Pathfinding::Algorithms
     using Pathfinding::Abstract::ILatticeGraph;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::PathfinderReturnType;
-    using Pathfinding::Helpers::LatticeGraphHelpers;
+    using Pathfinding::Helpers::ILatticeGraphHelpers;
 
     namespace
     {
@@ -65,7 +65,7 @@ namespace Pathfinding::Algorithms
                 return {true, reconstructPath(cameFrom, current), nodesExpanded};
             }
             openSet.pop();
-            auto neighbors = LatticeGraphHelpers::neighbors(graphWrapper->latGraphSPtr, current);
+            auto neighbors = ILatticeGraphHelpers::neighbors(*graphWrapper->latGraphSPtr, current);
             for (auto neighbor : neighbors)
             {
                 auto tentativeGscore = getMapDefaultInf(gScore, current) + costUPtr->calculate(current, neighbor);

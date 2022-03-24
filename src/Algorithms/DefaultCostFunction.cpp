@@ -16,11 +16,15 @@ namespace Pathfinding::Algorithms
 
     double DefaultCostFunction::calculate(const Node *from, const Node *to)
     {
-        if (blocked(to) || blocked(from))
+        if (blocked(to))
         {
             return infinity();
         }
         
+        /**
+         * @brief does this make my graph bidirectional ?
+         * 
+         */
         return twoNodesDiagonal(from, to) ? diagonalMovementCost * to->factor : straightMovementCost * to->factor; 
     }
 }

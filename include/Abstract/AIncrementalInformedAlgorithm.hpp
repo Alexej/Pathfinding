@@ -24,12 +24,12 @@ namespace Pathfinding::Abstract
 
             void addFoundPathCallBack(std::function<void(void)> callBack)
             {
-                doneCallBack_ = callBack;
+                doneCallBack = callBack;
             }
 
             void addNoPathCallBack(std::function<void(void)> callBack)
             {
-                noPathCallBack_ = callBack;
+                noPathCallBack = callBack;
             }
             
             virtual void initialize() = 0;
@@ -46,8 +46,8 @@ namespace Pathfinding::Abstract
 
         protected:
             std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr = nullptr;
-            std::function<void(void)> doneCallBack_;
-            std::function<void(void)> noPathCallBack_;
+            std::function<void(void)> doneCallBack;
+            std::function<void(void)> noPathCallBack;
     };
 }
 
