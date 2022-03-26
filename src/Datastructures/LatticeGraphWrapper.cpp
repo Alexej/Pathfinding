@@ -2,11 +2,30 @@
 #include "ALatGraphWr.hpp"
 #include "ILatticeGraph.hpp"
 #include "Node.hpp"
+#include "IMazeGenerator.hpp"
+#include "LatticeGraphHelpers.hpp"
 
 namespace Pathfinding::Datastructures
 {
     using Pathfinding::Abstract::ALatGraphWr;
     using Pathfinding::Abstract::ILatticeGraph;
+    using Pathfinding::Abstract::IMazeGenerator;
+    using Pathfinding::Helpers::ILatticeGraphHelpers;
+
+    namespace
+    {
+        Node *getFreeNode(std::vector<Node *> vec)
+        {
+            for (auto possibleFreeNode : vec)
+            {
+                if (possibleFreeNode->state == NodeState::Free)
+                {
+                    return possibleFreeNode;
+                }
+            }
+            return nullptr;
+        }
+    }
 
     LatticeGraphWrapper::LatticeGraphWrapper(std::shared_ptr<ILatticeGraph> latticeGraphUPtr)
         : ALatGraphWr(latticeGraphUPtr)
@@ -44,8 +63,29 @@ namespace Pathfinding::Datastructures
     {
         int32_t heightI = static_cast<int32_t>(latGraphSPtr->height());
         int32_t widthI = static_cast<int32_t>(latGraphSPtr->width());
-        goalNodePtr = latGraphSPtr->node(Vec2i(heightI - 1, widthI - 1));
-        startNodePtr = latGraphSPtr->node(Vec2i(0, 0));
+
+        auto possibleGoal = latGraphSPtr->node(Vec2i(heightI - 1, widthI - 1));
+        auto possibleStart = latGraphSPtr->node(Vec2i(0, 0));
+
+        std::vector<Node *> possibleGoals;
+        std::vector<Node *> possibleStarts;
+
+        possibleGoals.push_back(possibleGoal);
+        possibleStarts.push_back(possibleStart);
+
+        for (auto node : ILatticeGraphHelpers::neighbors(*latGraphSPtr, possibleGoal))
+        {
+            possibleGoals.push_back(node);
+        }
+
+        for (auto node : ILatticeGraphHelpers::neighbors(*latGraphSPtr, possibleStart))
+        {
+            possibleStarts.push_back(node);
+        }
+
+        goalNodePtr = getFreeNode(possibleGoals);
+        startNodePtr = getFreeNode(possibleStarts);
+
         goalNodePtr->state = NodeState::Goal;
         startNodePtr->state = NodeState::Start;
     }
@@ -70,7 +110,7 @@ namespace Pathfinding::Datastructures
         }
     }
 
-    void LatticeGraphWrapper::changeNodeState(Node *node, NodeState newState)
+    void LatticeGraphWrapper::changeNodeStateWhenNodeFreeOrVisited(Node *node, NodeState newState)
     {
         if (!node->visitedOnce)
         {
@@ -80,5 +120,20 @@ namespace Pathfinding::Datastructures
         {
             node->state = newState;
         }
+    }
+
+    void LatticeGraphWrapper::removeEndpointsFromGraph()
+    {
+        endpointsSet_ = false;
+        goalNodePtr->state = NodeState::Free;
+        startNodePtr->state = NodeState::Free;
+        goalNodePtr = nullptr;
+        startNodePtr = nullptr;
+    }
+
+    void LatticeGraphWrapper::addEndpointsToGraph()
+    {
+        endpointsSet_ = true;
+        resetEndpoints();
     }
 }

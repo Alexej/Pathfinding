@@ -7,6 +7,7 @@
 #include "ILatticeGraph.hpp"
 #include "Vec2.hpp"
 
+namespace Pathfinding::Abstract { class IMazeGenerator; }
 
 namespace Pathfinding::Datastructures
 {
@@ -14,6 +15,7 @@ namespace Pathfinding::Datastructures
     class LatticeGraphWrapper final : public Pathfinding::Abstract::ALatGraphWr
     {
         private:
+            using PAIMazeGenerator = Pathfinding::Abstract::IMazeGenerator;
             using PAILatticeGraph = Pathfinding::Abstract::ILatticeGraph;
         public:
             LatticeGraphWrapper(std::shared_ptr<PAILatticeGraph> latticeGraphUPtr);
@@ -32,7 +34,11 @@ namespace Pathfinding::Datastructures
 
             void setStart(Vec2i location) override;
 
-            void changeNodeState(Node *node, NodeState newState) override;
+            void changeNodeStateWhenNodeFreeOrVisited(Node *node, NodeState newState) override;
+
+            void removeEndpointsFromGraph() override;
+        
+            void addEndpointsToGraph() override;
 
         private:
             void resetEndpoints();

@@ -12,6 +12,7 @@ namespace Pathfinding::Datastructures { enum class NodeState; }
 namespace Pathfinding::Abstract
 {
     class ILatticeGraph;
+    class IMazeGenerator;
     class ALatGraphWr
     {
     private:
@@ -36,12 +37,21 @@ namespace Pathfinding::Abstract
 
         virtual void resize(int32_t height, int32_t width) = 0;
 
-        virtual void changeNodeState(PDNode *node, PDNodeState newState) = 0;
+        virtual void changeNodeStateWhenNodeFreeOrVisited(PDNode *node, PDNodeState newState) = 0;
+
+        virtual void removeEndpointsFromGraph() = 0;
+        
+        virtual void addEndpointsToGraph() = 0;
 
         virtual ~ALatGraphWr() = default;
 
     public:
+        bool endpointsSet() const { return endpointsSet_; }
+        
+    public:
         std::shared_ptr<ILatticeGraph> latGraphSPtr = nullptr;
+    protected:
+        bool endpointsSet_ = true;
     };
 }
 

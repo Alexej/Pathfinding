@@ -6,6 +6,7 @@
 #include "PathfinderReturnType.hpp"
 #include "RenderingHelpers.hpp"
 #include "LatticeGraphHelpers.hpp"
+#include "DFSMazeGenerator.hpp"
 
 namespace Pathfinding::Core
 {
@@ -13,6 +14,7 @@ namespace Pathfinding::Core
     using Pathfinding::Datastructures::PathfinderReturnType;
     using Pathfinding::Helpers::convertToSfmlColor;
     using Pathfinding::Helpers::ILatticeGraphHelpers;
+    using Pathfinding::Algorithms::DFSMazeGenerator;
 
     void Application::startAlgorithm()
     {
@@ -143,4 +145,16 @@ namespace Pathfinding::Core
             aStarCache.cache(aStarUPtr->calculatePath(latGraphWrapUPtr));
         }
     }
+    
+
+    void Application::generateMaze()
+    {
+        DFSMazeGenerator dfsmg;
+        latGraphWrapUPtr->resize(dimensionPtr->height(), dimensionPtr->width());
+        latGraphWrapUPtr->removeEndpointsFromGraph();
+        dfsmg.generate(*latGraphWrapUPtr->latGraphSPtr);
+        latGraphWrapUPtr->addEndpointsToGraph();
+    }
 }
+
+

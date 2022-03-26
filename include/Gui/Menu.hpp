@@ -43,6 +43,8 @@ namespace Pathfinding::Gui
 
             void addRandomGraphCallBack(fPtrVV callBack) override;
 
+            void addMazeGraphCallBack(fPtrVV callBack) override;
+
             bool initialized() const override;
 
             void showGraph(std::vector<int32_t> values, std::string name) override;
@@ -88,6 +90,7 @@ namespace Pathfinding::Gui
             fPtrVV resetCallback = nullptr;
             fPtrVV stepCallBack = nullptr;
             fPtrVV randomGraphCallBack = nullptr;
+            fPtrVV mazeGraphCallBack = nullptr;
     };
 }
 

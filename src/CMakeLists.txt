@@ -4,6 +4,7 @@ set(SOURCES_PATHFINDING
   Algorithms/AStar.cpp
   Algorithms/DiagonalHeuristic.cpp
   Algorithms/DefaultCostFunction.cpp
+  Algorithms/DFSMazeGenerator.cpp
   Events/EventManager.cpp
   Datastructures/LatticeGraph.cpp
   Datastructures/Node.cpp

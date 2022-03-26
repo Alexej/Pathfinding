@@ -43,7 +43,8 @@ namespace Pathfinding::Gui
     Menu::Menu(ApplicationState *appStatePtr_,
                PathfinderCache *aCache_,
                PDPathfinderCache *dCache_)
-        : appStatePtr(appStatePtr_), offset(static_cast<float>(GRID_FIELD_WIDTH)),
+        : appStatePtr(appStatePtr_), 
+          offset(static_cast<float>(GRID_FIELD_WIDTH)),
           height(static_cast<float>(GRID_FIELD_HEIGHT)),
           width(static_cast<float>(MENU_WIDTH)),
           aCache(aCache_),
@@ -227,6 +228,11 @@ namespace Pathfinding::Gui
         {
             randomGraphCallBack();
         }
+
+        if (ImGui::Button("Maze", ImVec2(width - 20, 20)))
+        {
+            mazeGraphCallBack();
+        }
     }
 
     void Menu::addNumberOfNodesChangedCallBack(fPtrVI callBack)
@@ -257,6 +263,11 @@ namespace Pathfinding::Gui
     void Menu::addRandomGraphCallBack(fPtrVV callBack)
     {
         randomGraphCallBack = callBack;
+    }
+
+    void Menu::addMazeGraphCallBack(fPtrVV callBack)
+    {
+        mazeGraphCallBack = callBack;
     }
 
     void Menu::showPathFlags()

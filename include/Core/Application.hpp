@@ -59,6 +59,8 @@ namespace Pathfinding::Core
         void noPath();
         
         void randomGraph();
+
+        void generateMaze();
         
         void step();
     

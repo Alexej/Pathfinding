@@ -134,6 +134,7 @@ namespace Pathfinding::Core
         applicationUPtr->menuUPtr->addNumberOfNodesChangedCallBack(std::bind(&Application::handleNumberOfNodesChange, applicationUPtr.get(), _1));
         applicationUPtr->menuUPtr->addStartCallBack(std::bind(&Application::startAlgorithm, applicationUPtr.get()));
         applicationUPtr->menuUPtr->addRandomGraphCallBack(std::bind(&Application::randomGraph, applicationUPtr.get()));
+        applicationUPtr->menuUPtr->addMazeGraphCallBack(std::bind(&Application::generateMaze, applicationUPtr.get()));
         applicationUPtr->menuUPtr->addResetCallBack(std::bind(&Application::reset, applicationUPtr.get()));
         applicationUPtr->menuUPtr->addStepCallBack(std::bind(&Application::step, applicationUPtr.get()));
     }
@@ -152,3 +153,4 @@ namespace Pathfinding::Core
         applicationUPtr->dstarLiteUPtr->setCostFunction(std::make_unique<DefaultCostFunction>(diagonalCost, straightCost));
     }
 }
+

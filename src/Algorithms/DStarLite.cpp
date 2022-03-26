@@ -138,20 +138,20 @@ namespace Pathfinding::Algorithms
     Node *DStarLite::popFromQueueAndUpdateState()
     {
         Node *u = U.pop();
-        latticeGraphWrapperSPtr->changeNodeState(u, NodeState::Visited);
+        latticeGraphWrapperSPtr->changeNodeStateWhenNodeFreeOrVisited(u, NodeState::Visited);
         return u;
     }
 
     void DStarLite::removeFromQUeueAndUpdateState(Node *node)
     {
         U.remove(node);
-        latticeGraphWrapperSPtr->changeNodeState(node, NodeState::Visited);
+        latticeGraphWrapperSPtr->changeNodeStateWhenNodeFreeOrVisited(node, NodeState::Visited);
     }
     
     void DStarLite::insertIntoQueueAndUpdateStateAndKey(Node *node)
     {
         insertIntoQueueAndUpdateKey(node);
-        latticeGraphWrapperSPtr->changeNodeState(node, NodeState::Frontier);
+        latticeGraphWrapperSPtr->changeNodeStateWhenNodeFreeOrVisited(node, NodeState::Frontier);
     }
 
     void DStarLite::insertIntoQueueAndUpdateKey(Node *node)
@@ -218,7 +218,7 @@ namespace Pathfinding::Algorithms
         Node *prevStart = sStart;
         sStart = getMinCG(sStart).second;
         latticeGraphWrapperSPtr->setStart(sStart->location);
-        latticeGraphWrapperSPtr->changeNodeState(prevStart, NodeState::Visited);
+        latticeGraphWrapperSPtr->changeNodeStateWhenNodeFreeOrVisited(prevStart, NodeState::Visited);
     }
 
     void DStarLite::addChangedNode(Node *node)

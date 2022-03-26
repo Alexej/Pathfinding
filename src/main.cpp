@@ -15,17 +15,16 @@
 #include <cmath>
 #include <numbers>
 
-
 int main()
-{   
+{
     using Pathfinding::Abstract::IApplication;
     using Pathfinding::Abstract::IFontLoader;
     using Pathfinding::Core::Application;
+    using Pathfinding::Core::ApplicationBuilder;
     using Pathfinding::Exceptions::CouldNotFindPathToFontException;
     using Pathfinding::Exceptions::CouldNotLoadFontException;
-    using Pathfinding::Exceptions::WrongNodeNumberForDimensionException;
     using Pathfinding::Exceptions::NoSuchFontException;
-    using Pathfinding::Core::ApplicationBuilder;
+    using Pathfinding::Exceptions::WrongNodeNumberForDimensionException;
     using Pathfinding::Helpers::FontLoader;
 
     ApplicationBuilder appBuilder;
@@ -35,7 +34,7 @@ int main()
     try
     {
         fontLoaderSPtr->loadFont("NugoSansLight.ttf");
-        appBuilder.setDimension({4,5,8, 10, 20, 25, 40, 80, 160});
+        appBuilder.setDimension({4,5,8, 10, 16, 20,25, 32, 40, 80, 160});
         appBuilder.setCosts(static_cast<int32_t>(std::sqrt(2) * 10), 10 * 1);
         appBuilder.setFontLoader(fontLoaderSPtr);
         app = appBuilder.make();
@@ -55,7 +54,7 @@ int main()
         std::cout << exception.what() << "\n";
         return -1;
     }
-    catch(NoSuchFontException & exception)
+    catch (NoSuchFontException &exception)
     {
         std::cout << exception.what() << "\n";
         return -1;
