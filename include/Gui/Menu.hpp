@@ -7,90 +7,108 @@
 #include "ApplicationState.hpp"
 #include "IMenu.hpp"
 
-namespace Pathfinding::Core { struct ApplicationState; }
-namespace Pathfinding::Core { class GraphDimension; }
-namespace Pathfinding::Core { class AlgorithmStepSpeed; }
-namespace Pathfinding::Datastructures { struct PathfinderCache; }
+namespace Pathfinding::Core
+{
+    struct ApplicationState;
+}
+namespace Pathfinding::Core
+{
+    class GraphDimension;
+}
+namespace Pathfinding::Core
+{
+    class AlgorithmStepSpeed;
+}
+namespace Pathfinding::Datastructures
+{
+    struct PathfinderCache;
+}
 
 namespace Pathfinding::Gui
 {
     class Menu final : public Pathfinding::Abstract::IMenu
     {
-        private:
-            using PCApplicationState = Pathfinding::Core::ApplicationState;
-            using PCGraphDimension = Pathfinding::Core::GraphDimension;
-            using PCAlgorithmStepSpeed = Pathfinding::Core::AlgorithmStepSpeed;
-            using PDPathfinderCache = Pathfinding::Datastructures::PathfinderCache;
-            using fPtrVI = std::function<void(int32_t)>;
-            using fPtrVV = std::function<void(void)>;
-        public:
-            Menu() = default;
+    private:
+        using PCApplicationState = Pathfinding::Core::ApplicationState;
+        using PCGraphDimension = Pathfinding::Core::GraphDimension;
+        using PCAlgorithmStepSpeed = Pathfinding::Core::AlgorithmStepSpeed;
+        using PDPathfinderCache = Pathfinding::Datastructures::PathfinderCache;
+        using fPtrVI = std::function<void(int32_t)>;
+        using fPtrVV = std::function<void(void)>;
 
-            Menu(
-                PCApplicationState * appStatePtr, 
-                PDPathfinderCache * aCache,
-                PDPathfinderCache * dCache);
+    public:
+        Menu() = default;
 
-            void show() override;
+        Menu(
+            PCApplicationState *appStatePtr,
+            PDPathfinderCache *aCache,
+            PDPathfinderCache *dCache);
 
-            void addNumberOfNodesChangedCallBack(fPtrVI callBack) override;
+        void show() override;
 
-            void addStepCallBack(fPtrVV callBack) override;
+        void addNumberOfNodesChangedCallBack(fPtrVI callBack) override;
 
-            void addStartCallBack(fPtrVV callBack) override;
+        void addStepCallBack(fPtrVV callBack) override;
 
-            void addResetCallBack(fPtrVV callBack) override;
+        void addStartCallBack(fPtrVV callBack) override;
 
-            void addRandomGraphCallBack(fPtrVV callBack) override;
+        void addResetCallBack(fPtrVV callBack) override;
 
-            void addMazeGraphCallBack(fPtrVV callBack) override;
+        void addRandomGraphCallBack(fPtrVV callBack) override;
 
-            bool initialized() const override;
+        void addMazeGraphCallBack(fPtrVV callBack) override;
 
-            void showGraph(std::vector<int32_t> values, std::string name) override;
+        bool initialized() const override;
 
-        private:
-            void showCommonElements();
+        void showGraph(std::vector<int32_t> values, std::string name) override;
 
-            void showReadyStateElements();
+        void showMouseWheelEventComboBox();
 
-            void showNodeInfoInMenu();
+        void addMouseWheelEventChangedCallBack(fPtrVI callBack) override;
 
-            void showNodeInfoFlag();
+    private:
+        void showCommonElements();
 
-            void showSearchingElements();
+        void showReadyStateElements();
 
-            void showAutoStepFlag();
+        void showNodeInfoInMenu();
 
-            void showPathFlags();
+        void showNodeInfoFlag();
 
-            void showNumberOfNodesComboBox();
+        void showSearchingElements();
 
-            void showSearchResults();
+        void showAutoStepFlag();
 
-            void showDoneState();
+        void showPathFlags();
 
-            void showAStarPath();
+        void showNumberOfNodesComboBox();
 
-            void showStepSpeed();
-            
-        private:
-            float offset; 
-            float height; 
-            float width;
-            PCApplicationState * appStatePtr;
-            PCGraphDimension * dimensionPtr;
-            PCAlgorithmStepSpeed * algoStepSpeedPtr;
-            PDPathfinderCache * aCache;
-            PDPathfinderCache * dCache;
-            
-        private:
-            fPtrVI numberOfNodesChangedCallBack = nullptr;
-            fPtrVV startCallBack = nullptr;
-            fPtrVV resetCallback = nullptr;
-            fPtrVV stepCallBack = nullptr;
-            fPtrVV randomGraphCallBack = nullptr;
-            fPtrVV mazeGraphCallBack = nullptr;
+        void showSearchResults();
+
+        void showDoneState();
+
+        void showAStarPath();
+
+        void showStepSpeed();
+
+    private:
+        float offset;
+        float height;
+        float width;
+        PCApplicationState *appStatePtr;
+        PCGraphDimension *dimensionPtr;
+        PCAlgorithmStepSpeed *algoStepSpeedPtr;
+        PDPathfinderCache *aCache;
+        PDPathfinderCache *dCache;
+
+    private:
+        fPtrVI numberOfNodesChangedCallBack = nullptr;
+        fPtrVV startCallBack = nullptr;
+        fPtrVV resetCallback = nullptr;
+        fPtrVV stepCallBack = nullptr;
+        fPtrVV randomGraphCallBack = nullptr;
+        fPtrVV mazeGraphCallBack = nullptr;
+        fPtrVI mouseWheelEventChangedCallBack = nullptr;
     };
 }
 

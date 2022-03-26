@@ -34,7 +34,7 @@ int main()
     try
     {
         fontLoaderSPtr->loadFont("NugoSansLight.ttf");
-        appBuilder.setDimension({4,5,8, 10, 16, 20,25, 32, 40, 80, 160});
+        appBuilder.setDimension({81});
         appBuilder.setCosts(static_cast<int32_t>(std::sqrt(2) * 10), 10 * 1);
         appBuilder.setFontLoader(fontLoaderSPtr);
         app = appBuilder.make();

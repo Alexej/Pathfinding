@@ -72,6 +72,9 @@ namespace Pathfinding::Rendering
 
         DrawableNode drawableNode;
         DrawablePath drawablePath;
+
+        int32_t currentNodeSideLength = 10;
+        const int32_t baseNodeSideLength = 10;
     };
 }
 

@@ -7,6 +7,7 @@
 #include "RenderingHelpers.hpp"
 #include "LatticeGraphHelpers.hpp"
 #include "DFSMazeGenerator.hpp"
+#include "MouseData.hpp"
 
 namespace Pathfinding::Core
 {
@@ -15,6 +16,7 @@ namespace Pathfinding::Core
     using Pathfinding::Helpers::convertToSfmlColor;
     using Pathfinding::Helpers::ILatticeGraphHelpers;
     using Pathfinding::Algorithms::DFSMazeGenerator;
+    using Pathfinding::Events::MouseData;
 
     void Application::startAlgorithm()
     {
@@ -145,7 +147,20 @@ namespace Pathfinding::Core
             aStarCache.cache(aStarUPtr->calculatePath(latGraphWrapUPtr));
         }
     }
-    
+
+    void Application::mouseWheelEventChanged(int32_t index)
+    {
+        appState.currentMouseWheelEvent = static_cast<MouseWheelEvent>(index);
+    }
+
+    void Application::mouseWheelMoved(MouseData mouseData)
+    {
+        if(appState.currentMouseWheelEvent != MouseWheelEvent::Zoom)
+        {
+            return;
+        }
+        printf("%i\n", mouseData.wheelDelta);
+    }
 
     void Application::generateMaze()
     {

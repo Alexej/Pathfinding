@@ -9,6 +9,7 @@ namespace Pathfinding::Datastructures { struct Node; }
 namespace Pathfinding::Core
 {
     enum class AlgorithmState { READY, SEARCHING, FOUND_PATH, NO_PATH };
+    enum class MouseWheelEvent { Zoom, EdgeCostFactor };
 
     struct ApplicationState
     {
@@ -24,6 +25,7 @@ namespace Pathfinding::Core
             GraphDimension dimension;
             int32_t stepSpeed = Pathfinding::Constants::DEFAULT_STEP_SPEED;
             AlgorithmState currentState = AlgorithmState::READY;
+            MouseWheelEvent currentMouseWheelEvent = MouseWheelEvent::EdgeCostFactor;
             bool showNodeInfo = false;
             const PDNode *nodeUnderCursor = nullptr;
             bool autoStep = false;

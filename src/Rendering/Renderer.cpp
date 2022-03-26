@@ -42,12 +42,12 @@ namespace Pathfinding::Rendering
 
     void Renderer::resize()
     {
-        float straightLineLength = static_cast<float>(dimensionPtr->currentNodeSideLength());
+        float straightLineLength = static_cast<float>(currentNodeSideLength);
         float halfNodeSize = straightLineLength / 2;
 
         float nodePointRadius;
 
-        if (dimensionPtr->canShowNodeInfo())
+        if (currentNodeSideLength >= 80)
         {
             nodePointRadius = halfNodeSize / 5;
         }
@@ -79,11 +79,11 @@ namespace Pathfinding::Rendering
         ILatticeGraphHelpers::iterateOverLatticeGraphConst(*latticeGraphWrapperSPtr->latGraphSPtr,
         [this](const Node *node, int32_t h, int32_t w)
         {
-            auto coords = getNodePosition(node, dimensionPtr->currentNodeSideLength());
+            auto coords = getNodePosition(node, currentNodeSideLength);
             auto color = stateColor(node->state);
             if(node->state == NodeState::Blocked) { color = blockedNodeGradient; }
             else if(node->state == NodeState::Start) { color = startNodeGradient; }
-            drawableNode.prepare(*node, coords, color, appStateSPtr->showNodeInfo);
+            drawableNode.prepare(*node, coords, color, currentNodeSideLength >= 80);
             windowPtr->draw(drawableNode);
         });
     }
@@ -112,7 +112,7 @@ namespace Pathfinding::Rendering
 
     void Renderer::renderPath(const std::vector<Node *> &path, sf::Color color)
     {
-        auto halfNodeSide = dimensionPtr->currentNodeSideLength() / 2.f;
+        auto halfNodeSide = currentNodeSideLength / 2.f;
         sf::Vector2f pointPositionOffset(halfNodeSide,halfNodeSide);
         drawablePath.prepare(path, pointPositionOffset, color);
         windowPtr->draw(drawablePath);

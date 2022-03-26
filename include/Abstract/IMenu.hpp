@@ -24,6 +24,8 @@ namespace Pathfinding::Abstract
             virtual void addRandomGraphCallBack(fPtrVV callBack) = 0;
 
             virtual void addMazeGraphCallBack(fPtrVV callBack) = 0;
+
+            virtual void addMouseWheelEventChangedCallBack(fPtrVI callBack) = 0;
             
             virtual bool initialized() const = 0;
             

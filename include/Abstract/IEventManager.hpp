@@ -5,18 +5,16 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 
-namespace Pathfinding::Events { struct MouseData; }
-namespace Pathfinding::Events { struct MouseEvent; }
+namespace Pathfinding::Events { struct Binding; }
 
 namespace Pathfinding::Abstract
 {
     class IEventManager
     {
         private:
-            using PEMouseEvent = Pathfinding::Events::MouseEvent;
-            using PEMouseData = Pathfinding::Events::MouseData;
+            using PEBinding = Pathfinding::Events::Binding;
         public:
-            virtual void addBinding(PEMouseEvent event, std::function<void(PEMouseData)> callbackFunc) = 0;
+            virtual void addBinding(PEBinding binding) = 0;
             
             virtual void pushEvent(sf::Event event) = 0;
             

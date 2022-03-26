@@ -18,6 +18,7 @@
 #include "IEventManager.hpp"
 #include "IMenu.hpp"
 #include "IApplication.hpp"
+#include "MouseData.hpp"
 
 namespace Pathfinding::Core { class ApplicationBuilder; }
 
@@ -36,11 +37,15 @@ namespace Pathfinding::Core
         using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
         using PAIAStar = Pathfinding::Abstract::IAStar;
         using PDPathfinderCachee = Pathfinding::Datastructures::PathfinderCache;
+        using PEMouseData = Pathfinding::Events::MouseData;
+
     public:
         Application() = default;
         
         void run();
         
+        void mouseWheelMoved(PEMouseData mouseData);
+
     private:
         void draw();
         
@@ -63,7 +68,9 @@ namespace Pathfinding::Core
         void generateMaze();
         
         void step();
-    
+
+        void mouseWheelEventChanged(int32_t index);
+
     private:
         void runAStar();
 

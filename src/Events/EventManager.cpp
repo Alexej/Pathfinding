@@ -11,9 +11,9 @@ namespace Pathfinding::Events
     {
     }
 
-    void EventManager::addBinding(MouseEvent event, std::function<void(MouseData)> callback)
+    void EventManager::addBinding(Binding binding)
     {
-        callBacks.push_back({event, callback});
+        bindings.push_back(binding);
     }
 
     void EventManager::pushEvent(sf::Event event)
@@ -31,13 +31,14 @@ namespace Pathfinding::Events
         {
             sf::Event &currentEvent = eventQueue[0];
             sf::Vector2i mousePos = sf::Mouse::getPosition(*windowPtr);
-            for (auto &callBack : callBacks)
+            for (auto &currentBinding : bindings)
             {
-                if (currentEvent.type == callBack.first.event)
+                if (currentEvent.type == currentBinding.mouseEvent.event)
                 {
-                    if (callBack.first.eventOnly || currentEvent.key.code == callBack.first.button)
+                    if (currentBinding.mouseEvent.eventOnly || 
+                        currentEvent.key.code == currentBinding.mouseEvent.button)
                     {
-                        callBack.second(MouseData(mousePos, currentEvent.mouseWheel.delta));
+                        currentBinding.callback(MouseData(mousePos, currentEvent.mouseWheel.delta));
                     }
                 }
             }

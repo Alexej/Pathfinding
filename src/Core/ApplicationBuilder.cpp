@@ -21,30 +21,31 @@
 #include "AStar.hpp"
 #include "PathfinderReturnType.hpp"
 #include "GraphOperations.hpp"
+#include "MouseEvent.hpp"
 
 namespace Pathfinding::Core
 {
     using namespace Pathfinding::Constants;
-    using Pathfinding::Abstract::IApplication;
     using Pathfinding::Abstract::AIncrementalInformedAlgorithm;
+    using Pathfinding::Abstract::IApplication;
     using Pathfinding::Abstract::IGraphOperations;
     using Pathfinding::Abstract::ILatticeGraph;
+    using Pathfinding::Algorithms::AStar;
     using Pathfinding::Algorithms::DefaultCostFunction;
     using Pathfinding::Algorithms::DiagonalHeuristic;
     using Pathfinding::Algorithms::DStarLite;
-    using Pathfinding::Algorithms::AStar;
-    using Pathfinding::Rendering::Renderer;
     using Pathfinding::Datastructures::LatticeGraph;
-    using Pathfinding::Datastructures::PathfinderReturnType;
     using Pathfinding::Datastructures::LatticeGraphWrapper;
+    using Pathfinding::Datastructures::PathfinderReturnType;
     using Pathfinding::Events::EventManager;
+    using Pathfinding::Events::MouseEvent;
     using Pathfinding::Gui::Menu;
-    using std::placeholders::_1;
+    using Pathfinding::Rendering::Renderer;
     using sf::Event::EventType::MouseButtonPressed;
     using sf::Event::EventType::MouseButtonReleased;
     using sf::Event::EventType::MouseMoved;
     using sf::Event::EventType::MouseWheelMoved;
-
+    using std::placeholders::_1;
 
     ApplicationBuilder::ApplicationBuilder()
     {
@@ -93,7 +94,6 @@ namespace Pathfinding::Core
         applicationUPtr->aStarUPtr = std::make_unique<AStar>();
     }
 
-
     void ApplicationBuilder::initializeObjects()
     {
         createEventManagerBindings();
@@ -101,37 +101,49 @@ namespace Pathfinding::Core
         initDStarLite();
         initAStar();
 
-        applicationUPtr->graphOpsUPtr->addEdgeChangeCallBack(std::bind(&AIncrementalInformedAlgorithm::addChangedNode, 
-                                                            applicationUPtr->dstarLiteUPtr.get(), _1));
+        applicationUPtr->graphOpsUPtr->addEdgeChangeCallBack(std::bind(&AIncrementalInformedAlgorithm::addChangedNode,
+                                                                       applicationUPtr->dstarLiteUPtr.get(), _1));
         applicationUPtr->window.setFramerateLimit(APP_FPS);
         applicationUPtr->dimensionPtr = &applicationUPtr->appState.dimension;
     }
 
     void ApplicationBuilder::createEventManagerBindings()
     {
-        constexpr sf::Mouse::Button NO_MOUSE_BUTTON = sf::Mouse::Left;        
-        applicationUPtr->eventManagerUPtr->addBinding({EVENT_AND_KEY, MouseButtonPressed, sf::Mouse::Left}, 
-                std::bind(&IGraphOperations::leftMouseButtonPressed, applicationUPtr->graphOpsUPtr.get(), _1));
+        constexpr sf::Mouse::Button NO_MOUSE_BUTTON = sf::Mouse::Left;
 
-        applicationUPtr->eventManagerUPtr->addBinding({EVENT_AND_KEY, MouseButtonPressed, sf::Mouse::Right}, 
-                std::bind(&IGraphOperations::rightMouseButtonPressed, applicationUPtr->graphOpsUPtr.get(), _1));
+        auto callBack = std::bind(&IGraphOperations::leftMouseButtonPressed, applicationUPtr->graphOpsUPtr.get(), _1);
+        auto mouseWheelEvent = MouseEvent(EVENT_AND_KEY, MouseButtonPressed, sf::Mouse::Left);
+        applicationUPtr->eventManagerUPtr->addBinding({"LeftMouseButtonPressed" ,mouseWheelEvent, callBack});
 
-        applicationUPtr->eventManagerUPtr->addBinding({EVENT_ONLY, MouseButtonReleased, NO_MOUSE_BUTTON}, 
-                std::bind(&IGraphOperations::mouseButtonReleased, applicationUPtr->graphOpsUPtr.get(), _1));
+        callBack = std::bind(&IGraphOperations::rightMouseButtonPressed, applicationUPtr->graphOpsUPtr.get(), _1);
+        mouseWheelEvent = MouseEvent(EVENT_AND_KEY, MouseButtonPressed, sf::Mouse::Right);
+        applicationUPtr->eventManagerUPtr->addBinding({"RightMouseButtonPressed" ,mouseWheelEvent, callBack});
 
-        applicationUPtr->eventManagerUPtr->addBinding({EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON}, 
-                std::bind(&IGraphOperations::mouseMoved, applicationUPtr->graphOpsUPtr.get(), _1));
+        callBack = std::bind(&IGraphOperations::mouseButtonReleased, applicationUPtr->graphOpsUPtr.get(), _1);
+        mouseWheelEvent = MouseEvent(EVENT_ONLY, MouseButtonReleased, NO_MOUSE_BUTTON);
+        applicationUPtr->eventManagerUPtr->addBinding({"MouseButtonReleased" ,mouseWheelEvent, callBack});
 
-        applicationUPtr->eventManagerUPtr->addBinding({EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON}, 
-                std::bind(&IGraphOperations::nodeUnderCursor, applicationUPtr->graphOpsUPtr.get(), _1));
+        callBack = std::bind(&IGraphOperations::mouseMoved, applicationUPtr->graphOpsUPtr.get(), _1);
+        mouseWheelEvent = MouseEvent(EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON);
+        applicationUPtr->eventManagerUPtr->addBinding({"MouseMoved" ,mouseWheelEvent, callBack});
+        
+        callBack = std::bind(&IGraphOperations::nodeUnderCursor, applicationUPtr->graphOpsUPtr.get(), _1);
+        mouseWheelEvent = MouseEvent(EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON);
+        applicationUPtr->eventManagerUPtr->addBinding({"NodeUnderCursor" ,mouseWheelEvent, callBack});
+        
+        callBack = std::bind(&IGraphOperations::mouseWheelMoved, applicationUPtr->graphOpsUPtr.get(), _1);
+        mouseWheelEvent = MouseEvent(EVENT_ONLY, MouseWheelMoved, NO_MOUSE_BUTTON);
+        applicationUPtr->eventManagerUPtr->addBinding({"MouseWheelMoved" ,mouseWheelEvent, callBack});
 
-        applicationUPtr->eventManagerUPtr->addBinding({EVENT_ONLY, MouseWheelMoved, NO_MOUSE_BUTTON}, 
-                std::bind(&IGraphOperations::mouseWheelMoved, applicationUPtr->graphOpsUPtr.get(), _1));
+        auto callBackApp = std::bind(&Application::mouseWheelMoved, applicationUPtr.get(), _1);
+        mouseWheelEvent = MouseEvent(EVENT_ONLY, MouseWheelMoved, NO_MOUSE_BUTTON);
+        applicationUPtr->eventManagerUPtr->addBinding({"MouseWheelMovedZoom" ,mouseWheelEvent, callBackApp});
     }
 
     void ApplicationBuilder::setMenuCallBacks()
     {
         applicationUPtr->menuUPtr->addNumberOfNodesChangedCallBack(std::bind(&Application::handleNumberOfNodesChange, applicationUPtr.get(), _1));
+        applicationUPtr->menuUPtr->addMouseWheelEventChangedCallBack(std::bind(&Application::mouseWheelEventChanged, applicationUPtr.get(), _1));
         applicationUPtr->menuUPtr->addStartCallBack(std::bind(&Application::startAlgorithm, applicationUPtr.get()));
         applicationUPtr->menuUPtr->addRandomGraphCallBack(std::bind(&Application::randomGraph, applicationUPtr.get()));
         applicationUPtr->menuUPtr->addMazeGraphCallBack(std::bind(&Application::generateMaze, applicationUPtr.get()));
@@ -153,4 +165,3 @@ namespace Pathfinding::Core
         applicationUPtr->dstarLiteUPtr->setCostFunction(std::make_unique<DefaultCostFunction>(diagonalCost, straightCost));
     }
 }
-

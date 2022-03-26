@@ -14,10 +14,9 @@
 namespace Pathfinding::Gui
 {
 
-
     using namespace Pathfinding::Constants;
-    using Pathfinding::Core::ApplicationState;
     using Pathfinding::Core::AlgorithmState;
+    using Pathfinding::Core::ApplicationState;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::PathfinderCache;
@@ -27,12 +26,12 @@ namespace Pathfinding::Gui
     using Pathfinding::Helpers::printLargeText;
     using Pathfinding::Helpers::showStatistic;
 
-    namespace 
+    namespace
     {
-        std::vector<int32_t> getSizesOfSubVectors(const std::vector<std::vector<Node *>> & vecOfNodes)
+        std::vector<int32_t> getSizesOfSubVectors(const std::vector<std::vector<Node *>> &vecOfNodes)
         {
             std::vector<int32_t> sizes;
-            for(const auto & subVector : vecOfNodes)
+            for (const auto &subVector : vecOfNodes)
             {
                 sizes.push_back(static_cast<int32_t>(subVector.size()));
             }
@@ -43,7 +42,7 @@ namespace Pathfinding::Gui
     Menu::Menu(ApplicationState *appStatePtr_,
                PathfinderCache *aCache_,
                PDPathfinderCache *dCache_)
-        : appStatePtr(appStatePtr_), 
+        : appStatePtr(appStatePtr_),
           offset(static_cast<float>(GRID_FIELD_WIDTH)),
           height(static_cast<float>(GRID_FIELD_HEIGHT)),
           width(static_cast<float>(MENU_WIDTH)),
@@ -146,6 +145,7 @@ namespace Pathfinding::Gui
             {
                 showAStarPath();
             }
+            showMouseWheelEventComboBox();
             ImGui::Separator();
         }
         if (ImGui::CollapsingHeader("Node info"))
@@ -189,6 +189,15 @@ namespace Pathfinding::Gui
             {
                 appStatePtr->showNodeInfo = false;
             }
+        }
+    }
+
+    void Menu::showMouseWheelEventComboBox()
+    {
+        static int32_t currentMouseWheelEventInt = static_cast<int32_t>(appStatePtr->currentMouseWheelEvent);
+        if (ImGui::custom_combo("# Of Nodes", &currentMouseWheelEventInt, mouseWheelEventStrings))
+        {
+            mouseWheelEventChangedCallBack(currentMouseWheelEventInt);
         }
     }
 
@@ -260,6 +269,11 @@ namespace Pathfinding::Gui
         stepCallBack = callBack;
     }
 
+    void Menu::addMouseWheelEventChangedCallBack(fPtrVI callBack)
+    {
+        mouseWheelEventChangedCallBack = callBack;
+    }
+
     void Menu::addRandomGraphCallBack(fPtrVV callBack)
     {
         randomGraphCallBack = callBack;
@@ -318,7 +332,7 @@ namespace Pathfinding::Gui
                     ImGui::TableSetColumnIndex(2);
                     ImGui::Text(std::to_string(aCache->nodesExpandedAll[i].size()).c_str());
                     ImGui::TableSetColumnIndex(3);
-                    int32_t diff = static_cast<int32_t>(aCache->nodesExpandedAll[i].size() - 
+                    int32_t diff = static_cast<int32_t>(aCache->nodesExpandedAll[i].size() -
                                                         dCache->nodesExpandedAll[i].size());
                     ImGui::Text(std::to_string(diff).c_str());
                 }

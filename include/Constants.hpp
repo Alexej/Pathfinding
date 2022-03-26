@@ -17,8 +17,8 @@ namespace Pathfinding::Constants
     constexpr int32_t MIN_COST_FACTOR = 1;
 
     // Dimension
-    constexpr int32_t GRID_FIELD_WIDTH = 800;
-    constexpr int32_t GRID_FIELD_HEIGHT = 800;
+    constexpr int32_t GRID_FIELD_WIDTH = 810;
+    constexpr int32_t GRID_FIELD_HEIGHT = 810;
     constexpr int32_t MENU_WIDTH = 300;
     constexpr int32_t NUMBER_OF_NODES_FOR_RENDER_INFO = 100;
     constexpr int32_t APPLICATION_WINDOW_WIDTH = GRID_FIELD_WIDTH + MENU_WIDTH;
@@ -62,6 +62,10 @@ namespace Pathfinding::Constants
     // Random
     constexpr int32_t LOWER_DEFAULT_RANDOM_NUMBER = 0;
     constexpr int32_t UPPER_DEFAULT_RANDOM_NUMBER = 100;
+
+
+    //Fix later
+    static std::vector<std::string> mouseWheelEventStrings = {"Zoom", "EdgeCostFactor"};
 }
 
 #endif /* A2338B5A_9164_4556_99CB_AA1F92239E7A */
