@@ -1,4 +1,4 @@
-# Visualization of D* lite pathfinding algorithm. Not done yet.
+# Visualization of D* lite, LPA* and A*. Not done yet.
 ## Libraries used: SFML, IMGUI, Catch2
 
 ## Goal of this project:
@@ -26,6 +26,7 @@ Learning LPA* and D* lite.
 * Documentation.  <br/>
 * Overall design improvements  <br/>
 * Better naming  <br/>
+* Implement LPA*  <br/>
 
 ## References:
 ---
