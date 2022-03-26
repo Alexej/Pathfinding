@@ -27,6 +27,7 @@ Learning LPA* and D* lite.
 * Overall design improvements  <br/>
 * Better naming  <br/>
 * Implement LPA*  <br/>
+* Change the way edge costs work <br/>
 
 ## References:
 ---

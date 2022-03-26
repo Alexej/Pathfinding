@@ -8,63 +8,31 @@
 #include "Vec2.hpp"
 #include "Node.hpp"
 
+namespace Pathfinding::Core { class RandomIntegers; }
 
-//https://hurna.io/academy/algorithms/maze_generator/dfs.html
+// https://hurna.io/academy/algorithms/maze_generator/dfs.html
 namespace Pathfinding::Algorithms
 {
-   inline Pathfinding::Datastructures::Vec2i 
-    getWallPosition(Pathfinding::Datastructures::Node * from, 
-                    Pathfinding::Datastructures::Node * to)
-    {
-        Pathfinding::Datastructures::Vec2i wallPosition;
-        if(from->location.height == to->location.height)
-        {
-            wallPosition = {from->location.height, std::min(from->location.width, to->location.width) + 1};
-        }
-        else
-        {
-            wallPosition = {std::min(from->location.height, to->location.height) + 1, to->location.width};
-        }
-        return wallPosition;
-    } 
-
-    template<typename IntegerType>
-    bool isEven(IntegerType number)
-    {
-        static_assert(std::is_integral<IntegerType>::value, "Integral required.");
-        return number % 2 == 0;
-    }
-
-    template<typename ElementType>
-    ElementType pop(std::stack<ElementType> & stack)
-    {
-        auto lastTop = stack.top();
-        stack.pop();
-        return lastTop;
-    }
-
-    template<typename ElementType>
-    inline bool inVector(std::vector<ElementType> vec, ElementType element)
-    {
-        return std::find(vec.begin(), vec.end(), element) != vec.end();
-    }
-
     class DFSMazeGenerator final : public Pathfinding::Abstract::IMazeGenrator
     {
-        private:
-            using PAIlatticeGraph = Pathfinding::Abstract::ILatticeGraph;
-            using PDVec2i = Pathfinding::Datastructures::Vec2i;
-            using PDNode = Pathfinding::Datastructures::Node;
-        public:
-            void generate(PAIlatticeGraph & latGraph) override;
-        private:
-            void setWalls(PAIlatticeGraph & latGraph);
-            void DFS(PDVec2i from, PAIlatticeGraph & latGraph);
-            std::vector<PDNode *> getAvailableneighbors(PAIlatticeGraph & latGraph, PDNode * node) const;
-            void connectNodes(PAIlatticeGraph & latGraph, PDNode * from ,PDNode * to);
-        private:
-            std::vector<PDNode*> visited;
-            std::stack<PDNode*> pathStack;
+    private:
+        using PAIlatticeGraph = Pathfinding::Abstract::ILatticeGraph;
+        using PDVec2i = Pathfinding::Datastructures::Vec2i;
+        using PDNode = Pathfinding::Datastructures::Node;
+        using RCRandomIntegers = Pathfinding::Core::RandomIntegers;
+
+    public:
+        void generate(PAIlatticeGraph &latGraph, RCRandomIntegers & ri) override;
+
+    private:
+        void setWalls(PAIlatticeGraph &latGraph);
+        void DFS(PDVec2i from, PAIlatticeGraph &latGraph, RCRandomIntegers & ri);
+        std::vector<PDNode *> getAvailableneighbors(PAIlatticeGraph &latGraph, PDNode *node) const;
+        void connectNodes(PAIlatticeGraph &latGraph, PDNode *from, PDNode *to);
+
+    private:
+        std::vector<PDNode *> visited;
+        std::stack<PDNode *> pathStack;
     };
 }
 

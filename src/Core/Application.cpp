@@ -152,7 +152,7 @@ namespace Pathfinding::Core
         DFSMazeGenerator dfsmg;
         latGraphWrapUPtr->resize(dimensionPtr->height(), dimensionPtr->width());
         latGraphWrapUPtr->removeEndpointsFromGraph();
-        dfsmg.generate(*latGraphWrapUPtr->latGraphSPtr);
+        dfsmg.generate(*latGraphWrapUPtr->latGraphSPtr, ri);
         latGraphWrapUPtr->addEndpointsToGraph();
     }
 }
