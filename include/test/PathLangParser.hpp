@@ -7,11 +7,14 @@
 #include <regex>
 
 #include "Scenario.hpp"
+#include "Vec2.hpp"
 
 namespace Pathfinding::Test
 {
     class PathLangParser
     {
+        private:
+            using PDVec2i = Pathfinding::Datastructures::Vec2i;
         public:
             explicit PathLangParser(std::string pathToScenarios);
             
@@ -31,6 +34,17 @@ namespace Pathfinding::Test
             void parseHeader(Scenario & scenario, const std::vector<std::string> & sectionStrings);
             
             void parseCommands(Scenario & scenario, const std::vector<std::string> & sectionStrings);
+        
+        private:
+            PDVec2i parseStartLocation(const std::string & line) const;
+
+            PDVec2i parseGoalLocation(const std::string & line) const;
+
+            std::string parseScenarioName(const std::string & line) const;
+
+            PDVec2i parseSize(const std::string & line) const;
+
+            bool codeLine(const std::string & line) const;
             
         public:
             std::vector<Scenario> scenarios;

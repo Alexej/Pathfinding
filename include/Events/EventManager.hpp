@@ -14,22 +14,19 @@
 
 namespace Pathfinding::Events
 {
+    class BindingsContainer;
     class EventManager final : public Pathfinding::Abstract::IEventManager
     {
     public:        
         explicit EventManager(sf::RenderWindow *window);
-        
-        void addBinding(Binding binding) override;
-        
+                
         void pushEvent(sf::Event event) override;
         
-        void processEvents() override;
-        
+        void processEvents(const BindingsContainer & bindings) override;
 
     private:
         sf::RenderWindow *windowPtr;
         std::deque<sf::Event> eventQueue;
-        std::vector<Binding> bindings;
     };
 }
 

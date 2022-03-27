@@ -113,31 +113,31 @@ namespace Pathfinding::Core
 
         auto callBack = std::bind(&IGraphOperations::leftMouseButtonPressed, applicationUPtr->graphOpsUPtr.get(), _1);
         auto mouseWheelEvent = MouseEvent(EVENT_AND_KEY, MouseButtonPressed, sf::Mouse::Left);
-        applicationUPtr->eventManagerUPtr->addBinding({"LeftMouseButtonPressed" ,mouseWheelEvent, callBack});
+        applicationUPtr->bindings.addBinding({"LeftMouseButtonPressed" ,mouseWheelEvent, callBack});
 
         callBack = std::bind(&IGraphOperations::rightMouseButtonPressed, applicationUPtr->graphOpsUPtr.get(), _1);
         mouseWheelEvent = MouseEvent(EVENT_AND_KEY, MouseButtonPressed, sf::Mouse::Right);
-        applicationUPtr->eventManagerUPtr->addBinding({"RightMouseButtonPressed" ,mouseWheelEvent, callBack});
+        applicationUPtr->bindings.addBinding({"RightMouseButtonPressed" ,mouseWheelEvent, callBack});
 
         callBack = std::bind(&IGraphOperations::mouseButtonReleased, applicationUPtr->graphOpsUPtr.get(), _1);
         mouseWheelEvent = MouseEvent(EVENT_ONLY, MouseButtonReleased, NO_MOUSE_BUTTON);
-        applicationUPtr->eventManagerUPtr->addBinding({"MouseButtonReleased" ,mouseWheelEvent, callBack});
+        applicationUPtr->bindings.addBinding({"MouseButtonReleased" ,mouseWheelEvent, callBack});
 
         callBack = std::bind(&IGraphOperations::mouseMoved, applicationUPtr->graphOpsUPtr.get(), _1);
         mouseWheelEvent = MouseEvent(EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON);
-        applicationUPtr->eventManagerUPtr->addBinding({"MouseMoved" ,mouseWheelEvent, callBack});
+        applicationUPtr->bindings.addBinding({"MouseMoved" ,mouseWheelEvent, callBack});
         
         callBack = std::bind(&IGraphOperations::nodeUnderCursor, applicationUPtr->graphOpsUPtr.get(), _1);
         mouseWheelEvent = MouseEvent(EVENT_ONLY, MouseMoved, NO_MOUSE_BUTTON);
-        applicationUPtr->eventManagerUPtr->addBinding({"NodeUnderCursor" ,mouseWheelEvent, callBack});
+        applicationUPtr->bindings.addBinding({"NodeUnderCursor" ,mouseWheelEvent, callBack});
         
         callBack = std::bind(&IGraphOperations::mouseWheelMoved, applicationUPtr->graphOpsUPtr.get(), _1);
         mouseWheelEvent = MouseEvent(EVENT_ONLY, MouseWheelMoved, NO_MOUSE_BUTTON);
-        applicationUPtr->eventManagerUPtr->addBinding({"MouseWheelMoved" ,mouseWheelEvent, callBack});
+        applicationUPtr->bindings.addBinding({"MouseWheelMoved" ,mouseWheelEvent, callBack});
 
         auto callBackApp = std::bind(&Application::mouseWheelMoved, applicationUPtr.get(), _1);
         mouseWheelEvent = MouseEvent(EVENT_ONLY, MouseWheelMoved, NO_MOUSE_BUTTON);
-        applicationUPtr->eventManagerUPtr->addBinding({"MouseWheelMovedZoom" ,mouseWheelEvent, callBackApp});
+        applicationUPtr->bindings.addBinding({"MouseWheelMovedZoom" ,mouseWheelEvent, callBackApp});
     }
 
     void ApplicationBuilder::setMenuCallBacks()

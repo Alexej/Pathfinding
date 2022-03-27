@@ -3,6 +3,7 @@
 #include <SFML/Window/Event.hpp>
 
 #include "MouseData.hpp"
+#include "BindingsContainer.hpp"
 
 namespace Pathfinding::Events
 {
@@ -11,27 +12,23 @@ namespace Pathfinding::Events
     {
     }
 
-    void EventManager::addBinding(Binding binding)
-    {
-        bindings.push_back(binding);
-    }
 
     void EventManager::pushEvent(sf::Event event)
     {
-        if (event.type == sf::Event::EventType::Closed)
-        {
-            windowPtr->close();
-        }
         eventQueue.push_back(event);
     }
 
-    void EventManager::processEvents()
+    void EventManager::processEvents(const BindingsContainer & bindings)
     {
         while (!eventQueue.empty())
         {
             sf::Event &currentEvent = eventQueue[0];
+            if (currentEvent.type == sf::Event::EventType::Closed)
+            {
+                windowPtr->close();
+            }
             sf::Vector2i mousePos = sf::Mouse::getPosition(*windowPtr);
-            for (auto &currentBinding : bindings)
+            for (const auto & currentBinding : bindings)
             {
                 if (currentEvent.type == currentBinding.mouseEvent.event)
                 {

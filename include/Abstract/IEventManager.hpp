@@ -5,20 +5,18 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Window/Event.hpp>
 
-namespace Pathfinding::Events { struct Binding; }
+namespace Pathfinding::Events { class BindingsContainer; }
 
 namespace Pathfinding::Abstract
 {
     class IEventManager
     {
         private:
-            using PEBinding = Pathfinding::Events::Binding;
-        public:
-            virtual void addBinding(PEBinding binding) = 0;
-            
+            using PEBindingsContainer = Pathfinding::Events::BindingsContainer;
+        public:            
             virtual void pushEvent(sf::Event event) = 0;
             
-            virtual void processEvents() = 0;
+            virtual void processEvents(const PEBindingsContainer & bindings) = 0;
             
             virtual ~IEventManager() = default;
             

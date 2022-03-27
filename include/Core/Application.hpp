@@ -19,6 +19,7 @@
 #include "IMenu.hpp"
 #include "IApplication.hpp"
 #include "MouseData.hpp"
+#include "BindingsContainer.hpp"
 
 namespace Pathfinding::Core { class ApplicationBuilder; }
 
@@ -38,6 +39,7 @@ namespace Pathfinding::Core
         using PAIAStar = Pathfinding::Abstract::IAStar;
         using PDPathfinderCachee = Pathfinding::Datastructures::PathfinderCache;
         using PEMouseData = Pathfinding::Events::MouseData;
+        using PEBindingsContainer = Pathfinding::Events::BindingsContainer;
 
     public:
         Application() = default;
@@ -91,6 +93,7 @@ namespace Pathfinding::Core
         RandomIntegers ri;
         
         GraphDimension *dimensionPtr;
+        PEBindingsContainer bindings;
     };
 }
 

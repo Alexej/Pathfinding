@@ -64,7 +64,7 @@ namespace Pathfinding::Core
             }
         }
         ImGui::SFML::Update(window, deltaClock.restart());
-        eventManagerUPtr->processEvents();
+        eventManagerUPtr->processEvents(bindings);
     }
 
     void Application::handleNumberOfNodesChange(int32_t index)

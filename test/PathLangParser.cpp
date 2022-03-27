@@ -4,25 +4,24 @@
 #include "Vec2.hpp"
 #include "ApplicationState.hpp"
 
-
 namespace Pathfinding::Test
 {
-    using Pathfinding::Datastructures::Vec2i;
     using Pathfinding::Core::AlgorithmState;
+    using Pathfinding::Datastructures::Vec2i;
     namespace
     {
         CommandsKeyWords mapStringToCommandKeyWord(std::string commandString)
         {
             CommandsKeyWords CommandsKeyWordsReturn;
-            if(commandString == std::string("BLOCK"))
+            if (commandString == std::string("BLOCK"))
             {
                 CommandsKeyWordsReturn = CommandsKeyWords::BLOCK;
             }
-            else if(commandString == std::string("STEP"))
+            else if (commandString == std::string("STEP"))
             {
                 CommandsKeyWordsReturn = CommandsKeyWords::STEP;
             }
-            else if(commandString == std::string("CLEAR"))
+            else if (commandString == std::string("CLEAR"))
             {
                 CommandsKeyWordsReturn = CommandsKeyWords::CLEAR;
             }
@@ -33,15 +32,14 @@ namespace Pathfinding::Test
             return CommandsKeyWordsReturn;
         }
 
-
         AlgorithmState convertStringToState(std::string stateStr)
         {
             AlgorithmState state;
-            if(stateStr == std::string("NO_PATH"))
+            if (stateStr == std::string("NO_PATH"))
             {
                 state = AlgorithmState::NO_PATH;
             }
-            else if(stateStr == std::string("FOUND_PATH"))
+            else if (stateStr == std::string("FOUND_PATH"))
             {
                 state = AlgorithmState::FOUND_PATH;
             }
@@ -53,15 +51,19 @@ namespace Pathfinding::Test
         }
     }
 
-
     PathLangParser::PathLangParser(std::string pathToScenarios)
     {
         input.open(pathToScenarios);
-        if(!input.is_open())
+        if (!input.is_open())
         {
             throw std::exception("Wrong .pathlang path");
         }
         parse();
+    }
+
+    bool PathLangParser::codeLine(const std::string & line) const
+    {
+        return !std::regex_match(line, commentRegex) && !std::regex_match(line, emptyLineRegex);
     }
 
     void PathLangParser::readLines()
@@ -70,9 +72,9 @@ namespace Pathfinding::Test
 
         auto flushBuffer = [&]()
         {
-            if(!buffer.empty())
+            if (!buffer.empty())
             {
-                if(buffer.size() < 5)
+                if (buffer.size() < 5)
                 {
                     throw std::exception("wrong scenarion layout!");
                 }
@@ -81,13 +83,13 @@ namespace Pathfinding::Test
             }
         };
 
-        for(std::string line; getline(input, line );)
+        for (std::string line; getline(input, line);)
         {
-            if(std::regex_match(line, commentRegex) || std::regex_match(line, emptyLineRegex))
+            if (!codeLine(line))
             {
                 continue;
             }
-            if(std::regex_match(line, scenarioRegex))
+            if (std::regex_match(line, scenarioRegex))
             {
                 flushBuffer();
             }
@@ -96,10 +98,10 @@ namespace Pathfinding::Test
         flushBuffer();
     }
 
-    void PathLangParser::parseFooter(Scenario & scenario, const std::vector<std::string> & sectionStrings)
+    void PathLangParser::parseFooter(Scenario &scenario, const std::vector<std::string> &sectionStrings)
     {
         std::smatch baseMatch;
-        if(std::regex_match(sectionStrings.back(), baseMatch, resultRegex))
+        if (std::regex_match(sectionStrings.back(), baseMatch, resultRegex))
         {
             scenario.result = convertStringToState(baseMatch[2].str());
         }
@@ -109,52 +111,80 @@ namespace Pathfinding::Test
         }
     }
 
-    void PathLangParser::parseHeader(Scenario & scenario, const std::vector<std::string> & sectionStrings)
+    void PathLangParser::parseHeader(Scenario &scenario, const std::vector<std::string> &sectionStrings)
+    {
+        scenario.name = parseScenarioName(sectionStrings[0]);
+        scenario.size = parseSize(sectionStrings[1]);
+        scenario.start = parseStartLocation(sectionStrings[2]);
+        scenario.goal = parseGoalLocation(sectionStrings[3]);
+    }
+
+    Vec2i PathLangParser::parseStartLocation(const std::string &line) const
     {
         std::smatch baseMatch;
-        if(std::regex_match(sectionStrings[0], baseMatch, scenarioRegex))
+        Vec2i startLocation;
+        if (std::regex_match(line, baseMatch, startRegex))
         {
-            scenario.name = baseMatch[2].str();
-        }
-        else
-        {
-            throw std::exception("{SCENRAIO [name] ;} not found");
-        }
-
-        if(std::regex_match(sectionStrings[1], baseMatch, sizeRegex))
-        {
-            scenario.size = Vec2i(std::stoi(baseMatch[3].str()), std::stoi(baseMatch[4].str()));
-        }
-        else
-        {
-            throw std::exception("{SIZE VEC2([num]:[num]) ;} not found");
-        }
-
-        if(std::regex_match(sectionStrings[2], baseMatch, startRegex))
-        {
-            scenario.start = Vec2i(std::stoi(baseMatch[3].str()), std::stoi(baseMatch[4].str()));
+            startLocation = Vec2i(std::stoi(baseMatch[3].str()), std::stoi(baseMatch[4].str()));
         }
         else
         {
             throw std::exception("{START VEC2([num]:[num]) ;} not found");
         }
+        return startLocation;
+    }
 
-        if(std::regex_match(sectionStrings[3], baseMatch, goalRegex))
+    Vec2i PathLangParser::parseGoalLocation(const std::string &line) const
+    {
+        std::smatch baseMatch;
+        Vec2i goalLocation;
+        if (std::regex_match(line, baseMatch, goalRegex))
         {
-            scenario.goal = Vec2i(std::stoi(baseMatch[3].str()), std::stoi(baseMatch[4].str()));
+            goalLocation = Vec2i(std::stoi(baseMatch[3].str()), std::stoi(baseMatch[4].str()));
         }
         else
         {
             throw std::exception("{GOAL VEC2([num]:[num]) ;} not found");
         }
+        return goalLocation;
     }
 
-    void PathLangParser::parseCommands(Scenario & scenario, const std::vector<std::string> & sectionStrings)
+    std::string PathLangParser::parseScenarioName(const std::string &line) const
     {
         std::smatch baseMatch;
-        for(std::size_t i = 4; i < sectionStrings.size() - 1; ++i)
+        std::string scenarioName;
+        if (std::regex_match(line, baseMatch, scenarioRegex))
         {
-            if(std::regex_match(sectionStrings[i], baseMatch, commandRegex))
+            scenarioName = baseMatch[2].str();
+        }
+        else
+        {
+            throw std::exception("{SCENRAIO [name] ;} not found");
+        }
+        return scenarioName;
+    }
+
+    Vec2i PathLangParser::parseSize(const std::string &line) const
+    {
+        std::smatch baseMatch;
+        Vec2i size;
+        if (std::regex_match(line, baseMatch, sizeRegex))
+        {
+            size = Vec2i(std::stoi(baseMatch[3].str()), std::stoi(baseMatch[4].str()));
+        }
+        else
+        {
+            throw std::exception("{SIZE VEC2([num]:[num]) ;} not found");
+        }
+        return size;
+    }
+
+    void PathLangParser::parseCommands(Scenario &scenario, const std::vector<std::string> &sectionStrings)
+    {
+        std::smatch baseMatch;
+        for (std::size_t i = 4; i < sectionStrings.size() - 1; ++i)
+        {
+            if (std::regex_match(sectionStrings[i], baseMatch, commandRegex))
             {
                 auto vec2iPos = Vec2i(std::stoi(baseMatch[3].str()), std::stoi(baseMatch[4].str()));
                 auto command = mapStringToCommandKeyWord(baseMatch[1].str());
@@ -169,7 +199,7 @@ namespace Pathfinding::Test
 
     void PathLangParser::parseLines()
     {
-        for(const auto & sectionStrings : sectionsAsStrings)
+        for (const auto &sectionStrings : sectionsAsStrings)
         {
             Scenario scenario;
             parseHeader(scenario, sectionStrings);
