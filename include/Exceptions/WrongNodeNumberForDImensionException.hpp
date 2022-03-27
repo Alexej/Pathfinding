@@ -8,8 +8,8 @@ namespace Pathfinding::Exceptions
     class WrongNodeNumberForDimensionException final : public Pathfinding::Abstract::AException
     {
         public:
-        WrongNodeNumberForDimensionException(const char* msg)
-        : AException(msg) {}
+            WrongNodeNumberForDimensionException(const char* msg)
+            : AException(msg) {}
     };
 }
 

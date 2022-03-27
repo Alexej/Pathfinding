@@ -13,13 +13,8 @@ namespace Pathfinding::Algorithms
 {
     struct QueueElement
     {
-        QueueElement(std::pair<double, double> key_, Pathfinding::Datastructures::Node * node_)
-        : key(key_), node(node_) {}
-        
-        std::pair<double, double> key;
-        
-        Pathfinding::Datastructures::Node * node;
-        
+        std::pair<double, double> key;        
+        Pathfinding::Datastructures::Node * node;   
     };
 
     class AStarQueueComperator

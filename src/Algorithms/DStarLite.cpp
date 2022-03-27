@@ -21,12 +21,11 @@
 namespace Pathfinding::Algorithms
 {
     using namespace Pathfinding::Helpers;
-    using Pathfinding::Constants::DONT_SET_START_STATE;
     using Pathfinding::Abstract::IHeuristic;
     using Pathfinding::Abstract::ICostFunction;
     using Pathfinding::Abstract::ALatGraphWr;
     using Pathfinding::Datastructures::PathfinderReturnType;
-    using Pathfinding::Datastructures::Key;
+    using Pathfinding::Datastructures::Key; 
     using Pathfinding::Datastructures::LatticeGraph;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;

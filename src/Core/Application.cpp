@@ -164,6 +164,7 @@ namespace Pathfinding::Core
 
     void Application::generateMaze()
     {
+        // fix later
         DFSMazeGenerator dfsmg;
         latGraphWrapUPtr->resize(dimensionPtr->height(), dimensionPtr->width());
         latGraphWrapUPtr->removeEndpointsFromGraph();

@@ -16,9 +16,7 @@ namespace Pathfinding::Events
 {
     class EventManager final : public Pathfinding::Abstract::IEventManager
     {
-    public:
-        EventManager() = default;
-        
+    public:        
         explicit EventManager(sf::RenderWindow *window);
         
         void addBinding(Binding binding) override;

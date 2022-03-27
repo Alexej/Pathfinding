@@ -7,8 +7,6 @@ namespace Pathfinding::Events
 {
     struct Binding
     {
-        Binding(std::string name_, MouseEvent mouseEvent_, std::function<void(MouseData)> callback_)
-        : name(name_), mouseEvent(mouseEvent_), callback(callback_) {}
         std::string name;
         MouseEvent mouseEvent;
         std::function<void(MouseData)> callback;

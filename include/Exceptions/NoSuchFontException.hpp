@@ -7,9 +7,9 @@ namespace Pathfinding::Exceptions
 {
     class NoSuchFontException final : public Pathfinding::Abstract::AException
     {
-    public:
-        NoSuchFontException(const char *msg)
-            : AException(msg) {}
+        public:
+            NoSuchFontException(const char *msg)
+                : AException(msg) {}
     };
 }
 

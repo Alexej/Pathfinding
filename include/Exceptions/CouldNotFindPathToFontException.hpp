@@ -8,8 +8,8 @@ namespace Pathfinding::Exceptions
     class CouldNotFindPathToFontException final : public Pathfinding::Abstract::AException
     {
         public:
-        CouldNotFindPathToFontException(const char* msg)
-        : AException(msg) {}
+            CouldNotFindPathToFontException(const char* msg)
+            : AException(msg) {}
     };
 }
 

@@ -27,6 +27,7 @@ namespace Pathfinding::Rendering
         private:
             sf::Text rhs;
             sf::Text g;
+            bool nodeBlocked;
             sf::Text key;
             sf::RectangleShape factorRect;
             sf::RectangleShape nodeRect;

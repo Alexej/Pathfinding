@@ -9,6 +9,7 @@
 namespace Pathfinding::Rendering
 {
     using Pathfinding::Datastructures::Node;
+    using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Helpers::convertToSfmlColor;
     using Pathfinding::Helpers::dToStr;
     using namespace Pathfinding::Constants;
@@ -42,6 +43,8 @@ namespace Pathfinding::Rendering
     {
         nodeRect.setPosition(coords);
         nodeRect.setFillColor(color);
+        
+        nodeBlocked = node.state == NodeState::Blocked ? true : false;
 
         if (renderInfo)
         {
@@ -69,7 +72,7 @@ namespace Pathfinding::Rendering
             key.setPosition(sf::Vector2f(coords.x + diff, coords.y + NODE_INFO_OFFSET + heightKeyOffset));
 
             factorRect.setPosition(sf::Vector2f(coords.x, coords.y + (halfOfNode - factorRect.getSize().y / 2)));
-            factorRect.setFillColor(sf::Color(100 + 14 * node.factor, 0, 140 - 14 * node.factor));
+            factorRect.setFillColor(sf::Color(100 + 28 * node.factor, 0, 140 - 28 * node.factor));
         }
         renderInfoInNode = renderInfo;
     }
@@ -88,7 +91,10 @@ namespace Pathfinding::Rendering
             target.draw(rhs);
             target.draw(g);
             target.draw(key);
-            target.draw(factorRect);
+            if(!nodeBlocked)
+            {
+                target.draw(factorRect);
+            }
         }
     }
 }
