@@ -19,7 +19,7 @@ namespace Pathfinding::Rendering
 
             void prepare(const PDNode & node ,sf::Vector2f coords, sf::Color color, bool renderInfo);
 
-            void resize(sf::Vector2f nodeSize, sf::Vector2f factorSize);
+            void resize(float nodeSideLength);
 
         private:
             void draw(sf::RenderTarget& target, sf::RenderStates states) const override;

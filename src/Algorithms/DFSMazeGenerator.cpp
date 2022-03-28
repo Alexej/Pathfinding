@@ -36,7 +36,7 @@ namespace Pathfinding::Algorithms
         }
     }
 
-    void DFSMazeGenerator::generate(ILatticeGraph &latGraph, RandomIntegers & ri)
+    void DFSMazeGenerator::operator()(ILatticeGraph &latGraph, RandomIntegers & ri)
     {
         setWalls(latGraph);
         DFS(Vec2i(0, 0), latGraph, ri);
@@ -46,6 +46,12 @@ namespace Pathfinding::Algorithms
     {
         Vec2i wallPos = getWallPosition(from, to);
         latGraph.node(wallPos)->state = NodeState::Free;
+    }
+
+    void DFSMazeGenerator::reset()
+    {
+        pathStack = std::stack<PDNode *>();
+        visited.clear();
     }
 
     void DFSMazeGenerator::DFS(PDVec2i from, PAIlatticeGraph &latGraph, RandomIntegers & ri)

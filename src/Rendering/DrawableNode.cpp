@@ -77,10 +77,13 @@ namespace Pathfinding::Rendering
         renderInfoInNode = renderInfo;
     }
 
-    void DrawableNode::resize(sf::Vector2f nodeSize, sf::Vector2f factorSize)
+    void DrawableNode::resize(float nodeSideLength)
     {
-        nodeRect.setSize(nodeSize);
-        factorRect.setSize(factorSize);
+        auto factorRectSize = sf::Vector2f(nodeSideLength / 6.f ,nodeSideLength / 6.f);
+        auto nodeRectSize = sf::Vector2f(nodeSideLength, nodeSideLength);
+
+        nodeRect.setSize(nodeRectSize);
+        factorRect.setSize(factorRectSize);
     }
 
     void DrawableNode::draw(sf::RenderTarget &target, sf::RenderStates states) const

@@ -42,35 +42,9 @@ namespace Pathfinding::Rendering
 
     void Renderer::resize()
     {
-        float straightLineLength = static_cast<float>(dimensionPtr->currentNodeSideLength());
-        float halfNodeSize = straightLineLength / 2;
-
-        float nodePointRadius;
-
-        if (dimensionPtr->canShowNodeInfo())
-        {
-            nodePointRadius = halfNodeSize / 5;
-        }
-        else
-        {
-            nodePointRadius = halfNodeSize / 2.5f;
-        }
-
-        float halfNodeSizeSquared = static_cast<float>(pow(straightLineLength / 2, 2));
-
-        float lineThickness = nodePointRadius / 2;
-        float diagonalLineLength = 2 * sqrt(halfNodeSizeSquared + halfNodeSizeSquared);
-
-        auto straightLineSize = sf::Vector2f(straightLineLength, lineThickness);
-        auto diagonalLineSize = sf::Vector2f(diagonalLineLength, lineThickness);
-
-        auto origin = sf::Vector2f(0, lineThickness / 2);
-
-        auto factorRectSize = sf::Vector2f(nodePointRadius * 1.5f ,nodePointRadius * 1.5f);
-        auto nodeRectSize = sf::Vector2f(straightLineLength, straightLineLength);
-
-        drawablePath.resize(nodePointRadius, straightLineSize, diagonalLineSize, origin);
-        drawableNode.resize(nodeRectSize, factorRectSize);
+        float nodeSideLength = static_cast<float>(dimensionPtr->currentNodeSideLength());
+        drawablePath.resize();
+        drawableNode.resize(nodeSideLength);
     }
 
     void Renderer::render(const std::shared_ptr<ALatGraphWr> latticeGraphWrapperSPtr)
@@ -88,6 +62,10 @@ namespace Pathfinding::Rendering
         });
     }
 
+    void Renderer::render(sf::RenderWindow & window, const DrawablePath & path)
+    {
+        window.draw(path);
+    }
 
     void Renderer::reset()
     {
@@ -105,16 +83,9 @@ namespace Pathfinding::Rendering
         else if(appStateSPtr->currentState == AlgorithmState::FOUND_PATH)
         {
             gradients.gradientGoalRed(startNodeGradient.r, 5);   
-            gradients.gradientGoalGreen(startNodeGradient.g, 1);
+            gradients.gradientGoalGreen(startNodeGradient.g, 5);
         }
     }
 
 
-    void Renderer::renderPath(const std::vector<Node *> &path, sf::Color color)
-    {
-        auto halfNodeSide = dimensionPtr->currentNodeSideLength() / 2.f;
-        sf::Vector2f pointPositionOffset(halfNodeSide,halfNodeSide);
-        drawablePath.prepare(path, pointPositionOffset, color);
-        windowPtr->draw(drawablePath);
-    }
 }

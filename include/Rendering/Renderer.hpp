@@ -2,8 +2,6 @@
 #define EE121C46_77A1_42C0_82FD_AA5B2F176C40
 
 #include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/Graphics/CircleShape.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
 #include <memory>
 
 #include "RenderingHelpers.hpp"
@@ -17,6 +15,7 @@ namespace Pathfinding::Core { class GraphDimension; }
 namespace Pathfinding::Abstract { class ALatGraphWr; }
 namespace Pathfinding::Abstract { class IFontLoader; }
 namespace Pathfinding::Helpers { class ColorGradient; }
+namespace sf { class RenderWindow; }
 
 namespace Pathfinding::Rendering
 {
@@ -31,6 +30,7 @@ namespace Pathfinding::Rendering
             PHColorGradient gradientGoalGreen;
     };
 
+    class DrawablePath;
     class Renderer final : public Pathfinding::Abstract::IRenderer
     {
     private:
@@ -39,6 +39,7 @@ namespace Pathfinding::Rendering
         using PCGraphDimension = Pathfinding::Core::GraphDimension;
         using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
         using PAIFontLoader = Pathfinding::Abstract::IFontLoader;
+        using SFRenderWindow = sf::RenderWindow;
     public:
         Renderer() = default;
         
@@ -46,7 +47,7 @@ namespace Pathfinding::Rendering
         
         void render(const std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr) override;
         
-        void renderPath(const std::vector<PDNode *> &path, sf::Color color) override;
+        void render(SFRenderWindow & window, const DrawablePath & path) override;
                 
         void reset() override;
         

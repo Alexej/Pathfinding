@@ -28,6 +28,8 @@ namespace Pathfinding::Rendering
         straightLine.setOutlineThickness(NODE_OUTLINE_THICKNESS);
 
         appStatePtr = appStatePtr_;
+
+        resize();
     }
 
     void DrawablePath::setColor(sf::Color color)
@@ -38,13 +40,14 @@ namespace Pathfinding::Rendering
 
                         
     void DrawablePath::prepare(const std::vector<Node *> &path, 
-                                sf::Vector2f pointPositionOffset, 
                                 sf::Color color)
     {
         setColor(color);
         points.clear();
         lines.clear();
 
+        float halfNodeSideLength = static_cast<float>(appStatePtr->dimension.currentNodeSideLength() / 2);
+        sf::Vector2f pointPositionOffset = {halfNodeSideLength,halfNodeSideLength};
         if(appStatePtr->showPathPoints)
         {
             createPathPoints(path, pointPositionOffset);
@@ -56,11 +59,33 @@ namespace Pathfinding::Rendering
         }
     }
 
-    void DrawablePath::resize(float nodePointRadius, 
-                                sf::Vector2f straightLineSize, 
-                                sf::Vector2f diagonalLineSize, 
-                                sf::Vector2f origin)
+    void DrawablePath::resize()
     {
+        float nodeSideLength = static_cast<float>(appStatePtr->dimension.currentNodeSideLength());
+
+        float halfNodeSize = nodeSideLength / 2;
+
+        float nodePointRadius;
+
+        if (appStatePtr->dimension.canShowNodeInfo())
+        {
+            nodePointRadius = halfNodeSize / 5;
+        }
+        else
+        {
+            nodePointRadius = halfNodeSize / 2.5f;
+        }
+
+        float halfNodeSizeSquared = static_cast<float>(pow(nodeSideLength / 2, 2));
+
+        float lineThickness = nodePointRadius / 2;
+        float diagonalLineLength = 2 * sqrt(halfNodeSizeSquared + halfNodeSizeSquared);
+
+        auto straightLineSize = sf::Vector2f(nodeSideLength, lineThickness);
+        auto diagonalLineSize = sf::Vector2f(diagonalLineLength, lineThickness);
+
+        auto origin = sf::Vector2f(0, lineThickness / 2);
+
         nodePoint.setRadius(nodePointRadius);
         nodePoint.setOrigin(nodePointRadius, nodePointRadius);
 

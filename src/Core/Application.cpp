@@ -6,8 +6,9 @@
 #include "PathfinderReturnType.hpp"
 #include "RenderingHelpers.hpp"
 #include "LatticeGraphHelpers.hpp"
-#include "DFSMazeGenerator.hpp"
 #include "MouseData.hpp"
+#include "Node.hpp"
+
 
 namespace Pathfinding::Core
 {
@@ -17,6 +18,8 @@ namespace Pathfinding::Core
     using Pathfinding::Helpers::ILatticeGraphHelpers;
     using Pathfinding::Algorithms::DFSMazeGenerator;
     using Pathfinding::Events::MouseData;
+    using Pathfinding::Rendering::DrawablePath;
+    using Pathfinding::Datastructures::Node;
 
     void Application::startAlgorithm()
     {
@@ -72,6 +75,7 @@ namespace Pathfinding::Core
         dimensionPtr->setCurrentNumberOfNodesIndex(index);
         rendererUPtr->resize();
         graphOpsUPtr->resize(dimensionPtr->currentNodeSideLength());
+        drawablePath.resize();
         reset();
     }
 
@@ -85,9 +89,9 @@ namespace Pathfinding::Core
         {
             if(appState.showAStarPath)
             {
-                rendererUPtr->renderPath(aStarCache.currentPath, convertToSfmlColor(PATH_NODE_COLOR_2));
+                drawPath(aStarCache.currentPath, convertToSfmlColor(PATH_NODE_COLOR_2));
             }
-            rendererUPtr->renderPath(dStarCache.currentPath, convertToSfmlColor(PATH_NODE_COLOR));
+            drawPath(dStarCache.currentPath, convertToSfmlColor(PATH_NODE_COLOR));
         }
         window.display();
     }
@@ -164,12 +168,17 @@ namespace Pathfinding::Core
 
     void Application::generateMaze()
     {
-        // fix later
-        DFSMazeGenerator dfsmg;
         latGraphWrapUPtr->resize(dimensionPtr->height(), dimensionPtr->width());
         latGraphWrapUPtr->removeEndpointsFromGraph();
-        dfsmg.generate(*latGraphWrapUPtr->latGraphSPtr, ri);
+        dfsmg.reset();
+        dfsmg(*latGraphWrapUPtr->latGraphSPtr, ri);
         latGraphWrapUPtr->addEndpointsToGraph();
+    }
+
+    void Application::drawPath(const std::vector<Node *> & path, sf::Color color)
+    {
+        drawablePath.prepare(path, color);
+        rendererUPtr->render(window, drawablePath);
     }
 }
 

@@ -22,8 +22,10 @@ namespace Pathfinding::Algorithms
         using RCRandomIntegers = Pathfinding::Core::RandomIntegers;
 
     public:
-        void generate(PAIlatticeGraph &latGraph, RCRandomIntegers & ri) override;
+        void operator()(PAIlatticeGraph &latGraph, RCRandomIntegers & ri) override;
 
+        void reset();
+        
     private:
         void setWalls(PAIlatticeGraph &latGraph);
         void DFS(PDVec2i from, PAIlatticeGraph &latGraph, RCRandomIntegers & ri);

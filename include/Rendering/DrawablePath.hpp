@@ -22,14 +22,9 @@ namespace Pathfinding::Rendering
         public:
             void init(const PCApplicationState * appStateSPtr);
 
-            void prepare(const std::vector<PDNode *> &path, 
-                        sf::Vector2f pointPositionOffset, 
-                        sf::Color color);
+            void prepare(const std::vector<PDNode *> &path, sf::Color color);
 
-            void resize(float nodePointRadius, 
-                    sf::Vector2f straughtLineSize, 
-                    sf::Vector2f diagonalLineSize, 
-                    sf::Vector2f origin);
+            void resize();
 
         private:
             void setColor(sf::Color color);

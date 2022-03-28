@@ -33,8 +33,8 @@ namespace Pathfinding::Helpers
         return string.substr(0, string.find(character, 0));
     }
 
-    inline std::vector<Pathfinding::Datastructures::Node *>
-    flushVector(std::vector<Pathfinding::Datastructures::Node *> &nodesExpanded)
+    template<typename ElementType>
+    inline std::vector<ElementType> flushVector(std::vector<ElementType> &nodesExpanded)
     {
         auto tmpNodesExpanded = nodesExpanded;
         nodesExpanded.clear();

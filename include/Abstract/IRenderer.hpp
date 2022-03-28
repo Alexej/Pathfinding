@@ -7,6 +7,8 @@
 namespace Pathfinding::Datastructures { class LatticeGraph; }
 namespace Pathfinding::Datastructures { struct Node; }
 namespace Pathfinding::Abstract { class ALatGraphWr; }
+namespace Pathfinding::Rendering { class DrawablePath; }    
+namespace sf { class RenderWindow; }
 
 namespace Pathfinding::Abstract
 {
@@ -16,11 +18,13 @@ namespace Pathfinding::Abstract
             using PDNode = Pathfinding::Datastructures::Node;
             using PDLatticeGraph = Pathfinding::Datastructures::LatticeGraph;
             using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
+            using SFRenderWindow = sf::RenderWindow;
+            using PRDrawablePath = Pathfinding::Rendering::DrawablePath;
         public:
             virtual void render(const std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr) = 0;
             
-            virtual void renderPath(const std::vector<PDNode *> & path, sf::Color color) = 0;
-                        
+            virtual void render(SFRenderWindow & window, const PRDrawablePath & path) = 0;
+
             virtual void reset() = 0;
             
             virtual void resize() = 0;

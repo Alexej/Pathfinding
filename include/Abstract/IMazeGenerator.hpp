@@ -11,7 +11,7 @@ namespace Pathfinding::Abstract
         private:
             using RCRandomIntegers = Pathfinding::Core::RandomIntegers;
         public:
-            virtual void generate(ILatticeGraph & latGraph, RCRandomIntegers & ri) = 0;
+            virtual void operator()(ILatticeGraph & latGraph, RCRandomIntegers & ri) = 0;
     };
 }
 

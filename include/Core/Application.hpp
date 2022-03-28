@@ -20,8 +20,12 @@
 #include "IApplication.hpp"
 #include "MouseData.hpp"
 #include "BindingsContainer.hpp"
+#include "DrawablePath.hpp"
+#include "DFSMazeGenerator.hpp"
 
 namespace Pathfinding::Core { class ApplicationBuilder; }
+namespace Pathfinding::Datastructures { struct Node; }
+
 
 namespace Pathfinding::Core
 {
@@ -40,6 +44,9 @@ namespace Pathfinding::Core
         using PDPathfinderCachee = Pathfinding::Datastructures::PathfinderCache;
         using PEMouseData = Pathfinding::Events::MouseData;
         using PEBindingsContainer = Pathfinding::Events::BindingsContainer;
+        using PRDrawablePath = Pathfinding::Rendering::DrawablePath;
+        using PDNode = Pathfinding::Datastructures::Node;
+        using PADSFMazeGenerator = Pathfinding::Algorithms::DFSMazeGenerator;
 
     public:
         Application() = default;
@@ -76,6 +83,8 @@ namespace Pathfinding::Core
     private:
         void runAStar();
 
+        void drawPath(const std::vector<PDNode *> & path, sf::Color color);
+
     private:
         std::unique_ptr<PAIRenderer> rendererUPtr;
         std::unique_ptr<PAIMenu> menuUPtr;
@@ -91,7 +100,9 @@ namespace Pathfinding::Core
         PDPathfinderCachee aStarCache;
         PDPathfinderCachee dStarCache;
         RandomIntegers ri;
-        
+        PRDrawablePath drawablePath;
+        PADSFMazeGenerator dfsmg;
+
         GraphDimension *dimensionPtr;
         PEBindingsContainer bindings;
     };

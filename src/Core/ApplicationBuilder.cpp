@@ -92,6 +92,8 @@ namespace Pathfinding::Core
         applicationUPtr->graphOpsUPtr = std::make_unique<GraphOperations>(&applicationUPtr->appState, applicationUPtr->latGraphWrapUPtr);
         applicationUPtr->rendererUPtr = std::make_unique<Renderer>(&applicationUPtr->window, &applicationUPtr->appState, fontLoaderSPtr);
         applicationUPtr->aStarUPtr = std::make_unique<AStar>();
+        applicationUPtr->drawablePath.init(&applicationUPtr->appState);
+
     }
 
     void ApplicationBuilder::initializeObjects()
