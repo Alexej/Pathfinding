@@ -21,10 +21,9 @@ namespace Pathfinding::Rendering
     using Pathfinding::Helpers::stateColor;
     using Pathfinding::Helpers::convertToSfmlColor;
 
-   Renderer::Renderer(sf::RenderWindow *window, 
-                       ApplicationState *appStateSPtr_, 
+   Renderer::Renderer(ApplicationState *appStateSPtr_, 
                        std::shared_ptr<IFontLoader> fontLoaderSPtr_)
-        : windowPtr(window), 
+        :       
         appStateSPtr(appStateSPtr_), 
         dimensionPtr(&appStateSPtr->dimension), 
         fontLoaderSPtr(fontLoaderSPtr_)
@@ -47,18 +46,18 @@ namespace Pathfinding::Rendering
         drawableNode.resize(nodeSideLength);
     }
 
-    void Renderer::render(const std::shared_ptr<ALatGraphWr> latticeGraphWrapperSPtr)
+    void Renderer::render(sf::RenderWindow & window, const std::shared_ptr<ALatGraphWr> latticeGraphWrapperSPtr)
     {
         if(appStateSPtr->algorithmFinished()) { updateColors(); }
         ILatticeGraphHelpers::iterateOverLatticeGraphConst(*latticeGraphWrapperSPtr->latGraphSPtr,
-        [this](const Node *node, int32_t h, int32_t w)
+        [this, &window](const Node *node, int32_t h, int32_t w)
         {
             auto coords = getNodePosition(node, dimensionPtr->currentNodeSideLength());
             auto color = stateColor(node->state);
             if(node->state == NodeState::Blocked) { color = blockedNodeGradient; }
             else if(node->state == NodeState::Start) { color = startNodeGradient; }
             drawableNode.prepare(*node, coords, color, appStateSPtr->showNodeInfo);
-            windowPtr->draw(drawableNode);
+            window.draw(drawableNode);
         });
     }
 
@@ -86,6 +85,4 @@ namespace Pathfinding::Rendering
             gradients.gradientGoalGreen(startNodeGradient.g, 5);
         }
     }
-
-
 }

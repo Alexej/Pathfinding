@@ -90,7 +90,7 @@ namespace Pathfinding::Core
         applicationUPtr->menuUPtr = std::make_unique<Menu>(&applicationUPtr->appState, &applicationUPtr->aStarCache, &applicationUPtr->dStarCache);
         applicationUPtr->dstarLiteUPtr = std::make_unique<DStarLite>(applicationUPtr->latGraphWrapUPtr);
         applicationUPtr->graphOpsUPtr = std::make_unique<GraphOperations>(&applicationUPtr->appState, applicationUPtr->latGraphWrapUPtr);
-        applicationUPtr->rendererUPtr = std::make_unique<Renderer>(&applicationUPtr->window, &applicationUPtr->appState, fontLoaderSPtr);
+        applicationUPtr->rendererUPtr = std::make_unique<Renderer>(&applicationUPtr->appState, fontLoaderSPtr);
         applicationUPtr->aStarUPtr = std::make_unique<AStar>();
         applicationUPtr->drawablePath.init(&applicationUPtr->appState);
 

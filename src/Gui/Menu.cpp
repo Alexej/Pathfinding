@@ -25,19 +25,7 @@ namespace Pathfinding::Gui
     using Pathfinding::Helpers::mapStateToText;
     using Pathfinding::Helpers::printLargeText;
     using Pathfinding::Helpers::showStatistic;
-
-    namespace
-    {
-        std::vector<int32_t> getSizesOfSubVectors(const std::vector<std::vector<Node *>> &vecOfNodes)
-        {
-            std::vector<int32_t> sizes;
-            for (const auto &subVector : vecOfNodes)
-            {
-                sizes.push_back(static_cast<int32_t>(subVector.size()));
-            }
-            return sizes;
-        }
-    }
+    using Pathfinding::Helpers::getSizesOfSubVectors;
 
     Menu::Menu(ApplicationState *appStatePtr_,
                PathfinderCache *aCache_,

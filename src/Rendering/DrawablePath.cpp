@@ -9,7 +9,6 @@
 
 namespace Pathfinding::Rendering
 {
-
     using Pathfinding::Core::ApplicationState;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
@@ -138,21 +137,16 @@ namespace Pathfinding::Rendering
         }
     }
 
+
     void DrawablePath::draw(sf::RenderTarget& target, sf::RenderStates states) const
     {
         if(appStatePtr->showPathLines && appStatePtr->showPathPoints)
         {
-            for(const auto & element : lines)
-            {
-                target.draw(element);
-            }
+            drawArrayOfDrawables(target, lines);
         }
         if(appStatePtr->showPathPoints)
         {
-            for(const auto & element : points)
-            {
-                target.draw(element);
-            }
+            drawArrayOfDrawables(target, points);
         }
     }
 }

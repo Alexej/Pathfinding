@@ -84,7 +84,7 @@ namespace Pathfinding::Core
         menuUPtr->show();
         window.clear();
         ImGui::SFML::Render(window);
-        rendererUPtr->render(latGraphWrapUPtr);
+        rendererUPtr->render(window, latGraphWrapUPtr);
         if (appState.currentState == AlgorithmState::FOUND_PATH || appState.currentState == AlgorithmState::SEARCHING)
         {
             if(appState.showAStarPath)

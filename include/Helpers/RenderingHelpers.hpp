@@ -3,8 +3,11 @@
 
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>
-#include <array>
+#include <vector>
 #include <string>
+#include <SFML/Graphics/RenderTarget.hpp>
+#include <type_traits>
+
 #include "Node.hpp"
 
 
@@ -18,6 +21,16 @@ namespace Pathfinding::Helpers
             bool increment = true;
     };
 
+
+    template<typename DrawableType>
+    void drawArrayOfDrawables(sf::RenderTarget& target, const std::vector<DrawableType> & objects)
+    {
+        static_assert(std::is_base_of<sf::Drawable, DrawableType>(), "Element not drawable");
+        for(const auto & element : objects)
+        {
+            target.draw(element);
+        }
+    }
 
     sf::Color convertToSfmlColor(std::array<uint8_t, 3> color);
 

@@ -5,8 +5,8 @@
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/CircleShape.hpp>
-
 #include <vector>
+
 
 namespace Pathfinding::Datastructures {struct Node;}
 namespace Pathfinding::Core {struct ApplicationState;}

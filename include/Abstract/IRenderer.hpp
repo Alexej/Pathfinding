@@ -21,7 +21,7 @@ namespace Pathfinding::Abstract
             using SFRenderWindow = sf::RenderWindow;
             using PRDrawablePath = Pathfinding::Rendering::DrawablePath;
         public:
-            virtual void render(const std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr) = 0;
+            virtual void render(sf::RenderWindow & window, const std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr) = 0;
             
             virtual void render(SFRenderWindow & window, const PRDrawablePath & path) = 0;
 

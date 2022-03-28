@@ -43,9 +43,9 @@ namespace Pathfinding::Rendering
     public:
         Renderer() = default;
         
-        Renderer(sf::RenderWindow *window, PCApplicationState *appStateSPtr, std::shared_ptr<PAIFontLoader> fontLoaderSPtr);
+        Renderer(PCApplicationState *appStateSPtr, std::shared_ptr<PAIFontLoader> fontLoaderSPtr);
         
-        void render(const std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr) override;
+        void render(sf::RenderWindow & window, const std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr) override;
         
         void render(SFRenderWindow & window, const DrawablePath & path) override;
                 
@@ -62,7 +62,6 @@ namespace Pathfinding::Rendering
         void updateColors();
 
     private:
-        sf::RenderWindow *windowPtr = nullptr;
         PCApplicationState *appStateSPtr = nullptr;
         PCGraphDimension *dimensionPtr = nullptr;
         std::shared_ptr<PAIFontLoader> fontLoaderSPtr;

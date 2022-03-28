@@ -28,6 +28,18 @@ namespace Pathfinding::Datastructures { enum class NodeState; }
 
 namespace Pathfinding::Helpers
 {
+
+    template<typename ElementType>
+    std::vector<int32_t> getSizesOfSubVectors(const std::vector<std::vector<ElementType>> &vecOfNodes)
+    {
+        std::vector<int32_t> sizes;
+        for (const auto &subVector : vecOfNodes)
+        {
+            sizes.push_back(static_cast<int32_t>(subVector.size()));
+        }
+        return sizes;
+    }
+
     std::string mapNodeStateToText(Pathfinding::Datastructures::NodeState state);
 
     std::string mapStateToText(Pathfinding::Core::AlgorithmState state);
