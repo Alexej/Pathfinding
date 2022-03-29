@@ -136,10 +136,6 @@ namespace Pathfinding::Core
         callBack = std::bind(&IGraphOperations::mouseWheelMoved, applicationUPtr->graphOpsUPtr.get(), _1);
         mouseWheelEvent = MouseEvent(EVENT_ONLY, MouseWheelMoved, NO_MOUSE_BUTTON);
         applicationUPtr->bindings.addBinding({"MouseWheelMoved" ,mouseWheelEvent, callBack});
-
-        auto callBackApp = std::bind(&Application::mouseWheelMoved, applicationUPtr.get(), _1);
-        mouseWheelEvent = MouseEvent(EVENT_ONLY, MouseWheelMoved, NO_MOUSE_BUTTON);
-        applicationUPtr->bindings.addBinding({"MouseWheelMovedZoom" ,mouseWheelEvent, callBackApp});
     }
 
     void ApplicationBuilder::setMenuCallBacks()

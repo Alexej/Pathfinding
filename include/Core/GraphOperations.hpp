@@ -52,13 +52,13 @@ namespace Pathfinding::Core
         
         void enableEndPointsEvent() override;
         
-        void disableObsticlesEvents() override;
+        void disableObsticlesAndScrollEvents() override;
         
-        void enableObsticlesEvents() override;
+        void enableObsticlesAndScrollEvents() override;
         
         bool endpointsEvents() const override;
         
-        bool obsticlesEvents() const override;
+        bool obsticlesAndScrollEvents() const override;
         
         void addEdgeChangeCallBack(std::function<void(PDNode * node)> callBack) override;
         

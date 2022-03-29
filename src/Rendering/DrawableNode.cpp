@@ -60,6 +60,7 @@ namespace Pathfinding::Rendering
             float freeSpaceHor = nodeSideLength - widthOfGText - widthOfRHSText;
             rhs.setPosition(sf::Vector2f(coords.x + freeSpaceHor + widthOfGText - NODE_INFO_OFFSET, coords.y + NODE_INFO_OFFSET));
 
+
             std::string keyString = "[" + dToStr(node.key.k1) + ":" + dToStr(node.key.k2) + "]";
             key.setString(keyString);
             float halfOfText = key.getLocalBounds().width / 2;

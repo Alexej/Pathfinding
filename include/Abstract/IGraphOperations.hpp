@@ -33,13 +33,13 @@ namespace Pathfinding::Abstract
             
             virtual void enableEndPointsEvent() = 0;
             
-            virtual void disableObsticlesEvents() = 0;
+            virtual void disableObsticlesAndScrollEvents() = 0;
             
-            virtual void enableObsticlesEvents() = 0;
+            virtual void enableObsticlesAndScrollEvents() = 0;
             
             virtual bool endpointsEvents() const = 0;
             
-            virtual bool obsticlesEvents() const = 0;
+            virtual bool obsticlesAndScrollEvents() const = 0;
             
             virtual void addEdgeChangeCallBack(std::function<void(PDNode * node)> callBack) = 0;
             

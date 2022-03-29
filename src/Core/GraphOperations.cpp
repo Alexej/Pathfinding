@@ -114,11 +114,11 @@ namespace Pathfinding::Core
         endPointsEvents_ = true;
     }
 
-    void GraphOperations::disableObsticlesEvents()
+    void GraphOperations::disableObsticlesAndScrollEvents()
     {
         obsticlesEvents_ = false;
     }
-    void GraphOperations::enableObsticlesEvents()
+    void GraphOperations::enableObsticlesAndScrollEvents()
     {
         obsticlesEvents_ = true;
     }
@@ -127,7 +127,7 @@ namespace Pathfinding::Core
     {
         return endPointsEvents_;
     }
-    bool GraphOperations::obsticlesEvents() const
+    bool GraphOperations::obsticlesAndScrollEvents() const
     {
         return obsticlesEvents_;
     }
@@ -146,7 +146,7 @@ namespace Pathfinding::Core
     {
         // Ignore operations without node state change or when events deactivated
         auto graph = latGraphWrapperUPtr->latGraphSPtr;
-        if (graph->node(mappedCoordinates)->state != NodeState::Blocked && obsticlesEvents())
+        if (graph->node(mappedCoordinates)->state != NodeState::Blocked && obsticlesAndScrollEvents())
         {
             ILatticeGraphHelpers::blockNode(*graph, mappedCoordinates);
             if (appStateSPtr->currentState == AlgorithmState::SEARCHING)
@@ -159,7 +159,7 @@ namespace Pathfinding::Core
     void GraphOperations::clearNodeAndNotifyAlgorithm(Vec2i mappedCoordinates)
     {
         auto graph = latGraphWrapperUPtr->latGraphSPtr;
-        if (graph->node(mappedCoordinates)->state != NodeState::Free && obsticlesEvents())
+        if (graph->node(mappedCoordinates)->state != NodeState::Free && obsticlesAndScrollEvents())
         {
             ILatticeGraphHelpers::clearNode(*graph, mappedCoordinates);
             if (appStateSPtr->currentState == AlgorithmState::SEARCHING)
@@ -201,7 +201,7 @@ namespace Pathfinding::Core
             return;
         }
         auto graph = latGraphWrapperUPtr->latGraphSPtr;
-        if(obsticlesEvents())
+        if(obsticlesAndScrollEvents())
         {
             Vec2i mappedCoordinates = mapMouseToGraphCoordinates(mouseData.cursorPosition, nodeSideLength);
             if(!latGraphWrapperUPtr->latGraphSPtr->inBounds(mappedCoordinates))

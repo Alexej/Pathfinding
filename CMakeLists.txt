@@ -21,8 +21,6 @@ include_directories(include/Gui)
 include_directories(include/Exceptions)
 include_directories(include/Rendering)
 
-
-
 add_subdirectory(dependencies)
 add_subdirectory(src)
 

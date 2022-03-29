@@ -9,7 +9,7 @@
 
 namespace Pathfinding::Datastructures
 {
-    enum class NodeState { Start, Goal, Free, Blocked, Frontier, Visited, Recalculated };
+    enum class NodeState { Start, Goal, Free, Blocked, Frontier, Visited };
     struct Node
     {
         Node() = default;
@@ -28,14 +28,13 @@ namespace Pathfinding::Datastructures
         void reset()
         {
             initNode();
-            location = Vec2i();
             key = Key();
         }
 
         Vec2i location;
-        NodeState state;;
-        double rhs;;
-        double g;;
+        NodeState state;
+        double rhs;
+        double g;
         Key key;
         bool visitedOnce;
         int32_t factor;

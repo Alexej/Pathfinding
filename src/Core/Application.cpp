@@ -76,7 +76,8 @@ namespace Pathfinding::Core
         rendererUPtr->resize();
         graphOpsUPtr->resize(dimensionPtr->currentNodeSideLength());
         drawablePath.resize();
-        reset();
+        latGraphWrapUPtr->resize(dimensionPtr->height(), dimensionPtr->width());
+        appState.nodeUnderCursor = nullptr;
     }
 
     void Application::draw()
@@ -99,10 +100,10 @@ namespace Pathfinding::Core
     void Application::reset()
     {
         dstarLiteUPtr->reset();
-        latGraphWrapUPtr->resize(dimensionPtr->height(), dimensionPtr->width());
+        latGraphWrapUPtr->reset();
         appState.currentState = AlgorithmState::READY;
         graphOpsUPtr->enableEndPointsEvent();
-        graphOpsUPtr->enableObsticlesEvents();
+        graphOpsUPtr->enableObsticlesAndScrollEvents();
         appState.nodeUnderCursor = nullptr;
         rendererUPtr->reset();
         aStarCache.reset();
@@ -111,13 +112,13 @@ namespace Pathfinding::Core
 
     void Application::done()
     {
-        graphOpsUPtr->disableObsticlesEvents();
+        graphOpsUPtr->disableObsticlesAndScrollEvents();
         appState.currentState = AlgorithmState::FOUND_PATH;
     }
 
     void Application::noPath()
     {
-        graphOpsUPtr->disableObsticlesEvents();
+        graphOpsUPtr->disableObsticlesAndScrollEvents();
         appState.currentState = AlgorithmState::NO_PATH;
     }
  
@@ -126,7 +127,7 @@ namespace Pathfinding::Core
         appState.nodeUnderCursor = nullptr;
         do
         {
-            latGraphWrapUPtr->resize(dimensionPtr->height(), dimensionPtr->width());
+            latGraphWrapUPtr->reset();
             ILatticeGraphHelpers::initRandomGraph(*latGraphWrapUPtr->latGraphSPtr, ri);
         } while(!aStarUPtr->calculatePath(latGraphWrapUPtr).pathFound);
     }
@@ -157,18 +158,9 @@ namespace Pathfinding::Core
         appState.currentMouseWheelEvent = static_cast<MouseWheelEvent>(index);
     }
 
-    void Application::mouseWheelMoved(MouseData mouseData)
-    {
-        if(appState.currentMouseWheelEvent != MouseWheelEvent::Zoom)
-        {
-            return;
-        }
-        printf("%i\n", mouseData.wheelDelta);
-    }
-
     void Application::generateMaze()
     {
-        latGraphWrapUPtr->resize(dimensionPtr->height(), dimensionPtr->width());
+        latGraphWrapUPtr->reset();
         latGraphWrapUPtr->removeEndpointsFromGraph();
         dfsmg.reset();
         dfsmg(*latGraphWrapUPtr->latGraphSPtr, ri);

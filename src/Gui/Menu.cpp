@@ -103,7 +103,10 @@ namespace Pathfinding::Gui
 
     void Menu::showGraph(std::vector<int32_t> values, std::string name)
     {
-        std::vector<float> valuesFloat(values.begin(), values.end());
+        std::vector<float> valuesFloat;
+        for(auto value : values)
+            valuesFloat.push_back(static_cast<float>(value));
+
         ImGui::Text(name.c_str());
         ImGui::PlotLines(std::format("last : {}.", std::to_string(values.back())).c_str(),
                          &valuesFloat[0],
