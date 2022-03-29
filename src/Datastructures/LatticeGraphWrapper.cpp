@@ -1,9 +1,11 @@
 #include "LatticeGraphWrapper.hpp"
+
 #include "ALatGraphWr.hpp"
 #include "ILatticeGraph.hpp"
 #include "Node.hpp"
 #include "IMazeGenerator.hpp"
 #include "LatticeGraphHelpers.hpp"
+#include "CppHelpers.hpp"
 
 namespace Pathfinding::Datastructures
 {
@@ -11,10 +13,11 @@ namespace Pathfinding::Datastructures
     using Pathfinding::Abstract::ILatticeGraph;
     using Pathfinding::Abstract::IMazeGenerator;
     using Pathfinding::Helpers::ILatticeGraphHelpers;
+    using Pathfinding::Helpers::isNullptr;
 
     namespace
     {
-        Node *getFreeNode(std::vector<Node *> vec)
+        std::optional<Node *> getFreeNode(std::vector<Node *> vec)
         {
             for (auto possibleFreeNode : vec)
             {
@@ -23,7 +26,7 @@ namespace Pathfinding::Datastructures
                     return possibleFreeNode;
                 }
             }
-            return nullptr;
+            return {};
         }
     }
 
@@ -67,27 +70,47 @@ namespace Pathfinding::Datastructures
         auto possibleGoal = latGraphSPtr->node(Vec2i(heightI - 1, widthI - 1));
         auto possibleStart = latGraphSPtr->node(Vec2i(0, 0));
 
-        std::vector<Node *> possibleGoals;
-        std::vector<Node *> possibleStarts;
+        setEndpointsToNullPtr();
 
-        possibleGoals.push_back(possibleGoal);
-        possibleStarts.push_back(possibleStart);
-
-        for (auto node : ILatticeGraphHelpers::neighbors(*latGraphSPtr, possibleGoal))
+        if(auto startNode = getFreeNodeFrom3By3(possibleStart); startNode)
         {
-            possibleGoals.push_back(node);
+            startNodePtr = *startNode;
+            startNodePtr->state = NodeState::Start;
         }
 
-        for (auto node : ILatticeGraphHelpers::neighbors(*latGraphSPtr, possibleStart))
+        if(auto goalNode = getFreeNodeFrom3By3(possibleGoal); goalNode)
         {
-            possibleStarts.push_back(node);
+            goalNodePtr = *goalNode;
+            goalNodePtr->state = NodeState::Goal;
         }
 
-        goalNodePtr = getFreeNode(possibleGoals);
-        startNodePtr = getFreeNode(possibleStarts);
+        if(!endpointsInitialized())
+        {
+            throw std::exception("Error when initializing endpoints");
+        }
+    }
 
-        goalNodePtr->state = NodeState::Goal;
-        startNodePtr->state = NodeState::Start;
+    bool LatticeGraphWrapper::endpointsInitialized() const
+    {
+        return !isNullptr(startNodePtr) && !isNullptr(goalNodePtr);
+    }
+
+
+    void LatticeGraphWrapper::setEndpointsToNullPtr()
+    {
+        startNodePtr = nullptr;
+        goalNodePtr = nullptr;
+    }
+
+    std::optional<Node *> LatticeGraphWrapper::getFreeNodeFrom3By3(Node * node)
+    {
+        std::vector<Node *> possibleNodes;
+        possibleNodes.push_back(node);
+        for (auto node : ILatticeGraphHelpers::neighbors(*latGraphSPtr, node))
+        {
+            possibleNodes.push_back(node);
+        }
+        return getFreeNode(possibleNodes);
     }
 
     void LatticeGraphWrapper::setGoal(Vec2i location)
@@ -134,6 +157,12 @@ namespace Pathfinding::Datastructures
     void LatticeGraphWrapper::addEndpointsToGraph()
     {
         endpointsSet_ = true;
+        resetEndpoints();
+    }
+
+    void LatticeGraphWrapper::reset()
+    {
+        latGraphSPtr->reset();
         resetEndpoints();
     }
 }

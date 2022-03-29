@@ -3,7 +3,7 @@
 #include "RootPath.hpp"
 #include "NoSuchFontException.hpp"
 #include "CouldNotLoadFontException.hpp"
-#include "OtherHelpers.hpp"
+#include "CppHelpers.hpp"
 
 namespace Pathfinding::Helpers
 {

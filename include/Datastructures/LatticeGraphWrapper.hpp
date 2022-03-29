@@ -6,6 +6,7 @@
 #include "ALatGraphWr.hpp"
 #include "ILatticeGraph.hpp"
 #include "Vec2.hpp"
+#include <optional>
 
 namespace Pathfinding::Abstract { class IMazeGenerator; }
 
@@ -40,8 +41,17 @@ namespace Pathfinding::Datastructures
         
             void addEndpointsToGraph() override;
 
+            void reset() override;
+
         private:
             void resetEndpoints();
+
+            std::optional<Node *> 
+            getFreeNodeFrom3By3(Node * node);
+
+            void setEndpointsToNullPtr();
+
+            bool endpointsInitialized() const;
             
         private:
             Node *goalNodePtr;

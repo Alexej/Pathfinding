@@ -21,6 +21,8 @@ namespace Pathfinding::Datastructures
 
         void resize(int32_t height, int32_t width) override;
 
+        void reset() override;
+
         Node *node(Vec2i location) override;
 
         const Node *node(Vec2i location) const override;

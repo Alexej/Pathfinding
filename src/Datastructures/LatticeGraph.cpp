@@ -44,17 +44,28 @@ namespace Pathfinding::Datastructures
         return 0 <= dimension.height && dimension.height < heightI && 0 <= dimension.width && dimension.width < widthI;
     }
 
+    void LatticeGraph::reset()
+    {
+        for (int32_t h = 0; h < graph.size(); ++h)
+        {
+            for (int32_t w = 0; w < graph[0].size(); ++w)
+            {
+                graph[h][w].reset();
+            }
+        }
+    }
+
     void LatticeGraph::resize(int32_t height, int32_t width)
     {
         graph.clear();
-        graph.resize(height, std::vector<Node>(width));
         for (int32_t h = 0; h < height; ++h)
         {
             std::vector<Node> row;
             for (int32_t w = 0; w < width; ++w)
             {
-                initNode(graph[h][w], h, w);
+                row.push_back(Node(h,w));
             }
+            graph.push_back(row);
         }
     }
 }

@@ -37,6 +37,8 @@ namespace Pathfinding::Abstract
 
         virtual void resize(int32_t height, int32_t width) = 0;
 
+        virtual void reset() = 0;
+
         virtual void changeNodeStateWhenNodeFreeOrVisited(PDNode *node, PDNodeState newState) = 0;
 
         virtual void removeEndpointsFromGraph() = 0;

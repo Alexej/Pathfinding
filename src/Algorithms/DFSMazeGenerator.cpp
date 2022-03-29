@@ -4,7 +4,7 @@
 #include <type_traits>
 #include "Node.hpp"
 #include "Vec2.hpp"
-#include "OtherHelpers.hpp"
+#include "CppHelpers.hpp"
 #include "RandomIntegers.hpp"
 
 namespace Pathfinding::Algorithms

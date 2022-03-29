@@ -15,6 +15,8 @@
 #include <cmath>
 #include <numbers>
 
+#include <SFML/Graphics.hpp>
+
 int main()
 {
     using Pathfinding::Abstract::IApplication;

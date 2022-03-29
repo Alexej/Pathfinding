@@ -7,6 +7,13 @@
 
 namespace Pathfinding::Helpers
 {
+    template<typename PointerType>
+    bool isNullptr(PointerType pointer)
+    {
+        static_assert(std::is_pointer<PointerType>::value, "Pointer required."); 
+        return pointer == nullptr; 
+    }
+
     template <typename IntegerType>
     bool isEven(IntegerType number)
     {

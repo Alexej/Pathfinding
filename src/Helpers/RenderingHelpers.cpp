@@ -3,7 +3,7 @@
 #include <numbers>
 
 #include "Constants.hpp"
-#include "OtherHelpers.hpp"
+#include "CppHelpers.hpp"
 
 namespace Pathfinding::Helpers
 {

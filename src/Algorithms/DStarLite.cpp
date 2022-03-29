@@ -15,7 +15,7 @@
 #include "ICostFunction.hpp"
 #include "Constants.hpp"
 #include "PathfinderReturnType.hpp"
-#include "OtherHelpers.hpp"
+#include "CppHelpers.hpp"
 
 
 namespace Pathfinding::Algorithms
