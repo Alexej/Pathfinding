@@ -5,8 +5,8 @@ using namespace Pathfinding::Datastructures;
 
 
 TEST_CASE( "Nodes with same location should be equal 1", "[constructor]" ) {
-    Node n1;
-    Node n2; 
+    Node n1({1,1});
+    Node n2({2,2}); 
 
     n1.location.height = 2;
     n1.location.width = 3;
@@ -19,8 +19,8 @@ TEST_CASE( "Nodes with same location should be equal 1", "[constructor]" ) {
 
 
 TEST_CASE( "Nodes with different locations should not be equal", "[constructor]" ) {
-    Node n1;
-    Node n2; 
+    Node n1({1,1});
+    Node n2({2,2}); 
 
     n1.location.height = 2;
     n1.location.width = 3;

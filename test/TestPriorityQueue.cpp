@@ -15,9 +15,9 @@ TEST_CASE( "Created priorityQeueu should be empty", "[constructor]" ) {
 
 TEST_CASE( "Adding elements to the queue should increase the size", "[size]" ) 
 {
-    Node * n1 = new Node();
-    Node * n2 = new Node();
-    Node * n3 = new Node();
+    Node * n1 = new Node({1,1});
+    Node * n2 = new Node({2,2});
+    Node * n3 = new Node({3,3});
 
     n1->location = Vec2i(1,2);
     n2->location = Vec2i(3,5);
@@ -44,10 +44,10 @@ TEST_CASE( "topKey should return the smallest key", "[topKey]" )
 {
     PriorityQueue queue;
 
-    Node * n1 = new Node();
-    Node * n2 = new Node();
-    Node * n3 = new Node();
-    Node * n4 = new Node();
+    Node * n1 = new Node({1,1});
+    Node * n2 = new Node({2,2});
+    Node * n3 = new Node({3,3});
+    Node * n4 = new Node({4,4});
 
     n1->location = Vec2i(1,2);
     n2->location = Vec2i(3,5);
@@ -81,10 +81,10 @@ TEST_CASE( "testing contains function", "[contains]" )
 {
     PriorityQueue queue;
 
-    Node * n1 = new Node();
-    Node * n2 = new Node();
-    Node * n3 = new Node();
-    Node * n4 = new Node();
+    Node * n1 = new Node({1,1});
+    Node * n2 = new Node({2,2});
+    Node * n3 = new Node({3,3});
+    Node * n4 = new Node({4,4});
 
     n1->location = Vec2i(1,2);
     n2->location = Vec2i(3,5);
@@ -117,10 +117,10 @@ TEST_CASE( "pop should return the node with the smallest key and delete in from 
 {
     PriorityQueue queue;
 
-    Node * n1 = new Node();
-    Node * n2 = new Node();
-    Node * n3 = new Node();
-    Node * n4 = new Node();
+    Node * n1 = new Node({1,1});
+    Node * n2 = new Node({2,2});
+    Node * n3 = new Node({3,3});
+    Node * n4 = new Node({4,4});
 
     n1->location = Vec2i(1,2);
     n2->location = Vec2i(3,5);

@@ -59,8 +59,8 @@ TEST_CASE("Blocked node should have of infinity") {
 
     DefaultCostFunction defCostFunc = DefaultCostFunction(diagonalMovementCost, straightMovementCost);
 
-    Node * n1 = new Node();
-    Node * n2 = new Node();
+    Node * n1 = new Node({1,1});
+    Node * n2 = new Node({2,2});
     n2->state = NodeState::Blocked;
 
     REQUIRE(defCostFunc.calculate(n1,n2) == std::numeric_limits<double>::infinity());

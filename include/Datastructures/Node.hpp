@@ -12,8 +12,6 @@ namespace Pathfinding::Datastructures
     enum class NodeState { Start, Goal, Free, Blocked, Frontier, Visited };
     struct Node
     {
-        Node() = default;
-        
         Node(int32_t h, int32_t w) : location(Vec2i(h,w)) { initNode(); }
 
         void initNode()
