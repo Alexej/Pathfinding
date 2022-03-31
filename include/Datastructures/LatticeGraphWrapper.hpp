@@ -21,9 +21,9 @@ namespace Pathfinding::Datastructures
         public:
             LatticeGraphWrapper(std::shared_ptr<PAILatticeGraph> latticeGraphUPtr);
 
-            const Node *startNode() const override;
+            const Node * startNode() const override;
 
-            const Node *goalNode() const override;
+            const Node * goalNode() const override;
 
             Node *startNode() override;
 

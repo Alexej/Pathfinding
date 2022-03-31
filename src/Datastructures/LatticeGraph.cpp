@@ -34,7 +34,7 @@ namespace Pathfinding::Datastructures
         return &graph[location.height][location.width];
     }
 
-    const Node *LatticeGraph::node(Vec2i location) const
+    const Node * LatticeGraph::node(Vec2i location) const
     {
         return &graph[location.height][location.width];
     }

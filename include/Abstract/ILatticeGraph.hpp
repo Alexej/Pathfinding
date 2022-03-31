@@ -22,7 +22,7 @@ namespace Pathfinding::Abstract
 
             virtual PDNode *node(PDVec2i location) = 0;
 
-            virtual const PDNode *node(PDVec2i location) const = 0;
+            virtual const PDNode * node(PDVec2i location) const = 0;
 
             virtual void reset() = 0;
 

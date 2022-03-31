@@ -28,27 +28,11 @@ namespace Pathfinding::Datastructures
 
     void Node::update()
     {
-        if (renderNodeInfo())
-        {
-            prepareNodeInfo(g, rhs, key);
-        }
-
-        factorRect.setFillColor(sf::Color(100 + 28 * factor, 0, 140 - 28 * factor));
-        nodeRect.setFillColor(colors->getColor(state));
+        prepareDrawableNode(*this);
     }
 
     void Node::draw(sf::RenderTarget &target, sf::RenderStates states) const
     {
-        target.draw(nodeRect);
-        if (renderNodeInfo())
-        {
-            target.draw(rhsText);
-            target.draw(gText);
-            target.draw(keyText);
-            if (state != NodeState::Blocked)
-            {
-                target.draw(factorRect);
-            }
-        }
+        drawDrawableNode(target, state != NodeState::Blocked);
     }
 }

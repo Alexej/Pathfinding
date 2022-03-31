@@ -18,28 +18,25 @@ namespace Pathfinding::Rendering
     struct NodeStateColors;
     class DrawableNode : public sf::Drawable
     {
-        private:
-            using PDNode = Pathfinding::Datastructures::Node;
-            using PCApplicationState = Pathfinding::Core::ApplicationState;
-            using PDVec2i = Pathfinding::Datastructures::Vec2i;
-            using PDKey = Pathfinding::Datastructures::Key;
         public:
             void init(const sf::Font & font, 
                         NodeStateColors * colors, 
-                        PCApplicationState * appStatePtr, 
-                        PDVec2i position);
+                        Pathfinding::Core::ApplicationState * appStatePtr, 
+                        Pathfinding::Datastructures::Vec2i position);
 
             void resize();
 
         protected:
-            void prepareNodeInfo(double g, double rhs, const PDKey & key);
+            void prepareDrawableNode(const Pathfinding::Datastructures::Node & node);
 
             bool renderNodeInfo() const;
+
+            void drawDrawableNode(sf::RenderTarget &target, bool nodeBlocked) const;
 
         private:
             void setRectsSizeAndPosition();
             
-        protected:
+        private:
             sf::Text rhsText;
             sf::Text gText;
             sf::Text keyText;
@@ -48,8 +45,8 @@ namespace Pathfinding::Rendering
             NodeStateColors * colors;
 
         private:
-            PCApplicationState * appStatePtr;
-            PDVec2i position;
+            Pathfinding::Core::ApplicationState * appStatePtr;
+            Pathfinding::Datastructures::Vec2i position;
     };
 }
 

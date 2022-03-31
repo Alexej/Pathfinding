@@ -53,31 +53,36 @@ namespace Pathfinding::Rendering
         setRectsSizeAndPosition();
     }
 
-
-    void DrawableNode::prepareNodeInfo(double g, double rhs, const PDKey & key)
+    void DrawableNode::prepareDrawableNode(const Node & node)
     {
-        using std::to_string;
-        auto nodeSideLength = nodeRect.getSize().x;
-        auto coords = nodeRect.getPosition();
-        gText.setString(dToStr(g));
-        gText.setPosition(sf::Vector2f(coords.x + NODE_INFO_OFFSET, coords.y + NODE_INFO_OFFSET));
-        float widthOfGText = gText.getLocalBounds().width;
+        if(renderNodeInfo())
+        {
+            using std::to_string;
+            auto nodeSideLength = nodeRect.getSize().x;
+            auto coords = nodeRect.getPosition();
+            gText.setString(dToStr(node.g));
+            gText.setPosition(sf::Vector2f(coords.x + NODE_INFO_OFFSET, coords.y + NODE_INFO_OFFSET));
+            float widthOfGText = gText.getLocalBounds().width;
 
-        rhsText.setString(dToStr(rhs));
-        float widthOfRHSText = rhsText.getLocalBounds().width;
-        float freeSpaceHor = nodeSideLength - widthOfGText - widthOfRHSText;
-        rhsText.setPosition(sf::Vector2f(coords.x + freeSpaceHor + widthOfGText - NODE_INFO_OFFSET, coords.y + NODE_INFO_OFFSET));
+            rhsText.setString(dToStr(node.rhs));
+            float widthOfRHSText = rhsText.getLocalBounds().width;
+            float freeSpaceHor = nodeSideLength - widthOfGText - widthOfRHSText;
+            rhsText.setPosition(sf::Vector2f(coords.x + freeSpaceHor + widthOfGText - NODE_INFO_OFFSET, coords.y + NODE_INFO_OFFSET));
 
-        std::string keyString = "[" + dToStr(key.k1) + ":" + dToStr(key.k2) + "]";
-        keyText.setString(keyString);
-        float halfOfText = keyText.getLocalBounds().width / 2;
+            std::string keyString = "[" + dToStr(node.key.k1) + ":" + dToStr(node.key.k2) + "]";
+            keyText.setString(keyString);
+            float halfOfText = keyText.getLocalBounds().width / 2;
 
-        float buttomOfTopRow = keyText.getLocalBounds().height + NODE_INFO_OFFSET;
-        float heightKeyOffset = nodeSideLength - buttomOfTopRow - NODE_INFO_OFFSET;
+            float buttomOfTopRow = keyText.getLocalBounds().height + NODE_INFO_OFFSET;
+            float heightKeyOffset = nodeSideLength - buttomOfTopRow - NODE_INFO_OFFSET;
 
-        float halfOfNode = static_cast<float>(nodeSideLength) / 2;
-        float diff = halfOfNode - halfOfText;
-        keyText.setPosition(sf::Vector2f(coords.x + diff, coords.y + NODE_INFO_OFFSET + heightKeyOffset));
+            float halfOfNode = static_cast<float>(nodeSideLength) / 2;
+            float diff = halfOfNode - halfOfText;
+            keyText.setPosition(sf::Vector2f(coords.x + diff, coords.y + NODE_INFO_OFFSET + heightKeyOffset));
+
+            factorRect.setFillColor(sf::Color(100 + 28 * node.factor, 0, 140 - 28 * node.factor));
+        }
+        nodeRect.setFillColor(colors->getColor(node.state));
     }
 
     void DrawableNode::resize()
@@ -98,6 +103,21 @@ namespace Pathfinding::Rendering
         auto factorRectPosition = sf::Vector2f(mainRectPositionsfVec2.x, factorRectHeight);
         factorRect.setPosition(factorRectPosition);
         factorRect.setSize(factorRectSize);
+    }
+
+    void DrawableNode::drawDrawableNode(sf::RenderTarget &target, bool nodeBlocked) const
+    {
+        target.draw(nodeRect);
+        if (renderNodeInfo())
+        {
+            target.draw(rhsText);
+            target.draw(gText);
+            target.draw(keyText);
+            if (nodeBlocked)
+            {
+                target.draw(factorRect);
+            }
+        }
     }
 
     bool DrawableNode::renderNodeInfo() const

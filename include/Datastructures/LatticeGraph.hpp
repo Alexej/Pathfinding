@@ -25,7 +25,7 @@ namespace Pathfinding::Datastructures
 
         Node *node(Vec2i location) override;
 
-        const Node *node(Vec2i location) const override;
+        const Node * node(Vec2i location) const override;
 
         bool inBounds(Vec2i location) const override;
 

@@ -42,12 +42,12 @@ namespace Pathfinding::Datastructures
         resetEndpoints();
     }
 
-    const Node *LatticeGraphWrapper::startNode() const
+    const Node * LatticeGraphWrapper::startNode() const
     {
         return startNodePtr;
     }
 
-    const Node *LatticeGraphWrapper::goalNode() const
+    const Node * LatticeGraphWrapper::goalNode() const
     {
         return goalNodePtr;
     }

@@ -27,9 +27,9 @@ namespace Pathfinding::Abstract
 
         virtual void setStart(PDVec2i location) = 0;
 
-        virtual const PDNode *startNode() const = 0;
+        virtual const PDNode * startNode() const = 0;
 
-        virtual const PDNode *goalNode() const = 0;
+        virtual const PDNode * goalNode() const = 0;
 
         virtual PDNode *startNode() = 0;
 
