@@ -7,7 +7,7 @@
 #include <string>
 #include <SFML/Graphics/RenderTarget.hpp>
 #include <type_traits>
-
+#include "Vec2.hpp"
 #include "Node.hpp"
 
 
@@ -21,6 +21,11 @@ namespace Pathfinding::Helpers
             bool increment = true;
     };
 
+    template<typename VectorType> Pathfinding::Datastructures::Vec2<VectorType> 
+    swapElements(Pathfinding::Datastructures::Vec2<VectorType> vec)
+    {
+        return {vec.width, vec.height};
+    }
 
     template<typename DrawableType>
     void drawArrayOfDrawables(sf::RenderTarget& target, const std::vector<DrawableType> & objects)
@@ -31,6 +36,7 @@ namespace Pathfinding::Helpers
             target.draw(element);
         }
     }
+
 
     sf::Color convertToSfmlColor(std::array<uint8_t, 3> color);
 

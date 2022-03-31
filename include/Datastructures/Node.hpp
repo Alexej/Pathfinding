@@ -3,31 +3,27 @@
 
 #include <cstdint>
 #include <limits>
+#include <SFML/Graphics/RenderTarget.hpp>
 
 #include "Vec2.hpp"
 #include "Key.hpp"
+#include "DrawableNode.hpp"
 
 namespace Pathfinding::Datastructures
 {
     enum class NodeState { Start, Goal, Free, Blocked, Frontier, Visited };
-    struct Node
+
+    struct Node final : public Pathfinding::Rendering::DrawableNode
     {
         Node(int32_t h, int32_t w) : location(Vec2i(h,w)) { initNode(); }
 
-        void initNode()
-        {
-            state = NodeState::Free;
-            rhs = std::numeric_limits<double>::infinity();
-            g = std::numeric_limits<double>::infinity();
-            visitedOnce = false;
-            factor = 1;
-        }
+        void initNode();
         
-        void reset()
-        {
-            initNode();
-            key = Key();
-        }
+        void reset();
+
+        void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
+
+        void update();
 
         Vec2i location;
         NodeState state;

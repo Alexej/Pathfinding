@@ -4,6 +4,7 @@
 #include <compare>
 #include <cstdint>
 
+#include <SFML/System/Vector2.hpp>
 
 namespace Pathfinding::Datastructures
 {
@@ -28,6 +29,11 @@ namespace Pathfinding::Datastructures
             this->width += rhs.width;
             return *this;
         }
+
+        operator sf::Vector2f() const   
+        {
+            return sf::Vector2f{static_cast<float>(height), static_cast<float>(width)};
+        }
         
         T height = 0;
         T width = 0;
@@ -44,6 +50,13 @@ namespace Pathfinding::Datastructures
     {
         return lhs += rhs;
     }
+
+    template <typename T>
+    Vec2<T> operator*(Vec2<T> lhs, int32_t rhs)
+    {
+        return {lhs.height * rhs, lhs.width * rhs};
+    }
+
 
     using Vec2i = Vec2<int32_t>;
 }

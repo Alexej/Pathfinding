@@ -2,10 +2,8 @@
 
 #include <SFML/Window/Event.hpp>
 
-#include "IApplication.hpp"
 #include "Constants.hpp"
 #include "Application.hpp"
-#include "ILatticeGraph.hpp"
 #include "LatticeGraph.hpp"
 #include "LatticeGraphWrapper.hpp"
 #include "ApplicationState.hpp"
@@ -13,15 +11,15 @@
 #include "Menu.hpp"
 #include "DStarLite.hpp"
 #include "AIncrementalInformedAlgorithm.hpp"
-#include "Renderer.hpp"
 #include "DiagonalHeuristic.hpp"
 #include "DefaultCostFunction.hpp"
-#include "IGraphOperations.hpp"
-#include "ApplicationState.hpp"
 #include "AStar.hpp"
 #include "PathfinderReturnType.hpp"
 #include "GraphOperations.hpp"
 #include "MouseEvent.hpp"
+#include "NodeStateColors.hpp"
+#include "Renderer.hpp"
+#include "ILatticeGraphHelpers.hpp"
 
 namespace Pathfinding::Core
 {
@@ -30,6 +28,8 @@ namespace Pathfinding::Core
     using Pathfinding::Abstract::IApplication;
     using Pathfinding::Abstract::IGraphOperations;
     using Pathfinding::Abstract::ILatticeGraph;
+    using Pathfinding::Abstract::IFontLoader;
+    using Pathfinding::Abstract::IRenderer;
     using Pathfinding::Algorithms::AStar;
     using Pathfinding::Algorithms::DefaultCostFunction;
     using Pathfinding::Algorithms::DiagonalHeuristic;
@@ -40,7 +40,9 @@ namespace Pathfinding::Core
     using Pathfinding::Events::EventManager;
     using Pathfinding::Events::MouseEvent;
     using Pathfinding::Gui::Menu;
+    using Pathfinding::Rendering::NodeStateColors;
     using Pathfinding::Rendering::Renderer;
+    using Pathfinding::Helpers::ILatticeGraphHelpers;
     using sf::Event::EventType::MouseButtonPressed;
     using sf::Event::EventType::MouseButtonReleased;
     using sf::Event::EventType::MouseMoved;
@@ -63,7 +65,7 @@ namespace Pathfinding::Core
         straightCost = straightCost_;
     }
 
-    void ApplicationBuilder::setFontLoader(std::shared_ptr<PAIFontLoader> fontLoaderSPtr_)
+    void ApplicationBuilder::setFontLoader(std::shared_ptr<IFontLoader> fontLoaderSPtr_)
     {
         fontLoaderSPtr = fontLoaderSPtr_;
     }
@@ -73,6 +75,7 @@ namespace Pathfinding::Core
         applicationUPtr->accumulator = 0;
         instantiateObjects();
         initializeObjects();
+        lastPreparations();
 
         /**
          * !implicit upcast!
@@ -90,10 +93,9 @@ namespace Pathfinding::Core
         applicationUPtr->menuUPtr = std::make_unique<Menu>(&applicationUPtr->appState, &applicationUPtr->aStarCache, &applicationUPtr->dStarCache);
         applicationUPtr->dstarLiteUPtr = std::make_unique<DStarLite>(applicationUPtr->latGraphWrapUPtr);
         applicationUPtr->graphOpsUPtr = std::make_unique<GraphOperations>(&applicationUPtr->appState, applicationUPtr->latGraphWrapUPtr);
-        applicationUPtr->rendererUPtr = std::make_unique<Renderer>(&applicationUPtr->appState, fontLoaderSPtr);
         applicationUPtr->aStarUPtr = std::make_unique<AStar>();
         applicationUPtr->drawablePath.init(&applicationUPtr->appState);
-
+        applicationUPtr->rendererUPtr = std::make_unique<Renderer>();
     }
 
     void ApplicationBuilder::initializeObjects()
@@ -102,11 +104,20 @@ namespace Pathfinding::Core
         setMenuCallBacks();
         initDStarLite();
         initAStar();
+    }
 
+    void ApplicationBuilder::lastPreparations()
+    {
         applicationUPtr->graphOpsUPtr->addEdgeChangeCallBack(std::bind(&AIncrementalInformedAlgorithm::addChangedNode,
                                                                        applicationUPtr->dstarLiteUPtr.get(), _1));
         applicationUPtr->window.setFramerateLimit(APP_FPS);
         applicationUPtr->dimensionPtr = &applicationUPtr->appState.dimension;
+        ILatticeGraphHelpers::initRendering(*applicationUPtr->latGraphWrapUPtr->latGraphSPtr, 
+                                             fontLoaderSPtr->getFont("NugoSansLight"), 
+                                             &applicationUPtr->colors, 
+                                             &applicationUPtr->appState);
+        applicationUPtr->fontLoaderSPtr = fontLoaderSPtr;
+        applicationUPtr->gradChager.init(applicationUPtr->colors);
     }
 
     void ApplicationBuilder::createEventManagerBindings()

@@ -11,7 +11,6 @@ namespace Pathfinding::Datastructures { struct Key;}
 namespace Pathfinding::Datastructures { struct Node;}
 namespace Pathfinding::Datastructures { struct PathfinderReturnType;}
 
-
 namespace Pathfinding::Algorithms
 {
     class LPAStar final : public Pathfinding::Abstract::AIncrementalInformedAlgorithm

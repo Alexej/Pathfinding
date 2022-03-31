@@ -8,7 +8,7 @@
 #include "DStarLite.hpp"
 #include "ALatGraphWr.hpp"
 #include "LatticeGraphWrapper.hpp"
-#include "LatticeGraphHelpers.hpp"
+#include "ILatticeGraphHelpers.hpp"
 #include "MouseData.hpp"
 #include "Constants.hpp"
 

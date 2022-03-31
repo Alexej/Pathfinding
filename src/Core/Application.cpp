@@ -5,10 +5,10 @@
 #include <SFML/Window/Event.hpp>
 #include "PathfinderReturnType.hpp"
 #include "RenderingHelpers.hpp"
-#include "LatticeGraphHelpers.hpp"
+#include "ILatticeGraphHelpers.hpp"
 #include "MouseData.hpp"
 #include "Node.hpp"
-
+#include "ILatticeGraph.hpp"
 
 namespace Pathfinding::Core
 {
@@ -20,6 +20,7 @@ namespace Pathfinding::Core
     using Pathfinding::Events::MouseData;
     using Pathfinding::Rendering::DrawablePath;
     using Pathfinding::Datastructures::Node;
+    using Pathfinding::Abstract::ILatticeGraph;
 
     void Application::startAlgorithm()
     {
@@ -54,8 +55,25 @@ namespace Pathfinding::Core
         eventManagerUPtr->pushEvent(event);
     }
 
+    void Application::updateColors()
+    {
+        if(appState.currentState == AlgorithmState::NO_PATH)
+        {
+            gradChager.updateBlockedColor();       
+        }
+        else if(appState.currentState == AlgorithmState::FOUND_PATH)
+        {
+            gradChager.updateStartColor();       
+        }
+    }
+
     void Application::update(sf::Clock &deltaClock)
     {
+        latGraphWrapUPtr->latGraphSPtr->update();
+        if(appState.algorithmFinished())
+        {
+            updateColors();
+        }
         int32_t dt = deltaClock.getElapsedTime().asMilliseconds();
         if (appState.currentState == AlgorithmState::SEARCHING && appState.autoStep)
         {
@@ -66,18 +84,21 @@ namespace Pathfinding::Core
                 accumulator = 0;
             }
         }
-        ImGui::SFML::Update(window, deltaClock.restart());
         eventManagerUPtr->processEvents(bindings);
+        ImGui::SFML::Update(window, deltaClock.restart());
     }
 
     void Application::handleNumberOfNodesChange(int32_t index)
     {
         dimensionPtr->setCurrentNumberOfNodesIndex(index);
-        rendererUPtr->resize();
         graphOpsUPtr->resize(dimensionPtr->currentNodeSideLength());
         drawablePath.resize();
         latGraphWrapUPtr->resize(dimensionPtr->height(), dimensionPtr->width());
         appState.nodeUnderCursor = nullptr;
+        ILatticeGraphHelpers::initRendering(*latGraphWrapUPtr->latGraphSPtr,
+                                            fontLoaderSPtr->getFont("NugoSansLight"),
+                                            &colors,
+                                            &appState);
     }
 
     void Application::draw()
@@ -85,7 +106,7 @@ namespace Pathfinding::Core
         menuUPtr->show();
         window.clear();
         ImGui::SFML::Render(window);
-        rendererUPtr->render(window, latGraphWrapUPtr);
+        rendererUPtr->render(window, *latGraphWrapUPtr->latGraphSPtr);
         if (appState.currentState == AlgorithmState::FOUND_PATH || appState.currentState == AlgorithmState::SEARCHING)
         {
             if(appState.showAStarPath)
@@ -105,9 +126,9 @@ namespace Pathfinding::Core
         graphOpsUPtr->enableEndPointsEvent();
         graphOpsUPtr->enableObsticlesAndScrollEvents();
         appState.nodeUnderCursor = nullptr;
-        rendererUPtr->reset();
         aStarCache.reset();
         dStarCache.reset();
+        colors.reset();
     }
 
     void Application::done()

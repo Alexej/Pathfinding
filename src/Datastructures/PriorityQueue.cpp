@@ -5,46 +5,43 @@
 
 namespace Pathfinding::Datastructures
 {
-        bool DStarLiteQueueComperator::operator()(const Node *lhs, const Node *rhs)
-        {
-            return lhs->key > rhs->key;
-        }
+    bool DStarLiteQueueComperator::operator()(const Node *lhs, const Node *rhs)
+    {
+        return lhs->key > rhs->key;
+    }
 
-        void PriorityQueue::remove(const Node *node)
-        {
-            auto it = std::find(c.begin(), c.end(), node);
-            c.erase(it);
-            std::make_heap(c.begin(), c.end(), comp);
-        }
+    void PriorityQueue::remove(const Node *node)
+    {
+        auto it = std::ranges::find(c, node);
+        c.erase(it);
+        std::ranges::make_heap(c, std::ranges::greater{}, &Node::key);
+    }
 
-        void PriorityQueue::insert(Node *node)
-        {
-            push(node);
-        }
+    void PriorityQueue::insert(Node *node)
+    {
+        push(node);
+    }
 
-        void PriorityQueue::reset()
-        {
-            c.clear();
-        }
+    void PriorityQueue::reset()
+    {
+        c.clear();
+    }
 
-        Key PriorityQueue::topKey() const
-        {
-            if (empty())
-            {
-                return Key();
-            }
-            return top()->key;
-        }
+    Key PriorityQueue::topKey() const
+    {
+        if (empty()) { return Key(); }
+        return top()->key;
+    }
 
-        Node *PriorityQueue::pop()
-        {
-            auto topNode = top();
-            base::pop();
-            return topNode;
-        }
+    Node *PriorityQueue::pop()
+    {
+        auto topNode = top();
+        base::pop();
+        return topNode;
+    }
 
-        bool PriorityQueue::contains(const Node *node) const
-        {
-            return std::find(c.begin(), c.end(), node) != c.end();
-        }
+    bool PriorityQueue::contains(const Node *node) const
+    {
+        return std::ranges::find(c, node) != c.end();
+    }
 }

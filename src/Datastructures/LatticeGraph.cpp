@@ -1,9 +1,11 @@
 #include "LatticeGraph.hpp"
 #include "InformedSearchAlgorithmHelpers.hpp"
+#include "CppHelpers.hpp"
 
 namespace Pathfinding::Datastructures
 {
     using Pathfinding::Helpers::infinity;
+    using Pathfinding::Helpers::iterateOver2DVector;
 
     namespace
     {
@@ -46,13 +48,17 @@ namespace Pathfinding::Datastructures
 
     void LatticeGraph::reset()
     {
-        for (int32_t h = 0; h < graph.size(); ++h)
-        {
-            for (int32_t w = 0; w < graph[0].size(); ++w)
-            {
-                graph[h][w].reset();
-            }
-        }
+        iterateOver2DVector(graph, [](Node & node) { node.reset(); });
+    }
+
+    void LatticeGraph::update()
+    {
+        iterateOver2DVector(graph, [](Node & node) { node.update(); });
+    }
+
+    void LatticeGraph::draw(sf::RenderTarget& target, sf::RenderStates states) const
+    {
+        iterateOver2DVector(graph, [&] (const Node & node) { target.draw(node); });
     }
 
     void LatticeGraph::resize(int32_t height, int32_t width)
@@ -68,4 +74,5 @@ namespace Pathfinding::Datastructures
             graph.push_back(row);
         }
     }
+
 }

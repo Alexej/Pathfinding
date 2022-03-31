@@ -32,7 +32,12 @@ namespace Pathfinding::Datastructures
         std::size_t width() const override { return graph[0].size(); }
 
         std::size_t height() const override { return graph.size(); }
-        
+
+        void update() override;  
+
+    private:
+        virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+
     private:
         template <typename Type>
         using Vector2D = std::vector<std::vector<Type>>;

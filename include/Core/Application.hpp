@@ -12,7 +12,6 @@
 #include "PathfinderCache.hpp"
 #include "ALatGraphWr.hpp"
 #include "ApplicationState.hpp"
-#include "IRenderer.hpp"
 #include "IGraphOperations.hpp"
 #include "AIncrementalInformedAlgorithm.hpp"
 #include "IEventManager.hpp"
@@ -22,10 +21,13 @@
 #include "BindingsContainer.hpp"
 #include "DrawablePath.hpp"
 #include "DFSMazeGenerator.hpp"
+#include "NodeStateColors.hpp"
+#include "IFontLoader.hpp"
+#include "GradientChanger.hpp"
+#include "IRenderer.hpp"
 
 namespace Pathfinding::Core { class ApplicationBuilder; }
 namespace Pathfinding::Datastructures { struct Node; }
-
 
 namespace Pathfinding::Core
 {
@@ -37,7 +39,6 @@ namespace Pathfinding::Core
         using PAIEventManager = Pathfinding::Abstract::IEventManager;
         using PAAIncrementalInformedAlgorithm = Pathfinding::Abstract::AIncrementalInformedAlgorithm;
         using PAIGraphOperations = Pathfinding::Abstract::IGraphOperations;
-        using PAIRenderer = Pathfinding::Abstract::IRenderer;
         using PCApplicationState = Pathfinding::Core::ApplicationState;
         using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
         using PAIAStar = Pathfinding::Abstract::IAStar;
@@ -47,6 +48,10 @@ namespace Pathfinding::Core
         using PRDrawablePath = Pathfinding::Rendering::DrawablePath;
         using PDNode = Pathfinding::Datastructures::Node;
         using PADSFMazeGenerator = Pathfinding::Algorithms::DFSMazeGenerator;
+        using PRNodeStateColors = Pathfinding::Rendering::NodeStateColors;
+        using PAIFontLoader = Pathfinding::Abstract::IFontLoader;
+        using PRGradientChanger = Pathfinding::Rendering::GradientChanger;
+        using PAIRenderer = Pathfinding::Abstract::IRenderer;
 
     public:
         Application() = default;
@@ -85,14 +90,17 @@ namespace Pathfinding::Core
 
         void drawPath(const std::vector<PDNode *> & path, sf::Color color);
 
+        void updateColors();
+
     private:
-        std::unique_ptr<PAIRenderer> rendererUPtr;
-        std::unique_ptr<PAIMenu> menuUPtr;
-        std::unique_ptr<PAIEventManager> eventManagerUPtr;
-        std::unique_ptr<PAAIncrementalInformedAlgorithm> dstarLiteUPtr;
-        std::unique_ptr<PAIAStar> aStarUPtr;
-        std::unique_ptr<PAIGraphOperations> graphOpsUPtr;
-        std::shared_ptr<PAALatGraphWr> latGraphWrapUPtr;
+        std::unique_ptr<PAIMenu> menuUPtr = nullptr;
+        std::unique_ptr<PAIEventManager> eventManagerUPtr = nullptr;
+        std::unique_ptr<PAAIncrementalInformedAlgorithm> dstarLiteUPtr = nullptr;
+        std::unique_ptr<PAIAStar> aStarUPtr = nullptr;
+        std::unique_ptr<PAIGraphOperations> graphOpsUPtr = nullptr;
+        std::unique_ptr<PAIRenderer> rendererUPtr = nullptr;
+        std::shared_ptr<PAALatGraphWr> latGraphWrapUPtr = nullptr;
+        std::shared_ptr<PAIFontLoader> fontLoaderSPtr = nullptr;
 
         PCApplicationState appState;
         int32_t accumulator;
@@ -102,8 +110,10 @@ namespace Pathfinding::Core
         RandomIntegers ri;
         PRDrawablePath drawablePath;
         PADSFMazeGenerator dfsmg;
+        PRNodeStateColors colors;
+        PRGradientChanger gradChager;
 
-        GraphDimension *dimensionPtr;
+        GraphDimension *dimensionPtr = nullptr;
         PEBindingsContainer bindings;
     };
 }

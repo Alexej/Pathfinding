@@ -4,7 +4,7 @@
 #include "ILatticeGraph.hpp"
 #include "Node.hpp"
 #include "IMazeGenerator.hpp"
-#include "LatticeGraphHelpers.hpp"
+#include "ILatticeGraphHelpers.hpp"
 #include "CppHelpers.hpp"
 
 namespace Pathfinding::Datastructures

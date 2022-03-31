@@ -1,104 +1,110 @@
 #include "DrawableNode.hpp"
 
-#include <SFML/Graphics/RenderTarget.hpp>
-
 #include "RenderingHelpers.hpp"
 #include "Constants.hpp"
 #include "Node.hpp"
+#include "ApplicationState.hpp"
+#include "Key.hpp"
+#include "NodeStateColors.hpp"
 
 namespace Pathfinding::Rendering
 {
+    using Pathfinding::Core::ApplicationState;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
+    using Pathfinding::Datastructures::Vec2i;
     using Pathfinding::Helpers::convertToSfmlColor;
     using Pathfinding::Helpers::dToStr;
+    using Pathfinding::Helpers::swapElements;
     using namespace Pathfinding::Constants;
 
-    void DrawableNode::init(const sf::Font &font)
+
+    void DrawableNode::init(const sf::Font &font,
+                            NodeStateColors *colors_,
+                            ApplicationState *appStatePtr_,
+                            Vec2i position_)
     {
-        g.setFont(font);
-        rhs.setFont(font);
-        key.setFont(font);
+        colors = colors_;
+        appStatePtr = appStatePtr_;
+        position = swapElements(position_);
 
-        g.setStyle(sf::Text::Bold);
-        rhs.setStyle(sf::Text::Bold);
-        key.setStyle(sf::Text::Bold);
+        gText.setFont(font);
+        rhsText.setFont(font);
+        keyText.setFont(font);
 
-        g.setCharacterSize(NODE_INFO_TEXT_SIZE);
-        rhs.setCharacterSize(NODE_INFO_TEXT_SIZE);
-        key.setCharacterSize(NODE_INFO_TEXT_SIZE);
+        gText.setStyle(sf::Text::Bold);
+        rhsText.setStyle(sf::Text::Bold);
+        keyText.setStyle(sf::Text::Bold);
 
-        g.setFillColor(convertToSfmlColor(NODE_INFO_COLOR));
-        rhs.setFillColor(convertToSfmlColor(NODE_INFO_COLOR));
-        key.setFillColor(convertToSfmlColor(NODE_INFO_COLOR));
+        gText.setCharacterSize(NODE_INFO_TEXT_SIZE);
+        rhsText.setCharacterSize(NODE_INFO_TEXT_SIZE);
+        keyText.setCharacterSize(NODE_INFO_TEXT_SIZE);
+
+        gText.setFillColor(convertToSfmlColor(NODE_INFO_COLOR));
+        rhsText.setFillColor(convertToSfmlColor(NODE_INFO_COLOR));
+        keyText.setFillColor(convertToSfmlColor(NODE_INFO_COLOR));
 
         nodeRect.setOutlineThickness(NODE_OUTLINE_THICKNESS);
         nodeRect.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
 
         factorRect.setOutlineThickness(NODE_OUTLINE_THICKNESS);
         factorRect.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
+
+        setRectsSizeAndPosition();
     }
 
-    void DrawableNode::prepare(const Node &node, sf::Vector2f coords, sf::Color color, bool renderInfo)
+
+    void DrawableNode::prepareNodeInfo(double g, double rhs, const PDKey & key)
     {
-        nodeRect.setPosition(coords);
-        nodeRect.setFillColor(color);
-        
-        nodeBlocked = node.state == NodeState::Blocked ? true : false;
+        using std::to_string;
+        auto nodeSideLength = nodeRect.getSize().x;
+        auto coords = nodeRect.getPosition();
+        gText.setString(dToStr(g));
+        gText.setPosition(sf::Vector2f(coords.x + NODE_INFO_OFFSET, coords.y + NODE_INFO_OFFSET));
+        float widthOfGText = gText.getLocalBounds().width;
 
-        if (renderInfo)
-        {
-            using std::to_string;
+        rhsText.setString(dToStr(rhs));
+        float widthOfRHSText = rhsText.getLocalBounds().width;
+        float freeSpaceHor = nodeSideLength - widthOfGText - widthOfRHSText;
+        rhsText.setPosition(sf::Vector2f(coords.x + freeSpaceHor + widthOfGText - NODE_INFO_OFFSET, coords.y + NODE_INFO_OFFSET));
 
-            auto nodeSideLength = nodeRect.getSize().x;
-            g.setString(dToStr(node.g));
-            g.setPosition(sf::Vector2f(coords.x + NODE_INFO_OFFSET, coords.y + NODE_INFO_OFFSET));
-            float widthOfGText = g.getLocalBounds().width;
+        std::string keyString = "[" + dToStr(key.k1) + ":" + dToStr(key.k2) + "]";
+        keyText.setString(keyString);
+        float halfOfText = keyText.getLocalBounds().width / 2;
 
-            rhs.setString(dToStr(node.rhs));
-            float widthOfRHSText = rhs.getLocalBounds().width;
-            float freeSpaceHor = nodeSideLength - widthOfGText - widthOfRHSText;
-            rhs.setPosition(sf::Vector2f(coords.x + freeSpaceHor + widthOfGText - NODE_INFO_OFFSET, coords.y + NODE_INFO_OFFSET));
+        float buttomOfTopRow = keyText.getLocalBounds().height + NODE_INFO_OFFSET;
+        float heightKeyOffset = nodeSideLength - buttomOfTopRow - NODE_INFO_OFFSET;
 
-
-            std::string keyString = "[" + dToStr(node.key.k1) + ":" + dToStr(node.key.k2) + "]";
-            key.setString(keyString);
-            float halfOfText = key.getLocalBounds().width / 2;
-
-            float buttomOfTopRow = key.getLocalBounds().height + NODE_INFO_OFFSET;
-            float heightKeyOffset = nodeSideLength - buttomOfTopRow - NODE_INFO_OFFSET;
-
-            float halfOfNode = static_cast<float>(nodeSideLength) / 2;
-            float diff = halfOfNode - halfOfText;
-            key.setPosition(sf::Vector2f(coords.x + diff, coords.y + NODE_INFO_OFFSET + heightKeyOffset));
-
-            factorRect.setPosition(sf::Vector2f(coords.x, coords.y + (halfOfNode - factorRect.getSize().y / 2)));
-            factorRect.setFillColor(sf::Color(100 + 28 * node.factor, 0, 140 - 28 * node.factor));
-        }
-        renderInfoInNode = renderInfo;
+        float halfOfNode = static_cast<float>(nodeSideLength) / 2;
+        float diff = halfOfNode - halfOfText;
+        keyText.setPosition(sf::Vector2f(coords.x + diff, coords.y + NODE_INFO_OFFSET + heightKeyOffset));
     }
 
-    void DrawableNode::resize(float nodeSideLength)
+    void DrawableNode::resize()
     {
-        auto factorRectSize = sf::Vector2f(nodeSideLength / 6.f ,nodeSideLength / 6.f);
-        auto nodeRectSize = sf::Vector2f(nodeSideLength, nodeSideLength);
+        setRectsSizeAndPosition();
+    }
 
-        nodeRect.setSize(nodeRectSize);
+    void DrawableNode::setRectsSizeAndPosition()
+    {
+        auto nodeSideLengthF = static_cast<float>(appStatePtr->dimension.currentNodeSideLength());
+        auto mainRectPosition = position * appStatePtr->dimension.currentNodeSideLength();
+        auto mainRectPositionsfVec2 = static_cast<sf::Vector2f>(mainRectPosition);
+        nodeRect.setPosition(mainRectPositionsfVec2);
+        nodeRect.setSize({nodeSideLengthF,nodeSideLengthF});
+
+        auto factorRectSize = sf::Vector2f(nodeSideLengthF / 6.f, nodeSideLengthF / 6.f);
+        auto factorRectHeight = mainRectPositionsfVec2.y + ((nodeSideLengthF / 2) - (factorRectSize.y / 2));
+        auto factorRectPosition = sf::Vector2f(mainRectPositionsfVec2.x, factorRectHeight);
+        factorRect.setPosition(factorRectPosition);
         factorRect.setSize(factorRectSize);
     }
 
-    void DrawableNode::draw(sf::RenderTarget &target, sf::RenderStates states) const
+    bool DrawableNode::renderNodeInfo() const
     {
-        target.draw(nodeRect);
-        if (renderInfoInNode)
-        {
-            target.draw(rhs);
-            target.draw(g);
-            target.draw(key);
-            if(!nodeBlocked)
-            {
-                target.draw(factorRect);
-            }
-        }
+        return appStatePtr->showNodeInfo;
     }
 }
+
+
+

@@ -11,7 +11,7 @@
 #include "InformedSearchAlgorithmHelpers.hpp"
 #include "ALatGraphWr.hpp"
 #include "LatticeGraphWrapper.hpp"
-#include "LatticeGraphHelpers.hpp"
+#include "ILatticeGraphHelpers.hpp"
 #include "ICostFunction.hpp"
 #include "Constants.hpp"
 #include "PathfinderReturnType.hpp"
@@ -116,7 +116,7 @@ namespace Pathfinding::Algorithms
     std::pair<double, Node *> DStarLite::getMinCG(Node *u)
     {
         auto succs = ILatticeGraphHelpers::neighbors(*latticeGraphWrapperSPtr->latGraphSPtr, u);
-        auto itr = std::min_element(succs.begin(), succs.end(),
+        auto itr = std::ranges::min_element(succs,
         [this, &u](const Node *lhs, const Node *rhs)
         {
             return costThisFar(u,lhs) < costThisFar(u,rhs);

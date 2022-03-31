@@ -3,9 +3,9 @@
 
 #include <memory>
 #include <initializer_list>
+#include <memory>
 
 #include "GraphDimension.hpp"
-#include <memory>
 
 namespace Pathfinding::Core {class Application;}
 namespace Pathfinding::Abstract {class IApplication;}
@@ -16,12 +16,6 @@ namespace Pathfinding::Core
     class FontLoader;
     class ApplicationBuilder
     {
-    private:
-        using PDGraphDimension = Pathfinding::Core::GraphDimension;
-        using PCApplication = Pathfinding::Core::Application;
-        using PAIApplication = Pathfinding::Abstract::IApplication;
-        using PAIFontLoader = Pathfinding::Abstract::IFontLoader;
-
     public:
         ApplicationBuilder();
 
@@ -29,9 +23,9 @@ namespace Pathfinding::Core
 
         void setCosts(int32_t diagonalCost, int32_t straightCost);
 
-        void setFontLoader(std::shared_ptr<PAIFontLoader> fontLoaderSPtr);
+        void setFontLoader(std::shared_ptr<Pathfinding::Abstract::IFontLoader> fontLoaderSPtr);
 
-        std::unique_ptr<PAIApplication> make();
+        std::unique_ptr<Pathfinding::Abstract::IApplication> make();
 
     private:
         void instantiateObjects();
@@ -46,10 +40,12 @@ namespace Pathfinding::Core
 
         void initAStar();
 
+        void lastPreparations();
+
     private:
-        std::unique_ptr<PCApplication> applicationUPtr = nullptr;
-        std::shared_ptr<PAIFontLoader> fontLoaderSPtr;
-        PDGraphDimension dimension;
+        std::unique_ptr<Pathfinding::Core::Application> applicationUPtr = nullptr;
+        std::shared_ptr<Pathfinding::Abstract::IFontLoader> fontLoaderSPtr;
+        Pathfinding::Core::GraphDimension dimension;
         int32_t diagonalCost;
         int32_t straightCost;
     };

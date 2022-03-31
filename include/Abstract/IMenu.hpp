@@ -7,25 +7,22 @@ namespace Pathfinding::Abstract
 {
     class IMenu
     {
-        private:
-            using fPtrVI = std::function<void(int32_t)>;
-            using fPtrVV = std::function<void(void)>;
         public: 
             virtual void show() = 0;
             
-            virtual void addNumberOfNodesChangedCallBack(fPtrVI callBack) = 0;
+            virtual void addNumberOfNodesChangedCallBack(std::function<void(int32_t)> callBack) = 0;
             
-            virtual void addStepCallBack(fPtrVV callBack) = 0;
+            virtual void addStepCallBack(std::function<void(void)> callBack) = 0;
             
-            virtual void addStartCallBack(fPtrVV callBack) = 0;
+            virtual void addStartCallBack(std::function<void(void)> callBack) = 0;
             
-            virtual void addResetCallBack(fPtrVV callBack) = 0;
+            virtual void addResetCallBack(std::function<void(void)> callBack) = 0;
             
-            virtual void addRandomGraphCallBack(fPtrVV callBack) = 0;
+            virtual void addRandomGraphCallBack(std::function<void(void)> callBack) = 0;
 
-            virtual void addMazeGraphCallBack(fPtrVV callBack) = 0;
+            virtual void addMazeGraphCallBack(std::function<void(void)> callBack) = 0;
 
-            virtual void addMouseWheelEventChangedCallBack(fPtrVI callBack) = 0;
+            virtual void addMouseWheelEventChangedCallBack(std::function<void(int32_t)> callBack) = 0;
             
             virtual bool initialized() const = 0;
             

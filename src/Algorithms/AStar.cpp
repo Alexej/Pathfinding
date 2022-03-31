@@ -9,7 +9,7 @@
 #include "IHeuristic.hpp"
 #include "ICostFunction.hpp"
 #include "Node.hpp"
-#include "LatticeGraphHelpers.hpp"
+#include "ILatticeGraphHelpers.hpp"
 #include "ILatticeGraph.hpp"
 
 namespace Pathfinding::Algorithms

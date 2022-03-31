@@ -6,32 +6,50 @@
 #include <SFML/Graphics/Text.hpp>
 #include <SFML/Graphics/Font.hpp>
 
+#include "Vec2.hpp"
+
+namespace Pathfinding::Datastructures {struct Key;}
 namespace Pathfinding::Datastructures {struct Node;}
+namespace Pathfinding::Core {struct ApplicationState;}
+
 
 namespace Pathfinding::Rendering
 {
-    class DrawableNode final : public sf::Drawable
+    struct NodeStateColors;
+    class DrawableNode : public sf::Drawable
     {
         private:
             using PDNode = Pathfinding::Datastructures::Node;
+            using PCApplicationState = Pathfinding::Core::ApplicationState;
+            using PDVec2i = Pathfinding::Datastructures::Vec2i;
+            using PDKey = Pathfinding::Datastructures::Key;
         public:
-            void init(const sf::Font & font);
+            void init(const sf::Font & font, 
+                        NodeStateColors * colors, 
+                        PCApplicationState * appStatePtr, 
+                        PDVec2i position);
 
-            void prepare(const PDNode & node ,sf::Vector2f coords, sf::Color color, bool renderInfo);
+            void resize();
 
-            void resize(float nodeSideLength);
+        protected:
+            void prepareNodeInfo(double g, double rhs, const PDKey & key);
+
+            bool renderNodeInfo() const;
 
         private:
-            void draw(sf::RenderTarget& target, sf::RenderStates states) const override;
+            void setRectsSizeAndPosition();
             
-        private:
-            sf::Text rhs;
-            sf::Text g;
-            bool nodeBlocked;
-            sf::Text key;
+        protected:
+            sf::Text rhsText;
+            sf::Text gText;
+            sf::Text keyText;
             sf::RectangleShape factorRect;
             sf::RectangleShape nodeRect;
-            bool renderInfoInNode = false;
+            NodeStateColors * colors;
+
+        private:
+            PCApplicationState * appStatePtr;
+            PDVec2i position;
     };
 }
 

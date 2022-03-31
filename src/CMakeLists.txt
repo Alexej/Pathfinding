@@ -14,15 +14,15 @@ Core/Application.cpp
 Core/ApplicationState.cpp
 Core/GraphOperations.cpp
 Core/ApplicationBuilder.cpp
-Rendering/Renderer.cpp
 Rendering/DrawableNode.cpp
 Rendering/DrawablePath.cpp
+Rendering/NodeStateColors.cpp
 Core/GraphDimension.cpp
 Helpers/RootPath.cpp
 Helpers/GuiHelpers.cpp
 Helpers/SFMLHelpers.cpp
 Helpers/RenderingHelpers.cpp
-Helpers/LatticeGraphHelpers.cpp
+Helpers/ILatticeGraphHelpers.cpp
 Helpers/FontLoader.cpp
 Helpers/AlgorithmFunctionHelpers.cpp
 Gui/Menu.cpp

@@ -11,12 +11,10 @@ namespace Pathfinding::Abstract
 {
     class IEventManager
     {
-        private:
-            using PEBindingsContainer = Pathfinding::Events::BindingsContainer;
         public:            
             virtual void pushEvent(sf::Event event) = 0;
             
-            virtual void processEvents(const PEBindingsContainer & bindings) = 0;
+            virtual void processEvents(const Pathfinding::Events::BindingsContainer & bindings) = 0;
             
             virtual ~IEventManager() = default;
             

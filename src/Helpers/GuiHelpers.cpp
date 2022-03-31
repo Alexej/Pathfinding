@@ -139,7 +139,7 @@ namespace Pathfinding::Helpers
 
         auto nodesExpandedTotal = std::accumulate(sizes.begin(), sizes.end(), 0);
         auto average = nodesExpandedTotal / sizes.size();
-        auto maxNodesExpanded = std::max_element(sizes.begin(), sizes.end());
+        auto maxNodesExpanded = std::ranges::max_element(sizes);
         ImGui::Text(std::format("Nodes expaneded total: {}", std::to_string(nodesExpandedTotal)).c_str());
         ImGui::Text(std::format("Nodex expanded on each step(avg) {}", std::to_string(average)).c_str());
         ImGui::Text(std::format("Max number of nodes expanded: {}", std::to_string(*maxNodesExpanded)).c_str());

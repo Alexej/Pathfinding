@@ -5,8 +5,35 @@
 #include <string>
 #include "Node.hpp"
 
+
 namespace Pathfinding::Helpers
 {
+    template<typename ElementType, typename Function>
+    void iterateOver2DVector(std::vector<std::vector<ElementType>> & vec, 
+                             Function function)
+    {
+        for(auto & row : vec)
+        {
+            for(auto & element : row)
+            {
+                function(element);
+            }
+        }
+    }
+
+    template<typename ElementType, typename Function>
+    void iterateOver2DVector(const std::vector<std::vector<ElementType>> & vec, 
+                             Function function)
+    {
+        for(auto & row : vec)
+        {
+            for(auto & element : row)
+            {
+                function(element);
+            }
+        }
+    }
+
     template<typename PointerType>
     bool isNullptr(PointerType pointer)
     {

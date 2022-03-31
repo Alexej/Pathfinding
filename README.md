@@ -28,6 +28,8 @@ Learning LPA* and D* lite.
 * Better naming  <br/>
 * Implement LPA*  <br/>
 * Change the way edge costs work <br/>
+* Change coordinate system to width, height <br/>
+
 
 ## References:
 ---

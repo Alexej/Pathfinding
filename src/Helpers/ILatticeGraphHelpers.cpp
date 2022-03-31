@@ -1,19 +1,22 @@
 #ifndef B15A85B1_6958_4A28_833B_2236EE9D4AE5
 #define B15A85B1_6958_4A28_833B_2236EE9D4AE5
 
-#include "LatticeGraphHelpers.hpp"
+#include "ILatticeGraphHelpers.hpp"
 
 #include "ILatticeGraph.hpp"
-#include "ILatticeGraph.hpp"
-#include "Node.hpp"
 #include "Vec2.hpp"
 #include "RandomIntegers.hpp"
+#include "ApplicationState.hpp"
+#include "NodeStateColors.hpp"
 
 namespace Pathfinding::Helpers
 {
     using namespace Pathfinding::Datastructures;
     using Pathfinding::Abstract::ILatticeGraph;
     using Pathfinding::Core::RandomIntegers;
+    using Pathfinding::Core::ApplicationState;
+    using Pathfinding::Rendering::NodeStateColors;
+
 
     void ILatticeGraphHelpers::initRandomGraph(ILatticeGraph & latticeGraphSPtr, RandomIntegers & ri)
     {
@@ -72,26 +75,17 @@ namespace Pathfinding::Helpers
         }
     }
 
-    void ILatticeGraphHelpers::iterateOverLatticeGraphConst(const ILatticeGraph & ilatticeGraph,
-                                                   std::function<void(const Node *node, int32_t h, int32_t w)> func)
+    void ILatticeGraphHelpers::initRendering(ILatticeGraph & ilatticeGraph, 
+                                const sf::Font & font, 
+                                NodeStateColors * colors, 
+                                ApplicationState * appStatePtr)
     {
         for (int32_t h = 0; h < ilatticeGraph.height(); ++h)
         {
             for (int32_t w = 0; w < ilatticeGraph.width(); ++w)
             {
-                func(ilatticeGraph.node(Vec2i(h, w)), h, w);
-            }
-        }
-    }
-
-    void ILatticeGraphHelpers::iterateOverLatticeGraph(ILatticeGraph & ilatticeGraph,
-                                           std::function<void(Node *node, int32_t h, int32_t w)> func)
-    {
-        for (int32_t h = 0; h < ilatticeGraph.height(); ++h)
-        {
-            for (int32_t w = 0; w < ilatticeGraph.width(); ++w)
-            {
-                func(ilatticeGraph.node(Vec2i(h, w)), h, w);
+                auto position = Vec2i{h,w};
+                ilatticeGraph.node(position)->init(font, colors, appStatePtr, position);
             }
         }
     }

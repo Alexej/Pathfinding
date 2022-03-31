@@ -15,8 +15,6 @@ namespace Pathfinding::Abstract
     {
         private:
             using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
-            using PDNode = Pathfinding::Datastructures::Node;
-            using PDPathfinderReturnType = Pathfinding::Datastructures::PathfinderReturnType;
 
         public:
             explicit AIncrementalInformedAlgorithm(std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr_)
@@ -36,11 +34,11 @@ namespace Pathfinding::Abstract
             
             virtual void reset() = 0;
 
-            virtual void addChangedNode(PDNode *node) = 0;
+            virtual void addChangedNode(Pathfinding::Datastructures::Node *node) = 0;
 
-            virtual PDPathfinderReturnType initialRun() = 0;
+            virtual Pathfinding::Datastructures::PathfinderReturnType initialRun() = 0;
             
-            virtual PDPathfinderReturnType followingRun() = 0;
+            virtual Pathfinding::Datastructures::PathfinderReturnType followingRun() = 0;
 
             virtual ~AIncrementalInformedAlgorithm() = default;
 
