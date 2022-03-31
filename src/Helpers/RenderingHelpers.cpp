@@ -44,7 +44,7 @@ namespace Pathfinding::Helpers
         return getSubstrBeforeChar(dStr, '.');
     }
 
-    double getAngleBetweenTwoNodes(Pathfinding::Datastructures::Node *n1, Pathfinding::Datastructures::Node *n2)
+    double getAngleBetweenTwoNodes(const Pathfinding::Datastructures::Node* n1, const Pathfinding::Datastructures::Node* n2)
     {
         float y1 = static_cast<float>(n1->location.height);
         float x1 = static_cast<float>(n1->location.width);

@@ -171,7 +171,7 @@ namespace Pathfinding::Algorithms
 
     PathfinderReturnType DStarLite::computePath()
     {
-        std::vector<Node *> path;
+        std::vector<const Node *> path;
         Node *currentNode = sStart;
         path.push_back(currentNode);
         while (*currentNode != *latticeGraphWrapperSPtr->goalNode())

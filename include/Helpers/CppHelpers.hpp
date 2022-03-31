@@ -3,6 +3,7 @@
 
 #include <stack>
 #include <string>
+#include <concepts>
 #include "Node.hpp"
 
 
@@ -12,6 +13,7 @@ namespace Pathfinding::Helpers
     void iterateOver2DVector(std::vector<std::vector<ElementType>> & vec, 
                              Function function)
     {
+
         for(auto & row : vec)
         {
             for(auto & element : row)
@@ -41,10 +43,9 @@ namespace Pathfinding::Helpers
         return pointer == nullptr; 
     }
 
-    template <typename IntegerType>
+    template <std::integral IntegerType>
     bool isEven(IntegerType number)
     {
-        static_assert(std::is_integral<IntegerType>::value, "Integral required.");
         return number % 2 == 0;
     }
 
@@ -68,7 +69,7 @@ namespace Pathfinding::Helpers
     }
 
     template<typename ElementType>
-    inline std::vector<ElementType> flushVector(std::vector<ElementType> &nodesExpanded)
+    inline std::vector<ElementType> flushVector(std::vector<ElementType> & nodesExpanded)
     {
         auto tmpNodesExpanded = nodesExpanded;
         nodesExpanded.clear();

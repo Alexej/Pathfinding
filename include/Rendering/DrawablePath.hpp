@@ -22,7 +22,7 @@ namespace Pathfinding::Rendering
         public:
             void init(const PCApplicationState * appStateSPtr);
 
-            void prepare(const std::vector<PDNode *> &path, sf::Color color);
+            void prepare(const std::vector<const PDNode *> &path, sf::Color color);
 
             void resize();
 
@@ -35,10 +35,10 @@ namespace Pathfinding::Rendering
 
             void drawPathLines();
 
-            void createPathPoints(const std::vector<PDNode *> &path, 
+            void createPathPoints(const std::vector<const PDNode *> &path, 
                                  sf::Vector2f pointPositionOffset);
 
-            void createPathLines(const std::vector<PDNode *> &path, 
+            void createPathLines(const std::vector<const PDNode *> &path, 
                                  sf::Vector2f pointPositionOffset);
 
         private:

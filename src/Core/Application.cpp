@@ -150,7 +150,7 @@ namespace Pathfinding::Core
         {
             latGraphWrapUPtr->reset();
             ILatticeGraphHelpers::initRandomGraph(*latGraphWrapUPtr->latGraphSPtr, ri);
-        } while(!aStarUPtr->calculatePath(latGraphWrapUPtr).pathFound);
+        } while(!aStarUPtr->calculatePath(*latGraphWrapUPtr).pathFound);
     }
 
     void Application::step()
@@ -170,7 +170,7 @@ namespace Pathfinding::Core
     {
         if(appState.runAStar)
         {
-            aStarCache.cache(aStarUPtr->calculatePath(latGraphWrapUPtr));
+            aStarCache.cache(aStarUPtr->calculatePath(*latGraphWrapUPtr));
         }
     }
 
@@ -188,7 +188,7 @@ namespace Pathfinding::Core
         latGraphWrapUPtr->addEndpointsToGraph();
     }
 
-    void Application::drawPath(const std::vector<Node *> & path, sf::Color color)
+    void Application::drawPath(const std::vector<const Node *> & path, sf::Color color)
     {
         drawablePath.prepare(path, color);
         rendererUPtr->render(window, drawablePath);

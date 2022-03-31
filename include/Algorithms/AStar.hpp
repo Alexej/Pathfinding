@@ -14,7 +14,7 @@ namespace Pathfinding::Algorithms
     struct QueueElement
     {
         std::pair<double, double> key;        
-        Pathfinding::Datastructures::Node * node;   
+        const Pathfinding::Datastructures::Node * node;   
     };
 
     class AStarQueueComperator
@@ -32,7 +32,7 @@ namespace Pathfinding::Algorithms
             using PDPathfinderReturnType = Pathfinding::Datastructures::PathfinderReturnType;
             using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
         public:
-            PDPathfinderReturnType calculatePath(const std::shared_ptr<PAALatGraphWr> graphWrapper) const override;
+            PDPathfinderReturnType calculatePath(const PAALatGraphWr & graphWrapper) const override;
     };
 }
 

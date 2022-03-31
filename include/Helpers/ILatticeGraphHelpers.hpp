@@ -28,7 +28,9 @@ namespace Pathfinding::Helpers
         using PCApplicationState = Pathfinding::Core::ApplicationState;
         using PRNodeStateColors = Pathfinding::Rendering::NodeStateColors;
     public:
-        static std::vector<PDNode *> neighbors(PAILatticeGraph & iLatticeGraph, PDNode *node);
+        static std::vector<PDNode *> neighbors(PAILatticeGraph & iLatticeGraph, const PDNode *node);
+
+        static std::vector<const PDNode *> neighborsConst(PAILatticeGraph & iLatticeGraph, const PDNode *node);
         
         static void initRandomGraph(PAILatticeGraph & iLatticeGraph, PCRandomIntegers & ri);
         

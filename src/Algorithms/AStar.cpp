@@ -31,9 +31,9 @@ namespace Pathfinding::Algorithms
             return it != map.end() ? it->second : std::numeric_limits<ValueType>::infinity();
         }
 
-        std::vector<Node *> reconstructPath(std::unordered_map<Node *, Node *> cameFrom, Node *current)
+        std::vector<const Node *> reconstructPath(std::unordered_map<const Node *, const Node *> cameFrom, const Node *current)
         {
-            std::vector<Node *> path;
+            std::vector<const Node *> path;
             path.push_back(current);
             while (cameFrom.find(current) != cameFrom.end())
             {
@@ -44,28 +44,28 @@ namespace Pathfinding::Algorithms
         }
     }
 
-    PathfinderReturnType AStar::calculatePath(const std::shared_ptr<ALatGraphWr> graphWrapper) const
+    PathfinderReturnType AStar::calculatePath(const ALatGraphWr & graphWrapper) const
     {
-        std::vector<Node*> nodesExpanded;
+        std::vector<const Node*> nodesExpanded;
         std::priority_queue<QueueElement, std::vector<QueueElement>, AStarQueueComperator> openSet;
-        std::unordered_map<Node *, Node *> cameFrom;
-        std::unordered_map<Node *, double> gScore;
-        std::unordered_map<Node *, double> fScore;
+        std::unordered_map<const Node *, const Node *> cameFrom;
+        std::unordered_map<const Node *, double> gScore;
+        std::unordered_map<const Node *, double> fScore;
 
-        gScore[graphWrapper->startNode()] = 0;
-        fScore[graphWrapper->startNode()] = heuristicUPtr->calculate(graphWrapper->startNode(), graphWrapper->goalNode());
-        openSet.push({{fScore[graphWrapper->startNode()], gScore[graphWrapper->startNode()]}, graphWrapper->startNode()});
+        gScore[graphWrapper.startNode()] = 0;
+        fScore[graphWrapper.startNode()] = heuristicUPtr->calculate(graphWrapper.startNode(), graphWrapper.goalNode());
+        openSet.push({{fScore[graphWrapper.startNode()], gScore[graphWrapper.startNode()]}, graphWrapper.startNode()});
 
         while (!openSet.empty())
         {
             auto current = openSet.top().node;
             nodesExpanded.push_back(current);
-            if (current == graphWrapper->goalNode())
+            if (current == graphWrapper.goalNode())
             {
                 return {true, reconstructPath(cameFrom, current), nodesExpanded};
             }
             openSet.pop();
-            auto neighbors = ILatticeGraphHelpers::neighbors(*graphWrapper->latGraphSPtr, current);
+            auto neighbors = ILatticeGraphHelpers::neighborsConst(*graphWrapper.latGraphSPtr, current);
             for (auto neighbor : neighbors)
             {
                 auto tentativeGscore = getMapDefaultInf(gScore, current) + costUPtr->calculate(current, neighbor);
@@ -73,7 +73,7 @@ namespace Pathfinding::Algorithms
                 {
                     cameFrom[neighbor] = current;
                     gScore[neighbor] = tentativeGscore;
-                    fScore[neighbor] = tentativeGscore + heuristicUPtr->calculate(neighbor, graphWrapper->goalNode());
+                    fScore[neighbor] = tentativeGscore + heuristicUPtr->calculate(neighbor, graphWrapper.goalNode());
                     openSet.push({{fScore[neighbor], gScore[neighbor]}, neighbor});
                 }
             }

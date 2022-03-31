@@ -16,7 +16,7 @@ namespace Pathfinding::Abstract
     private:
         using PDPathfinderReturnType = Pathfinding::Datastructures::PathfinderReturnType;
     public:
-        virtual PDPathfinderReturnType calculatePath(const std::shared_ptr<ALatGraphWr> graphWrapper) const = 0;
+        virtual PDPathfinderReturnType calculatePath(const ALatGraphWr & graphWrapper) const = 0;
 
         virtual ~IAStar() = default;
 

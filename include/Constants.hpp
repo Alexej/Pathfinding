@@ -32,8 +32,9 @@ namespace Pathfinding::Constants
     constexpr std::array<uint8_t, 3> GOAL_NODE_COLOR{255, 255, 0};
     constexpr std::array<uint8_t, 3> PATH_NODE_COLOR{0, 255, 0};
     constexpr std::array<uint8_t, 3> PATH_NODE_COLOR_2{0, 0, 255};
-    constexpr std::array<uint8_t, 3> NODE_OUTLINE_COLOR{0, 0, 0};
+    constexpr std::array<uint8_t, 3> NODE_OUTLINE_COLOR{255, 255, 255};
     constexpr std::array<uint8_t, 3> NODE_INFO_COLOR{0, 0, 0};
+    constexpr std::array<uint8_t, 3> PATH_OUTLINE_COLOR{0, 0, 0};
 
     constexpr std::size_t RED = 0;
     constexpr std::size_t GREEN = 1;

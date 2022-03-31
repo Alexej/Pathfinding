@@ -10,8 +10,8 @@ namespace Pathfinding::Datastructures
     struct PathfinderReturnType
     {
         bool pathFound = false; 
-        std::vector<Pathfinding::Datastructures::Node *> path;
-        std::vector<Node *> nodesExpandedAll;
+        std::vector<const Node *> path;
+        std::vector<const Node *> nodesExpandedAll;
     };
 }
 

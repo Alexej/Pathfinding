@@ -50,7 +50,7 @@ namespace Pathfinding::Helpers
      */
     std::string dToStr(double d);
 
-    double getAngleBetweenTwoNodes(Pathfinding::Datastructures::Node *n1, Pathfinding::Datastructures::Node *n2);
+    double getAngleBetweenTwoNodes(const Pathfinding::Datastructures::Node *n1, const Pathfinding::Datastructures::Node *n2);
 
     bool diagonal(double angle);
     

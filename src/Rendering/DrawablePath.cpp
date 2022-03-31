@@ -17,13 +17,13 @@ namespace Pathfinding::Rendering
 
     void DrawablePath::init(const PCApplicationState * appStatePtr_)
     {
-        nodePoint.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
+        nodePoint.setOutlineColor(convertToSfmlColor(PATH_OUTLINE_COLOR));
         nodePoint.setOutlineThickness(NODE_OUTLINE_THICKNESS);
 
-        diagonalLine.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
+        diagonalLine.setOutlineColor(convertToSfmlColor(PATH_OUTLINE_COLOR));
         diagonalLine.setOutlineThickness(NODE_OUTLINE_THICKNESS);
 
-        straightLine.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
+        straightLine.setOutlineColor(convertToSfmlColor(PATH_OUTLINE_COLOR));
         straightLine.setOutlineThickness(NODE_OUTLINE_THICKNESS);
 
         appStatePtr = appStatePtr_;
@@ -38,7 +38,7 @@ namespace Pathfinding::Rendering
     }
 
                         
-    void DrawablePath::prepare(const std::vector<Node *> &path, 
+    void DrawablePath::prepare(const std::vector<const Node *> &path, 
                                 sf::Color color)
     {
         setColor(color);
@@ -95,7 +95,7 @@ namespace Pathfinding::Rendering
         diagonalLine.setOrigin(origin);
     }
 
-    void DrawablePath::createPathPoints(const std::vector<Node *> &path, sf::Vector2f pointPositionOffset)
+    void DrawablePath::createPathPoints(const std::vector<const Node *> &path, sf::Vector2f pointPositionOffset)
     {
         for (auto &node : path)
         {
@@ -112,7 +112,7 @@ namespace Pathfinding::Rendering
         }
     }
 
-    void DrawablePath::createPathLines(const std::vector<Node *> &path, sf::Vector2f pointPositionOffset)
+    void DrawablePath::createPathLines(const std::vector<const Node *> &path, sf::Vector2f pointPositionOffset)
     {
         for (auto currentNodeItr = path.begin(); currentNodeItr != path.end(); ++currentNodeItr)
         {

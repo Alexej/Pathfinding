@@ -29,27 +29,51 @@ namespace Pathfinding::Helpers
     }
 
     std::vector<Node *>
-    ILatticeGraphHelpers::neighbors(ILatticeGraph & latticeGraphSPtr, Node *node_)
+    ILatticeGraphHelpers::neighbors(ILatticeGraph & latticeGraph, const Node *node)
     {
         std::vector<Node *> nbors;
-        int32_t hFrom = node_->location.height - 1;
-        int32_t hTo = node_->location.height + 1;
-        int32_t wFrom = node_->location.width - 1;
-        int32_t wTo = node_->location.width + 1;
+        int32_t hFrom = node->location.height - 1;
+        int32_t hTo = node->location.height + 1;
+        int32_t wFrom = node->location.width - 1;
+        int32_t wTo = node->location.width + 1;
 
         for (int32_t h = hFrom; h <= hTo; ++h)
         {
             for (int32_t w = wFrom; w <= wTo; ++w)
             {
                 auto coord = Vec2i(h, w);
-                if (latticeGraphSPtr.inBounds(coord) && node_->location != coord)
+                if (latticeGraph.inBounds(coord) && node->location != coord)
                 {
-                    nbors.push_back(latticeGraphSPtr.node(coord));
+                    nbors.push_back(latticeGraph.node(coord));
                 }
             }
         }
         return nbors;
     }
+
+    std::vector<const Node *> 
+    ILatticeGraphHelpers::neighborsConst(ILatticeGraph & LatticeGraph, const Node *node)
+    {
+        std::vector<const Node *> nbors;
+        int32_t hFrom = node->location.height - 1;
+        int32_t hTo = node->location.height + 1;
+        int32_t wFrom = node->location.width - 1;
+        int32_t wTo = node->location.width + 1;
+
+        for (int32_t h = hFrom; h <= hTo; ++h)
+        {
+            for (int32_t w = wFrom; w <= wTo; ++w)
+            {
+                auto coord = Vec2i(h, w);
+                if (LatticeGraph.inBounds(coord) && node->location != coord)
+                {
+                    nbors.push_back(LatticeGraph.node(coord));
+                }
+            }
+        }
+        return nbors;
+    }
+
 
     void ILatticeGraphHelpers::blockNode(ILatticeGraph & ilatticeGraph, Vec2i location)
     {

@@ -42,7 +42,7 @@ namespace Pathfinding::Core
         using PCApplicationState = Pathfinding::Core::ApplicationState;
         using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
         using PAIAStar = Pathfinding::Abstract::IAStar;
-        using PDPathfinderCachee = Pathfinding::Datastructures::PathfinderCache;
+        using PDPathfinderCache = Pathfinding::Datastructures::PathfinderCache;
         using PEMouseData = Pathfinding::Events::MouseData;
         using PEBindingsContainer = Pathfinding::Events::BindingsContainer;
         using PRDrawablePath = Pathfinding::Rendering::DrawablePath;
@@ -88,7 +88,7 @@ namespace Pathfinding::Core
     private:
         void runAStar();
 
-        void drawPath(const std::vector<PDNode *> & path, sf::Color color);
+        void drawPath(const std::vector<const PDNode *> & path, sf::Color color);
 
         void updateColors();
 
@@ -105,8 +105,8 @@ namespace Pathfinding::Core
         PCApplicationState appState;
         int32_t accumulator;
         sf::RenderWindow window;
-        PDPathfinderCachee aStarCache;
-        PDPathfinderCachee dStarCache;
+        PDPathfinderCache aStarCache;
+        PDPathfinderCache dStarCache;
         RandomIntegers ri;
         PRDrawablePath drawablePath;
         PADSFMazeGenerator dfsmg;

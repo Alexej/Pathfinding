@@ -78,7 +78,7 @@ namespace Pathfinding::Algorithms
         PDNode *sLast = nullptr;
         PDPriorityQueue U;
         std::unordered_set<PDNode *> nodesChanged;
-        std::vector<PDNode *> nodexExpanded;
+        std::vector<const PDNode *> nodexExpanded;
         double kM = 0;
     };
 }
