@@ -29,7 +29,7 @@ namespace Pathfinding::Gui
 
         void addCallbacks(MenuCallBacks callBacks) override;
 
-        void showGraph(std::vector<int32_t> values, std::string name) override;
+        void showGraph(std::vector<int32_t> values, std::string name) const override;
 
         void update(sf::RenderWindow & window, sf::Time deltaClock) override;
 
@@ -43,6 +43,8 @@ namespace Pathfinding::Gui
 
         
     private:
+        void showGraphs() const;
+
         void showMouseWheelEventComboBox();
 
         void showCommonElements();

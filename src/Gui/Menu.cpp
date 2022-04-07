@@ -55,6 +55,8 @@ namespace Pathfinding::Gui
         ImGui::SetNextWindowSize(ImVec2(width, height), ImGuiCond_FirstUseEver);
 
         ImGui::Begin("Configuration", nullptr, window_flags);
+        showCommonElements();
+        
 
         switch (appStatePtr->currentState)
         {
@@ -63,16 +65,28 @@ namespace Pathfinding::Gui
             break;
         case AlgorithmState::SEARCHING:
             showSearchingElements();
+            showGraphs();
+            break;
+        case AlgorithmState::FOUND_PATH:
+            showDoneState();
+            showGraphs();
             break;
         }
 
-        showCommonElements();
 
-        if (appStatePtr->currentState == AlgorithmState::FOUND_PATH)
-        {
-            showDoneState();
-        }
         ImGui::End();
+    }
+
+    void Menu::showGraphs() const
+    {
+        if (appStatePtr->currentState != AlgorithmState::READY)
+        {
+            if (appStatePtr->runAStar)
+            {
+                showGraph(getSizesOfSubVectors(aCache->nodesExpandedAll), "A* nodes Expanded");
+            }
+            showGraph(getSizesOfSubVectors(dCache->nodesExpandedAll), "D* nodes Expanded");
+        }
     }
 
     void Menu::showSearchingElements()
@@ -104,7 +118,7 @@ namespace Pathfinding::Gui
         ImGui::HelpMarker("A* (for now) can take different\npath(same distance)");
     }
 
-    void Menu::showGraph(std::vector<int32_t> values, std::string name)
+    void Menu::showGraph(std::vector<int32_t> values, std::string name) const
     {
         std::vector<float> valuesFloat;
         for(auto value : values)
@@ -191,15 +205,6 @@ namespace Pathfinding::Gui
         if (ImGui::Button("RESET", ImVec2(width - 20, 20)))
         {
             callBacks.resetCallback();
-        }
-
-        if (appStatePtr->currentState != AlgorithmState::READY)
-        {
-            if (appStatePtr->runAStar)
-            {
-                showGraph(getSizesOfSubVectors(aCache->nodesExpandedAll), "A* nodes Expanded");
-            }
-            showGraph(getSizesOfSubVectors(dCache->nodesExpandedAll), "D* nodes Expanded");
         }
     }
 

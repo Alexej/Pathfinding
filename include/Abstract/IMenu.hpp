@@ -17,7 +17,7 @@ namespace Pathfinding::Abstract
             
             virtual void addCallbacks(Pathfinding::Gui::MenuCallBacks callBacks) = 0;
             
-            virtual void showGraph(std::vector<int32_t> values, std::string name) = 0;
+            virtual void showGraph(std::vector<int32_t> values, std::string name) const = 0;
 
             virtual void update(sf::RenderWindow & window, sf::Time deltaClock) = 0;
 
