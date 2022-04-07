@@ -20,6 +20,7 @@
 #include "NodeStateColors.hpp"
 #include "Renderer.hpp"
 #include "ILatticeGraphHelpers.hpp"
+#include "MenuCallBacks.hpp"
 
 namespace Pathfinding::Core
 {
@@ -40,6 +41,7 @@ namespace Pathfinding::Core
     using Pathfinding::Events::EventManager;
     using Pathfinding::Events::MouseEvent;
     using Pathfinding::Gui::Menu;
+    using Pathfinding::Gui::MenuCallBacks;
     using Pathfinding::Rendering::NodeStateColors;
     using Pathfinding::Rendering::Renderer;
     using Pathfinding::Helpers::ILatticeGraphHelpers;
@@ -151,13 +153,18 @@ namespace Pathfinding::Core
 
     void ApplicationBuilder::setMenuCallBacks()
     {
-        applicationUPtr->menuUPtr->addNumberOfNodesChangedCallBack(std::bind(&Application::handleNumberOfNodesChange, applicationUPtr.get(), _1));
-        applicationUPtr->menuUPtr->addMouseWheelEventChangedCallBack(std::bind(&Application::mouseWheelEventChanged, applicationUPtr.get(), _1));
-        applicationUPtr->menuUPtr->addStartCallBack(std::bind(&Application::startAlgorithm, applicationUPtr.get()));
-        applicationUPtr->menuUPtr->addRandomGraphCallBack(std::bind(&Application::randomGraph, applicationUPtr.get()));
-        applicationUPtr->menuUPtr->addMazeGraphCallBack(std::bind(&Application::generateMaze, applicationUPtr.get()));
-        applicationUPtr->menuUPtr->addResetCallBack(std::bind(&Application::reset, applicationUPtr.get()));
-        applicationUPtr->menuUPtr->addStepCallBack(std::bind(&Application::step, applicationUPtr.get()));
+        MenuCallBacks mc;
+
+        mc.numberOfNodesChangedCallBack = std::bind(&Application::handleNumberOfNodesChange, applicationUPtr.get(), _1);
+        mc.mouseWheelEventChangedCallBack = std::bind(&Application::mouseWheelEventChanged, applicationUPtr.get(), _1);
+        mc.startCallBack = std::bind(&Application::startAlgorithm, applicationUPtr.get());
+        mc.randomGraphCallBack = std::bind(&Application::randomGraph, applicationUPtr.get());
+        mc.mazeGraphCallBack = std::bind(&Application::generateMaze, applicationUPtr.get());
+        mc.resetCallback = std::bind(&Application::reset, applicationUPtr.get());
+        mc.stepCallBack = std::bind(&Application::step, applicationUPtr.get());
+
+        applicationUPtr->menuUPtr->addCallbacks(mc);
+
     }
 
     void ApplicationBuilder::initAStar()

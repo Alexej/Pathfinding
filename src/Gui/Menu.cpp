@@ -76,7 +76,7 @@ namespace Pathfinding::Gui
     {
         if (ImGui::Button("STEP", ImVec2(width - 20, 20)))
         {
-            stepCallBack();
+            callBacks.stepCallBack();
         }
     }
 
@@ -120,6 +120,11 @@ namespace Pathfinding::Gui
         ImGui::HelpMarker("Step Speed for\nAutostep function");
     }
 
+    void Menu::addCallbacks(MenuCallBacks callBacks_)
+    {
+        callBacks = callBacks_;
+    }
+
     void Menu::showCommonElements()
     {
         if (ImGui::CollapsingHeader("Runtime Options"))
@@ -156,7 +161,7 @@ namespace Pathfinding::Gui
 
         if (ImGui::Button("RESET", ImVec2(width - 20, 20)))
         {
-            resetCallback();
+            callBacks.resetCallback();
         }
 
         if (appStatePtr->currentState != AlgorithmState::READY)
@@ -175,7 +180,7 @@ namespace Pathfinding::Gui
         auto numberOfNodesInRow = dimensionPtr->getNumberOfNodesInRowString();
         if (ImGui::custom_combo("# Of Nodes", &itemCurrentNumberOfNodes, numberOfNodesInRow))
         {
-            numberOfNodesChangedCallBack(itemCurrentNumberOfNodes);
+            callBacks.numberOfNodesChangedCallBack(itemCurrentNumberOfNodes);
             if (!dimensionPtr->canShowNodeInfo())
             {
                 appStatePtr->showNodeInfo = false;
@@ -188,7 +193,7 @@ namespace Pathfinding::Gui
         static int32_t currentMouseWheelEventInt = static_cast<int32_t>(appStatePtr->currentMouseWheelEvent);
         if (ImGui::custom_combo("# Of Nodes", &currentMouseWheelEventInt, mouseWheelEventStrings))
         {
-            mouseWheelEventChangedCallBack(currentMouseWheelEventInt);
+            callBacks.mouseWheelEventChangedCallBack(currentMouseWheelEventInt);
         }
     }
 
@@ -221,58 +226,18 @@ namespace Pathfinding::Gui
 
         if (ImGui::Button("Start", ImVec2(width - 20, 20)))
         {
-            startCallBack();
+            callBacks.startCallBack();
         }
 
         if (ImGui::Button("RANDOM GRAPH", ImVec2(width - 20, 20)))
         {
-            randomGraphCallBack();
+            callBacks.randomGraphCallBack();
         }
 
         if (ImGui::Button("Maze", ImVec2(width - 20, 20)))
         {
-            mazeGraphCallBack();
+            callBacks.mazeGraphCallBack();
         }
-    }
-
-    void Menu::addNumberOfNodesChangedCallBack(fPtrVI callBack)
-    {
-        numberOfNodesChangedCallBack = callBack;
-    }
-
-    void Menu::addStartCallBack(fPtrVV callBack)
-    {
-        startCallBack = callBack;
-    }
-
-    void Menu::addResetCallBack(fPtrVV callBack)
-    {
-        resetCallback = callBack;
-    }
-
-    bool Menu::initialized() const
-    {
-        return numberOfNodesChangedCallBack != nullptr && startCallBack != nullptr;
-    }
-
-    void Menu::addStepCallBack(fPtrVV callBack)
-    {
-        stepCallBack = callBack;
-    }
-
-    void Menu::addMouseWheelEventChangedCallBack(fPtrVI callBack)
-    {
-        mouseWheelEventChangedCallBack = callBack;
-    }
-
-    void Menu::addRandomGraphCallBack(fPtrVV callBack)
-    {
-        randomGraphCallBack = callBack;
-    }
-
-    void Menu::addMazeGraphCallBack(fPtrVV callBack)
-    {
-        mazeGraphCallBack = callBack;
     }
 
     void Menu::showPathFlags()

@@ -6,23 +6,12 @@
 
 #include "ApplicationState.hpp"
 #include "IMenu.hpp"
+#include "MenuCallBacks.hpp"
 
-namespace Pathfinding::Core
-{
-    struct ApplicationState;
-}
-namespace Pathfinding::Core
-{
-    class GraphDimension;
-}
-namespace Pathfinding::Core
-{
-    class AlgorithmStepSpeed;
-}
-namespace Pathfinding::Datastructures
-{
-    struct PathfinderCache;
-}
+namespace Pathfinding::Core { struct ApplicationState; }
+namespace Pathfinding::Core { class GraphDimension; }
+namespace Pathfinding::Core { class AlgorithmStepSpeed; }
+namespace Pathfinding::Datastructures { struct PathfinderCache; }
 
 namespace Pathfinding::Gui
 {
@@ -33,8 +22,6 @@ namespace Pathfinding::Gui
         using PCGraphDimension = Pathfinding::Core::GraphDimension;
         using PCAlgorithmStepSpeed = Pathfinding::Core::AlgorithmStepSpeed;
         using PDPathfinderCache = Pathfinding::Datastructures::PathfinderCache;
-        using fPtrVI = std::function<void(int32_t)>;
-        using fPtrVV = std::function<void(void)>;
 
     public:
         Menu() = default;
@@ -46,26 +33,13 @@ namespace Pathfinding::Gui
 
         void show() override;
 
-        void addNumberOfNodesChangedCallBack(fPtrVI callBack) override;
-
-        void addStepCallBack(fPtrVV callBack) override;
-
-        void addStartCallBack(fPtrVV callBack) override;
-
-        void addResetCallBack(fPtrVV callBack) override;
-
-        void addRandomGraphCallBack(fPtrVV callBack) override;
-
-        void addMazeGraphCallBack(fPtrVV callBack) override;
-
-        bool initialized() const override;
+        void addCallbacks(MenuCallBacks callBacks) override;
 
         void showGraph(std::vector<int32_t> values, std::string name) override;
 
         void showMouseWheelEventComboBox();
 
-        void addMouseWheelEventChangedCallBack(fPtrVI callBack) override;
-
+        
     private:
         void showCommonElements();
 
@@ -102,13 +76,7 @@ namespace Pathfinding::Gui
         PDPathfinderCache *dCache;
 
     private:
-        fPtrVI numberOfNodesChangedCallBack = nullptr;
-        fPtrVV startCallBack = nullptr;
-        fPtrVV resetCallback = nullptr;
-        fPtrVV stepCallBack = nullptr;
-        fPtrVV randomGraphCallBack = nullptr;
-        fPtrVV mazeGraphCallBack = nullptr;
-        fPtrVI mouseWheelEventChangedCallBack = nullptr;
+        MenuCallBacks callBacks;
     };
 }
 

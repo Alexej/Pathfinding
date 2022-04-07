@@ -17,6 +17,8 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "CostFunction.hpp"
+
 int main()
 {
     using Pathfinding::Abstract::IApplication;
