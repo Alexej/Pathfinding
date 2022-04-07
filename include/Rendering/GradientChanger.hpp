@@ -4,47 +4,40 @@
 #include <SFML/Graphics/Color.hpp>
 
 #include "Node.hpp"
-#include "RenderingHelpers.hpp"
 #include "NodeStateColors.hpp"
+#include "ApplicationState.hpp"
 
 namespace Pathfinding::Rendering
 {
-    struct Gradients
+    class ColorGradient
     {
-        private:
-            using PHColorGradient = Pathfinding::Helpers::ColorGradient;
-        public:
-            PHColorGradient gradientBlockedRed;
-            PHColorGradient gradientBlockedBlue;
-            PHColorGradient gradientGoalRed;
-            PHColorGradient gradientGoalGreen;
+    public:
+        void operator()(uint8_t &color, uint8_t incrementStep);
+
+    private:
+        bool increment = true;
     };
 
-    class GradientChanger
+    class BlockedAndStartGradientChanger
     {
-        public:
-            void init(NodeStateColors & colors)
-            {
-                startColor = &colors.startNodeColor;
-                blockedColor = &colors.blockedNodeColor;
-            }
+    public:
+        void init(NodeStateColors &colors);
 
-            void updateBlockedColor()
-            {
-                gradients.gradientBlockedRed(blockedColor->r, 5);
-                gradients.gradientBlockedBlue(blockedColor->b, 1);
-            }
+        void updateColors(Pathfinding::Core::AlgorithmState state);
 
-            void updateStartColor()
-            {
-                gradients.gradientGoalRed(startColor->r, 5);   
-                gradients.gradientGoalGreen(startColor->g, 5);
-            }
+    private:
+        void updateBlockedColor();
 
-        private:
-            Gradients gradients;
-            sf::Color * startColor;
-            sf::Color * blockedColor;
+        void updateStartColor();
+
+    private:
+        ColorGradient gradientBlockedRed;
+        ColorGradient gradientBlockedBlue;
+        ColorGradient gradientGoalRed;
+        ColorGradient gradientGoalGreen;
+
+        sf::Color *startColor;
+        sf::Color *blockedColor;
     };
 }
 

@@ -34,24 +34,6 @@ namespace Pathfinding::Core
     class Application final : public Pathfinding::Abstract::IApplication
     {
         friend Pathfinding::Core::ApplicationBuilder;
-    private:
-        using PAIMenu = Pathfinding::Abstract::IMenu;
-        using PAIEventManager = Pathfinding::Abstract::IEventManager;
-        using PAAIncrementalInformedAlgorithm = Pathfinding::Abstract::AIncrementalInformedAlgorithm;
-        using PAIGraphOperations = Pathfinding::Abstract::IGraphOperations;
-        using PCApplicationState = Pathfinding::Core::ApplicationState;
-        using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
-        using PAIAStar = Pathfinding::Abstract::IAStar;
-        using PDPathfinderCache = Pathfinding::Datastructures::PathfinderCache;
-        using PEMouseData = Pathfinding::Events::MouseData;
-        using PEBindingsContainer = Pathfinding::Events::BindingsContainer;
-        using PRDrawablePath = Pathfinding::Rendering::DrawablePath;
-        using PDNode = Pathfinding::Datastructures::Node;
-        using PADSFMazeGenerator = Pathfinding::Algorithms::DFSMazeGenerator;
-        using PRNodeStateColors = Pathfinding::Rendering::NodeStateColors;
-        using PAIFontLoader = Pathfinding::Abstract::IFontLoader;
-        using PRGradientChanger = Pathfinding::Rendering::GradientChanger;
-        using PAIRenderer = Pathfinding::Abstract::IRenderer;
 
     public:
         Application() = default;
@@ -86,33 +68,31 @@ namespace Pathfinding::Core
     private:
         void runAStar();
 
-        void drawPath(const std::vector<const PDNode *> & path, sf::Color color);
-
-        void updateColors();
+        void drawPath(const std::vector<const Pathfinding::Datastructures::Node *> & path, sf::Color color);
 
     private:
-        std::unique_ptr<PAIMenu> menuUPtr = nullptr;
-        std::unique_ptr<PAIEventManager> eventManagerUPtr = nullptr;
-        std::unique_ptr<PAAIncrementalInformedAlgorithm> dstarLiteUPtr = nullptr;
-        std::unique_ptr<PAIAStar> aStarUPtr = nullptr;
-        std::unique_ptr<PAIGraphOperations> graphOpsUPtr = nullptr;
-        std::unique_ptr<PAIRenderer> rendererUPtr = nullptr;
-        std::shared_ptr<PAALatGraphWr> latGraphWrapUPtr = nullptr;
-        std::shared_ptr<PAIFontLoader> fontLoaderSPtr = nullptr;
+        std::unique_ptr<Pathfinding::Abstract::IMenu> menuUPtr = nullptr;
+        std::unique_ptr<Pathfinding::Abstract::IEventManager> eventManagerUPtr = nullptr;
+        std::unique_ptr<Pathfinding::Abstract::AIncrementalInformedAlgorithm> dstarLiteUPtr = nullptr;
+        std::unique_ptr<Pathfinding::Abstract::IAStar> aStarUPtr = nullptr;
+        std::unique_ptr<Pathfinding::Abstract::IGraphOperations> graphOpsUPtr = nullptr;
+        std::unique_ptr<Pathfinding::Abstract::IRenderer> rendererUPtr = nullptr;
+        std::shared_ptr<Pathfinding::Abstract::ALatGraphWr> latGraphWrapUPtr = nullptr;
+        std::shared_ptr<Pathfinding::Abstract::IFontLoader> fontLoaderSPtr = nullptr;
 
-        PCApplicationState appState;
+        Pathfinding::Core::ApplicationState appState;
         int32_t accumulator;
         sf::RenderWindow window;
-        PDPathfinderCache aStarCache;
-        PDPathfinderCache dStarCache;
+        Pathfinding::Datastructures::PathfinderCache aStarCache;
+        Pathfinding::Datastructures::PathfinderCache dStarCache;
         RandomIntegers ri;
-        PRDrawablePath drawablePath;
-        PADSFMazeGenerator dfsmg;
-        PRNodeStateColors colors;
-        PRGradientChanger gradChager;
+        Pathfinding::Rendering::DrawablePath drawablePath;
+        Pathfinding::Algorithms::DFSMazeGenerator dfsmg;
+        Pathfinding::Rendering::NodeStateColors colors;
+        Pathfinding::Rendering::BlockedAndStartGradientChanger gradChager;
+        Pathfinding::Events::BindingsContainer bindings;
 
         GraphDimension *dimensionPtr = nullptr;
-        PEBindingsContainer bindings;
     };
 }
 

@@ -17,6 +17,7 @@ Core/ApplicationBuilder.cpp
 Rendering/DrawableNode.cpp
 Rendering/DrawablePath.cpp
 Rendering/NodeStateColors.cpp
+Rendering/GradientChanger.cpp
 Core/GraphDimension.cpp
 Helpers/RootPath.cpp
 Helpers/GuiHelpers.cpp

@@ -7,20 +7,6 @@
 
 namespace Pathfinding::Helpers
 {
-    void ColorGradient::operator()(uint8_t & color, uint8_t incrementStep)
-    {
-        if(increment)
-        {
-            if(color < Pathfinding::Constants::MAX_COLOR_CHANNEL) { color += incrementStep; }
-            else { increment = false; }
-        }
-        if(!increment)
-        {
-            if(color > Pathfinding::Constants::MIN_COLOR_CHANNEL) { color -= incrementStep; }
-            else { increment = true; }
-        }
-    }
-
     sf::Color convertToSfmlColor(std::array<uint8_t, 3> color)
     {
         return {color[Pathfinding::Constants::RED],

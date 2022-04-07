@@ -55,24 +55,12 @@ namespace Pathfinding::Core
         eventManagerUPtr->pushEvent(event);
     }
 
-    void Application::updateColors()
-    {
-        if(appState.currentState == AlgorithmState::NO_PATH)
-        {
-            gradChager.updateBlockedColor();       
-        }
-        else if(appState.currentState == AlgorithmState::FOUND_PATH)
-        {
-            gradChager.updateStartColor();       
-        }
-    }
-
     void Application::update(sf::Clock &deltaClock)
     {
         latGraphWrapUPtr->latGraphSPtr->update();
         if(appState.algorithmFinished())
         {
-            updateColors();
+            gradChager.updateColors(appState.currentState);
         }
         sf::Time dt = deltaClock.getElapsedTime();
         if (appState.currentState == AlgorithmState::SEARCHING && appState.autoStep)

@@ -29,6 +29,7 @@ set(SOURCES_TESTS
     ../src/Rendering/DrawableNode.cpp
     ../src/Rendering/DrawablePath.cpp
     ../src/Rendering/NodeStateColors.cpp
+    ../src/Rendering/GradientChanger.cpp
     ../src/Core/GraphDimension.cpp
     ../src/Helpers/RootPath.cpp
     ../src/Helpers/GuiHelpers.cpp

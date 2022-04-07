@@ -13,14 +13,6 @@
 
 namespace Pathfinding::Helpers
 {
-    class ColorGradient
-    {
-        public:
-            void operator()(uint8_t & color, uint8_t incrementStep);
-        private:
-            bool increment = true;
-    };
-
     template<typename VectorType> Pathfinding::Datastructures::Vec2<VectorType> 
     swapElements(Pathfinding::Datastructures::Vec2<VectorType> vec)
     {
