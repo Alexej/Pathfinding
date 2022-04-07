@@ -4,6 +4,9 @@
 #include <functional>
 
 namespace Pathfinding::Gui { struct MenuCallBacks; }
+namespace sf { class RenderWindow; }
+namespace sf { class Time; }
+namespace sf { class Event; }
 
 namespace Pathfinding::Abstract
 {
@@ -15,7 +18,17 @@ namespace Pathfinding::Abstract
             virtual void addCallbacks(Pathfinding::Gui::MenuCallBacks callBacks) = 0;
             
             virtual void showGraph(std::vector<int32_t> values, std::string name) = 0;
-            
+
+            virtual void update(sf::RenderWindow & window, sf::Time deltaClock) = 0;
+
+            virtual void processEvent(const sf::Event & event) = 0;
+
+            virtual void shutDown() = 0;
+
+            virtual void init(sf::RenderWindow & window) = 0;
+
+            virtual void render(sf::RenderWindow & window) = 0;
+
             virtual ~IMenu() = default;
     };
 }

@@ -17,19 +17,13 @@ namespace Pathfinding::Gui
 {
     class Menu final : public Pathfinding::Abstract::IMenu
     {
-    private:
-        using PCApplicationState = Pathfinding::Core::ApplicationState;
-        using PCGraphDimension = Pathfinding::Core::GraphDimension;
-        using PCAlgorithmStepSpeed = Pathfinding::Core::AlgorithmStepSpeed;
-        using PDPathfinderCache = Pathfinding::Datastructures::PathfinderCache;
-
     public:
         Menu() = default;
 
         Menu(
-            PCApplicationState *appStatePtr,
-            PDPathfinderCache *aCache,
-            PDPathfinderCache *dCache);
+            Pathfinding::Core::ApplicationState *appStatePtr,
+            Pathfinding::Datastructures::PathfinderCache *aCache,
+            Pathfinding::Datastructures::PathfinderCache *dCache);
 
         void show() override;
 
@@ -37,10 +31,20 @@ namespace Pathfinding::Gui
 
         void showGraph(std::vector<int32_t> values, std::string name) override;
 
-        void showMouseWheelEventComboBox();
+        void update(sf::RenderWindow & window, sf::Time deltaClock) override;
+
+        void processEvent(const sf::Event & event) override;
+
+        void shutDown() override;
+
+        void init(sf::RenderWindow & window) override;
+
+        void render(sf::RenderWindow & window) override;
 
         
     private:
+        void showMouseWheelEventComboBox();
+
         void showCommonElements();
 
         void showReadyStateElements();
@@ -69,11 +73,11 @@ namespace Pathfinding::Gui
         float offset;
         float height;
         float width;
-        PCApplicationState *appStatePtr;
-        PCGraphDimension *dimensionPtr;
-        PCAlgorithmStepSpeed *algoStepSpeedPtr;
-        PDPathfinderCache *aCache;
-        PDPathfinderCache *dCache;
+        Pathfinding::Core::ApplicationState *appStatePtr;
+        Pathfinding::Core::AlgorithmStepSpeed *algoStepSpeedPtr;
+        Pathfinding::Datastructures::PathfinderCache *aCache;
+        Pathfinding::Datastructures::PathfinderCache *dCache;
+        Pathfinding::Core::GraphDimension *dimensionPtr;
 
     private:
         MenuCallBacks callBacks;

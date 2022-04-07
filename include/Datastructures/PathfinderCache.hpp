@@ -16,6 +16,8 @@ namespace Pathfinding::Datastructures
 
         void reset();
 
+        bool nodesExpandedLastIteration() const;
+
     };  
 }
 

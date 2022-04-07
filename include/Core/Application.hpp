@@ -58,8 +58,6 @@ namespace Pathfinding::Core
         
         void run();
         
-        void mouseWheelMoved(PEMouseData mouseData);
-
     private:
         void draw();
         

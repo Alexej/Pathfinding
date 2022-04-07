@@ -2,6 +2,9 @@
 
 #include <imgui-SFML.h>
 #include <imgui.h>
+#include <SFML/Graphics/RenderWindow.hpp>
+#include <SFML/Window/Event.hpp>
+#include <SFML/System/Time.hpp>
 #include <format>
 
 #include "Constants.hpp"
@@ -29,7 +32,7 @@ namespace Pathfinding::Gui
 
     Menu::Menu(ApplicationState *appStatePtr_,
                PathfinderCache *aCache_,
-               PDPathfinderCache *dCache_)
+               PathfinderCache *dCache_)
         : appStatePtr(appStatePtr_),
           offset(static_cast<float>(GRID_FIELD_WIDTH)),
           height(static_cast<float>(GRID_FIELD_HEIGHT)),
@@ -111,6 +114,32 @@ namespace Pathfinding::Gui
         ImGui::PlotLines(std::format("last : {}.", std::to_string(values.back())).c_str(),
                          &valuesFloat[0],
                          static_cast<int32_t>(values.size()));
+    }
+
+
+    void Menu::update(sf::RenderWindow & window, sf::Time deltaClock)
+    {
+        ImGui::SFML::Update(window, deltaClock);
+    }
+
+    void Menu::processEvent(const sf::Event & event)
+    {
+        ImGui::SFML::ProcessEvent(event);
+    }
+
+    void Menu::shutDown()
+    {
+        ImGui::SFML::Shutdown();
+    }
+
+    void Menu::init(sf::RenderWindow & window)
+    {
+        ImGui::SFML::Init(window);
+    }
+
+    void Menu::render(sf::RenderWindow & window)
+    {
+        ImGui::SFML::Render(window);
     }
 
     void Menu::showStepSpeed()

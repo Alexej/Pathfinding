@@ -15,4 +15,9 @@ namespace Pathfinding::Datastructures
         currentPath.clear();
         nodesExpandedAll.clear();
     }
+
+    bool PathfinderCache::nodesExpandedLastIteration() const
+    {
+        return nodesExpandedAll.back().size() != 0;
+    }
 }

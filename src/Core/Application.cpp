@@ -34,7 +34,7 @@ namespace Pathfinding::Core
 
     void Application::run()
     {
-        ImGui::SFML::Init(window);
+        menuUPtr->init(window);
         sf::Clock deltaClock;
         while (window.isOpen())
         {
@@ -46,12 +46,12 @@ namespace Pathfinding::Core
             update(deltaClock);
             draw();
         }
-        ImGui::SFML::Shutdown();
+        menuUPtr->shutDown();
     }
 
     void Application::handleInput(sf::Event event)
     {
-        ImGui::SFML::ProcessEvent(event);
+        menuUPtr->processEvent(event);
         eventManagerUPtr->pushEvent(event);
     }
 
@@ -74,10 +74,10 @@ namespace Pathfinding::Core
         {
             updateColors();
         }
-        int32_t dt = deltaClock.getElapsedTime().asMilliseconds();
+        sf::Time dt = deltaClock.getElapsedTime();
         if (appState.currentState == AlgorithmState::SEARCHING && appState.autoStep)
         {
-            accumulator += dt;
+            accumulator += dt.asMilliseconds();
             if (accumulator > appState.stepSpeed)
             {
                 step();
@@ -85,7 +85,8 @@ namespace Pathfinding::Core
             }
         }
         eventManagerUPtr->processEvents(bindings);
-        ImGui::SFML::Update(window, deltaClock.restart());
+        menuUPtr->update(window, dt);
+        deltaClock.restart();
     }
 
     void Application::handleNumberOfNodesChange(int32_t index)
@@ -105,7 +106,7 @@ namespace Pathfinding::Core
     {
         menuUPtr->show();
         window.clear();
-        ImGui::SFML::Render(window);
+        menuUPtr->render(window);
         rendererUPtr->render(window, *latGraphWrapUPtr->latGraphSPtr);
         if (appState.currentState == AlgorithmState::FOUND_PATH || appState.currentState == AlgorithmState::SEARCHING)
         {
@@ -156,7 +157,7 @@ namespace Pathfinding::Core
     void Application::step()
     {
         dStarCache.cache(dstarLiteUPtr->followingRun());
-        if(dStarCache.nodesExpandedAll.back().size() != 0)
+        if(dStarCache.nodesExpandedLastIteration())
         {
             runAStar();
         }
