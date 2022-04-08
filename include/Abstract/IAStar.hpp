@@ -13,10 +13,8 @@ namespace Pathfinding::Abstract
     class ALatGraphWr;
     class IAStar : public AInformedSearchAlgorithm
     {
-    private:
-        using PDPathfinderReturnType = Pathfinding::Datastructures::PathfinderReturnType;
     public:
-        virtual PDPathfinderReturnType calculatePath(const ALatGraphWr & graphWrapper) const = 0;
+        virtual Pathfinding::Datastructures::PathfinderReturnType calculatePath(const ALatGraphWr & graphWrapper) const = 0;
 
         virtual ~IAStar() = default;
 

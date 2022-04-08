@@ -8,10 +8,8 @@ namespace Pathfinding::Abstract
     class ILatticeGraph;
     class IMazeGenrator
     {
-        private:
-            using RCRandomIntegers = Pathfinding::Core::RandomIntegers;
         public:
-            virtual void operator()(ILatticeGraph & latGraph, RCRandomIntegers & ri) = 0;
+            virtual void operator()(ILatticeGraph & latGraph, Pathfinding::Core::RandomIntegers & ri) = 0;
     };
 }
 

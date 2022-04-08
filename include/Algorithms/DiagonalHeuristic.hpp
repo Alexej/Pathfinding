@@ -6,6 +6,8 @@
 #include <cstdint>
 
 
+namespace Pathfinding::Datastructures { struct Node; }
+
 namespace Pathfinding::Algorithms
 {
     class DiagonalHeuristic final : public Pathfinding::Abstract::IHeuristic
@@ -13,7 +15,7 @@ namespace Pathfinding::Algorithms
     public:
         DiagonalHeuristic(int32_t diagonalMovementCost, int32_t straightMovementCost);
         
-        double calculate(const PDNode *from, const PDNode *to) override;
+        double calculate(const Pathfinding::Datastructures::Node *from, const Pathfinding::Datastructures::Node *to) override;
         
     private:
         int32_t diagonalMovementCost;

@@ -13,16 +13,12 @@ namespace Pathfinding::Abstract
 {
     class ILatticeGraph : public Resizable2DArray, public sf::Drawable
     {
-        private:
-            using PDNode = Pathfinding::Datastructures::Node;
-            using PDVec2i = Pathfinding::Datastructures::Vec2i;
-
         public:
-            virtual bool inBounds(PDVec2i location) const = 0;
+            virtual bool inBounds(Pathfinding::Datastructures::Vec2i location) const = 0;
 
-            virtual PDNode *node(PDVec2i location) = 0;
+            virtual Pathfinding::Datastructures::Node *node(Pathfinding::Datastructures::Vec2i location) = 0;
 
-            virtual const PDNode * node(PDVec2i location) const = 0;
+            virtual const Pathfinding::Datastructures::Node * node(Pathfinding::Datastructures::Vec2i location) const = 0;
 
             virtual void reset() = 0;
 

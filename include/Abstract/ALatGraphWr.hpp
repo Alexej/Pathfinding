@@ -15,31 +15,28 @@ namespace Pathfinding::Abstract
     class IMazeGenerator;
     class ALatGraphWr
     {
-    private:
-        using PDVec2i = Pathfinding::Datastructures::Vec2i;
-        using PDNode = Pathfinding::Datastructures::Node;
-        using PDNodeState = Pathfinding::Datastructures::NodeState;
     public:
         explicit ALatGraphWr(std::shared_ptr<ILatticeGraph> latGraphSPtr_)
         : latGraphSPtr(latGraphSPtr_) {}
 
-        virtual void setGoal(PDVec2i location) = 0;
+        virtual void setGoal(Pathfinding::Datastructures::Vec2i location) = 0;
 
-        virtual void setStart(PDVec2i location) = 0;
+        virtual void setStart(Pathfinding::Datastructures::Vec2i location) = 0;
 
-        virtual const PDNode * startNode() const = 0;
+        virtual const Pathfinding::Datastructures::Node * startNode() const = 0;
 
-        virtual const PDNode * goalNode() const = 0;
+        virtual const Pathfinding::Datastructures::Node * goalNode() const = 0;
 
-        virtual PDNode *startNode() = 0;
+        virtual Pathfinding::Datastructures::Node *startNode() = 0;
 
-        virtual PDNode *goalNode() = 0;
+        virtual Pathfinding::Datastructures::Node *goalNode() = 0;
 
         virtual void resize(int32_t height, int32_t width) = 0;
 
         virtual void reset() = 0;
 
-        virtual void changeNodeStateWhenNodeFreeOrVisited(PDNode *node, PDNodeState newState) = 0;
+        virtual void changeNodeStateWhenNodeFreeOrVisited(Pathfinding::Datastructures::Node *node, 
+                                             Pathfinding::Datastructures::NodeState newState) = 0;
 
         virtual void removeEndpointsFromGraph() = 0;
         

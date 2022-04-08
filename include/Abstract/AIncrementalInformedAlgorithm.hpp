@@ -13,11 +13,8 @@ namespace Pathfinding::Abstract
 {
     class AIncrementalInformedAlgorithm : public AInformedSearchAlgorithm
     {
-        private:
-            using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
-
         public:
-            explicit AIncrementalInformedAlgorithm(std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr_)
+            explicit AIncrementalInformedAlgorithm(std::shared_ptr<Pathfinding::Abstract::ALatGraphWr> latticeGraphWrapperSPtr_)
             : latticeGraphWrapperSPtr(latticeGraphWrapperSPtr_) {}
 
             void addFoundPathCallBack(std::function<void(void)> callBack)
@@ -43,7 +40,7 @@ namespace Pathfinding::Abstract
             virtual ~AIncrementalInformedAlgorithm() = default;
 
         protected:
-            std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr = nullptr;
+            std::shared_ptr<Pathfinding::Abstract::ALatGraphWr> latticeGraphWrapperSPtr = nullptr;
             std::function<void(void)> doneCallBack;
             std::function<void(void)> noPathCallBack;
     };

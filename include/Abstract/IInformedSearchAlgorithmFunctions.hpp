@@ -7,10 +7,9 @@ namespace Pathfinding::Abstract
 {
     class IInformedSearchAlgorithmFunctions
     {
-        protected:
-            using PDNode = Pathfinding::Datastructures::Node;
         public:
-            virtual double calculate(const PDNode *from, const PDNode *to) = 0;
+            virtual double calculate(const Pathfinding::Datastructures::Node *from, 
+                                     const Pathfinding::Datastructures::Node *to) = 0;
             
             virtual ~IInformedSearchAlgorithmFunctions() = default;
             

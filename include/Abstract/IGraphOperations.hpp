@@ -11,21 +11,18 @@ namespace Pathfinding::Abstract
 {
     class IGraphOperations
     {
-        private:
-            using PDNode = Pathfinding::Datastructures::Node;
-            using PEMouseData = Pathfinding::Events::MouseData;
         public:
-            virtual void rightMouseButtonPressed(PEMouseData mouseData) = 0;
+            virtual void rightMouseButtonPressed(Pathfinding::Events::MouseData mouseData) = 0;
             
-            virtual void leftMouseButtonPressed(PEMouseData mouseData) = 0;
+            virtual void leftMouseButtonPressed(Pathfinding::Events::MouseData mouseData) = 0;
             
-            virtual void mouseButtonReleased(PEMouseData mouseData) = 0;
+            virtual void mouseButtonReleased(Pathfinding::Events::MouseData mouseData) = 0;
             
-            virtual void nodeUnderCursor(PEMouseData mouseData) = 0;
+            virtual void nodeUnderCursor(Pathfinding::Events::MouseData mouseData) = 0;
             
-            virtual void mouseMoved(PEMouseData mouseData) = 0;
+            virtual void mouseMoved(Pathfinding::Events::MouseData mouseData) = 0;
             
-            virtual void mouseWheelMoved(PEMouseData mouseData) = 0;
+            virtual void mouseWheelMoved(Pathfinding::Events::MouseData mouseData) = 0;
             
             virtual void resize(int32_t nodeSideLength) = 0;
             
@@ -41,7 +38,7 @@ namespace Pathfinding::Abstract
             
             virtual bool obsticlesAndScrollEvents() const = 0;
             
-            virtual void addEdgeChangeCallBack(std::function<void(PDNode * node)> callBack) = 0;
+            virtual void addEdgeChangeCallBack(std::function<void(Pathfinding::Datastructures::Node * node)> callBack) = 0;
             
             virtual ~IGraphOperations() = default;
             
