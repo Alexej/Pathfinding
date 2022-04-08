@@ -36,11 +36,12 @@ namespace Pathfinding::Datastructures
             {
             }
 
-
             void updateEdge(const Node * from, const Node * to, double weight)
             {
                 
             }
+
+            
 
             void add(Edge edge)
             {

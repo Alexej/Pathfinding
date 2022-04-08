@@ -70,6 +70,23 @@ namespace Pathfinding::Gui
         void showAStarPath();
 
         void showStepSpeed();
+    
+        void showRuntimeOptions();
+
+        void showNodeInfo();
+
+        void showAlgorithmState();
+
+        void showResetButton();
+
+        void showStartOptions();
+
+        void showStartButton();
+
+        void showRandomGraph();
+
+        void showMazeButton();
+
 
     private:
         float offset;

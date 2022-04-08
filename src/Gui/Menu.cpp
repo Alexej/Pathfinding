@@ -55,9 +55,9 @@ namespace Pathfinding::Gui
         ImGui::SetNextWindowSize(ImVec2(width, height), ImGuiCond_FirstUseEver);
 
         ImGui::Begin("Configuration", nullptr, window_flags);
+    
+    
         showCommonElements();
-        
-
         switch (appStatePtr->currentState)
         {
         case AlgorithmState::READY:
@@ -168,7 +168,7 @@ namespace Pathfinding::Gui
         callBacks = callBacks_;
     }
 
-    void Menu::showCommonElements()
+    void Menu::showRuntimeOptions()
     {
         if (ImGui::CollapsingHeader("Runtime Options"))
         {
@@ -187,6 +187,10 @@ namespace Pathfinding::Gui
             showMouseWheelEventComboBox();
             ImGui::Separator();
         }
+    }
+
+    void Menu::showNodeInfo()
+    {
         if (ImGui::CollapsingHeader("Node info"))
         {
             if (appStatePtr->nodeUnderCursor != nullptr)
@@ -196,15 +200,37 @@ namespace Pathfinding::Gui
                 ImGui::Separator();
             }
         }
+    }
 
+    void Menu::showAlgorithmState()
+    {
         auto color = getStateColor(appStatePtr->currentState);
         ImGui::PushStyleColor(ImGuiCol_Text, IM_COL32(color[RED], color[GREEN], color[BLUE], 255));
         printLargeText(std::format("State: {}", mapStateToText(appStatePtr->currentState)), 2);
         ImGui::PopStyleColor();
+    }
 
+    void Menu::showResetButton()
+    {
         if (ImGui::Button("RESET", ImVec2(width - 20, 20)))
         {
             callBacks.resetCallback();
+        }
+    }
+
+    void Menu::showCommonElements()
+    {
+        showRuntimeOptions();
+        showNodeInfo();
+        showAlgorithmState();
+    }
+
+    void Menu::showMouseWheelEventComboBox()
+    {
+        static int32_t currentMouseWheelEventInt = static_cast<int32_t>(appStatePtr->currentMouseWheelEvent);
+        if (ImGui::custom_combo("MW Event", &currentMouseWheelEventInt, mouseWheelEventStrings))
+        {
+            callBacks.mouseWheelEventChangedCallBack(currentMouseWheelEventInt);
         }
     }
 
@@ -222,14 +248,6 @@ namespace Pathfinding::Gui
         }
     }
 
-    void Menu::showMouseWheelEventComboBox()
-    {
-        static int32_t currentMouseWheelEventInt = static_cast<int32_t>(appStatePtr->currentMouseWheelEvent);
-        if (ImGui::custom_combo("# Of Nodes", &currentMouseWheelEventInt, mouseWheelEventStrings))
-        {
-            callBacks.mouseWheelEventChangedCallBack(currentMouseWheelEventInt);
-        }
-    }
 
     void Menu::showNodeInfoInMenu()
     {
@@ -246,7 +264,7 @@ namespace Pathfinding::Gui
         ImGui::Text(std::format("State: {}", mapNodeStateToText(appStatePtr->nodeUnderCursor->state)).c_str());
     }
 
-    void Menu::showReadyStateElements()
+    void Menu::showStartOptions()
     {
         if (ImGui::CollapsingHeader("Start Options"))
         {
@@ -257,21 +275,38 @@ namespace Pathfinding::Gui
             ImGui::HelpMarker("A* is run at every step of D* lite,\nat the end statistic is provided");
             ImGui::Separator();
         }
+    }
 
+    void Menu::showStartButton()
+    {
         if (ImGui::Button("Start", ImVec2(width - 20, 20)))
         {
             callBacks.startCallBack();
         }
+    }
 
+    void Menu::showRandomGraph()
+    {
         if (ImGui::Button("RANDOM GRAPH", ImVec2(width - 20, 20)))
         {
             callBacks.randomGraphCallBack();
         }
+    }
 
+    void Menu::showMazeButton()
+    {
         if (ImGui::Button("Maze", ImVec2(width - 20, 20)))
         {
             callBacks.mazeGraphCallBack();
         }
+    }
+
+    void Menu::showReadyStateElements()
+    {
+        showStartOptions();
+        showStartButton();
+        showRandomGraph();
+        showMazeButton();
     }
 
     void Menu::showPathFlags()
