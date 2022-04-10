@@ -4,14 +4,13 @@
 #include <vector>
 #include <SFML/Graphics/Drawable.hpp>
 
-#include "Resizable2DArray.hpp"
 #include "Vec2.hpp"
 
 namespace Pathfinding::Datastructures { struct Node; }
 
 namespace Pathfinding::Abstract
 {
-    class ILatticeGraph : public Resizable2DArray, public sf::Drawable
+    class ILatticeGraph : public sf::Drawable
     {
         public:
             virtual bool inBounds(Pathfinding::Datastructures::Vec2i location) const = 0;
@@ -23,7 +22,13 @@ namespace Pathfinding::Abstract
             virtual void reset() = 0;
 
             virtual void update() = 0;
+
+            virtual void resize(int32_t height, int32_t width) = 0;
             
+            virtual std::size_t width() const = 0;
+            
+            virtual std::size_t height() const = 0;
+                        
             virtual ~ILatticeGraph() = default;
             
     };

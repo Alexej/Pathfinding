@@ -223,6 +223,7 @@ namespace Pathfinding::Gui
         showRuntimeOptions();
         showNodeInfo();
         showAlgorithmState();
+        showResetButton();
     }
 
     void Menu::showMouseWheelEventComboBox()
