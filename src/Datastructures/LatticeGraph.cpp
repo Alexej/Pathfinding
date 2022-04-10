@@ -1,11 +1,13 @@
 #include "LatticeGraph.hpp"
 #include "InformedSearchAlgorithmHelpers.hpp"
 #include "CppHelpers.hpp"
+#include "IDrawNodeStrategy.hpp"
 
 namespace Pathfinding::Datastructures
 {
     using Pathfinding::Helpers::infinity;
     using Pathfinding::Helpers::iterateOver2DVector;
+    using Pathfinding::Abstract::IDrawNodeStrategy;
 
     namespace
     {
@@ -51,14 +53,10 @@ namespace Pathfinding::Datastructures
         iterateOver2DVector(graph, [](Node & node) { node.reset(); });
     }
 
-    void LatticeGraph::update()
-    {
-        iterateOver2DVector(graph, [](Node & node) { node.update(); });
-    }
 
-    void LatticeGraph::draw(sf::RenderTarget& target, sf::RenderStates states) const
+    void LatticeGraph::draw(IDrawNodeStrategy & drawStrategy) const
     {
-        iterateOver2DVector(graph, [&] (const Node & node) { target.draw(node); });
+        iterateOver2DVector(graph, [&] (const Node & node) { node.draw(drawStrategy); });
     }
 
     void LatticeGraph::resize(int32_t height, int32_t width)

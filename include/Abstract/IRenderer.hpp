@@ -6,11 +6,14 @@ namespace sf { class Drawable; }
 
 namespace Pathfinding::Abstract
 {
+    class IDrawNodeStrategy;
     class IRenderer
     {
         public:
-            virtual void render(sf::RenderWindow & window, const sf::Drawable & drawable) = 0;
-        
+            virtual void render(const ILatticeGraph & graph, IDrawNodeStrategy &strategy) const = 0;
+
+            virtual void render(sf::RenderWindow &window, const sf::Drawable & drawable) = 0;
+
             virtual ~IRenderer() = default;
     };
 }

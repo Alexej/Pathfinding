@@ -21,6 +21,7 @@
 #include "Renderer.hpp"
 #include "ILatticeGraphHelpers.hpp"
 #include "MenuCallBacks.hpp"
+#include "SFMLNodeStrategy.hpp"
 
 namespace Pathfinding::Core
 {
@@ -44,6 +45,7 @@ namespace Pathfinding::Core
     using Pathfinding::Gui::MenuCallBacks;
     using Pathfinding::Rendering::NodeStateColors;
     using Pathfinding::Rendering::Renderer;
+    using Pathfinding::Rendering::SFMLNodeStrategy;
     using Pathfinding::Helpers::ILatticeGraphHelpers;
     using sf::Event::EventType::MouseButtonPressed;
     using sf::Event::EventType::MouseButtonReleased;
@@ -69,7 +71,7 @@ namespace Pathfinding::Core
 
     void ApplicationBuilder::setFontLoader(std::shared_ptr<IFontLoader> fontLoaderSPtr_)
     {
-        fontLoaderSPtr = fontLoaderSPtr_;
+        applicationUPtr->fontLoaderSPtr = fontLoaderSPtr_;
     }
 
     std::unique_ptr<IApplication> ApplicationBuilder::make()
@@ -98,6 +100,10 @@ namespace Pathfinding::Core
         applicationUPtr->aStarUPtr = std::make_unique<AStar>();
         applicationUPtr->drawablePath.init(&applicationUPtr->appState);
         applicationUPtr->rendererUPtr = std::make_unique<Renderer>();
+        applicationUPtr->drawStrategy = std::make_shared<SFMLNodeStrategy>(applicationUPtr->fontLoaderSPtr->getFont("NugoSansLight"), 
+                                                                            applicationUPtr->colors, 
+                                                                            applicationUPtr->appState,
+                                                                            applicationUPtr->window);
     }
 
     void ApplicationBuilder::initializeObjects()
@@ -114,11 +120,6 @@ namespace Pathfinding::Core
                                                                        applicationUPtr->dstarLiteUPtr.get(), _1));
         applicationUPtr->window.setFramerateLimit(APP_FPS);
         applicationUPtr->dimensionPtr = &applicationUPtr->appState.dimension;
-        ILatticeGraphHelpers::initRendering(*applicationUPtr->latGraphWrapUPtr->latGraphSPtr, 
-                                             fontLoaderSPtr->getFont("NugoSansLight"), 
-                                             &applicationUPtr->colors, 
-                                             &applicationUPtr->appState);
-        applicationUPtr->fontLoaderSPtr = fontLoaderSPtr;
         applicationUPtr->gradChager.init(applicationUPtr->colors);
     }
 

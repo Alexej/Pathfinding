@@ -25,6 +25,7 @@
 #include "IFontLoader.hpp"
 #include "GradientChanger.hpp"
 #include "IRenderer.hpp"
+#include "IDrawNodeStrategy.hpp"
 
 namespace Pathfinding::Core { class ApplicationBuilder; }
 namespace Pathfinding::Datastructures { struct Node; }
@@ -79,6 +80,7 @@ namespace Pathfinding::Core
         std::unique_ptr<Pathfinding::Abstract::IRenderer> rendererUPtr = nullptr;
         std::shared_ptr<Pathfinding::Abstract::ALatGraphWr> latGraphWrapUPtr = nullptr;
         std::shared_ptr<Pathfinding::Abstract::IFontLoader> fontLoaderSPtr = nullptr;
+        std::shared_ptr<Pathfinding::Abstract::IDrawNodeStrategy> drawStrategy = nullptr;
 
         Pathfinding::Core::ApplicationState appState;
         int32_t accumulator;

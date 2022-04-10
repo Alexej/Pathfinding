@@ -33,10 +33,7 @@ namespace Pathfinding::Datastructures
 
         std::size_t height() const override { return graph.size(); }
 
-        void update() override;  
-
-    private:
-        virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
+        void draw(Pathfinding::Abstract::IDrawNodeStrategy & drawStrategy) const override;
 
     private:
         template <typename Type>

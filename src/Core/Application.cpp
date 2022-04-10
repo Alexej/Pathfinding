@@ -57,7 +57,6 @@ namespace Pathfinding::Core
 
     void Application::update(sf::Clock &deltaClock)
     {
-        latGraphWrapUPtr->latGraphSPtr->update();
         if(appState.algorithmFinished())
         {
             gradChager.updateColors(appState.currentState);
@@ -84,10 +83,7 @@ namespace Pathfinding::Core
         drawablePath.resize();
         latGraphWrapUPtr->resize(dimensionPtr->height(), dimensionPtr->width());
         appState.nodeUnderCursor = nullptr;
-        ILatticeGraphHelpers::initRendering(*latGraphWrapUPtr->latGraphSPtr,
-                                            fontLoaderSPtr->getFont("NugoSansLight"),
-                                            &colors,
-                                            &appState);
+        drawStrategy->resize();
     }
 
     void Application::draw()
@@ -95,7 +91,7 @@ namespace Pathfinding::Core
         menuUPtr->show();
         window.clear();
         menuUPtr->render(window);
-        rendererUPtr->render(window, *latGraphWrapUPtr->latGraphSPtr);
+        rendererUPtr->render(*latGraphWrapUPtr->latGraphSPtr, *drawStrategy);
         if (appState.currentState == AlgorithmState::FOUND_PATH || appState.currentState == AlgorithmState::SEARCHING)
         {
             if(appState.showAStarPath)

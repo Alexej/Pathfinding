@@ -7,7 +7,6 @@
 #include "Vec2.hpp"
 #include "RandomIntegers.hpp"
 #include "ApplicationState.hpp"
-#include "NodeStateColors.hpp"
 
 namespace Pathfinding::Helpers
 {
@@ -15,7 +14,6 @@ namespace Pathfinding::Helpers
     using Pathfinding::Abstract::ILatticeGraph;
     using Pathfinding::Core::RandomIntegers;
     using Pathfinding::Core::ApplicationState;
-    using Pathfinding::Rendering::NodeStateColors;
 
 
     void ILatticeGraphHelpers::initRandomGraph(ILatticeGraph & latticeGraphSPtr, RandomIntegers & ri)
@@ -95,21 +93,6 @@ namespace Pathfinding::Helpers
             else
             {
                 ilatticeGraph.node(location)->state = NodeState::Free;
-            }
-        }
-    }
-
-    void ILatticeGraphHelpers::initRendering(ILatticeGraph & ilatticeGraph, 
-                                const sf::Font & font, 
-                                NodeStateColors * colors, 
-                                ApplicationState * appStatePtr)
-    {
-        for (int32_t h = 0; h < ilatticeGraph.height(); ++h)
-        {
-            for (int32_t w = 0; w < ilatticeGraph.width(); ++w)
-            {
-                auto position = Vec2i{h,w};
-                ilatticeGraph.node(position)->init(font, colors, appStatePtr, position);
             }
         }
     }

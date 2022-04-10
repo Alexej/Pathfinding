@@ -1,7 +1,6 @@
 #ifndef A8F39E2A_B87B_43DF_A67F_993CBD86DC47
 #define A8F39E2A_B87B_43DF_A67F_993CBD86DC47
 
-#include <SFML/Graphics/Font.hpp>
 #include <vector>
 #include <memory>
 #include <functional>
@@ -13,7 +12,6 @@
 
 namespace Pathfinding::Core { class RandomIntegers; }
 namespace Pathfinding::Core { struct ApplicationState; }
-namespace Pathfinding::Rendering { struct NodeStateColors; }
 
 
 namespace Pathfinding::Helpers
@@ -26,7 +24,6 @@ namespace Pathfinding::Helpers
         using PDVec2i = Pathfinding::Datastructures::Vec2i;
         using PCRandomIntegers = Pathfinding::Core::RandomIntegers;
         using PCApplicationState = Pathfinding::Core::ApplicationState;
-        using PRNodeStateColors = Pathfinding::Rendering::NodeStateColors;
     public:
         static std::vector<PDNode *> neighbors(PAILatticeGraph & iLatticeGraph, const PDNode *node);
 
@@ -38,11 +35,6 @@ namespace Pathfinding::Helpers
         
         static void clearNode(PAILatticeGraph & iLatticeGraph, PDVec2i location);
 
-        static void initRendering(PAILatticeGraph & iLatticeGraph,
-                                    const sf::Font & font, 
-                                    PRNodeStateColors * colors, 
-                                    PCApplicationState * appStatePtr);
-        
     };
 
     template<typename Function>

@@ -3,17 +3,17 @@
 
 #include <cstdint>
 #include <limits>
-#include <SFML/Graphics/RenderTarget.hpp>
 
 #include "Vec2.hpp"
 #include "Key.hpp"
-#include "DrawableNode.hpp"
+
+namespace Pathfinding::Abstract { class IDrawNodeStrategy; }
 
 namespace Pathfinding::Datastructures
 {
     enum class NodeState { Start, Goal, Free, Blocked, Frontier, Visited };
 
-    struct Node final : public Pathfinding::Rendering::DrawableNode
+    struct Node final
     {   
         Node(int32_t h, int32_t w) : location(Vec2i(h,w)) { initNode(); }
 
@@ -21,9 +21,7 @@ namespace Pathfinding::Datastructures
         
         void reset();
 
-        void draw(sf::RenderTarget &target, sf::RenderStates states) const override;
-
-        void update();
+        void draw(Pathfinding::Abstract::IDrawNodeStrategy & drawStrategy) const;
 
         Vec2i location;
         NodeState state;

@@ -4,8 +4,6 @@
 #include <compare>
 #include <cstdint>
 
-#include <SFML/System/Vector2.hpp>
-
 namespace Pathfinding::Datastructures
 {
     /**
@@ -30,11 +28,6 @@ namespace Pathfinding::Datastructures
             return *this;
         }
 
-        operator sf::Vector2f() const   
-        {
-            return sf::Vector2f{static_cast<float>(height), static_cast<float>(width)};
-        }
-        
         T height = 0;
         T width = 0;
     };

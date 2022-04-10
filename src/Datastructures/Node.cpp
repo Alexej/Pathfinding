@@ -1,10 +1,12 @@
 #include "Node.hpp"
-#include "NodeStateColors.hpp"
 
 #include <iostream>
+
+#include "IDrawNodeStrategy.hpp"
 namespace Pathfinding::Datastructures
 {
-    using Pathfinding::Rendering::NodeStateColors;
+    using Pathfinding::Abstract::IDrawNodeStrategy;
+
 
     bool operator==(const Node &lhs, const Node &rhs)
     {
@@ -26,13 +28,9 @@ namespace Pathfinding::Datastructures
         key = Key();
     }
 
-    void Node::update()
-    {
-        prepareDrawableNode(*this);
-    }
 
-    void Node::draw(sf::RenderTarget &target, sf::RenderStates states) const
+    void Node::draw(Pathfinding::Abstract::IDrawNodeStrategy & drawStrategy) const
     {
-        drawDrawableNode(target, state != NodeState::Blocked);
+        drawStrategy.draw(this);
     }
 }

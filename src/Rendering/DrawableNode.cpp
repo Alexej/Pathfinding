@@ -1,4 +1,4 @@
-#include "DrawableNode.hpp"
+#include "SFMLNodeStrategy.hpp"
 
 #include "RenderingHelpers.hpp"
 #include "Constants.hpp"
@@ -19,15 +19,15 @@ namespace Pathfinding::Rendering
     using namespace Pathfinding::Constants;
 
 
-    void DrawableNode::init(const sf::Font &font,
-                            NodeStateColors *colors_,
-                            ApplicationState *appStatePtr_,
-                            Vec2i position_)
+    SFMLNodeStrategy::SFMLNodeStrategy(const sf::Font &font,
+                            NodeStateColors & colorsRef_,
+                            ApplicationState & appStateRef_,
+                            sf::RenderWindow & windowRef_)
+    :
+      colorsRef(colorsRef_),
+      appStateRef(appStateRef_), 
+      windowRef(windowRef_)
     {
-        colors = colors_;
-        appStatePtr = appStatePtr_;
-        position = swapElements(position_);
-
         gText.setFont(font);
         rhsText.setFont(font);
         keyText.setFont(font);
@@ -50,10 +50,31 @@ namespace Pathfinding::Rendering
         factorRect.setOutlineThickness(NODE_OUTLINE_THICKNESS);
         factorRect.setOutlineColor(convertToSfmlColor(NODE_OUTLINE_COLOR));
 
-        setRectsSizeAndPosition();
+        setRectsSize();
     }
 
-    void DrawableNode::prepareDrawableNode(const Node & node)
+    void SFMLNodeStrategy::setRectsPosition(Vec2i location)
+    {
+        auto nodeSideLengthF = static_cast<float>(appStateRef.dimension.currentNodeSideLength());
+        auto mainRectPosition = location * appStateRef.dimension.currentNodeSideLength();
+        auto mainRectPositionsfVec2 = sf::Vector2f(static_cast<float>(mainRectPosition.width), 
+                                                   static_cast<float>(mainRectPosition.height));
+        nodeRect.setPosition(mainRectPositionsfVec2);
+
+        auto factorRectSize = sf::Vector2f(nodeSideLengthF / 6.f, nodeSideLengthF / 6.f);
+        auto factorRectHeight = mainRectPositionsfVec2.y + ((nodeSideLengthF / 2) - (factorRectSize.y / 2));
+        auto factorRectPosition = sf::Vector2f(mainRectPositionsfVec2.x, factorRectHeight);
+        factorRect.setPosition(factorRectPosition);
+    }
+
+    void SFMLNodeStrategy::draw(const Pathfinding::Datastructures::Node * node)
+    {
+        prepareDrawableNode(*node);
+        setRectsPosition(node->location);
+        drawNode(node->state == NodeState::Blocked);
+    }
+
+    void SFMLNodeStrategy::prepareDrawableNode(const Node & node)
     {
         if(renderNodeInfo())
         {
@@ -82,47 +103,41 @@ namespace Pathfinding::Rendering
 
             factorRect.setFillColor(sf::Color(100 + 28 * node.factor, 0, 140 - 28 * node.factor));
         }
-        nodeRect.setFillColor(colors->getColor(node.state));
+        nodeRect.setFillColor(colorsRef.getColor(node.state));
     }
 
-    void DrawableNode::resize()
+    void SFMLNodeStrategy::resize()
     {
-        setRectsSizeAndPosition();
+        setRectsSize();
     }
 
-    void DrawableNode::setRectsSizeAndPosition()
+    void SFMLNodeStrategy::setRectsSize()
     {
-        auto nodeSideLengthF = static_cast<float>(appStatePtr->dimension.currentNodeSideLength());
-        auto mainRectPosition = position * appStatePtr->dimension.currentNodeSideLength();
-        auto mainRectPositionsfVec2 = static_cast<sf::Vector2f>(mainRectPosition);
-        nodeRect.setPosition(mainRectPositionsfVec2);
+        auto nodeSideLengthF = static_cast<float>(appStateRef.dimension.currentNodeSideLength());
         nodeRect.setSize({nodeSideLengthF,nodeSideLengthF});
 
         auto factorRectSize = sf::Vector2f(nodeSideLengthF / 6.f, nodeSideLengthF / 6.f);
-        auto factorRectHeight = mainRectPositionsfVec2.y + ((nodeSideLengthF / 2) - (factorRectSize.y / 2));
-        auto factorRectPosition = sf::Vector2f(mainRectPositionsfVec2.x, factorRectHeight);
-        factorRect.setPosition(factorRectPosition);
         factorRect.setSize(factorRectSize);
     }
 
-    void DrawableNode::drawDrawableNode(sf::RenderTarget &target, bool nodeBlocked) const
+    void SFMLNodeStrategy::drawNode(bool nodeBlocked) const
     {
-        target.draw(nodeRect);
+        windowRef.draw(nodeRect);
         if (renderNodeInfo())
         {
-            target.draw(rhsText);
-            target.draw(gText);
-            target.draw(keyText);
+            windowRef.draw(rhsText);
+            windowRef.draw(gText);
+            windowRef.draw(keyText);
             if (nodeBlocked)
             {
-                target.draw(factorRect);
+                windowRef.draw(factorRect);
             }
         }
     }
 
-    bool DrawableNode::renderNodeInfo() const
+    bool SFMLNodeStrategy::renderNodeInfo() const
     {
-        return appStatePtr->showNodeInfo;
+        return appStateRef.showNodeInfo;
     }
 }
 
