@@ -14,11 +14,12 @@ namespace Pathfinding::Helpers
     using Pathfinding::Abstract::ILatticeGraph;
     using Pathfinding::Core::RandomIntegers;
     using Pathfinding::Core::ApplicationState;
+    using Pathfinding::Datastructures::Node;
 
 
-    void ILatticeGraphHelpers::initRandomGraph(ILatticeGraph & latticeGraphSPtr, RandomIntegers & ri)
+    void initRandomGraph(ILatticeGraph & latticeGraphSPtr, RandomIntegers & ri)
     {
-        iterateOverLatticeGraph(latticeGraphSPtr, [&](PDNode *node, int32_t h, int32_t w)
+        iterateOverLatticeGraph(latticeGraphSPtr, [&](Node *node, int32_t h, int32_t w)
                                         {
             if (node->state == NodeState::Free && ri.getRandomInteger() % 3 == 0)
             {
@@ -27,7 +28,7 @@ namespace Pathfinding::Helpers
     }
 
     std::vector<Node *>
-    ILatticeGraphHelpers::neighbors(ILatticeGraph & latticeGraph, const Node *node)
+    neighbors(ILatticeGraph & latticeGraph, const Node *node)
     {
         std::vector<Node *> nbors;
         int32_t hFrom = node->location.height - 1;
@@ -50,7 +51,7 @@ namespace Pathfinding::Helpers
     }
 
     std::vector<const Node *> 
-    ILatticeGraphHelpers::neighborsConst(ILatticeGraph & LatticeGraph, const Node *node)
+    neighborsConst(ILatticeGraph & LatticeGraph, const Node *node)
     {
         std::vector<const Node *> nbors;
         int32_t hFrom = node->location.height - 1;
@@ -73,7 +74,7 @@ namespace Pathfinding::Helpers
     }
 
 
-    void ILatticeGraphHelpers::blockNode(ILatticeGraph & ilatticeGraph, Vec2i location)
+    void blockNode(ILatticeGraph & ilatticeGraph, Vec2i location)
     {
         if (ilatticeGraph.node(location)->state != NodeState::Start &&
             ilatticeGraph.node(location)->state != NodeState::Goal)
@@ -82,7 +83,7 @@ namespace Pathfinding::Helpers
         }
     }
 
-    void ILatticeGraphHelpers::clearNode(ILatticeGraph & ilatticeGraph, Vec2i location)
+    void clearNode(ILatticeGraph & ilatticeGraph, Vec2i location)
     {
         if (ilatticeGraph.node(location)->state == NodeState::Blocked)
         {

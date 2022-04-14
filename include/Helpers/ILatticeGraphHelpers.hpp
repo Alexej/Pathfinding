@@ -16,26 +16,18 @@ namespace Pathfinding::Core { struct ApplicationState; }
 
 namespace Pathfinding::Helpers
 {
-    class ILatticeGraphHelpers
-    {
-    private:
-        using PAILatticeGraph = Pathfinding::Abstract::ILatticeGraph;
-        using PDNode = Pathfinding::Datastructures::Node;
-        using PDVec2i = Pathfinding::Datastructures::Vec2i;
-        using PCRandomIntegers = Pathfinding::Core::RandomIntegers;
-        using PCApplicationState = Pathfinding::Core::ApplicationState;
-    public:
-        static std::vector<PDNode *> neighbors(PAILatticeGraph & iLatticeGraph, const PDNode *node);
+    std::vector<Pathfinding::Datastructures::Node *> 
+    neighbors(Pathfinding::Abstract::ILatticeGraph & iLatticeGraph, const Pathfinding::Datastructures::Node *node);
 
-        static std::vector<const PDNode *> neighborsConst(PAILatticeGraph & iLatticeGraph, const PDNode *node);
-        
-        static void initRandomGraph(PAILatticeGraph & iLatticeGraph, PCRandomIntegers & ri);
-        
-        static void blockNode(PAILatticeGraph & iLatticeGraph, PDVec2i location);
-        
-        static void clearNode(PAILatticeGraph & iLatticeGraph, PDVec2i location);
+    std::vector<const Pathfinding::Datastructures::Node *> 
+    neighborsConst(Pathfinding::Abstract::ILatticeGraph & iLatticeGraph, const Pathfinding::Datastructures::Node *node);
+    
+    void  initRandomGraph(Pathfinding::Abstract::ILatticeGraph & iLatticeGraph, Pathfinding::Core::RandomIntegers & ri);
+    
+    void  blockNode(Pathfinding::Abstract::ILatticeGraph & iLatticeGraph, Pathfinding::Datastructures::Vec2i location);
+    
+    void  clearNode(Pathfinding::Abstract::ILatticeGraph & iLatticeGraph, Pathfinding::Datastructures::Vec2i location);
 
-    };
 
     template<typename Function>
     void iterateOverLatticeGraphConst(const Pathfinding::Abstract::ILatticeGraph & ilatticeGraph, Function func)

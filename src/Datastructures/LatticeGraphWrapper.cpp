@@ -12,7 +12,7 @@ namespace Pathfinding::Datastructures
     using Pathfinding::Abstract::ALatGraphWr;
     using Pathfinding::Abstract::ILatticeGraph;
     using Pathfinding::Abstract::IMazeGenerator;
-    using Pathfinding::Helpers::ILatticeGraphHelpers;
+    using Pathfinding::Helpers::neighbors;
     using Pathfinding::Helpers::isNullptr;
 
     namespace
@@ -106,7 +106,7 @@ namespace Pathfinding::Datastructures
     {
         std::vector<Node *> possibleNodes;
         possibleNodes.push_back(node);
-        for (auto node : ILatticeGraphHelpers::neighbors(*latGraphSPtr, node))
+        for (auto node : neighbors(*latGraphSPtr, node))
         {
             possibleNodes.push_back(node);
         }

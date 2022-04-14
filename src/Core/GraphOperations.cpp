@@ -19,7 +19,8 @@ namespace Pathfinding::Core
 
     using Pathfinding::Abstract::ALatGraphWr;
     using Pathfinding::Algorithms::DStarLite;
-    using Pathfinding::Helpers::ILatticeGraphHelpers;
+    using Pathfinding::Helpers::clearNode;
+    using Pathfinding::Helpers::blockNode;
     using Pathfinding::Helpers::mapMouseToGraphCoordinates;
     using Pathfinding::Events::MouseData;
 
@@ -148,7 +149,7 @@ namespace Pathfinding::Core
         auto graph = latGraphWrapperUPtr->latGraphSPtr;
         if (graph->node(mappedCoordinates)->state != NodeState::Blocked && obsticlesAndScrollEvents())
         {
-            ILatticeGraphHelpers::blockNode(*graph, mappedCoordinates);
+            blockNode(*graph, mappedCoordinates);
             if (appStateSPtr->currentState == AlgorithmState::SEARCHING)
             {
                 edgeChangeCallBack(graph->node(mappedCoordinates));
@@ -161,7 +162,7 @@ namespace Pathfinding::Core
         auto graph = latGraphWrapperUPtr->latGraphSPtr;
         if (graph->node(mappedCoordinates)->state != NodeState::Free && obsticlesAndScrollEvents())
         {
-            ILatticeGraphHelpers::clearNode(*graph, mappedCoordinates);
+            clearNode(*graph, mappedCoordinates);
             if (appStateSPtr->currentState == AlgorithmState::SEARCHING)
             {
                 edgeChangeCallBack(graph->node(mappedCoordinates));

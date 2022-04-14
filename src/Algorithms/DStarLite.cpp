@@ -31,8 +31,8 @@ namespace Pathfinding::Algorithms
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
     using Pathfinding::Helpers::flushVector;
-    using Pathfinding::Helpers::ILatticeGraphHelpers;
     using Pathfinding::Abstract::ICostFunction;
+    using Pathfinding::Helpers::neighbors;
 
 
     DStarLite::DStarLite(std::shared_ptr<ALatGraphWr> latticeGraphWrapperSPtr_)
@@ -115,7 +115,7 @@ namespace Pathfinding::Algorithms
 
     std::pair<double, Node *> DStarLite::getMinCG(Node *u)
     {
-        auto succs = ILatticeGraphHelpers::neighbors(*latticeGraphWrapperSPtr->latGraphSPtr, u);
+        auto succs = neighbors(*latticeGraphWrapperSPtr->latGraphSPtr, u);
         auto itr = std::ranges::min_element(succs,
         [this, &u](const Node *lhs, const Node *rhs)
         {
@@ -162,7 +162,7 @@ namespace Pathfinding::Algorithms
 
     void DStarLite::updateNeighbors(Node *node)
     {
-        for (auto &pred : ILatticeGraphHelpers::neighbors(*latticeGraphWrapperSPtr->latGraphSPtr, node))
+        for (auto &pred : neighbors(*latticeGraphWrapperSPtr->latGraphSPtr, node))
         {
             UpdateVertex(pred);
         }
@@ -222,7 +222,7 @@ namespace Pathfinding::Algorithms
 
     void DStarLite::addChangedNode(Node *node)
     {
-        for (auto &succ : ILatticeGraphHelpers::neighbors(*latticeGraphWrapperSPtr->latGraphSPtr, node))
+        for (auto &succ : neighbors(*latticeGraphWrapperSPtr->latGraphSPtr, node))
         {
             nodesChanged.insert(succ);
         }

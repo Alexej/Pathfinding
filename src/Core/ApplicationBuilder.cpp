@@ -46,7 +46,6 @@ namespace Pathfinding::Core
     using Pathfinding::Rendering::NodeStateColors;
     using Pathfinding::Rendering::Renderer;
     using Pathfinding::Rendering::SFMLNodeStrategy;
-    using Pathfinding::Helpers::ILatticeGraphHelpers;
     using sf::Event::EventType::MouseButtonPressed;
     using sf::Event::EventType::MouseButtonReleased;
     using sf::Event::EventType::MouseMoved;

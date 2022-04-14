@@ -15,7 +15,7 @@ namespace Pathfinding::Core
     using namespace Constants;
     using Pathfinding::Datastructures::PathfinderReturnType;
     using Pathfinding::Helpers::convertToSfmlColor;
-    using Pathfinding::Helpers::ILatticeGraphHelpers;
+    using Pathfinding::Helpers::initRandomGraph;
     using Pathfinding::Algorithms::DFSMazeGenerator;
     using Pathfinding::Events::MouseData;
     using Pathfinding::Rendering::DrawablePath;
@@ -134,7 +134,7 @@ namespace Pathfinding::Core
         do
         {
             latGraphWrapUPtr->reset();
-            ILatticeGraphHelpers::initRandomGraph(*latGraphWrapUPtr->latGraphSPtr, ri);
+            initRandomGraph(*latGraphWrapUPtr->latGraphSPtr, ri);
         } while(!aStarUPtr->calculatePath(*latGraphWrapUPtr).pathFound);
     }
 
