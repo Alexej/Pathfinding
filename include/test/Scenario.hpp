@@ -12,16 +12,13 @@ namespace Pathfinding::Test
     enum class CommandsKeyWords {BLOCK, STEP, CLEAR};
     struct Scenario
     {
-        private:
-            using PDVec2i = Pathfinding::Datastructures::Vec2i;
-            using PCAlgorithmState = Pathfinding::Core::AlgorithmState;
         public:
             std::string name;
-            PDVec2i size;
-            PDVec2i start;
-            PDVec2i goal;
-            std::vector<std::pair<CommandsKeyWords, PDVec2i>> commands;
-            PCAlgorithmState result;
+            Pathfinding::Datastructures::Vec2i size;
+            Pathfinding::Datastructures::Vec2i start;
+            Pathfinding::Datastructures::Vec2i goal;
+            std::vector<std::pair<CommandsKeyWords, Pathfinding::Datastructures::Vec2i>> commands;
+            Pathfinding::Core::AlgorithmState result;
     };
 }
 

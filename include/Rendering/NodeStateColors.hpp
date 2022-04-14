@@ -9,11 +9,9 @@ namespace Pathfinding::Rendering
 {
     struct NodeStateColors
     {
-        private:
-            using PDNodeSstate = Pathfinding::Datastructures::NodeState;
         public:
             NodeStateColors();
-            sf::Color getColor(PDNodeSstate state) const;
+            sf::Color getColor(Pathfinding::Datastructures::NodeState state) const;
             void reset();
         public:
             sf::Color freeNodeColor;

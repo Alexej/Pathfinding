@@ -128,7 +128,7 @@ namespace Pathfinding::Rendering
             windowRef.draw(rhsText);
             windowRef.draw(gText);
             windowRef.draw(keyText);
-            if (nodeBlocked)
+            if (!nodeBlocked)
             {
                 windowRef.draw(factorRect);
             }

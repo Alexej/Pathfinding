@@ -14,7 +14,7 @@ namespace Pathfinding::Rendering
         reset();
     }
     
-    sf::Color NodeStateColors::getColor(PDNodeSstate state) const
+    sf::Color NodeStateColors::getColor(NodeState state) const
     {
         sf::Color color;
         switch (state)
