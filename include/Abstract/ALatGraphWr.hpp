@@ -36,7 +36,7 @@ namespace Pathfinding::Abstract
         virtual void reset() = 0;
 
         virtual void changeNodeStateWhenNodeFreeOrVisited(Pathfinding::Datastructures::Node *node, 
-                                             Pathfinding::Datastructures::NodeState newState) = 0;
+                                                          Pathfinding::Datastructures::NodeState newState) = 0;
 
         virtual void removeEndpointsFromGraph() = 0;
         

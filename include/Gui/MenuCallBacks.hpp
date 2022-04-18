@@ -13,7 +13,6 @@ namespace Pathfinding::Gui
         std::function<void(void)> stepCallBack = nullptr;
         std::function<void(void)> randomGraphCallBack = nullptr;
         std::function<void(void)> mazeGraphCallBack = nullptr;
-        std::function<void(int32_t)> mouseWheelEventChangedCallBack = nullptr;
     };
 }
 

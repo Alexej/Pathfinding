@@ -29,10 +29,10 @@ namespace Pathfinding::Algorithms
     class AStar final : public Pathfinding::Abstract::IAStar
     {
         private:
-            using PDPathfinderReturnType = Pathfinding::Datastructures::PathfinderReturnType;
             using PAALatGraphWr = Pathfinding::Abstract::ALatGraphWr;
         public:
-            PDPathfinderReturnType calculatePath(const PAALatGraphWr & graphWrapper) const override;
+            PDPathfinderReturnType calculatePath(const PAALatGraphWr & graphWrapper, 
+                                                 const PDInformedSearchFunctions & functions) const override;
     };
 }
 

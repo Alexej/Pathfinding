@@ -135,7 +135,7 @@ namespace Pathfinding::Core
         {
             latGraphWrapUPtr->reset();
             initRandomGraph(*latGraphWrapUPtr->latGraphSPtr, ri);
-        } while(!aStarUPtr->calculatePath(*latGraphWrapUPtr).pathFound);
+        } while(!aStarUPtr->calculatePath(*latGraphWrapUPtr, searchFunctions).pathFound);
     }
 
     void Application::step()
@@ -155,13 +155,8 @@ namespace Pathfinding::Core
     {
         if(appState.runAStar)
         {
-            aStarCache.cache(aStarUPtr->calculatePath(*latGraphWrapUPtr));
+            aStarCache.cache(aStarUPtr->calculatePath(*latGraphWrapUPtr, searchFunctions));
         }
-    }
-
-    void Application::mouseWheelEventChanged(int32_t index)
-    {
-        appState.currentMouseWheelEvent = static_cast<MouseWheelEvent>(index);
     }
 
     void Application::generateMaze()

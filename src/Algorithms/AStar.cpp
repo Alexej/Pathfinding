@@ -11,6 +11,7 @@
 #include "Node.hpp"
 #include "ILatticeGraphHelpers.hpp"
 #include "ILatticeGraph.hpp"
+#include "InformedSearchFunctions.hpp"
 
 namespace Pathfinding::Algorithms
 {
@@ -20,6 +21,7 @@ namespace Pathfinding::Algorithms
     using Pathfinding::Abstract::ILatticeGraph;
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::PathfinderReturnType;
+    using Pathfinding::Datastructures::InformedSearchFunctions;
     using Pathfinding::Helpers::neighborsConst;
 
     namespace
@@ -44,7 +46,7 @@ namespace Pathfinding::Algorithms
         }
     }
 
-    PathfinderReturnType AStar::calculatePath(const ALatGraphWr & graphWrapper) const
+    PathfinderReturnType AStar::calculatePath(const ALatGraphWr & graphWrapper, const InformedSearchFunctions & functions) const
     {
         std::vector<const Node*> nodesExpanded;
         std::priority_queue<QueueElement, std::vector<QueueElement>, AStarQueueComperator> openSet;
@@ -53,7 +55,7 @@ namespace Pathfinding::Algorithms
         std::unordered_map<const Node *, double> fScore;
 
         gScore[graphWrapper.startNode()] = 0;
-        fScore[graphWrapper.startNode()] = heuristicUPtr->calculate(graphWrapper.startNode(), graphWrapper.goalNode());
+        fScore[graphWrapper.startNode()] = functions.heuristicUPtr->calculate(graphWrapper.startNode(), graphWrapper.goalNode());
         openSet.push({{fScore[graphWrapper.startNode()], gScore[graphWrapper.startNode()]}, graphWrapper.startNode()});
 
         while (!openSet.empty())
@@ -68,12 +70,12 @@ namespace Pathfinding::Algorithms
             auto neighbors = neighborsConst(*graphWrapper.latGraphSPtr, current);
             for (auto neighbor : neighbors)
             {
-                auto tentativeGscore = getMapDefaultInf(gScore, current) + costUPtr->calculate(current, neighbor);
+                auto tentativeGscore = getMapDefaultInf(gScore, current) + functions.costUPtr->calculate(current, neighbor);
                 if (tentativeGscore < getMapDefaultInf(gScore, neighbor))
                 {
                     cameFrom[neighbor] = current;
                     gScore[neighbor] = tentativeGscore;
-                    fScore[neighbor] = tentativeGscore + heuristicUPtr->calculate(neighbor, graphWrapper.goalNode());
+                    fScore[neighbor] = tentativeGscore + functions.heuristicUPtr->calculate(neighbor, graphWrapper.goalNode());
                     openSet.push({{fScore[neighbor], gScore[neighbor]}, neighbor});
                 }
             }

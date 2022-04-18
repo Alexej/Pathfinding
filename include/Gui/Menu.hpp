@@ -45,8 +45,6 @@ namespace Pathfinding::Gui
     private:
         void showGraphs() const;
 
-        void showMouseWheelEventComboBox();
-
         void showCommonElements();
 
         void showReadyStateElements();

@@ -30,13 +30,12 @@ namespace Pathfinding::Algorithms
     using Pathfinding::Datastructures::Node;
     using Pathfinding::Datastructures::NodeState;
     using Pathfinding::Datastructures::Vec2i;
-    using Pathfinding::Helpers::flushVector;
     using Pathfinding::Abstract::ICostFunction;
+    using Pathfinding::Helpers::flushVector;
     using Pathfinding::Helpers::neighbors;
 
-
-    DStarLite::DStarLite(std::shared_ptr<ALatGraphWr> latticeGraphWrapperSPtr_)
-    : AIncrementalInformedAlgorithm(latticeGraphWrapperSPtr_) {}
+    DStarLite::DStarLite(std::shared_ptr<ALatGraphWr> latticeGraphWrapperSPtr_, PDInformedSearchFunctions & functions)
+    : AIncrementalInformedAlgorithm(latticeGraphWrapperSPtr_, functions) {}
 
     void DStarLite::initialize()
     {
@@ -103,7 +102,7 @@ namespace Pathfinding::Algorithms
     Key DStarLite::calculateKey(const Node *s) const
     {
         auto pseudoG = std::min(s->g, s->rhs);
-        auto k1 = pseudoG + heuristicUPtr->calculate(sStart, s) + kM;
+        auto k1 = pseudoG + functions.heuristicUPtr->calculate(sStart, s) + kM;
         auto k2 = pseudoG;
         return {k1, k2};
     }
@@ -186,7 +185,7 @@ namespace Pathfinding::Algorithms
     {
         if (!nodesChanged.empty())
         {
-            kM = kM + heuristicUPtr->calculate(sLast, sStart);
+            kM = kM + functions.heuristicUPtr->calculate(sLast, sStart);
             sLast = sStart;
             for (auto &node : nodesChanged)
             {
@@ -231,6 +230,6 @@ namespace Pathfinding::Algorithms
 
     double DStarLite::costThisFar(const Node * u, const Node * neighbor)
     {
-        return costUPtr->calculate(u, neighbor) + neighbor->g;
+        return functions.costUPtr->calculate(u, neighbor) + neighbor->g;
     }
 }

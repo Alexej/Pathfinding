@@ -184,7 +184,6 @@ namespace Pathfinding::Gui
             {
                 showAStarPath();
             }
-            showMouseWheelEventComboBox();
             ImGui::Separator();
         }
     }
@@ -224,15 +223,6 @@ namespace Pathfinding::Gui
         showNodeInfo();
         showAlgorithmState();
         showResetButton();
-    }
-
-    void Menu::showMouseWheelEventComboBox()
-    {
-        static int32_t currentMouseWheelEventInt = static_cast<int32_t>(appStatePtr->currentMouseWheelEvent);
-        if (ImGui::custom_combo("MW Event", &currentMouseWheelEventInt, mouseWheelEventStrings))
-        {
-            callBacks.mouseWheelEventChangedCallBack(currentMouseWheelEventInt);
-        }
     }
 
     void Menu::showNumberOfNodesComboBox()

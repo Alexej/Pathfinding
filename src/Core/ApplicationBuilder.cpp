@@ -22,6 +22,7 @@
 #include "ILatticeGraphHelpers.hpp"
 #include "MenuCallBacks.hpp"
 #include "SFMLNodeStrategy.hpp"
+#include "InformedSearchFunctions.hpp"
 
 namespace Pathfinding::Core
 {
@@ -39,6 +40,7 @@ namespace Pathfinding::Core
     using Pathfinding::Datastructures::LatticeGraph;
     using Pathfinding::Datastructures::LatticeGraphWrapper;
     using Pathfinding::Datastructures::PathfinderReturnType;
+    using Pathfinding::Datastructures::InformedSearchFunctions;
     using Pathfinding::Events::EventManager;
     using Pathfinding::Events::MouseEvent;
     using Pathfinding::Gui::Menu;
@@ -89,12 +91,16 @@ namespace Pathfinding::Core
     void ApplicationBuilder::instantiateObjects()
     {
         std::shared_ptr<ILatticeGraph> latticeGraph = std::make_shared<LatticeGraph>(dimension.width(), dimension.height());
+
+        applicationUPtr->searchFunctions.costUPtr = std::make_unique<DefaultCostFunction>(diagonalCost, straightCost);
+        applicationUPtr->searchFunctions.heuristicUPtr = std::make_unique<DiagonalHeuristic>(diagonalCost, straightCost);
+
         applicationUPtr->latGraphWrapUPtr = std::make_shared<LatticeGraphWrapper>(latticeGraph);
         applicationUPtr->window.create(sf::VideoMode(APPLICATION_WINDOW_WIDTH, GRID_FIELD_HEIGHT), APPLICATION_TITLE, sf::Style::Titlebar | sf::Style::Close);
         applicationUPtr->appState = ApplicationState(dimension);
         applicationUPtr->eventManagerUPtr = std::make_unique<EventManager>(&applicationUPtr->window);
         applicationUPtr->menuUPtr = std::make_unique<Menu>(&applicationUPtr->appState, &applicationUPtr->aStarCache, &applicationUPtr->dStarCache);
-        applicationUPtr->dstarLiteUPtr = std::make_unique<DStarLite>(applicationUPtr->latGraphWrapUPtr);
+        applicationUPtr->dstarLiteUPtr = std::make_unique<DStarLite>(applicationUPtr->latGraphWrapUPtr, applicationUPtr->searchFunctions);
         applicationUPtr->graphOpsUPtr = std::make_unique<GraphOperations>(&applicationUPtr->appState, applicationUPtr->latGraphWrapUPtr);
         applicationUPtr->aStarUPtr = std::make_unique<AStar>();
         applicationUPtr->drawablePath.init(&applicationUPtr->appState);
@@ -110,7 +116,6 @@ namespace Pathfinding::Core
         createEventManagerBindings();
         setMenuCallBacks();
         initDStarLite();
-        initAStar();
     }
 
     void ApplicationBuilder::lastPreparations()
@@ -156,7 +161,6 @@ namespace Pathfinding::Core
         MenuCallBacks mc;
 
         mc.numberOfNodesChangedCallBack = std::bind(&Application::handleNumberOfNodesChange, applicationUPtr.get(), _1);
-        mc.mouseWheelEventChangedCallBack = std::bind(&Application::mouseWheelEventChanged, applicationUPtr.get(), _1);
         mc.startCallBack = std::bind(&Application::startAlgorithm, applicationUPtr.get());
         mc.randomGraphCallBack = std::bind(&Application::randomGraph, applicationUPtr.get());
         mc.mazeGraphCallBack = std::bind(&Application::generateMaze, applicationUPtr.get());
@@ -167,17 +171,10 @@ namespace Pathfinding::Core
 
     }
 
-    void ApplicationBuilder::initAStar()
-    {
-        applicationUPtr->aStarUPtr->setHeuristic(std::make_unique<DiagonalHeuristic>(diagonalCost, straightCost));
-        applicationUPtr->aStarUPtr->setCostFunction(std::make_unique<DefaultCostFunction>(diagonalCost, straightCost));
-    }
 
     void ApplicationBuilder::initDStarLite()
     {
         applicationUPtr->dstarLiteUPtr->addFoundPathCallBack(std::bind(&Application::done, applicationUPtr.get()));
         applicationUPtr->dstarLiteUPtr->addNoPathCallBack(std::bind(&Application::noPath, applicationUPtr.get()));
-        applicationUPtr->dstarLiteUPtr->setHeuristic(std::make_unique<DiagonalHeuristic>(diagonalCost, straightCost));
-        applicationUPtr->dstarLiteUPtr->setCostFunction(std::make_unique<DefaultCostFunction>(diagonalCost, straightCost));
     }
 }

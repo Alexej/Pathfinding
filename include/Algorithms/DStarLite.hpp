@@ -12,6 +12,8 @@ namespace Pathfinding::Datastructures{ struct Node; }
 namespace Pathfinding::Datastructures{ struct Key; }
 namespace Pathfinding::Datastructures{ enum class NodeState; }
 namespace Pathfinding::Datastructures{ struct PathfinderReturnType; }
+namespace Pathfinding::Datastructures{ struct InformedSearchFunctions; }
+
 
 namespace Pathfinding::Abstract { class IHeuristic; }
 namespace Pathfinding::Abstract { class ICostFunction; }
@@ -29,10 +31,11 @@ namespace Pathfinding::Algorithms
         using PAIHeuristic = Pathfinding::Abstract::IHeuristic;
         using PAICostFunction = Pathfinding::Abstract::ICostFunction;
         using PDPathfinderReturnType = Pathfinding::Datastructures::PathfinderReturnType;
+        using PDInformedSearchFunctions = Pathfinding::Datastructures::InformedSearchFunctions;
     public:
         DStarLite() = default;
         
-        explicit DStarLite(std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr);
+        DStarLite(std::shared_ptr<PAALatGraphWr> latticeGraphWrapperSPtr, PDInformedSearchFunctions & functions);
         
         void initialize() override;
         

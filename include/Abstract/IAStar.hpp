@@ -4,17 +4,20 @@
 
 #include <memory>
 
-#include "AInformedSearchAlgorithm.hpp"
-
 namespace Pathfinding::Datastructures { struct PathfinderReturnType; }
+namespace Pathfinding::Datastructures { struct InformedSearchFunctions; }
 
 namespace Pathfinding::Abstract
 {
     class ALatGraphWr;
-    class IAStar : public AInformedSearchAlgorithm
+    class IAStar
     {
-    public:
-        virtual Pathfinding::Datastructures::PathfinderReturnType calculatePath(const ALatGraphWr & graphWrapper) const = 0;
+        protected:
+            using PDInformedSearchFunctions = Pathfinding::Datastructures::InformedSearchFunctions;
+            using PDPathfinderReturnType = Pathfinding::Datastructures::PathfinderReturnType;
+        public:
+            virtual PDPathfinderReturnType calculatePath(const ALatGraphWr & graphWrapper, 
+                                                        const PDInformedSearchFunctions & functions) const = 0;
 
         virtual ~IAStar() = default;
 

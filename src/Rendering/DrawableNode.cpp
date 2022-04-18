@@ -9,14 +9,14 @@
 
 namespace Pathfinding::Rendering
 {
-    using Pathfinding::Core::ApplicationState;
-    using Pathfinding::Datastructures::Node;
-    using Pathfinding::Datastructures::NodeState;
-    using Pathfinding::Datastructures::Vec2i;
-    using Pathfinding::Helpers::convertToSfmlColor;
     using Pathfinding::Helpers::dToStr;
-    using Pathfinding::Helpers::swapElements;
     using namespace Pathfinding::Constants;
+    using Pathfinding::Datastructures::Node;
+    using Pathfinding::Datastructures::Vec2i;
+    using Pathfinding::Helpers::swapElements;
+    using Pathfinding::Core::ApplicationState;
+    using Pathfinding::Datastructures::NodeState;
+    using Pathfinding::Helpers::convertToSfmlColor;
 
 
     SFMLNodeStrategy::SFMLNodeStrategy(const sf::Font &font,

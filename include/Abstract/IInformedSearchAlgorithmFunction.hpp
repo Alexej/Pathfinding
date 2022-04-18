@@ -5,13 +5,13 @@ namespace Pathfinding::Datastructures { struct Node; }
 
 namespace Pathfinding::Abstract
 {
-    class IInformedSearchAlgorithmFunctions
+    class IInformedSearchAlgorithmFunction
     {
         public:
             virtual double calculate(const Pathfinding::Datastructures::Node *from, 
-                                     const Pathfinding::Datastructures::Node *to) = 0;
+                                     const Pathfinding::Datastructures::Node *to) const = 0;
             
-            virtual ~IInformedSearchAlgorithmFunctions() = default;
+            virtual ~IInformedSearchAlgorithmFunction() = default;
             
     };
 }

@@ -9,7 +9,7 @@ namespace Pathfinding::Algorithms
     DiagonalHeuristic::DiagonalHeuristic(int32_t diagonalMovementCost_, int32_t straightMovementCost_)
     : diagonalMovementCost(diagonalMovementCost_), straightMovementCost(straightMovementCost_) {}
 
-    double DiagonalHeuristic::calculate(const Node *from, const Node *to)
+    double DiagonalHeuristic::calculate(const Node *from, const Node *to) const
     {
         double D = straightMovementCost;
         double D2 = diagonalMovementCost;

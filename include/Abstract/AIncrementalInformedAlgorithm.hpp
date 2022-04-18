@@ -3,7 +3,7 @@
 
 #include <memory>
 #include <functional>
-#include "AInformedSearchAlgorithm.hpp"
+#include "InformedSearchFunctions.hpp"
 
 namespace Pathfinding::Abstract { class ALatGraphWr; }
 namespace Pathfinding::Datastructures { struct Node; }
@@ -11,11 +11,12 @@ namespace Pathfinding::Datastructures { struct PathfinderReturnType; }
 
 namespace Pathfinding::Abstract
 {
-    class AIncrementalInformedAlgorithm : public AInformedSearchAlgorithm
+    class AIncrementalInformedAlgorithm
     {
         public:
-            explicit AIncrementalInformedAlgorithm(std::shared_ptr<Pathfinding::Abstract::ALatGraphWr> latticeGraphWrapperSPtr_)
-            : latticeGraphWrapperSPtr(latticeGraphWrapperSPtr_) {}
+            explicit AIncrementalInformedAlgorithm(std::shared_ptr<Pathfinding::Abstract::ALatGraphWr> latticeGraphWrapperSPtr_,
+                                                   Pathfinding::Datastructures::InformedSearchFunctions & functions_)
+            : latticeGraphWrapperSPtr(latticeGraphWrapperSPtr_), functions(functions_) {}
 
             void addFoundPathCallBack(std::function<void(void)> callBack)
             {
@@ -41,8 +42,10 @@ namespace Pathfinding::Abstract
 
         protected:
             std::shared_ptr<Pathfinding::Abstract::ALatGraphWr> latticeGraphWrapperSPtr = nullptr;
+            const Pathfinding::Datastructures::InformedSearchFunctions & functions;
             std::function<void(void)> doneCallBack;
             std::function<void(void)> noPathCallBack;
+            
     };
 }
 

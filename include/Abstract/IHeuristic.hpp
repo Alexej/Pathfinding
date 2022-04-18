@@ -3,11 +3,11 @@
 
 #include <cstdint>
 
-#include "IInformedSearchAlgorithmFunctions.hpp"
+#include "IInformedSearchAlgorithmFunction.hpp"
 
 namespace Pathfinding::Abstract
 {
-    class IHeuristic : public IInformedSearchAlgorithmFunctions
+    class IHeuristic : public IInformedSearchAlgorithmFunction
     {
     };
 }

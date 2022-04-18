@@ -197,10 +197,6 @@ namespace Pathfinding::Core
 
     void GraphOperations::mouseWheelMoved(MouseData mouseData)
     {
-        if(appStateSPtr->currentMouseWheelEvent == MouseWheelEvent::Zoom)
-        {
-            return;
-        }
         auto graph = latGraphWrapperUPtr->latGraphSPtr;
         if(obsticlesAndScrollEvents())
         {

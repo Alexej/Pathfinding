@@ -26,6 +26,7 @@
 #include "GradientChanger.hpp"
 #include "IRenderer.hpp"
 #include "IDrawNodeStrategy.hpp"
+#include "InformedSearchFunctions.hpp"
 
 namespace Pathfinding::Core { class ApplicationBuilder; }
 namespace Pathfinding::Datastructures { struct Node; }
@@ -64,8 +65,6 @@ namespace Pathfinding::Core
         
         void step();
 
-        void mouseWheelEventChanged(int32_t index);
-
     private:
         void runAStar();
 
@@ -95,6 +94,7 @@ namespace Pathfinding::Core
         Pathfinding::Events::BindingsContainer bindings;
 
         GraphDimension *dimensionPtr = nullptr;
+        Pathfinding::Datastructures::InformedSearchFunctions searchFunctions;
     };
 }
 

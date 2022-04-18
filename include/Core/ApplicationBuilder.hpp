@@ -38,8 +38,6 @@ namespace Pathfinding::Core
 
         void initDStarLite();
 
-        void initAStar();
-
         void lastPreparations();
 
     private:
